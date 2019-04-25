@@ -56,9 +56,9 @@ public class JarConverter {
 		tmpDir = new File(dataDirPath, TEMP_FOLDER_NAME);
 	}
 
-	private File patchJar(File inputJar, String encoding) throws IOException {
+	private File patchJar(File inputJar) throws IOException {
 		File patchedJar = new File(tmpDir, inputJar.getName() + ".jar");
-		AndroidProducer.processJar(inputJar, patchedJar, encoding);
+		AndroidProducer.processJar(inputJar, patchedJar);
 		return patchedJar;
 	}
 
@@ -128,7 +128,7 @@ public class JarConverter {
 		return null;
 	}
 
-	public Single<String> convert(final String path, final String encoding) {
+	public Single<String> convert(final String path) {
 		return Single.create(emitter -> {
 			boolean jadInstall = false;
 			String pathToJad = null;
@@ -168,7 +168,7 @@ public class JarConverter {
 			// Patch and unzip
 			File patchedJar;
 			try {
-				patchedJar = patchJar(inputJar, encoding);
+				patchedJar = patchJar(inputJar);
 			} catch (Exception e) {
 				deleteTemp();
 				throw new ConverterException("Can't patch", e);

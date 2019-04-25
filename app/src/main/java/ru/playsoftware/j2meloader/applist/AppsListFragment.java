@@ -176,7 +176,7 @@ public class AppsListFragment extends ListFragment {
 		dialog.setCancelable(false);
 		dialog.setMessage(getText(R.string.converting_message));
 		dialog.setTitle(R.string.converting_wait);
-		converter.convert(path, encoding)
+		converter.convert(path)
 				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeWith(new SingleObserver<String>() {

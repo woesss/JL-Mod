@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2020 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +25,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -39,6 +43,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -83,6 +88,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected EditText tfFontSizeMedium;
 	protected EditText tfFontSizeLarge;
 	protected CheckBox cxFontSizeInSP;
+	private Spinner spEncoding;
 	protected EditText tfSystemProperties;
 	protected CheckBox cxShowKeyboard;
 
@@ -121,6 +127,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	public static final String CONFIG_PATH_KEY = "configPath";
 	public static final String MIDLET_NAME_KEY = "midletName";
 	public static final String SHOW_SETTINGS_KEY = "showSettings";
+	private ArrayAdapter<String> encodingAdapter;
+	private final ArrayList<String> charsets = new ArrayList<>(Charset.availableCharsets().keySet());
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
@@ -172,6 +180,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
 		tfFontSizeLarge = findViewById(R.id.tfFontSizeLarge);
 		cxFontSizeInSP = findViewById(R.id.cxFontSizeInSP);
+		spEncoding = findViewById(R.id.spEncoding);
 		tfSystemProperties = findViewById(R.id.tfSystemProperties);
 
 		cxTouchInput = findViewById(R.id.cxTouchInput);
@@ -202,6 +211,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		addFontSizePreset("128 x 160", 13, 15, 20);
 		addFontSizePreset("176 x 220", 15, 18, 22);
 		addFontSizePreset("240 x 320", 18, 22, 26);
+
+		initEncoding();
 
 		findViewById(R.id.cmdScreenSizePresets).setOnClickListener(this::showScreenPresets);
 		findViewById(R.id.cmdSwapSizes).setOnClickListener(this);
@@ -273,6 +284,43 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		if (loaded && !showSettings) {
 			startMIDlet();
 		}
+	}
+
+	private void initEncoding() {
+		encodingAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, charsets);
+		encodingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spEncoding.setAdapter(encodingAdapter);
+		spEncoding.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				String enc = "microedition.encoding: "
+						+ parent.getItemAtPosition(position).toString();
+				String[] props = tfSystemProperties.getText().toString().split("\\n");
+				int propsLength = props.length;
+				if (propsLength == 0) {
+					tfSystemProperties.setText(enc);
+					return;
+				}
+				int i = propsLength - 1;
+				while (i >= 0) {
+					if (props[i].startsWith("microedition.encoding")) {
+						props[i] = enc;
+						break;
+					}
+					i--;
+				}
+				if (i < 0) {
+					tfSystemProperties.setText(enc);
+					return;
+				}
+				tfSystemProperties.setText(TextUtils.join("\n", props));
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+
+			}
+		});
 	}
 
 	private void loadKeylayout() {
@@ -385,7 +433,30 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFontSizeMedium.setText(Integer.toString(params.getInt("FontSizeMedium", 22)));
 		tfFontSizeLarge.setText(Integer.toString(params.getInt("FontSizeLarge", 26)));
 		cxFontSizeInSP.setChecked(params.getBoolean("FontApplyDimensions", false));
-		tfSystemProperties.setText(params.getString("SystemProperties", ""));
+		String systemProperties = params.getString("SystemProperties", "");
+		tfSystemProperties.setText(systemProperties);
+		String encoding = "iso-8859-1";
+		String[] split = systemProperties.split("\\n");
+		for (int i = split.length - 1; i >= 0; i--) {
+			String s = split[i].toLowerCase();
+			if (s.startsWith("microedition.encoding") && s.length() > 22) {
+				s = s.substring(22).trim();
+				if (!s.isEmpty()) {
+					encoding = s;
+					break;
+				}
+			}
+		}
+
+		int i = 0;
+		while (i < charsets.size()) {
+			if (charsets.get(i).toLowerCase().equals(encoding)) {
+				break;
+			}
+			i++;
+		}
+		if (i < charsets.size())
+			spEncoding.setSelection(i);
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
 		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
 		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());

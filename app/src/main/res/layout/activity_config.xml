@@ -357,12 +357,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/PREF_FONT_SIZE_IN_SP" />
+
         </LinearLayout>
 
         <TextView
             style="@style/ConfigTitleTextStyle"
             android:layout_margin="10dp"
             android:text="@string/PREF_SYS_PROPS" />
+
+        <!-- Encoding -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginBottom="4dp"
+            android:minHeight="40dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:gravity="center_vertical"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_setting_encoding"
+                android:drawableLeft="@drawable/ic_setting_encoding"
+                app:drawableTint="?colorAccent"
+                android:drawablePadding="2dp"
+                android:text="@string/pref_encoding_title"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?attr/textColorSecondary"
+                android:textSize="15sp" />
+
+            <Spinner
+                android:id="@+id/spEncoding"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:textColor="?attr/textColorSecondary"
+                android:textSize="15sp" />
+
+        </LinearLayout><!-- Encoding -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -497,17 +531,20 @@
                 <!-- Key shape type -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_marginBottom="4dp"
                     android:minHeight="40dp">
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
+                        android:drawableLeft="@drawable/ic_setting_button_shape"
+                        android:drawableStart="@drawable/ic_setting_button_shape"
+                        app:drawableTint="?colorAccent"
                         android:text="@string/pref_button_shape_title"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="?attr/textColorSecondary"

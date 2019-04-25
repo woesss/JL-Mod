@@ -45,11 +45,11 @@ public class AndroidProducer {
 
 	private static final int BUFFER_SIZE = 2048;
 
-	private static byte[] instrument(final byte[] classFile, String classFileName, String encoding)
+	private static byte[] instrument(final byte[] classFile, String classFileName)
 			throws IllegalArgumentException {
 		ClassReader cr = new ClassReader(classFile);
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		ClassVisitor cv = new AndroidClassVisitor(cw, encoding);
+		ClassVisitor cv = new AndroidClassVisitor(cw);
 		if (!cr.getClassName().equals(classFileName)) {
 			throw new IllegalArgumentException("Class name does not match path");
 		}
@@ -58,7 +58,7 @@ public class AndroidProducer {
 		return cw.toByteArray();
 	}
 
-	public static void processJar(File jarInputFile, File jarOutputFile, String encoding) throws IOException {
+	public static void processJar(File jarInputFile, File jarOutputFile) throws IOException {
 		HashMap<String, byte[]> resources = new HashMap<>();
 		ZipEntry zipEntry;
 		InputStream zis;
@@ -93,10 +93,10 @@ public class AndroidProducer {
 				byte[] outBuffer = inBuffer;
 				try {
 					if (name.endsWith(".class")) {
-						outBuffer = instrument(inBuffer,
-								name.replace(".class", ""), encoding);
+						outBuffer = instrument(inBuffer, name.replace(".class", ""));
 					}
 					zos.putNextEntry(new ZipEntry(name));
+					//noinspection ConstantConditions
 					zos.write(outBuffer);
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseIntArray;
 
@@ -30,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -195,6 +195,11 @@ public class MicroLoader {
 				if (prop.length == 2) {
 					System.setProperty(prop[0], prop[1]);
 				}
+			}
+			try {
+				Charset.forName(System.getProperty("microedition.encoding"));
+			} catch (Exception e) {
+				System.setProperty("microedition.encoding", "ISO-8859-1");
 			}
 
 			SparseIntArray intArray = KeyMapper.getArrayPref(params);
