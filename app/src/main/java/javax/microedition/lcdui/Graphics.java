@@ -54,6 +54,7 @@ public class Graphics {
 	private int translateX;
 	private int translateY;
 
+	private final Rect clip = new Rect();
 	private Rect rect = new Rect();
 	private RectF rectF = new RectF();
 	private Path path = new Path();
@@ -69,6 +70,7 @@ public class Graphics {
 		canvas = new Canvas(canvasBitmap);
 		canvasInitSave = canvas.save();
 		canvas.clipRect(image.getBounds());
+		canvas.getClipBounds(clip);
 		drawPaint.setStyle(Paint.Style.STROKE);
 		fillPaint.setStyle(Paint.Style.FILL);
 		drawPaint.setAntiAlias(false);
@@ -82,6 +84,7 @@ public class Graphics {
 		canvas.restoreToCount(canvasInitSave);
 		canvasInitSave = canvas.save();
 		canvas.clipRect(image.getBounds());
+		canvas.getClipBounds(clip);
 		translateX = 0;
 		translateY = 0;
 	}
@@ -187,40 +190,38 @@ public class Graphics {
 	}
 
 	public void setClip(int x, int y, int width, int height) {
-		rect.set(x, y, x + width, y + height);
+		clip.set(x, y, x + width, y + height);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 			canvas.restore();
 			canvas.save();
 			canvas.translate(translateX, translateY);
-			canvas.clipRect(rect);
+			canvas.clipRect(clip);
 		} else {
-			canvas.clipRect(rect, Region.Op.REPLACE);
+			canvas.clipRect(clip, Region.Op.REPLACE);
 		}
+		canvas.getClipBounds(clip);
 	}
 
 	public void clipRect(int x, int y, int width, int height) {
-		rect.set(x, y, x + width, y + height);
-		canvas.clipRect(rect);
+		clip.set(x, y, x + width, y + height);
+		canvas.clipRect(clip);
+		canvas.getClipBounds(clip);
 	}
 
 	public int getClipX() {
-		canvas.getClipBounds(rect);
-		return rect.left;
+		return clip.left;
 	}
 
 	public int getClipY() {
-		canvas.getClipBounds(rect);
-		return rect.top;
+		return clip.top;
 	}
 
 	public int getClipWidth() {
-		canvas.getClipBounds(rect);
-		return rect.width();
+		return clip.width();
 	}
 
 	public int getClipHeight() {
-		canvas.getClipBounds(rect);
-		return rect.height();
+		return clip.height();
 	}
 
 	public void translate(int dx, int dy) {
@@ -228,6 +229,7 @@ public class Graphics {
 		translateY += dy;
 
 		canvas.translate(dx, dy);
+		canvas.getClipBounds(clip);
 	}
 
 	@SuppressWarnings("unused")
