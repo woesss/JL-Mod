@@ -55,21 +55,21 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 			actionBar.setTitle(R.string.pref_map_keys);
 		}
 		Intent intent = getIntent();
+		String dirName = intent.getDataString();
+		if (dirName == null) {
+			Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+			finish();
+			return;
+		}
 		File configDir;
-		boolean defaultConfig = intent.getBooleanExtra(ConfigActivity.DEFAULT_CONFIG_KEY, false);
-		if (defaultConfig) {
-			configDir = new File(Config.DEFAULT_CONFIG_DIR);
+		boolean isTemplate = ConfigActivity.ACTION_EDIT_TEMPLATE.equals(intent.getAction());
+		if (isTemplate) {
+			configDir = new File(Config.TEMPLATES_DIR, dirName);
 		} else {
-			String appPath = intent.getDataString();
-			if (appPath == null) {
-				Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-				finish();
-				return;
-			}
-			configDir = new File(Config.CONFIGS_DIR, appPath);
+			configDir = new File(Config.CONFIGS_DIR, dirName);
 		}
 		params = new SharedPreferencesContainer(configDir);
-		params.load(defaultConfig);
+		params.load();
 
 		setupButton(R.id.virtual_key_left_soft, Canvas.KEY_SOFT_LEFT);
 		setupButton(R.id.virtual_key_right_soft, Canvas.KEY_SOFT_RIGHT);

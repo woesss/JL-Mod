@@ -36,7 +36,7 @@ public class Config {
 	public static final String DATA_DIR = EMULATOR_DIR + "/data/";
 	public static final String DEFAULT_CONFIG_DIR = EMULATOR_DIR + "/default/";
 	public static final String CONFIGS_DIR = EMULATOR_DIR + "/configs/";
-	static final String TEMPLATES_DIR = EMULATOR_DIR + "/templates/";
+	public static final String TEMPLATES_DIR = EMULATOR_DIR + "/templates/";
 	public static final String APP_DIR = EMULATOR_DIR + MIDLET_DIR;
 	public static final String TEMP_DEX_DIR = "/tmp_dex";
 	public static final String TEMP_DEX_OPT_DIR = "/tmp_dexopt";
@@ -47,13 +47,13 @@ public class Config {
 	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_KEYLAYOUT_FILE = "/VirtualKeyboardLayout";
 	public static final String MIDLET_CONFIG_FILE = "/config.xml";
+	static final String DEFAULT_TEMPLATE_KEY = "default_template";
 
 	public static void startApp(Context context, AppItem app, boolean showSettings) {
 		File file = new File(Config.CONFIGS_DIR, app.getPath());
 		if (showSettings || !file.exists()) {
-			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(app.getPath()),
+			Intent intent = new Intent(ConfigActivity.ACTION_EDIT, Uri.parse(app.getPath()),
 					context, ConfigActivity.class);
-			intent.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
 			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, app.getTitle());
 			context.startActivity(intent);
 		} else {

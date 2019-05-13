@@ -80,7 +80,7 @@ public class MicroLoader {
 				temp.delete();
 			}
 		}
-		params.load(false);
+		params.load();
 	}
 
 	LinkedHashMap<String, String> loadMIDletList() throws IOException {

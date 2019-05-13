@@ -146,4 +146,7 @@
     <string name="reinstall_newest">Обновить это приложение?\n\nНовая версия: %s?\nУстановлено: %s\nВсе данные будут сохранены.</string>
     <string name="install_jar_non_matched_jad">Это приложение не соответствует описанному в JAD. Параметры из JAD не будут использованы\n\nВсё равно установить?</string>
     <string name="loading_info">загрузка информации…</string>
+    <string name="error_name">Введите название шаблона!</string>
+    <string name="set_as_default">Сделать стандартным</string>
+    <string name="edit">Изменить</string>
 </resources>

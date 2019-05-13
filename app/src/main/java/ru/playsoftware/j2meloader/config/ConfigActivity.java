@@ -66,6 +66,11 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ConfigActivity extends BaseActivity implements View.OnClickListener {
 
+	public static final String ACTION_EDIT = "config.edit";
+	public static final String ACTION_EDIT_TEMPLATE = "config.edit.template";
+	public static final String CONFIG_PATH_KEY = "configPath";
+	public static final String MIDLET_NAME_KEY = "midletName";
+
 	protected ScrollView rootContainer;
 	protected EditText tfScreenWidth;
 	protected EditText tfScreenHeight;
@@ -117,46 +122,44 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private File keylayoutFile;
 	private File dataDir;
 	private SharedPreferencesContainer params;
-	private String appPath;
 	private FragmentManager fragmentManager;
-	private boolean defaultConfig;
+	private boolean isTemplate;
 	private Display display;
 	private File configDir;
-
-	public static final String DEFAULT_CONFIG_KEY = "default";
-	public static final String CONFIG_PATH_KEY = "configPath";
-	public static final String MIDLET_NAME_KEY = "midletName";
-	public static final String SHOW_SETTINGS_KEY = "showSettings";
-	private ArrayAdapter<String> encodingAdapter;
 	private final ArrayList<String> charsets = new ArrayList<>(Charset.availableCharsets().keySet());
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_config);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		Intent intent = getIntent();
+		String action = intent.getAction();
+		isTemplate = ACTION_EDIT_TEMPLATE.equals(action);
+		boolean showSettings = isTemplate || ACTION_EDIT.equals(action);
+		String dirName = intent.getDataString();
+		if (dirName == null) {
+			finish();
+			return;
+		}
+		setContentView(R.layout.activity_config);
+		//noinspection ConstantConditions
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		display = getWindowManager().getDefaultDisplay();
 		fragmentManager = getSupportFragmentManager();
-		defaultConfig = intent.getBooleanExtra(DEFAULT_CONFIG_KEY, false);
-		boolean showSettings;
-		if (defaultConfig) {
-			showSettings = true;
-			configDir = new File(Config.DEFAULT_CONFIG_DIR);
+		if (isTemplate) {
+			configDir = new File(Config.TEMPLATES_DIR, dirName);
+			setTitle(dirName);
 		} else {
-			showSettings = intent.getBooleanExtra(SHOW_SETTINGS_KEY, false);
-			appPath = intent.getDataString();
-			getSupportActionBar().setTitle(intent.getStringExtra(MIDLET_NAME_KEY));
-			dataDir = new File(Config.DATA_DIR, appPath);
+			setTitle(intent.getStringExtra(MIDLET_NAME_KEY));
+			dataDir = new File(Config.DATA_DIR, dirName);
 			dataDir.mkdirs();
-			configDir = new File(Config.CONFIGS_DIR, appPath);
+			configDir = new File(Config.CONFIGS_DIR, dirName);
 		}
 		configDir.mkdirs();
-		loadKeylayout();
+		loadKeyLayout();
 
 		params = new SharedPreferencesContainer(configDir);
-		boolean loaded = params.load(defaultConfig);
+		boolean loaded = params.load();
 
 		rootContainer = findViewById(R.id.configRoot);
 		tfScreenWidth = findViewById(R.id.tfScreenWidth);
@@ -287,7 +290,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	private void initEncoding() {
-		encodingAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, charsets);
+		ArrayAdapter<String> encodingAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, charsets);
 		encodingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spEncoding.setAdapter(encodingAdapter);
 		spEncoding.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -323,19 +326,25 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		});
 	}
 
-	private void loadKeylayout() {
+	private void loadKeyLayout() {
 		File file = new File(configDir, Config.MIDLET_KEYLAYOUT_FILE);
-		if (!defaultConfig && !file.exists()) {
-			File defaultKeylayoutFile = new File(Config.DEFAULT_CONFIG_DIR, Config.MIDLET_KEYLAYOUT_FILE);
-			if (defaultKeylayoutFile.exists()) {
-				try {
-					FileUtils.copyFileUsingChannel(defaultKeylayoutFile, file);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 		keylayoutFile = file;
+		if (isTemplate || file.exists()) {
+			return;
+		}
+		final String def = PreferenceManager.getDefaultSharedPreferences(this).getString(Config.DEFAULT_TEMPLATE_KEY, null);
+		if (def == null) {
+			return;
+		}
+		File defaultKeyLayoutFile = new File(Config.TEMPLATES_DIR, def + Config.MIDLET_KEYLAYOUT_FILE);
+		if (!defaultKeyLayoutFile.exists()) {
+			return;
+		}
+		try {
+			FileUtils.copyFileUsingChannel(defaultKeyLayoutFile, file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -411,7 +420,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	@SuppressLint("SetTextI18n")
 	public void loadParams() {
-		params.load(defaultConfig);
+		params.load();
 		tfScreenWidth.setText(Integer.toString(params.getInt("ScreenWidth", 240)));
 		tfScreenHeight.setText(Integer.toString(params.getInt("ScreenHeight", 320)));
 		tfScreenBack.setText(Integer.toHexString(params.
@@ -547,7 +556,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.config, menu);
-		if (defaultConfig) {
+		if (isTemplate) {
 			menu.findItem(R.id.action_start).setVisible(false);
 			menu.findItem(R.id.action_clear_data).setVisible(false);
 		}
@@ -570,7 +579,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			case R.id.action_reset_layout:
 				//noinspection ResultOfMethodCallIgnored
 				keylayoutFile.delete();
-				loadKeylayout();
+				loadKeyLayout();
 				break;
 			case R.id.action_load_template:
 				LoadTemplateDialogFragment loadTemplateFragment = new LoadTemplateDialogFragment();
@@ -590,7 +599,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			case R.id.action_map_keys:
 				Intent i = new Intent(getIntent());
 				i.setClass(getApplicationContext(), KeyMapperActivity.class);
-				i.putExtra(DEFAULT_CONFIG_KEY, defaultConfig);
 				startActivity(i);
 				break;
 			case android.R.id.home:

@@ -24,9 +24,9 @@ import java.util.Arrays;
 
 import ru.playsoftware.j2meloader.util.FileUtils;
 
-public class TemplatesManager {
+class TemplatesManager {
 
-	public static ArrayList<Template> getTemplatesList() {
+	static ArrayList<Template> getTemplatesList() {
 		File templatesDir = new File(Config.TEMPLATES_DIR);
 		File[] templatesList = templatesDir.listFiles();
 		if (templatesList == null) {
@@ -40,32 +40,32 @@ public class TemplatesManager {
 		return new ArrayList<>(Arrays.asList(templates));
 	}
 
-	public static void loadTemplate(Template template, String path,
-									boolean templateSettings, boolean templateKeyboard) throws IOException {
+	static void loadTemplate(Template template, String path,
+							 boolean templateSettings, boolean templateKeyboard) throws IOException {
 		if (!templateSettings && !templateKeyboard) {
 			return;
 		}
 		File dstConfig = new File(path, Config.MIDLET_CONFIG_FILE);
-		File dstKeylayout = new File(path, Config.MIDLET_KEYLAYOUT_FILE);
+		File dstKeyLayout = new File(path, Config.MIDLET_KEYLAYOUT_FILE);
 		try {
 			if (templateSettings) FileUtils.copyFileUsingChannel(template.getConfig(), dstConfig);
-			if (templateKeyboard) FileUtils.copyFileUsingChannel(template.getKeylayout(), dstKeylayout);
+			if (templateKeyboard) FileUtils.copyFileUsingChannel(template.getKeylayout(), dstKeyLayout);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void saveTemplate(Template template, String path,
-									boolean templateSettings, boolean templateKeyboard) throws IOException {
+	static void saveTemplate(Template template, String path,
+							 boolean templateSettings, boolean templateKeyboard) throws IOException {
 		if (!templateSettings && !templateKeyboard) {
 			return;
 		}
 		template.create();
 		File srcConfig = new File(path, Config.MIDLET_CONFIG_FILE);
-		File srcKeylayout = new File(path, Config.MIDLET_KEYLAYOUT_FILE);
+		File srcKeyLayout = new File(path, Config.MIDLET_KEYLAYOUT_FILE);
 		try {
 			if (templateSettings) FileUtils.copyFileUsingChannel(srcConfig, template.getConfig());
-			if (templateKeyboard) FileUtils.copyFileUsingChannel(srcKeylayout, template.getKeylayout());
+			if (templateKeyboard) FileUtils.copyFileUsingChannel(srcKeyLayout, template.getKeylayout());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
