@@ -174,8 +174,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected static final int KEY_FIRE = 24;
 
 	private static final int LAYOUT_SIGNATURE = 0x564B4C00;
-	private static final int LAYOUT_OLD_VERSION = 1;
-	private static final int LAYOUT_VERSION = 2;
+	private static final int LAYOUT_VERSION_1 = 1;
+	private static final int LAYOUT_VERSION_2 = 2;
+	private static final int LAYOUT_VERSION_3 = 3;
+	private static final int LAYOUT_VERSION = LAYOUT_VERSION_3;
 
 	public static final int LAYOUT_EOF = -1;
 	public static final int LAYOUT_KEYS = 0;
@@ -208,19 +210,19 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	};
 
 	private static final int SCALE_JOYSTICK = 0;
-	private static final int SCALE_SOFT_KEYS = 1;
-	private static final int SCALE_DIAL_KEYS = 2;
-	private static final int SCALE_DIGITS = 3;
-	private static final int SCALE_FIRE_KEY = 4;
+	private static final int SCALE_SOFT_KEYS = 2;
+	private static final int SCALE_DIAL_KEYS = 4;
+	private static final int SCALE_DIGITS = 6;
+	private static final int SCALE_FIRE_KEY = 8;
 
 	private static final float SCALE_SNAP_RADIUS = 0.05f;
 
 	private float[] keyScales = {
-			1,
-			1,
-			1,
-			0.75f,
-			1.5f
+			1, 1,
+			1, 1,
+			1, 1,
+			1, 1,
+			1, 1
 	};
 
 	private int[][] keyScaleGroups = {
@@ -233,16 +235,13 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					KEY_DOWN_LEFT,
 					KEY_DOWN,
 					KEY_DOWN_RIGHT
-			},
-			{
+			}, {
 					KEY_SOFT_LEFT,
 					KEY_SOFT_RIGHT
-			},
-			{
+			}, {
 					KEY_DIAL,
 					KEY_CANCEL,
-			},
-			{
+			}, {
 					KEY_NUM1,
 					KEY_NUM2,
 					KEY_NUM3,
@@ -255,8 +254,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					KEY_NUM0,
 					KEY_STAR,
 					KEY_POUND
-			},
-			{
+			}, {
 					KEY_FIRE
 			}
 	};
@@ -281,8 +279,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private int layoutEditMode;
 	private int editedIndex;
 	private float offsetX, offsetY;
-	private float prevScale;
-	protected int layoutVariant;
+	private float prevScaleX;
+	private float prevScaleY;
+	int layoutVariant;
 
 	protected RectF screen;
 	protected RectF virtualScreen;
@@ -347,10 +346,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		switch (variant) {
 			case 0:
 				keyScales[SCALE_JOYSTICK] = 1;
+				keyScales[SCALE_JOYSTICK + 1] = 1;
 				keyScales[SCALE_SOFT_KEYS] = 1;
+				keyScales[SCALE_SOFT_KEYS + 1] = 1;
 				keyScales[SCALE_DIAL_KEYS] = 1;
+				keyScales[SCALE_DIAL_KEYS + 1] = 1;
 				keyScales[SCALE_DIGITS] = 1;
+				keyScales[SCALE_DIGITS + 1] = 1;
 				keyScales[SCALE_FIRE_KEY] = 1;
+				keyScales[SCALE_FIRE_KEY + 1] = 1;
 
 				setSnap(KEY_DOWN_RIGHT, SCREEN, RectSnap.INT_SOUTHEAST);
 				setSnap(KEY_DOWN, KEY_DOWN_RIGHT, RectSnap.EXT_WEST);
@@ -387,10 +391,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				break;
 			case 1:
 				keyScales[SCALE_JOYSTICK] = 1;
+				keyScales[SCALE_JOYSTICK + 1] = 1;
 				keyScales[SCALE_SOFT_KEYS] = 1;
+				keyScales[SCALE_SOFT_KEYS + 1] = 1;
 				keyScales[SCALE_DIAL_KEYS] = 1;
+				keyScales[SCALE_DIAL_KEYS + 1] = 1;
 				keyScales[SCALE_DIGITS] = 1;
+				keyScales[SCALE_DIGITS + 1] = 1;
 				keyScales[SCALE_FIRE_KEY] = 1;
+				keyScales[SCALE_FIRE_KEY + 1] = 1;
 
 				setSnap(KEY_DOWN, SCREEN, RectSnap.INT_SOUTH);
 				setSnap(KEY_DOWN_RIGHT, KEY_DOWN, RectSnap.EXT_EAST);
@@ -415,10 +424,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				break;
 			case 2:
 				keyScales[SCALE_JOYSTICK] = 1;
+				keyScales[SCALE_JOYSTICK + 1] = 1;
 				keyScales[SCALE_SOFT_KEYS] = 1;
+				keyScales[SCALE_SOFT_KEYS + 1] = 1;
 				keyScales[SCALE_DIAL_KEYS] = 1;
+				keyScales[SCALE_DIAL_KEYS + 1] = 1;
 				keyScales[SCALE_DIGITS] = 1;
+				keyScales[SCALE_DIGITS + 1] = 1;
 				keyScales[SCALE_FIRE_KEY] = 1;
+				keyScales[SCALE_FIRE_KEY + 1] = 1;
 
 				setSnap(KEY_SOFT_LEFT, KEY_NUM1, RectSnap.EXT_WEST);
 				setSnap(KEY_SOFT_RIGHT, KEY_NUM3, RectSnap.EXT_EAST);
@@ -495,7 +509,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			throw new IOException("file signature not found");
 		}
 		int version = dis.readInt();
-		if (version != LAYOUT_VERSION && version != LAYOUT_OLD_VERSION) {
+		if (version < LAYOUT_VERSION_1 || version > LAYOUT_VERSION) {
 			throw new IOException("incompatible file version");
 		}
 		while (true) {
@@ -515,7 +529,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						found = false;
 						for (int key = 0; key < keypad.length; key++) {
 							if (keypad[key].hashCode() == hash) {
-								if (version == LAYOUT_VERSION) {
+								if (version >= LAYOUT_VERSION_2) {
 									keypad[key].setVisible(dis.readBoolean());
 								}
 								snapOrigins[key] = dis.readInt();
@@ -533,9 +547,15 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					break;
 				case LAYOUT_SCALES:
 					count = dis.readInt();
-					if (count == keyScales.length) {
+					if (version >= LAYOUT_VERSION_3) {
 						for (int i = 0; i < count; i++) {
 							keyScales[i] = dis.readFloat();
+						}
+					} else if (count * 2 == keyScales.length) {
+						for (int i = 0; i < keyScales.length; i++) {
+							float v = dis.readFloat();
+							keyScales[i++] = v;
+							keyScales[i] = v;
 						}
 					} else {
 						dis.skip(count * 4);
@@ -673,15 +693,16 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		show();
 	}
 
-	private void resizeKey(int key, float size) {
-		keypad[key].resize(size, size);
+	private void resizeKey(int key, float w, float h) {
+		keypad[key].resize(w, h);
 		snapValid[key] = false;
 	}
 
 	private void resizeKeyGroup(int group) {
-		float size = keySize * keyScales[group];
+		float sizeX = keySize * keyScales[group * 2];
+		float sizeY = keySize * keyScales[group * 2 + 1];
 		for (int key = 0; key < keyScaleGroups[group].length; key++) {
-			resizeKey(keyScaleGroups[group][key], size);
+			resizeKey(keyScaleGroups[group][key], sizeX, sizeY);
 		}
 	}
 
@@ -788,7 +809,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				}
 				offsetX = x;
 				offsetY = y;
-				prevScale = keyScales[editedIndex];
+				prevScaleX = keyScales[editedIndex * 2];
+				prevScaleY = keyScales[editedIndex * 2 + 1];
 				break;
 		}
 		return checkPointerHandled(x, y);
@@ -852,25 +874,26 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			case LAYOUT_SCALES:
 				float dx = x - offsetX;
 				float dy = offsetY - y;
-				float delta;
+				float scale;
+				int index = this.editedIndex * 2;
 				if (Math.abs(dx) > Math.abs(dy)) {
-					delta = dx;
+					scale = prevScaleX + dx / Math.min(screen.centerX(), screen.centerY());
 				} else {
-					delta = dy;
+					scale = prevScaleY + dy / Math.min(screen.centerX(), screen.centerY());
+					index++;
 				}
-				float scale = prevScale + delta / Math.max(screen.width(), screen.height());
 				if (Math.abs(1 - scale) <= SCALE_SNAP_RADIUS) {
 					scale = 1;
 				} else {
-					for (int i = 0; i < keyScales.length; i++) {
-						if (i != editedIndex && Math.abs(keyScales[i] - scale) <= SCALE_SNAP_RADIUS) {
+					for (int i = index % 2; i < keyScales.length; i += 2) {
+						if (i != index && Math.abs(keyScales[i] - scale) <= SCALE_SNAP_RADIUS) {
 							scale = keyScales[i];
 							break;
 						}
 					}
 				}
-				keyScales[editedIndex] = scale;
-				resizeKeyGroup(editedIndex);
+				keyScales[index] = scale;
+				resizeKeyGroup(this.editedIndex);
 				snapKeys();
 				repaint();
 				break;
