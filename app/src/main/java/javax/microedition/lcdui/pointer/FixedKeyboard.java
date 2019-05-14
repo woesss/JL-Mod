@@ -30,7 +30,6 @@ public class FixedKeyboard extends VirtualKeyboard {
 
 	public FixedKeyboard(int variant) {
 		super(variant);
-		shape = SQUARE_SHAPE;
 	}
 
 	@Override
@@ -129,9 +128,5 @@ public class FixedKeyboard extends VirtualKeyboard {
 
 	@Override
 	public void writeLayout(DataOutputStream dos) throws IOException {
-	}
-
-	@Override
-	public void setButtonShape(int shape) {
 	}
 }

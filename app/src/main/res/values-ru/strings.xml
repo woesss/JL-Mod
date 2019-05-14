@@ -115,8 +115,9 @@
     <string name="pref_wakelock_title">Не отключать экран</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
     <string-array name="pref_button_shape_entries">
-        <item>Круглые</item>
-        <item>Квадратные</item>
+        <item>Овальные</item>
+        <item>Прямоугольные</item>
+        <item>Закруглённые</item>
     </string-array>
     <string name="pref_app_sort_title">Сортировка приложений</string>
     <string-array name="pref_app_sort_entries">

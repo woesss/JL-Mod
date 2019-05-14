@@ -58,6 +58,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		private boolean selected;
 		private boolean visible;
 		private long lastActionTime;
+		private boolean intersectScreen;
+		private int corners = 0;
 
 		VirtualKey(int keyCode, String label) {
 			this.keyCode = keyCode;
@@ -107,22 +109,34 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 		public void paint(Graphics g) {
 			if (label != null && visible) {
-				int alpha = obscuresVirtualScreen ? overlayAlpha : 0xFF000000;
+				int alpha = intersectScreen ? overlayAlpha : 0xFF000000;
 				g.setColorAlpha(alpha | colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
-				if (shape == SQUARE_SHAPE) {
-					g.fillRoundRect(rect, 0, 0);
-				} else {
-					g.fillArc(rect, 0, 360);
+				switch (shape) {
+					case ROUND_RECT_SHAPE:
+						g.fillRoundRect(rect, corners, corners);
+						break;
+					case RECT_SHAPE:
+						g.fillRect(rect);
+						break;
+					case OVAL_SHAPE:
+						g.fillArc(rect, 0, 360);
+						break;
 				}
 
 				g.setColorAlpha(alpha | colors[selected ? FOREGROUND_SELECTED : FOREGROUND]);
 				g.drawString(label, (int) rect.centerX(), (int) rect.centerY(), Graphics.HCENTER | Graphics.VCENTER);
 
 				g.setColorAlpha(alpha | colors[OUTLINE]);
-				if (shape == SQUARE_SHAPE) {
-					g.drawRoundRect(rect, 0, 0);
-				} else {
-					g.drawArc(rect, 0, 360);
+				switch (shape) {
+					case ROUND_RECT_SHAPE:
+						g.drawRoundRect(rect, corners, corners);
+						break;
+					case RECT_SHAPE:
+						g.drawRect(rect);
+						break;
+					case OVAL_SHAPE:
+						g.drawArc(rect, 0, 360);
+						break;
 				}
 			}
 		}
@@ -192,8 +206,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public static final int PHONE_DIGITS_TYPE = 1;
 	public static final int PHONE_ARROWS_TYPE = 2;
 
-	public static final int ROUND_SHAPE = 0;
-	public static final int SQUARE_SHAPE = 1;
+	public static final int OVAL_SHAPE = 0;
+	public static final int RECT_SHAPE = 1;
+	public static final int ROUND_RECT_SHAPE = 2;
 
 	public static final int BACKGROUND = 0;
 	public static final int FOREGROUND = 1;
@@ -281,7 +296,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private float offsetX, offsetY;
 	private float prevScaleX;
 	private float prevScaleY;
-	int layoutVariant;
+	protected int layoutVariant;
 
 	protected RectF screen;
 	protected RectF virtualScreen;
@@ -659,9 +674,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		obscuresVirtualScreen = false;
 		for (int i = 0; i < keypad.length; i++) {
 			snapKey(i, 0);
-			if (keypad[i].isVisible() && RectF.intersects(keypad[i].getRect(), virtualScreen)) {
+			VirtualKey key = keypad[i];
+			if (key.isVisible() && RectF.intersects(key.getRect(), virtualScreen)) {
 				obscuresVirtualScreen = true;
+				key.intersectScreen = true;
+			} else {
+				key.intersectScreen = false;
 			}
+			key.corners = (int) (Math.min(key.getRect().width(), key.getRect().height()) * 0.25F);
 		}
 	}
 

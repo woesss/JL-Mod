@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
@@ -40,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
@@ -53,6 +55,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ConfigActivity extends BaseActivity implements View.OnClickListener {
 
+	protected ScrollView rootContainer;
 	protected EditText tfScreenWidth;
 	protected EditText tfScreenHeight;
 	protected EditText tfScreenBack;
@@ -76,11 +79,14 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected CheckBox cxFontSizeInSP;
 	protected EditText tfSystemProperties;
 	protected CheckBox cxShowKeyboard;
+
+	private View vkContainer;
 	protected CheckBox cxVKFeedback;
 	protected CheckBox cxTouchInput;
 
 	protected Spinner spVKType;
 	protected Spinner spLayout;
+	private Spinner spButtonsShape;
 	protected SeekBar sbVKAlpha;
 	protected EditText tfVKHideDelay;
 	protected EditText tfVKFore;
@@ -140,6 +146,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		params = new SharedPreferencesContainer(configDir);
 		boolean loaded = params.load(defaultConfig);
 
+		rootContainer = findViewById(R.id.configRoot);
 		tfScreenWidth = findViewById(R.id.tfScreenWidth);
 		tfScreenHeight = findViewById(R.id.tfScreenHeight);
 		tfScreenBack = findViewById(R.id.tfScreenBack);
@@ -162,12 +169,16 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFontSizeLarge = findViewById(R.id.tfFontSizeLarge);
 		cxFontSizeInSP = findViewById(R.id.cxFontSizeInSP);
 		tfSystemProperties = findViewById(R.id.tfSystemProperties);
+
+		cxTouchInput = findViewById(R.id.cxTouchInput);
 		cxShowKeyboard = findViewById(R.id.cxIsShowKeyboard);
+		vkContainer = findViewById(R.id.configVkContainer);
 		cxVKFeedback = findViewById(R.id.cxVKFeedback);
 		cxTouchInput = findViewById(R.id.cxTouchInput);
 
 		spVKType = findViewById(R.id.spVKType);
 		spLayout = findViewById(R.id.spLayout);
+		spButtonsShape = findViewById(R.id.spButtonsShape);
 		sbVKAlpha = findViewById(R.id.sbVKAlpha);
 		tfVKHideDelay = findViewById(R.id.tfVKHideDelay);
 		tfVKFore = findViewById(R.id.tfVKFore);
@@ -241,13 +252,21 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				}
 			});
 		}
-
-		cxShowKeyboard.setOnClickListener(v -> {
-			if (!((CheckBox) v).isChecked()) {
-				cxVKFeedback.setEnabled(false);
+		vkContainer.setVisibility(cxShowKeyboard.isChecked() ? View.VISIBLE : View.GONE);
+		cxShowKeyboard.setOnCheckedChangeListener((b, checked) -> {
+			if (checked) {
+				vkContainer.setVisibility(View.VISIBLE);
 			} else {
-				cxVKFeedback.setEnabled(true);
+				vkContainer.setVisibility(View.GONE);
 			}
+			View.OnLayoutChangeListener onLayoutChangeListener = new View.OnLayoutChangeListener() {
+				@Override
+				public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+					v.scrollTo(0, ConfigActivity.this.findViewById(R.id.tvKeyboardHeader).getBottom());
+					v.removeOnLayoutChangeListener(this);
+				}
+			};
+			rootContainer.addOnLayoutChangeListener(onLayoutChangeListener);
 		});
 
 		if (loaded && !showSettings) {
@@ -278,8 +297,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	@Override
 	protected void onResume() {
-		loadParams();
 		super.onResume();
+		loadParams();
 	}
 
 	@Override
@@ -362,6 +381,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 		spVKType.setSelection(params.getInt("VirtualKeyboardType", 0));
 		spLayout.setSelection(params.getInt("Layout", 0));
+		spButtonsShape.setSelection(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
 		tfVKHideDelay.setText(Integer.toString(params.getInt("VirtualKeyboardDelay", -1)));
 		tfVKBack.setText(Integer.toHexString(
@@ -410,6 +430,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			params.putInt("VirtualKeyboardType", spVKType.getSelectedItemPosition());
 			params.putInt("Layout", spLayout.getSelectedItemPosition());
+			params.putInt("ButtonShape", spButtonsShape.getSelectedItemPosition());
 			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
 			params.putInt("VirtualKeyboardDelay",
 					Integer.parseInt(tfVKHideDelay.getText().toString()));
