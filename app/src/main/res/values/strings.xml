@@ -89,7 +89,7 @@
     <string name="PREF_VK_NUM_KEYS">Digits: </string>
     <string name="PREF_VK_FIRE_KEY">Fire: </string>
     <string name="PREF_VK_SIZE_HINT">Size</string>
-    <string name="SIZE_PRESETS">Presets</string>
+    <string name="SIZE_PRESETS">Presets list</string>
     <string name="SWAP_SIZES">Swap sizes</string>
     <string name="PREF_SYS_PROPS">System properties</string>
     <string name="PREF_SYS_PROPS_HINT" translatable="false">microedition.platform: Sony Ericsson C510i\nmicroedition.profiles: MIDP2.0</string>
@@ -208,7 +208,12 @@
     <string name="toast_close_filepicker">Press again to close file picker</string>
     <string name="action_context_default_template">Set as default config</string>
     <string name="error_exists">Error: already exists!</string>
-    <string name="default_template"> (default)</string>
-
+    <string name="default_template">" (default)"</string>
+    <string name="config_virtual_screen_size">virtual screen size (original resolutions of MIDlet):</string>
+    <string name="invalid_resolution">Invalid %s, application may not work correctly</string>
+    <string name="add_resolution_preset">Add resolution to presets</string>
+    <string name="saved">Saved %s</string>
+    <string name="not_saved_exists">Not saved: already exists</string>
+    <string name="invalid_resolution_not_saved">Invalid resolutions: not saved!</string>
 
 </resources>
