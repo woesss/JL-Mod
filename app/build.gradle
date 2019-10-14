@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "ru.playsoftware.j2meloader"
@@ -86,9 +85,9 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.preference:preference:1.0.0'
+    implementation 'androidx.preference:preference:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'ch.acra:acra-dialog:5.4.0'
@@ -97,8 +96,8 @@ dependencies {
     implementation 'com.github.nikita36078:filepicker:4.3.0'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
-    implementation 'org.ow2.asm:asm:7.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
+    implementation 'org.ow2.asm:asm:7.1'
     implementation project(':dexlib')
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
