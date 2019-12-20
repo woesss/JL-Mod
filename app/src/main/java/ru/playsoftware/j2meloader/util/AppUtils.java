@@ -74,14 +74,21 @@ public class AppUtils {
 	}
 
 	public static String getImagePathFromManifest(LinkedHashMap<String, String> params) {
-		String tmp;
-		String imagePath = "";
-		if ((tmp = params.get("MIDlet-Icon")) != null) {
-			imagePath = tmp;
-		} else if ((tmp = params.get("MIDlet-1")) != null) {
-			imagePath = tmp.split(",")[1];
+		String tmp = params.get("MIDlet-Icon");
+		if (tmp != null) {
+			tmp = tmp.trim();
+			if (tmp.length() != 0) {
+				return tmp;
+			}
 		}
-		return imagePath.replace(" ", "");
+		tmp = params.get("MIDlet-1");
+		if (tmp != null) {
+			int start = tmp.indexOf(',');
+			if (start == -1) return "";
+			int end = tmp.indexOf(',', ++start);
+			return tmp.substring(start, end).trim();
+		}
+		return "";
 	}
 
 	public static void deleteApp(AppItem item) {
