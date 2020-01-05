@@ -199,7 +199,9 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private static void mapKeyCode(int midpKeyCode, int gameAction, String keyName) {
-		keyCodeToGameAction.put(midpKeyCode, gameAction);
+		if (gameAction != 0) {
+			keyCodeToGameAction.put(midpKeyCode, gameAction);
+		}
 		keyCodeToKeyName.put(midpKeyCode, keyName);
 	}
 
