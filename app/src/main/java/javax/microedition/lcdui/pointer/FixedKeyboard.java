@@ -101,11 +101,12 @@ public class FixedKeyboard extends VirtualKeyboard {
 	}
 
 	@Override
-	public void switchLayout() {
+	public int switchLayout() {
 		layoutVariant ^= 1;
 		resetLayout(layoutVariant);
 		snapKeys();
 		repaint();
+		return layoutVariant;
 	}
 
 	@Override
