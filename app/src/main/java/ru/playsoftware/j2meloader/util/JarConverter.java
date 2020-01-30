@@ -38,12 +38,13 @@ import ru.playsoftware.j2meloader.config.Config;
 
 public class JarConverter {
 
-	public static final String TEMP_JAR_NAME = "tmp.jar";
-	public static final String TEMP_JAD_NAME = "tmp.jad";
-	public static final String TEMP_URI_FOLDER_NAME = "tmp_uri";
+	static final String TEMP_JAR_NAME = "tmp.jar";
+	static final String TEMP_JAD_NAME = "tmp.jad";
+	static final String TEMP_URI_FOLDER_NAME = "tmp_uri";
 
 	private static final String TEMP_FOLDER_NAME = "tmp";
 	private static final String TAG = JarConverter.class.getName();
+	private static final String ILLEGAL_FILENAME_CHARS = "[|\\\\?*<\":>+;/']";
 
 	private String appDirPath;
 	private String dataDirPath;
@@ -194,11 +195,12 @@ public class JarConverter {
 				throw new ConverterException("Invalid manifest");
 			}
 			// Remove invalid characters from app path
-			appDirPath = appDirPath.replace(":", "").replace("/", "");
+			appDirPath = appDirPath.replaceAll(ILLEGAL_FILENAME_CHARS, "");
 			appConverted = new File(Config.APP_DIR, appDirPath);
 			// Create target directory
 			FileUtils.deleteDirectory(appConverted);
-			appConverted.mkdirs();
+			if (!appConverted.mkdirs())
+				throw new ConverterException("Can't create app directory: '" + appConverted + "'");
 			Log.d(TAG, "appConverted=" + appConverted.getPath());
 
 			// Convert jar
