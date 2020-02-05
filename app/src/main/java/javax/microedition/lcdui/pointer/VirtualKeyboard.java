@@ -867,7 +867,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						}
 					}
 					snapKey(editedIndex, 0);
-					snapKeys();
 					repaint();
 				}
 				break;
@@ -921,6 +920,29 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				repaint();
 			}
 		} else if (layoutEditMode == LAYOUT_KEYS) {
+			int length = snapOrigins.length;
+			for (int key = 0; key < length; key++) {
+				if (snapOrigins[key] == editedIndex) {
+					snapModes[key] = RectSnap.NO_SNAP;
+					for (int i = 0; i < length; i++) {
+						if (i != key && findSnap(key, i)) {
+							break;
+						}
+					}
+					if (snapModes[key] == RectSnap.NO_SNAP) {
+						snapModes[key] = RectSnap.getSnap(keypad[key].rect, screen, snapOffsets[key]);
+						snapOrigins[key] = SCREEN;
+						if (Math.abs(snapOffsets[key].x) <= snapRadius) {
+							snapOffsets[key].x = 0;
+						}
+						if (Math.abs(snapOffsets[key].y) <= snapRadius) {
+							snapOffsets[key].y = 0;
+						}
+					}
+					snapKey(key, 0);
+				}
+			}
+			snapKeys();
 			editedIndex = -1;
 		}
 		return checkPointerHandled(x, y);
