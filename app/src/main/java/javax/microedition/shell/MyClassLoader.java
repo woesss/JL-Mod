@@ -30,14 +30,14 @@ public class MyClassLoader extends DexClassLoader {
 	public MyClassLoader(String paths, String tmpDir, ClassLoader parent, File resDir) {
 		super(paths, tmpDir, null, new MyCoreClassLoader(parent));
 		resFolder = resDir;
-		ACRA.getErrorReporter().putCustomData("Running app", getName());
+		ACRA.getErrorReporter().putCustomData("Running app", getDirName());
 	}
 
 	public static File getResFolder() {
 		return resFolder;
 	}
 
-	public static String getName() {
+	public static String getDirName() {
 		return resFolder.getParentFile().getName();
 	}
 }

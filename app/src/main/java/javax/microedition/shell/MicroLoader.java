@@ -52,20 +52,21 @@ import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.settings.KeyMapper;
 import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.woesss.j2me.jar.Descriptor;
 
 public class MicroLoader {
 	private static final String TAG = MicroLoader.class.getName();
 
 	private String path;
-	private String appName;
 	private Context context;
 	private SharedPreferencesContainer params;
+	private String appPath;
 
-	public MicroLoader(Context context, String appName) {
+	public MicroLoader(Context context, String appPath) {
 		this.context = context;
-		this.appName = appName;
-		this.path = Config.APP_DIR + appName;
-		this.params = new SharedPreferencesContainer(appName);
+		this.appPath = appPath;
+		this.path = Config.APP_DIR + appPath;
+		this.params = new SharedPreferencesContainer(appPath);
 	}
 
 	public void init() {
@@ -81,17 +82,17 @@ public class MicroLoader {
 		params.load(false);
 	}
 
-	public LinkedHashMap<String, String> loadMIDletList() {
+	public LinkedHashMap<String, String> loadMIDletList() throws IOException {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
-		LinkedHashMap<String, String> params =
-				FileUtils.loadManifest(new File(path, Config.MIDLET_MANIFEST_FILE));
-		MIDlet.initProps(params);
-		for (Map.Entry<String, String> entry : params.entrySet()) {
+		Descriptor descriptor = new Descriptor(new File(path, Config.MIDLET_MANIFEST_FILE), false);
+		Map<String, String> attr = descriptor.getAttrs();
+		MIDlet.initProps(attr);
+		for (Map.Entry<String, String> entry : attr.entrySet()) {
 			if (entry.getKey().matches("MIDlet-[0-9]+")) {
 				String tmp = entry.getValue();
-				String key = tmp.substring(tmp.lastIndexOf(',') + 1).trim();
-				String value = tmp.substring(0, tmp.indexOf(',')).trim();
-				midlets.put(key, value);
+				String clazz = tmp.substring(tmp.lastIndexOf(',') + 1).trim();
+				String title = tmp.substring(0, tmp.indexOf(',')).trim();
+				midlets.put(clazz, title);
 			}
 		}
 		return midlets;
@@ -116,7 +117,7 @@ public class MicroLoader {
 		ClassLoader loader = new MyClassLoader(dexTarget.getAbsolutePath(),
 				dexTargetOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
 		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexTarget.getPath());
-		Log.i(TAG, "MIDlet-Name: " + MyClassLoader.getName());
+		Log.i(TAG, "MIDlet-Name: " + MyClassLoader.getDirName());
 		return (MIDlet) loader.loadClass(mainClass).newInstance();
 	}
 
@@ -226,7 +227,7 @@ public class MicroLoader {
 		int vkColorBackground = params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0);
 		int vkColorForeground = params.getInt("VirtualKeyboardColorForeground", 0x000080);
 		int vkColorBackgroundSelected = params.getInt("VirtualKeyboardColorBackgroundSelected", 0x000080);
-		int vkColorForegroundSelected =  params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF);
+		int vkColorForegroundSelected = params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF);
 		int vkColorOutline = params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF);
 		boolean vkFeedback = params.getBoolean(("VirtualKeyboardFeedback"), false);
 
@@ -243,7 +244,7 @@ public class MicroLoader {
 		vk.setHasHapticFeedback(vkFeedback);
 		vk.setButtonShape(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
 
-		File keylayoutFile = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_KEYLAYOUT_FILE);
+		File keylayoutFile = new File(Config.CONFIGS_DIR, appPath + Config.MIDLET_KEYLAYOUT_FILE);
 		if (keylayoutFile.exists()) {
 			try {
 				FileInputStream fis = new FileInputStream(keylayoutFile);

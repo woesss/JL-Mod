@@ -69,4 +69,12 @@ public class AppRepository {
 				.subscribe();
 	}
 
+	public AppItem get(String name, String vendor) {
+		return appItemDao.get(name, vendor);
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		AppDatabase.closeInstance();
+	}
 }

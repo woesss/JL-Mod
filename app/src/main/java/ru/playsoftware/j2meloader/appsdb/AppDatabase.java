@@ -26,18 +26,22 @@ import ru.playsoftware.j2meloader.applist.AppItem;
 @Database(entities = {AppItem.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase instance;
+	private static volatile int openCount;
 
 	public abstract AppItemDao appItemDao();
 
-	static AppDatabase getDatabase(Context context) {
+	static synchronized AppDatabase getDatabase(Context context) {
+		openCount++;
 		if (instance == null) {
-			synchronized (AppDatabase.class) {
-				if (instance == null) {
-					instance = Room.databaseBuilder(context.getApplicationContext(),
-							AppDatabase.class, "apps-database.db").build();
-				}
-			}
+			instance = Room.databaseBuilder(context.getApplicationContext(),
+					AppDatabase.class, "apps-database.db").build();
 		}
 		return instance;
+	}
+
+	public static synchronized void closeInstance() {
+		if (--openCount > 0) return;
+		instance.close();
+		instance = null;
 	}
 }

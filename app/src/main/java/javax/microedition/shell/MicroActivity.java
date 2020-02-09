@@ -101,7 +101,7 @@ public class MicroActivity extends AppCompatActivity {
 		}
 		Intent intent = getIntent();
 		String appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
-		microLoader = new MicroLoader(this, appName);
+		microLoader = new MicroLoader(this, intent.getDataString());
 		microLoader.init();
 		microLoader.applyConfiguration();
 		VirtualKeyboard vk = ContextHolder.getVk();
@@ -249,7 +249,7 @@ public class MicroActivity extends AppCompatActivity {
 				if (!actionBarEnabled) {
 					actionBar.hide();
 				} else {
-					actionBar.setTitle(MyClassLoader.getName());
+					actionBar.setTitle(MyClassLoader.getDirName());
 					layoutParams.height = (int) (getToolBarHeight() / 1.5);
 				}
 			} else {

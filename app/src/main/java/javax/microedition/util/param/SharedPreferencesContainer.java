@@ -32,8 +32,8 @@ public class SharedPreferencesContainer implements DataContainer, DataEditor {
 	private HashMap<String, Object> configMap = new HashMap<>();
 	private File configFile;
 
-	public SharedPreferencesContainer(String appName) {
-		configFile = new File(Config.CONFIGS_DIR, appName + Config.MIDLET_CONFIG_FILE);
+	public SharedPreferencesContainer(String appPath) {
+		configFile = new File(Config.CONFIGS_DIR, appPath + Config.MIDLET_CONFIG_FILE);
 	}
 
 	public SharedPreferencesContainer(File configDir) {

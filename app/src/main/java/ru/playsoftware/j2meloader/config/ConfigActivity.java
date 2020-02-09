@@ -117,7 +117,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private File keylayoutFile;
 	private File dataDir;
 	private SharedPreferencesContainer params;
-	private String appName;
+	private String appPath;
 	private FragmentManager fragmentManager;
 	private boolean defaultConfig;
 	private Display display;
@@ -146,11 +146,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			configDir = new File(Config.DEFAULT_CONFIG_DIR);
 		} else {
 			showSettings = intent.getBooleanExtra(SHOW_SETTINGS_KEY, false);
-			appName = intent.getDataString();
-			getSupportActionBar().setTitle(appName);
-			dataDir = new File(Config.DATA_DIR, appName);
+			appPath = intent.getDataString();
+			getSupportActionBar().setTitle(intent.getStringExtra(MIDLET_NAME_KEY));
+			dataDir = new File(Config.DATA_DIR, appPath);
 			dataDir.mkdirs();
-			configDir = new File(Config.CONFIGS_DIR, appName);
+			configDir = new File(Config.CONFIGS_DIR, appPath);
 		}
 		configDir.mkdirs();
 		loadKeylayout();
@@ -588,8 +588,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				saveTemplateFragment.show(fragmentManager, "save_template");
 				break;
 			case R.id.action_map_keys:
-				Intent i = new Intent(this, KeyMapperActivity.class);
-				i.putExtra(MIDLET_NAME_KEY, appName);
+				Intent i = new Intent(getIntent());
+				i.setClass(getApplicationContext(), KeyMapperActivity.class);
 				i.putExtra(DEFAULT_CONFIG_KEY, defaultConfig);
 				startActivity(i);
 				break;
@@ -614,8 +614,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	}
 
 	private void startMIDlet() {
-		Intent i = new Intent(this, MicroActivity.class);
-		i.putExtra(MIDLET_NAME_KEY, appName);
+		Intent i = new Intent(getIntent());
+		i.setClass(getApplicationContext(), MicroActivity.class);
 		startActivity(i);
 		finish();
 	}

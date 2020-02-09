@@ -32,7 +32,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.ZipEntry;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MyClassLoader;
@@ -41,7 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.util.ZipFileCompat;
+import ru.playsoftware.j2meloader.util.ZipUtils;
 
 public class ContextHolder {
 	private static final String TAG = ContextHolder.class.getName();
@@ -116,23 +115,18 @@ public class ContextHolder {
 	}
 
 	private static InputStream getResource(String resName) throws IOException {
-		InputStream is;
 		byte[] data;
 		File midletResFile = new File(Config.APP_DIR,
-				MyClassLoader.getName() + Config.MIDLET_RES_FILE);
+				MyClassLoader.getDirName() + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) {
-			ZipFileCompat zipFile = new ZipFileCompat(midletResFile);
-			ZipEntry entry = zipFile.getEntry(resName);
-			is = zipFile.getInputStream(entry);
-			data = new byte[(int) entry.getSize()];
+			data = ZipUtils.unzipEntry(midletResFile, resName);
 		} else {
 			File resFile = new File(MyClassLoader.getResFolder(), resName);
-			is = new FileInputStream(resFile);
 			data = new byte[(int) resFile.length()];
+			try (DataInputStream dis = new DataInputStream(new FileInputStream(resFile))) {
+				dis.readFully(data);
+			}
 		}
-		DataInputStream dis = new DataInputStream(is);
-		dis.readFully(data);
-		dis.close();
 		return new ByteArrayInputStream(data);
 	}
 
@@ -149,7 +143,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		return new File(Config.DATA_DIR + MyClassLoader.getName(), name);
+		return new File(Config.DATA_DIR + MyClassLoader.getDirName(), name);
 	}
 
 	public static File getCacheDir() {

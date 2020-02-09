@@ -46,4 +46,7 @@ public interface AppItemDao {
 
 	@Query("DELETE FROM apps")
 	void deleteAll();
+
+	@Query("SELECT * FROM apps WHERE title = :name AND author = :vendor")
+	AppItem get(String name, String vendor);
 }

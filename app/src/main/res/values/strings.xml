@@ -207,5 +207,17 @@
     <string name="saved">Saved %s</string>
     <string name="not_saved_exists">Not saved: already exists</string>
     <string name="invalid_resolution_not_saved">Invalid resolutions: not saved!</string>
-
+    <string name="midlet_name"><b>Name:</b> </string>
+    <string name="midlet_vendor"><b>Vendor:</b> </string>
+    <string name="midlet_version"><b>Version:</b> </string>
+    <string name="midlet_size"><b>Size:</b> </string>
+    <string name="install">install</string>
+    <string name="midlet_source"><b>Source:</b> </string>
+    <string name="reinstall_oldest">\nReplace this app with version %s?\n\nCurrently installed: %s\nOldest version may not working correctly with recorded data.</string>
+    <string name="reinstall">\nApp already installed.\n\nDo you want to reinstall it?\nAll data will be saved.</string>
+    <string name="reinstall_newest">\nUpdate this app to version %s?\n\nCurrently installed: %s\nAll data will be saved.</string>
+    <string name="install_jar_non_matched_jad">This app differs from that described in JAD.\nIgnore JAD and install anyway?</string>
+    <string name="create_apps_dir_failed">Can\'t create directory \'%s\', emulator can\'t work without it.</string>
+    <string name="loading_info">loading info…</string>
+    <string name="install_done">\n\nApplication successfully installed!</string>
 </resources>

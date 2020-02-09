@@ -21,17 +21,17 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.util.ContextHolder;
 
 public abstract class MIDlet {
 
-	private static LinkedHashMap<String, String> properties;
+	private static Map<String, String> properties;
 	private boolean destroyAppCalled = false;
 
-	public static void initProps(LinkedHashMap<String, String> p) {
+	public static void initProps(Map<String, String> p) {
 		properties = p;
 	}
 
@@ -73,7 +73,7 @@ public abstract class MIDlet {
 	 * Called when the application terminates.
 	 *
 	 * @param unconditional unconditional completion flag, has no particular
-	 * sense for Android.
+	 *                      sense for Android.
 	 */
 	public abstract void destroyApp(boolean unconditional) throws MIDletStateChangeException;
 
@@ -82,7 +82,7 @@ public abstract class MIDlet {
 	 * notifyDestroyed() calls are ignored.
 	 *
 	 * @param unconditional unconditional completion flag, has no particular
-	 * sense for Android.
+	 *                      sense for Android.
 	 */
 	public final void callDestroyApp(boolean unconditional) {
 		destroyAppCalled = true;

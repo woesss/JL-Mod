@@ -27,6 +27,8 @@
 
 package org.microemu.android.asm;
 
+import android.util.Log;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -35,18 +37,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import ru.playsoftware.j2meloader.util.ZipFileCompat;
 
 public class AndroidProducer {
+	private static final String TAG = AndroidProducer.class.getName();
 
-	private static final int BUFFER_SIZE = 2048;
-
-	private static byte[] instrument(final byte[] classFile, String classFileName)
-			throws IllegalArgumentException {
+	private static byte[] instrument(final InputStream classFile, String classFileName)
+			throws IllegalArgumentException, IOException {
 		ClassReader cr = new ClassReader(classFile);
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		ClassVisitor cv = new AndroidClassVisitor(cw);
@@ -58,48 +58,21 @@ public class AndroidProducer {
 		return cw.toByteArray();
 	}
 
-	public static void processJar(File jarInputFile, File jarOutputFile) throws IOException {
-		HashMap<String, byte[]> resources = new HashMap<>();
-		ZipEntry zipEntry;
-		InputStream zis;
-		try (ZipFileCompat zip = new ZipFileCompat(jarInputFile);
-			 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jarOutputFile))) {
-			byte[] buffer = new byte[BUFFER_SIZE];
+	public static void processJar(File src, File dst) throws IOException {
+		try (ZipFileCompat zip = new ZipFileCompat(src);
+			 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(dst))) {
+			ZipEntry zipEntry;
 			while ((zipEntry = zip.getNextEntry()) != null) {
-				if (!zipEntry.isDirectory()) {
-					zis = zip.getInputStream(zipEntry);
-					String name = zipEntry.getName();
-					int size = 0;
-					int read;
-					int length = buffer.length;
-					while ((read = zis.read(buffer, size, length)) > 0) {
-						size += read;
-
-						length = BUFFER_SIZE;
-						if (size + length > buffer.length) {
-							byte[] newInputBuffer = new byte[size + length];
-							System.arraycopy(buffer, 0, newInputBuffer, 0, buffer.length);
-							buffer = newInputBuffer;
-						}
-					}
-					byte[] inBuffer = new byte[size];
-					System.arraycopy(buffer, 0, inBuffer, 0, size);
-					resources.put(name, inBuffer);
+				String name = zipEntry.getName();
+				if (name == null || name.endsWith("/") || !name.toLowerCase().endsWith(".class")) {
+					continue;
 				}
-			}
-
-			for (String name : resources.keySet()) {
-				byte[] inBuffer = resources.get(name);
-				byte[] outBuffer = inBuffer;
-				try {
-					if (name.endsWith(".class")) {
-						outBuffer = instrument(inBuffer, name.replace(".class", ""));
-					}
+				try (InputStream zis = zip.getInputStream(zipEntry)) {
+					byte[] outBuffer = instrument(zis, name.substring(0, name.length() - 6));
 					zos.putNextEntry(new ZipEntry(name));
-					//noinspection ConstantConditions
 					zos.write(outBuffer);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.w(TAG, "Error patching class: " + name, e);
 				}
 			}
 		}

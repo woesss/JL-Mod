@@ -18,6 +18,7 @@ package ru.playsoftware.j2meloader.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,7 +30,7 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipUtils {
 
-	private static final int BUFFER_SIZE = 2048;
+	private static final int BUFFER_SIZE = 8096;
 
 	public static void zip(File sourceFolder, File zipFile) throws IOException {
 		FileOutputStream dest = new FileOutputStream(zipFile);
@@ -85,6 +86,41 @@ public class ZipUtils {
 				dest.flush();
 				dest.close();
 				is.close();
+			}
+		}
+	}
+
+	public static void unzipEntry(File srcZip, String name, File dst) throws IOException {
+		try (ZipFile zip = new ZipFile(srcZip)) {
+			ZipEntry entry = zip.getEntry(name);
+			if (entry == null) {
+				throw new IOException("Entry '" + name + "' not found in zip: " + srcZip);
+			}
+			try (BufferedInputStream bis = new BufferedInputStream(zip.getInputStream(entry));
+				 BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(dst), BUFFER_SIZE)) {
+				byte[] data = new byte[BUFFER_SIZE];
+				int read;
+				while ((read = bis.read(data)) != -1) {
+					bos.write(data, 0, read);
+				}
+			}
+		}
+	}
+
+	public static byte[] unzipEntry(File srcZip, String name) throws IOException {
+		try (ZipFile zip = new ZipFile(srcZip)) {
+			ZipEntry entry = zip.getEntry(name);
+			if (entry == null) {
+				throw new IOException("Entry '" + name + "' not found in zip: " + srcZip);
+			}
+			try (BufferedInputStream bis = new BufferedInputStream(zip.getInputStream(entry));
+				 ByteArrayOutputStream bos = new ByteArrayOutputStream(BUFFER_SIZE)) {
+				byte[] data = new byte[BUFFER_SIZE];
+				int read;
+				while ((read = bis.read(data)) != -1) {
+					bos.write(data, 0, read);
+				}
+				return bos.toByteArray();
 			}
 		}
 	}

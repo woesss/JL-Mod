@@ -2,14 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.playsoftware.j2meloader"
-    android:installLocation="auto" >
+    android:installLocation="auto">
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
-    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+
     <application
         android:name=".EmulatorApplication"
         android:allowBackup="false"
@@ -24,16 +28,21 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:mimeType="application/java" />
                 <data android:mimeType="application/java-archive" />
+                <data android:mimeType="application/x-java-archive" />
                 <data android:mimeType="text/vnd.sun.j2me.app-descriptor" />
                 <data android:host="*" />
                 <data android:scheme="file" />
@@ -41,28 +50,30 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:mimeType="*/*" />
-                <data android:host="*"/>
+                <data android:host="*" />
                 <data android:scheme="file" />
                 <data android:scheme="content" />
-                <data android:pathPattern=".*\\.jar" />
-                <data android:pathPattern=".*\\..*\\.jar" />
-                <data android:pathPattern=".*\\..*\\..*\\.jar" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.jar" />
-                <data android:pathPattern=".*\\.JAR" />
-                <data android:pathPattern=".*\\..*\\.JAR" />
-                <data android:pathPattern=".*\\..*\\..*\\.JAR" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.JAR" />
-                <data android:pathPattern=".*\\.jad" />
-                <data android:pathPattern=".*\\..*\\.jad" />
-                <data android:pathPattern=".*\\..*\\..*\\.jad" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.jad" />
-                <data android:pathPattern=".*\\.JAD" />
-                <data android:pathPattern=".*\\..*\\.JAD" />
-                <data android:pathPattern=".*\\..*\\..*\\.JAD" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.JAD" />
+                <data android:pathPattern=".*.jar" />
+                <data android:pathPattern=".*..*.jar" />
+                <data android:pathPattern=".*..*..*.jar" />
+                <data android:pathPattern=".*..*..*..*.jar" />
+                <data android:pathPattern=".*.JAR" />
+                <data android:pathPattern=".*..*.JAR" />
+                <data android:pathPattern=".*..*..*.JAR" />
+                <data android:pathPattern=".*..*..*..*.JAR" />
+                <data android:pathPattern=".*.jad" />
+                <data android:pathPattern=".*..*.jad" />
+                <data android:pathPattern=".*..*..*.jad" />
+                <data android:pathPattern=".*..*..*..*.jad" />
+                <data android:pathPattern=".*.JAD" />
+                <data android:pathPattern=".*..*.JAD" />
+                <data android:pathPattern=".*..*..*.JAD" />
+                <data android:pathPattern=".*..*..*..*.JAD" />
             </intent-filter>
         </activity>
         <activity
@@ -72,26 +83,25 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="javax.microedition.shell.MicroActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize"
             android:process=":midlet"
-            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize" />
-        <activity
-            android:name=".settings.SettingsActivity" >
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".settings.SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
+            </intent-filter>
         </activity>
-        <activity
-            android:name=".donations.DonationsActivity" />
+        <activity android:name=".donations.DonationsActivity" />
         <activity
             android:name=".settings.KeyMapperActivity"
             android:process=":midlet" />
         <activity
             android:name=".filepicker.FilteredFilePickerActivity"
             android:theme="@style/FilePickerTheme" />
-        <activity
-            android:name=".config.TemplatesActivity" />
+        <activity android:name=".config.TemplatesActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

@@ -25,16 +25,18 @@ import java.io.File;
 
 import javax.microedition.shell.MicroActivity;
 
+import ru.playsoftware.j2meloader.applist.AppItem;
+
 public class Config {
 
-	public static final String MIDLET_DIR = "/converted/";
+	private static final String MIDLET_DIR = "/converted/";
 	public static final String EMULATOR_DIR = Environment.getExternalStorageDirectory() + "/J2ME-Loader";
 	public static final String SCREENSHOTS_DIR =
 			Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/J2ME-Loader";
 	public static final String DATA_DIR = EMULATOR_DIR + "/data/";
 	public static final String DEFAULT_CONFIG_DIR = EMULATOR_DIR + "/default/";
 	public static final String CONFIGS_DIR = EMULATOR_DIR + "/configs/";
-	public static final String TEMPLATES_DIR = EMULATOR_DIR + "/templates/";
+	static final String TEMPLATES_DIR = EMULATOR_DIR + "/templates/";
 	public static final String APP_DIR = EMULATOR_DIR + MIDLET_DIR;
 	public static final String TEMP_DEX_DIR = "/tmp_dex";
 	public static final String TEMP_DEX_OPT_DIR = "/tmp_dexopt";
@@ -46,16 +48,18 @@ public class Config {
 	public static final String MIDLET_KEYLAYOUT_FILE = "/VirtualKeyboardLayout";
 	public static final String MIDLET_CONFIG_FILE = "/config.xml";
 
-	public static void startApp(Context context, String appName, boolean showSettings) {
-		File file = new File(Config.CONFIGS_DIR, appName);
-		if (!showSettings && file.exists()) {
-			Intent intent = new Intent(context, MicroActivity.class);
-			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appName);
-			context.startActivity(intent);
-		} else {
-			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appName),
+	public static void startApp(Context context, AppItem app, boolean showSettings) {
+		File file = new File(Config.CONFIGS_DIR, app.getPath());
+		if (showSettings || !file.exists()) {
+			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(app.getPath()),
 					context, ConfigActivity.class);
 			intent.putExtra(ConfigActivity.SHOW_SETTINGS_KEY, true);
+			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, app.getTitle());
+			context.startActivity(intent);
+		} else {
+			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(app.getPath()),
+					context, MicroActivity.class);
+			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, app.getTitle());
 			context.startActivity(intent);
 		}
 	}

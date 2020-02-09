@@ -18,6 +18,7 @@ package ru.playsoftware.j2meloader.util;
 
 import android.os.Build;
 
+import java.io.BufferedInputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,7 +62,12 @@ public class ZipFileCompat implements Closeable {
 		if (zipFile != null) {
 			return zipFile.getInputStream(zipEntry);
 		} else {
-			return zis;
+			return new BufferedInputStream(zis) {
+				@Override
+				public void close() throws IOException {
+					// do noting
+				}
+			};
 		}
 	}
 
@@ -70,7 +76,7 @@ public class ZipFileCompat implements Closeable {
 			return zipFile.getEntry(name);
 		} else {
 			ZipEntry zipEntry;
-			while ((zipEntry = zis.getNextEntry()) != null && !zipEntry.getName().equals(name));
+			while ((zipEntry = zis.getNextEntry()) != null && !zipEntry.getName().equals(name)) ;
 			return zipEntry;
 		}
 	}

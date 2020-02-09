@@ -25,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -49,16 +50,23 @@ public class KeyMapperActivity extends BaseActivity implements View.OnClickListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_keymapper);
 		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setTitle(R.string.pref_map_keys);
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setTitle(R.string.pref_map_keys);
+		}
 		Intent intent = getIntent();
 		File configDir;
 		boolean defaultConfig = intent.getBooleanExtra(ConfigActivity.DEFAULT_CONFIG_KEY, false);
 		if (defaultConfig) {
 			configDir = new File(Config.DEFAULT_CONFIG_DIR);
 		} else {
-			String appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
-			configDir = new File(Config.CONFIGS_DIR, appName);
+			String appPath = intent.getDataString();
+			if (appPath == null) {
+				Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+				finish();
+				return;
+			}
+			configDir = new File(Config.CONFIGS_DIR, appPath);
 		}
 		params = new SharedPreferencesContainer(configDir);
 		params.load(defaultConfig);

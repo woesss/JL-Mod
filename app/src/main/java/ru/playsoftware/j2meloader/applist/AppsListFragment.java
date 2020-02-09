@@ -19,15 +19,11 @@ package ru.playsoftware.j2meloader.applist;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,7 +56,6 @@ import androidx.core.graphics.drawable.IconCompat;
 import androidx.fragment.app.ListFragment;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -79,28 +74,32 @@ import ru.playsoftware.j2meloader.info.AboutDialogFragment;
 import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.AppUtils;
-import ru.playsoftware.j2meloader.util.JarConverter;
 import ru.playsoftware.j2meloader.util.LogUtils;
+import ru.woesss.j2me.installer.InstallerDialog;
 
 public class AppsListFragment extends ListFragment {
-
 	private AppRepository appRepository;
 	private CompositeDisposable compositeDisposable;
 	private AppsListAdapter adapter;
-	private JarConverter converter;
 	private String appSort;
 	private String appPath;
 	private static final int FILE_CODE = 0;
+	private Uri appUri;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		compositeDisposable = new CompositeDisposable();
-		converter = new JarConverter(getActivity().getApplicationInfo().dataDir);
-		appSort = getArguments().getString(MainActivity.APP_SORT_KEY);
-		appPath = getArguments().getString(MainActivity.APP_PATH_KEY);
 		adapter = new AppsListAdapter(getActivity());
+		Bundle args = getArguments();
+		if (args == null) {
+			return;
+		}
+		appSort = args.getString(MainActivity.APP_SORT_KEY);
+		appPath = args.getString(MainActivity.APP_PATH_KEY);
+		appUri = args.getParcelable(MainActivity.APP_URI_KEY);
 	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,7 +113,7 @@ public class AppsListFragment extends ListFragment {
 		setHasOptionsMenu(true);
 		setListAdapter(adapter);
 		initDb();
-		FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+		FloatingActionButton fab = requireActivity().findViewById(R.id.fab);
 		fab.setOnClickListener(v -> {
 			Intent i = new Intent(getActivity(), FilteredFilePickerActivity.class);
 			i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
@@ -130,7 +129,7 @@ public class AppsListFragment extends ListFragment {
 	public void onResume() {
 		super.onResume();
 		if (appPath != null) {
-			convertJar(appPath);
+			installApp(appPath, appUri);
 			appPath = null;
 		}
 	}
@@ -142,8 +141,9 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	@SuppressLint("CheckResult")
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	private void initDb() {
-		appRepository = new AppRepository(getActivity().getApplication(), appSort.equals("date"));
+		appRepository = new AppRepository(requireActivity().getApplication(), appSort.equals("date"));
 		ConnectableFlowable<List<AppItem>> listConnectableFlowable = appRepository.getAll()
 				.subscribeOn(Schedulers.io()).publish();
 		listConnectableFlowable
@@ -161,68 +161,16 @@ public class AppsListFragment extends ListFragment {
 			List<Uri> files = Utils.getSelectedFilesFromResult(data);
 			for (Uri uri : files) {
 				File file = Utils.getFileForUri(uri);
-				convertJar(file.getAbsolutePath());
+				installApp(file.getAbsolutePath(), null);
 			}
 		}
 	}
 
-	@SuppressLint("CheckResult")
-	private void convertJar(String path) {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-		String encoding = sp.getString("pref_encoding", "ISO-8859-1");
-		ProgressDialog dialog = new ProgressDialog(getActivity());
-		dialog.setIndeterminate(true);
-		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		dialog.setCancelable(false);
-		dialog.setMessage(getText(R.string.converting_message));
-		dialog.setTitle(R.string.converting_wait);
-		converter.convert(path)
-				.subscribeOn(Schedulers.computation())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribeWith(new SingleObserver<String>() {
-					@Override
-					public void onSubscribe(Disposable d) {
-						dialog.show();
-					}
-
-					@Override
-					public void onSuccess(String s) {
-						AppItem app = AppUtils.getApp(s);
-						appRepository.insert(app);
-						dialog.dismiss();
-						if (!isAdded()) return;
-						showStartDialog(app);
-					}
-
-					@Override
-					public void onError(Throwable e) {
-						e.printStackTrace();
-						if (!isAdded()) return;
-						Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-						dialog.dismiss();
-					}
-				});
+	private void installApp(String path, Uri uri) {
+		InstallerDialog.newInstance(path, uri).show(getParentFragmentManager(), "installer");
 	}
 
-	private void showStartDialog(AppItem app) {
-		AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-		StringBuilder text = new StringBuilder()
-				.append(getString(R.string.author)).append(' ')
-				.append(app.getAuthor()).append('\n')
-				.append(getString(R.string.version)).append(' ')
-				.append(app.getVersion()).append('\n');
-		dialog.setMessage(text);
-		dialog.setTitle(app.getTitle());
-		Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
-		if (drawable != null) dialog.setIcon(drawable);
-		dialog.setPositiveButton(R.string.START_CMD, (d, w) -> {
-			Config.startApp(getActivity(), app.getPath(), false);
-		});
-		dialog.setNegativeButton(R.string.close, null);
-		dialog.show();
-	}
-
-	private void showRenameDialog(final int id) {
+	private void alertRename(final int id) {
 		AppItem item = adapter.getItem(id);
 		EditText editText = new EditText(getActivity());
 		editText.setText(item.getTitle());
@@ -236,7 +184,7 @@ public class AppsListFragment extends ListFragment {
 		int paddingVertical = (int) (density * 16);
 		int paddingHorizontal = (int) (density * 8);
 		editText.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
 				.setTitle(R.string.action_context_rename)
 				.setView(linearLayout)
 				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
@@ -252,9 +200,9 @@ public class AppsListFragment extends ListFragment {
 		builder.show();
 	}
 
-	private void showDeleteDialog(final int id) {
+	private void alertDelete(final int id) {
 		AppItem item = adapter.getItem(id);
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
 				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
@@ -266,15 +214,16 @@ public class AppsListFragment extends ListFragment {
 	}
 
 	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
+	public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
 		AppItem item = adapter.getItem(position);
-		Config.startApp(getActivity(), item.getPath(), false);
+		Config.startApp(getActivity(), item, false);
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v,
+									ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		MenuInflater inflater = getActivity().getMenuInflater();
+		MenuInflater inflater = requireActivity().getMenuInflater();
 		inflater.inflate(R.menu.context_main, menu);
 	}
 
@@ -288,51 +237,54 @@ public class AppsListFragment extends ListFragment {
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
 				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
 						Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
+				launchIntent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
 				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
-						new ShortcutInfoCompat.Builder(getActivity(), appItem.getTitle())
+						new ShortcutInfoCompat.Builder(requireActivity(), appItem.getTitle())
 								.setIntent(launchIntent)
 								.setShortLabel(appItem.getTitle());
 				if (bitmap != null) {
 					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithBitmap(bitmap));
 				} else {
-					shortcutInfoCompatBuilder.setIcon(IconCompat.createWithResource(getActivity(), R.mipmap.ic_launcher));
+					IconCompat icon = IconCompat.createWithResource(requireActivity(),
+							R.mipmap.ic_launcher);
+					shortcutInfoCompatBuilder.setIcon(icon);
 				}
-				ShortcutManagerCompat.requestPinShortcut(getActivity(), shortcutInfoCompatBuilder.build(), null);
+				ShortcutManagerCompat.requestPinShortcut(requireActivity(),
+						shortcutInfoCompatBuilder.build(), null);
 				break;
 			case R.id.action_context_rename:
-				showRenameDialog(index);
+				alertRename(index);
 				break;
 			case R.id.action_context_settings:
-				Config.startApp(getActivity(), appItem.getPath(), true);
+				Config.startApp(getActivity(), appItem, true);
 				break;
 			case R.id.action_context_delete:
-				showDeleteDialog(index);
+				alertDelete(index);
 				break;
 		}
 		return super.onContextItemSelected(item);
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.main, menu);
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView searchView = (SearchView) searchItem.getActionView();
-		Disposable searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter -> {
-			searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-				@Override
-				public boolean onQueryTextSubmit(String query) {
-					emitter.onNext(query);
-					return true;
-				}
+		Disposable searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter ->
+				searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+					@Override
+					public boolean onQueryTextSubmit(String query) {
+						emitter.onNext(query);
+						return true;
+					}
 
-				@Override
-				public boolean onQueryTextChange(String newText) {
-					emitter.onNext(newText);
-					return true;
-				}
-			});
-		}).debounce(300, TimeUnit.MILLISECONDS)
+					@Override
+					public boolean onQueryTextChange(String newText) {
+						emitter.onNext(newText);
+						return true;
+					}
+				})).debounce(300, TimeUnit.MILLISECONDS)
 				.map(String::toLowerCase)
 				.distinctUntilChanged()
 				.observeOn(AndroidSchedulers.mainThread())
@@ -373,7 +325,7 @@ public class AppsListFragment extends ListFragment {
 				}
 				break;
 			case R.id.action_exit_app:
-				getActivity().finish();
+				requireActivity().finish();
 				break;
 		}
 		return super.onOptionsItemSelected(item);

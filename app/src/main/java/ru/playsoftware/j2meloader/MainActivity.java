@@ -44,6 +44,7 @@ public class MainActivity extends BaseActivity {
 
 	public static final String APP_SORT_KEY = "appSort";
 	public static final String APP_PATH_KEY = "appPath";
+	public static final String APP_URI_KEY = "appUri";
 
 	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
@@ -78,7 +79,10 @@ public class MainActivity extends BaseActivity {
 		String appSort = sp.getString("pref_app_sort", "name");
 		Bundle bundleLoad = new Bundle();
 		bundleLoad.putString(APP_SORT_KEY, appSort);
-		if (intentUri) bundleLoad.putString(APP_PATH_KEY, getAppPath());
+		if (intentUri) {
+			bundleLoad.putString(APP_PATH_KEY, getAppPath(getIntent().getData()));
+			bundleLoad.putParcelable(APP_URI_KEY, getIntent().getData());
+		}
 		AppsListFragment appsListFragment = new AppsListFragment();
 		appsListFragment.setArguments(bundleLoad);
 		FragmentManager fragmentManager = getSupportFragmentManager();
@@ -87,29 +91,31 @@ public class MainActivity extends BaseActivity {
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
 										   @NonNull int[] grantResults) {
-		switch (requestCode) {
-			case MY_PERMISSIONS_REQUEST_WRITE_STORAGE:
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					setupActivity(getIntent().getData() != null);
-				} else {
-					Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
-					finish();
-				}
-				break;
+		if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_STORAGE) {
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				setupActivity(getIntent().getData() != null);
+			} else {
+				Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
+				finish();
+			}
 		}
 	}
 
 	private void initFolders() {
-		File nomedia = new File(Config.EMULATOR_DIR, ".nomedia");
-		if (!nomedia.exists()) {
+		File appsDir = new File(Config.EMULATOR_DIR);
+		if (!appsDir.exists()) {
 			try {
-				nomedia.getParentFile().mkdirs();
-				nomedia.createNewFile();
+				File nomedia = new File(appsDir, ".nomedia");
+				if (appsDir.mkdirs() && nomedia.createNewFile()) {
+					return;
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			Toast.makeText(this, getString(R.string.create_apps_dir_failed, appsDir), Toast.LENGTH_SHORT).show();
+			finish();
 		}
 	}
 
@@ -123,9 +129,9 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-	private String getAppPath() {
+	private String getAppPath(Uri uri) {
 		try {
-			return FileUtils.getAppPath(this, getIntent().getData());
+			return FileUtils.getAppPath(this, uri);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
