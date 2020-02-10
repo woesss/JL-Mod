@@ -98,7 +98,6 @@ public class AppUtils {
 			if (itemsNum != 0) {
 				appRepository.deleteAll();
 			}
-			appRepository.insertAll(getAppsList());
 			return;
 		}
 		List<String> appFoldersList = Arrays.asList(appFolders);
