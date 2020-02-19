@@ -18,19 +18,19 @@
 package javax.microedition.util.param;
 
 public interface DataEditor {
-	public DataEditor clear();
+	DataEditor clear();
 
-	public DataEditor remove(String key);
+	DataEditor remove(String key);
 
-	public DataEditor putBoolean(String key, boolean value);
+	DataEditor putBoolean(String key, boolean value);
 
-	public DataEditor putFloat(String key, float value);
+	DataEditor putFloat(String key, float value);
 
-	public DataEditor putInt(String key, int value);
+	DataEditor putInt(String key, int value);
 
-	public DataEditor putLong(String key, long value);
+	DataEditor putLong(String key, long value);
 
-	public DataEditor putString(String key, String value);
+	DataEditor putString(String key, String value);
 
-	public void apply();
+	void apply();
 }

@@ -16,9 +16,7 @@
     <string name="version">Version: </string>
     <string name="no_data_for_display">Pas de données</string>
     <string name="message_delete">Voulez-vous vraiment supprimer cette application?</string>
-    <string name="converting_wait">Conversion en JAR...</string>
-    <string name="convert_complete">Complétez</string>
-    <string name="converting_message">Traitement des données en cours...</string>
+    <string name="converting_wait">Conversion en JAR…</string>
     <string name="permission_request_failed">Cette application exige l’autorisation de sauvegarde de données et caché sur la carte Sd</string>
     <string name="external_storage_not_mounted">Cette application exige d\'être stocké sur la carte Sd ou externe</string>
     <string name="action_context_shortcut">Ajouter un raccourci</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">En mode plein écran des applications</string>
     <string name="pref_wakelock_title">Gardez l\'écran allumé</string>
     <string name="pref_button_shape_title">Forme des boutons ou apparence des boutons</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Rond</item>
-        <item>Carré</item>
-    </string-array>
     <string name="pref_app_sort_title">Trier les applications par ordre alphabétique</string>
     <string-array name="pref_app_sort_entries">
         <item>Nom</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Encodage</string>
     <string name="pref_default_settings">Réglages par défaut</string>
     <string name="mapping_dialog_title">Appuyez sur une touche</string>
-    <string name="mapping_dialog_message" formatted="false">Mappage actuel : %1$s</string>
+    <string name="mapping_dialog_message">Mappage actuel : %1$s</string>
     <string name="reset_mapping">Réinitialiser</string>
     <string name="parallel_screen_redrawing">Redessin de l\'écran parallèle</string>
 </resources>

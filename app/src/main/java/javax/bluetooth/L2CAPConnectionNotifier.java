@@ -79,6 +79,6 @@ public interface L2CAPConnectionNotifier extends Connection {
 	 *                                      not be placed in connectable mode because the device user has
 	 *                                      configured the device to be non-connectable.
 	 */
-	public L2CAPConnection acceptAndOpen() throws IOException;
+	L2CAPConnection acceptAndOpen() throws IOException;
 
 }

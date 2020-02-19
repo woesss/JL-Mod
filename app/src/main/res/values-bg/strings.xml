@@ -17,8 +17,6 @@
     <string name="no_data_for_display">Няма данни</string>
     <string name="message_delete">Сигурни ли сте, че искате да изтриете това приложение?</string>
     <string name="converting_wait">Конвертиране на JAR...</string>
-    <string name="convert_complete">Завършенo</string>
-    <string name="converting_message">Обработване...</string>
     <string name="permission_request_failed">Това приложение изисква разрешение за запис във хранилището</string>
     <string name="external_storage_not_mounted">Това приложение изисква външна памет</string>
     <string name="action_context_shortcut">Добавяне на пряк път</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">Приложения на цял екран</string>
     <string name="pref_wakelock_title">Поддържане на включен екран</string>
     <string name="pref_button_shape_title">Форма на бутона</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Закръглен</item>
-        <item>Квадрат</item>
-    </string-array>
     <string name="pref_app_sort_title">Ред за сортиране на приложения</string>
     <string-array name="pref_app_sort_entries">
         <item>Име</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Кодиране</string>
     <string name="pref_default_settings">Настройки по подразбиране</string>
     <string name="mapping_dialog_title">Натиснете клавиш</string>
-    <string name="mapping_dialog_message" formatted="false">Текущи настройки: %1$s</string>
+    <string name="mapping_dialog_message">Текущи настройки: %s</string>
     <string name="reset_mapping">Нулиране</string>
     <string name="parallel_screen_redrawing">Паралелно обновяване на екрана</string>
 </resources>

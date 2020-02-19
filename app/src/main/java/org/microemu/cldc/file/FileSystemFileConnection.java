@@ -160,7 +160,7 @@ public class FileSystemFileConnection implements FileConnection {
 		if (!file.isDirectory()) {
 			throw new IOException("Not a directory " + file.getAbsolutePath());
 		}
-		return new Long(directorySize(file, includeSubDirs));
+		return Long.valueOf(directorySize(file, includeSubDirs));
 	}
 
 	private static long directorySize(File dir, boolean includeSubDirs) throws IOException {

@@ -4,12 +4,12 @@ import javax.microedition.pki.Certificate;
 
 public interface SecurityInfo {
 
-	public Certificate getServerCertificate();
+	Certificate getServerCertificate();
 
-	public String getProtocolVersion();
+	String getProtocolVersion();
 
-	public String getProtocolName();
+	String getProtocolName();
 
-	public String getCipherSuite();
+	String getCipherSuite();
 
 }

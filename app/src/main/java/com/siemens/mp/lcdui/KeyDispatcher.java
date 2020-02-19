@@ -18,6 +18,6 @@ package com.siemens.mp.lcdui;
 
 public interface KeyDispatcher {
 
-	public boolean keyEvent(int keyEvent);
+	boolean keyEvent(int keyEvent);
 
 }

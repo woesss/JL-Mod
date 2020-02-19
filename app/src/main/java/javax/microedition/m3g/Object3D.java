@@ -154,7 +154,7 @@ public abstract class Object3D {
 	// Private methods
 	//------------------------------------------------------------------
 
-	static final Object3D getInstance(long handle) {
+	static Object3D getInstance(long handle) {
 		return Interface.getObjectInstance(handle);
 	}
 

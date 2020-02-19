@@ -131,13 +131,13 @@ public class SocketConnection implements javax.microedition.io.SocketConnection 
 				} else {
 					delay = 1;
 				}
-				socket.setTcpNoDelay(delay == 0 ? false : true);
+				socket.setTcpNoDelay(delay != 0);
 				break;
 			case LINGER:
 				if (value < 0) {
 					throw new IllegalArgumentException();
 				}
-				socket.setSoLinger(value == 0 ? false : true, value);
+				socket.setSoLinger(value != 0, value);
 				break;
 			case KEEPALIVE:
 				int keepalive;
@@ -146,7 +146,7 @@ public class SocketConnection implements javax.microedition.io.SocketConnection 
 				} else {
 					keepalive = 1;
 				}
-				socket.setKeepAlive(keepalive == 0 ? false : true);
+				socket.setKeepAlive(keepalive != 0);
 				break;
 			case RCVBUF:
 				if (value <= 0) {

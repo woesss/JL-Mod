@@ -12,9 +12,7 @@
     <string name="version">รุ่น: </string>
     <string name="no_data_for_display">ไม่​มี​ข้อมูล</string>
     <string name="message_delete">ท่านต้องการลบแอปฯนี้หรือไม่?</string>
-    <string name="converting_wait">กำลังแปลง JAR...</string>
-    <string name="convert_complete">เสร็จสมบูรณ์</string>
-    <string name="converting_message">กำลังประมวลผล...</string>
+    <string name="converting_wait">กำลังแปลง JAR…</string>
     <string name="permission_request_failed">แอปฯนี้ต้องใช้สิทธิ์ในการเขียนที่เก็บข้อมูล</string>
     <string name="external_storage_not_mounted">แอปฯนี้ต้องใช้สิทธิ์ที่เก็บข้อมูลภายนอก</string>
     <string name="action_context_shortcut">เพิ่มทางลัด</string>
@@ -95,10 +93,6 @@
     <string name="pref_enable_actionbar_title">เปิดใช้ ActionBar</string>
     <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
     <string name="pref_button_shape_title">รูปร่างปุ่ม</string>
-    <string-array name="pref_button_shape_entries">
-        <item>มล</item>
-        <item>สีเหลี่ยม</item>
-    </string-array>
     <string name="pref_app_sort_title">ลำดับการจัดเรียง app</string>
     <string-array name="pref_app_sort_entries">
         <item>ชื่อ</item>
@@ -106,6 +100,6 @@
     </string-array>
     <string name="pref_map_keys">Key mappings</string>
     <string name="mapping_dialog_title">กดปุ่ม</string>
-    <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
+    <string name="mapping_dialog_message">Current mapping: %1$s</string>
     <string name="reset_mapping">รีเซ็ต</string>
 </resources>

@@ -37,69 +37,69 @@ import javax.microedition.io.StreamConnection;
 
 public interface FileConnection extends StreamConnection {
 
-	public abstract boolean isOpen();
+	boolean isOpen();
 
 	@Override
-	public abstract InputStream openInputStream() throws IOException;
+	InputStream openInputStream() throws IOException;
 
 	@Override
-	public abstract DataInputStream openDataInputStream() throws IOException;
+	DataInputStream openDataInputStream() throws IOException;
 
 	@Override
-	public abstract OutputStream openOutputStream() throws IOException;
+	OutputStream openOutputStream() throws IOException;
 
 	@Override
-	public abstract DataOutputStream openDataOutputStream() throws IOException;
+	DataOutputStream openDataOutputStream() throws IOException;
 
-	public abstract OutputStream openOutputStream(long byteOffset) throws IOException;
+	OutputStream openOutputStream(long byteOffset) throws IOException;
 
-	public abstract long totalSize();
+	long totalSize();
 
-	public abstract long availableSize();
+	long availableSize();
 
-	public abstract long usedSize();
+	long usedSize();
 
-	public abstract long directorySize(boolean includeSubDirs) throws IOException;
+	long directorySize(boolean includeSubDirs) throws IOException;
 
-	public abstract long fileSize() throws IOException;
+	long fileSize() throws IOException;
 
-	public abstract boolean canRead();
+	boolean canRead();
 
-	public abstract boolean canWrite();
+	boolean canWrite();
 
-	public abstract boolean isHidden();
+	boolean isHidden();
 
-	public abstract void setReadable(boolean readable) throws IOException;
+	void setReadable(boolean readable) throws IOException;
 
-	public abstract void setWritable(boolean writable) throws IOException;
+	void setWritable(boolean writable) throws IOException;
 
-	public abstract void setHidden(boolean hidden) throws IOException;
+	void setHidden(boolean hidden) throws IOException;
 
-	public abstract Enumeration list() throws IOException;
+	Enumeration list() throws IOException;
 
-	public abstract Enumeration list(String filter, boolean includeHidden) throws IOException;
+	Enumeration list(String filter, boolean includeHidden) throws IOException;
 
-	public abstract void create() throws IOException;
+	void create() throws IOException;
 
-	public abstract void mkdir() throws IOException;
+	void mkdir() throws IOException;
 
-	public abstract boolean exists();
+	boolean exists();
 
-	public abstract boolean isDirectory();
+	boolean isDirectory();
 
-	public abstract void delete() throws IOException;
+	void delete() throws IOException;
 
-	public abstract void rename(String newName) throws IOException;
+	void rename(String newName) throws IOException;
 
-	public abstract void truncate(long byteOffset) throws IOException;
+	void truncate(long byteOffset) throws IOException;
 
-	public abstract void setFileConnection(String s) throws IOException;
+	void setFileConnection(String s) throws IOException;
 
-	public abstract String getName();
+	String getName();
 
-	public abstract String getPath();
+	String getPath();
 
-	public abstract String getURL();
+	String getURL();
 
-	public abstract long lastModified();
+	long lastModified();
 }

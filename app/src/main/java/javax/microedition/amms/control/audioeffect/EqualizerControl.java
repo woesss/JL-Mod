@@ -19,17 +19,17 @@ package javax.microedition.amms.control.audioeffect;
 import javax.microedition.amms.control.EffectControl;
 
 public interface EqualizerControl extends EffectControl {
-	public int getNumberOfBands();
+	int getNumberOfBands();
 
-	public int getBand(int frequency);
+	int getBand(int frequency);
 
-	public int getCenterFreq(int band);
+	int getCenterFreq(int band);
 
-	public int getMinBandLevel();
+	int getMinBandLevel();
 
-	public int getMaxBandLevel();
+	int getMaxBandLevel();
 
-	public void setBandLevel(int level, int band);
+	void setBandLevel(int level, int band);
 
-	public int getBandLevel(int band);
+	int getBandLevel(int band);
 }

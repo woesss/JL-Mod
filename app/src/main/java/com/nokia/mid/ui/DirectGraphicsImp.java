@@ -74,7 +74,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void drawPolygon(int xPoints[], int xOffset, int yPoints[], int yOffset, int nPoints, int argbColor) {
+	public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
 		setARGBColor(argbColor);
 		graphics.drawPolygon(xPoints, xOffset, yPoints, yOffset, nPoints);
 	}
@@ -85,7 +85,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void fillPolygon(int xPoints[], int xOffset, int yPoints[], int yOffset, int nPoints, int argbColor) {
+	public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
 		setARGBColor(argbColor);
 		graphics.fillPolygon(xPoints, xOffset, yPoints, yOffset, nPoints);
 	}
@@ -153,7 +153,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void drawPixels(short pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
+	public void drawPixels(short[] pix, boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
 		if (pix == null) {
 			throw new NullPointerException();
 		}
@@ -184,7 +184,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void drawPixels(int pix[], boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
+	public void drawPixels(int[] pix, boolean trans, int off, int scanlen, int x, int y, int width, int height, int manipulation, int format) {
 		if (pix == null) {
 			throw new NullPointerException();
 		}
@@ -215,13 +215,13 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height,
+	public void getPixels(byte[] pix, byte[] alpha, int offset, int scanlen, int x, int y, int width, int height,
 						  int format) {
 		Log.e(TAG, "public void getPixels(byte pix[], byte alpha[], int offset, int scanlen, int x, int y, int width, int height, int format)");
 	}
 
 	@Override
-	public void getPixels(short pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
+	public void getPixels(short[] pix, int offset, int scanlen, int x, int y, int width, int height, int format) {
 		if (pix == null) {
 			throw new NullPointerException();
 		}
@@ -249,7 +249,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 	}
 
 	@Override
-	public void getPixels(int pix[], int offset, int scanlen, int x, int y, int width, int height, int format) {
+	public void getPixels(int[] pix, int offset, int scanlen, int x, int y, int width, int height, int format) {
 		if (pix == null) {
 			throw new NullPointerException();
 		}

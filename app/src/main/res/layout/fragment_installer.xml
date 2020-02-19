@@ -43,7 +43,7 @@
 
     <LinearLayout
         android:id="@+id/buttonBar"
-        style="?attr/buttonBarNeutralButtonStyle"
+        style="?attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
@@ -68,7 +68,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/CANCEL_CMD"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:ignore="ButtonOrder" />
 
         <Button
             android:id="@+id/btnOk"
@@ -76,7 +78,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/install"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </LinearLayout>
 

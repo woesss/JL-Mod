@@ -122,7 +122,7 @@ class Interface {
 	/**
 	 * Returns the M3G interface instance for the current MIDlet.
 	 */
-	static final Interface getInstance() {
+	static Interface getInstance() {
 		if (instance == null) {
 			instance = new Interface();
 		}
@@ -132,7 +132,7 @@ class Interface {
 	/**
 	 * Returns the native handle of the current Interface instance.
 	 */
-	static final long getHandle() {
+	static long getHandle() {
 		getInstance().integrityCheck();
 		return getInstance().handle;
 	}
@@ -143,13 +143,13 @@ class Interface {
 	 * callback is set up. The handle of the object must already be
 	 * set at this point!
 	 */
-	static final void register(Object3D obj) {
-		getInstance().liveObjects.put(new Long(obj.handle),
+	static void register(Object3D obj) {
+		getInstance().liveObjects.put(Long.valueOf(obj.handle),
 				new WeakReference(obj));
 	}
 
-	static final void register(Loader obj) {
-		getInstance().liveObjects.put(new Long(obj.handle),
+	static void register(Loader obj) {
+		getInstance().liveObjects.put(Long.valueOf(obj.handle),
 				new WeakReference(obj));
 	}
 
@@ -158,9 +158,9 @@ class Interface {
 	 * removes dead objects (that is, null references) from the map
 	 * upon encountering them.
 	 */
-	static final Object3D findObject(long handle) {
+	static Object3D findObject(long handle) {
 		Interface self = getInstance();
-		Long iHandle = new Long(handle);
+		Long iHandle = Long.valueOf(handle);
 		Object ref = self.liveObjects.get(iHandle);
 
 		if (ref != null) {
@@ -178,7 +178,7 @@ class Interface {
 	 * Returns the Java object representing a native object, or
 	 * creates a new proxy/peer if one doesn't exist yet.
 	 */
-	static final Object3D getObjectInstance(long handle) {
+	static Object3D getObjectInstance(long handle) {
 
 		// A zero handle equals null
 
@@ -252,8 +252,8 @@ class Interface {
 	/**
 	 * Forces removal of an object from the handle-to-object map.
 	 */
-	static final void deregister(Object3D obj, Interface self) {
-		self.liveObjects.remove(new Long(obj.handle));
+	static void deregister(Object3D obj, Interface self) {
+		self.liveObjects.remove(Long.valueOf(obj.handle));
 		if (self.liveObjects.isEmpty() && self.iShutdown) {
 			self.registeredFinalize();
 		}
@@ -262,8 +262,8 @@ class Interface {
 	/**
 	 * Forces removal of an object from the handle-to-object map.
 	 */
-	static final void deregister(Loader obj, Interface self) {
-		self.liveObjects.remove(new Long(obj.handle));
+	static void deregister(Loader obj, Interface self) {
+		self.liveObjects.remove(Long.valueOf(obj.handle));
 		if (self.liveObjects.isEmpty() && self.iShutdown) {
 			self.registeredFinalize();
 		}
@@ -334,7 +334,7 @@ class Interface {
 //#endif // RD_JAVA_OMJ
 
 	// Native finalization hook, for Symbian only
-	final private void registeredFinalize() {
+	private void registeredFinalize() {
 		if (Interface.instance != null) {
 			Platform.executeInUIThread(
 					new M3gRunnable() {

@@ -24,7 +24,7 @@ import javax.microedition.util.LinkedList;
  * The event queue. A really complicated thing.
  */
 public class EventQueue implements Runnable {
-	protected LinkedList<Event> queue;
+	protected final LinkedList<Event> queue;
 	protected Event event;
 
 	protected boolean enabled;

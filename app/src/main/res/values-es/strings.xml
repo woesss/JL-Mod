@@ -16,9 +16,7 @@
     <string name="version">Versión: </string>
     <string name="no_data_for_display">Sin datos</string>
     <string name="message_delete">¿Realmente desea eliminar esta aplicación?</string>
-    <string name="converting_wait">Convirtiendo...</string>
-    <string name="convert_complete">Completo</string>
-    <string name="converting_message">Cargando...</string>
+    <string name="converting_wait">Convirtiendo…</string>
     <string name="permission_request_failed">Esta aplicación requiere permisos de escritura de almacenamiento</string>
     <string name="external_storage_not_mounted">Esta aplicación requiere almacenamiento externo</string>
     <string name="action_context_shortcut">Añadir acceso directo</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">En aplicaciones de pantalla completa</string>
     <string name="pref_wakelock_title">Mantener pantalla encendida</string>
     <string name="pref_button_shape_title">Forma del botón</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Circular</item>
-        <item>Cuadrado</item>
-    </string-array>
     <string name="pref_app_sort_title">Orden de las aplicaciones</string>
     <string-array name="pref_app_sort_entries">
         <item>Nombre</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Codificación</string>
     <string name="pref_default_settings">Configuración predeterminada</string>
     <string name="mapping_dialog_title">Presiona una tecla</string>
-    <string name="mapping_dialog_message" formatted="false">Mapeo actual: %1$s</string>
+    <string name="mapping_dialog_message">Mapeo actual: %1$s</string>
     <string name="reset_mapping">Reiniciar</string>
     <string name="parallel_screen_redrawing">Dibujado de pantalla paralelo</string>
 </resources>

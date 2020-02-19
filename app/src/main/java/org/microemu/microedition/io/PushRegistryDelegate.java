@@ -32,17 +32,17 @@ import javax.microedition.io.ConnectionNotFoundException;
 
 public interface PushRegistryDelegate {
 
-	public void registerConnection(String connection, String midlet, String filter) throws ClassNotFoundException,
+	void registerConnection(String connection, String midlet, String filter) throws ClassNotFoundException,
 			IOException;
 
-	public boolean unregisterConnection(String connection);
+	boolean unregisterConnection(String connection);
 
-	public String[] listConnections(boolean available);
+	String[] listConnections(boolean available);
 
-	public String getMIDlet(String connection);
+	String getMIDlet(String connection);
 
-	public String getFilter(String connection);
+	String getFilter(String connection);
 
-	public long registerAlarm(String midlet, long time) throws ClassNotFoundException, ConnectionNotFoundException;
+	long registerAlarm(String midlet, long time) throws ClassNotFoundException, ConnectionNotFoundException;
 
 }

@@ -13,9 +13,7 @@
     <string name="version">バージョン: </string>
     <string name="no_data_for_display">データがありません</string>
     <string name="message_delete">本当にこのアプリを削除しますか？</string>
-    <string name="converting_wait">JAR を変換しています...</string>
-    <string name="convert_complete">完了しました</string>
-    <string name="converting_message">処理中です...</string>
+    <string name="converting_wait">JAR を変換しています…</string>
     <string name="permission_request_failed">このアプリはストレージの書き込み権限が必要です</string>
     <string name="external_storage_not_mounted">このアプリは外部ストレージを必要とします。</string>
     <string name="action_context_shortcut">ショートカットを追加する</string>
@@ -102,6 +100,6 @@
     </string-array>
     <string name="pref_map_keys">キーマッピング</string>
     <string name="mapping_dialog_title">キーを押してください</string>
-    <string name="mapping_dialog_message" formatted="false">現在のマッピング: %1$s</string>
+    <string name="mapping_dialog_message">現在のマッピング: %1$s</string>
     <string name="reset_mapping">リセット</string>
 </resources>

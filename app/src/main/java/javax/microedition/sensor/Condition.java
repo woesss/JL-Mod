@@ -17,13 +17,13 @@
 package javax.microedition.sensor;
 
 public interface Condition {
-	public static final String OP_EQUALS = "eq";
-	public static final String OP_GREATER_THAN = "gt";
-	public static final String OP_GREATER_THAN_OR_EQUALS = "ge";
-	public static final String OP_LESS_THAN = "lt";
-	public static final String OP_LESS_THAN_OR_EQUALS = "le";
+	String OP_EQUALS = "eq";
+	String OP_GREATER_THAN = "gt";
+	String OP_GREATER_THAN_OR_EQUALS = "ge";
+	String OP_LESS_THAN = "lt";
+	String OP_LESS_THAN_OR_EQUALS = "le";
 
-	public boolean isMet(double doubleValue);
+	boolean isMet(double doubleValue);
 
-	public boolean isMet(Object value);
+	boolean isMet(Object value);
 }

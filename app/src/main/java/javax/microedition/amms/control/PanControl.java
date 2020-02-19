@@ -19,7 +19,7 @@ package javax.microedition.amms.control;
 import javax.microedition.media.Control;
 
 public interface PanControl extends Control {
-	public int setPan(int pan);
+	int setPan(int pan);
 
-	public int getPan();
+	int getPan();
 }

@@ -8,9 +8,7 @@
     <string name="version">Versie: </string>
     <string name="no_data_for_display">Geen gegevens</string>
     <string name="message_delete">Weet u zeker dat u deze app wilt verwijderen?</string>
-    <string name="converting_wait">Converteren JAR...</string>
-    <string name="convert_complete">Voltooien</string>
-    <string name="converting_message">Wordt verwerkt...</string>
+    <string name="converting_wait">Converteren JAR…</string>
     <string name="permission_request_failed">Deze app vereist schrijfrechten voor opslag</string>
     <string name="action_context_shortcut">Snelkoppeling toevoegen</string>
     <string name="action_settings">Instellingen</string>

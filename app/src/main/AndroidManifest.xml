@@ -25,7 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        tools:targetApi="o">
+        android:extractNativeLibs="false"
+        tools:targetApi="q">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"

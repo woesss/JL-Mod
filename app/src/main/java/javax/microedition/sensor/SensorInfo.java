@@ -17,46 +17,46 @@
 package javax.microedition.sensor;
 
 public interface SensorInfo {
-	public static final int CONN_EMBEDDED = 1;
-	public static final int CONN_REMOTE = 2;
-	public static final int CONN_SHORT_RANGE_WIRELESS = 4;
-	public static final int CONN_WIRED = 8;
-	public static final String CONTEXT_TYPE_AMBIENT = "ambient";
-	public static final String CONTEXT_TYPE_DEVICE = "device";
-	public static final String CONTEXT_TYPE_USER = "user";
-	public static final String CONTEXT_TYPE_VEHICLE = "vehicle";
-	public static final String PROP_IS_CONTROLLABLE = "controllable";
-	public static final String PROP_IS_REPORTING_ERRORS = "errorsReported";
-	public static final String PROP_LATITUDE = "latitude";
-	public static final String PROP_LOCATION = "location";
-	public static final String PROP_LONGITUDE = "longitude";
-	public static final String PROP_MAX_RATE = "maxSamplingRate";
-	public static final String PROP_VENDOR = "vendor";
-	public static final String PROP_VERSION = "version";
+	int CONN_EMBEDDED = 1;
+	int CONN_REMOTE = 2;
+	int CONN_SHORT_RANGE_WIRELESS = 4;
+	int CONN_WIRED = 8;
+	String CONTEXT_TYPE_AMBIENT = "ambient";
+	String CONTEXT_TYPE_DEVICE = "device";
+	String CONTEXT_TYPE_USER = "user";
+	String CONTEXT_TYPE_VEHICLE = "vehicle";
+	String PROP_IS_CONTROLLABLE = "controllable";
+	String PROP_IS_REPORTING_ERRORS = "errorsReported";
+	String PROP_LATITUDE = "latitude";
+	String PROP_LOCATION = "location";
+	String PROP_LONGITUDE = "longitude";
+	String PROP_MAX_RATE = "maxSamplingRate";
+	String PROP_VENDOR = "vendor";
+	String PROP_VERSION = "version";
 
-	public ChannelInfo[] getChannelInfos();
+	ChannelInfo[] getChannelInfos();
 
-	public int getConnectionType();
+	int getConnectionType();
 
-	public String getContextType();
+	String getContextType();
 
-	public String getDescription();
+	String getDescription();
 
-	public int getMaxBufferSize();
+	int getMaxBufferSize();
 
-	public String getModel();
+	String getModel();
 
-	public Object getProperty(String name);
+	Object getProperty(String name);
 
-	public String[] getPropertyNames();
+	String[] getPropertyNames();
 
-	public String getQuantity();
+	String getQuantity();
 
-	public String getUrl();
+	String getUrl();
 
-	public boolean isAvailabilityPushSupported();
+	boolean isAvailabilityPushSupported();
 
-	public boolean isAvailable();
+	boolean isAvailable();
 
-	public boolean isConditionPushSupported();
+	boolean isConditionPushSupported();
 }

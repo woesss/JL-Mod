@@ -92,14 +92,14 @@ public class Vector3D {
 		}
 	}
 
-	public static final int innerProduct(Vector3D v1, Vector3D v2) {
+	public static int innerProduct(Vector3D v1, Vector3D v2) {
 		if (v1 != null && v2 != null) {
 			return 0;
 		}
 		throw new NullPointerException();
 	}
 
-	public static final Vector3D outerProduct(Vector3D v1, Vector3D v2) {
+	public static Vector3D outerProduct(Vector3D v1, Vector3D v2) {
 		if (v1 == null || v2 == null) {
 			throw new NullPointerException();
 		}

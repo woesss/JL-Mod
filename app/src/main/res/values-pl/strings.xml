@@ -16,9 +16,7 @@
     <string name="version">Wersja: </string>
     <string name="no_data_for_display">Brak danych</string>
     <string name="message_delete">Czy na pewno chcesz usunąć tę aplikację?</string>
-    <string name="converting_wait">Konwertuję plik JAR...</string>
-    <string name="convert_complete">Zakończono</string>
-    <string name="converting_message">Przetwarzanie...</string>
+    <string name="converting_wait">Konwertuję plik JAR…</string>
     <string name="permission_request_failed">Ta aplikacja wymaga pozwolenia na zapisywanie danych do pamięci zewnętrznej</string>
     <string name="external_storage_not_mounted">Ta aplikacja wymaga dostępu do pamięci zewnętrznej</string>
     <string name="action_context_shortcut">Dodaj skrót</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">W aplikacjach pełnoekranowych</string>
     <string name="pref_wakelock_title">Pozostaw ekran włączony</string>
     <string name="pref_button_shape_title">Kształt przycisków</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Okrągłe</item>
-        <item>Kwadratowe</item>
-    </string-array>
     <string name="pref_app_sort_title">Kolejność sortowania aplikacji</string>
     <string-array name="pref_app_sort_entries">
         <item>Nazwa</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Kodowanie</string>
     <string name="pref_default_settings">Ustawienia domyślne</string>
     <string name="mapping_dialog_title">Naciśnij przycisk</string>
-    <string name="mapping_dialog_message" formatted="false">Bieżące mapowanie: %1$s</string>
+    <string name="mapping_dialog_message">Bieżące mapowanie: %1$s</string>
     <string name="reset_mapping">Zresetuj</string>
     <string name="parallel_screen_redrawing">Równoległe przerysowywanie obrazu</string>
 </resources>

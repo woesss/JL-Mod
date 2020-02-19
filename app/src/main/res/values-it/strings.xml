@@ -16,9 +16,7 @@
     <string name="version">Versione: </string>
     <string name="no_data_for_display">Nessun dato</string>
     <string name="message_delete">Vuoi davvero eliminare questa applicazione?</string>
-    <string name="converting_wait">Conversione del file JAR...</string>
-    <string name="convert_complete">Completato</string>
-    <string name="converting_message">Elaborazione...</string>
+    <string name="converting_wait">Conversione del file JAR…</string>
     <string name="permission_request_failed">Questa applicazione richiede l\'autorizzazione di scrittura nell\'archivio</string>
     <string name="external_storage_not_mounted">Questa applicazione richiede l\'archiviazione esterna</string>
     <string name="action_context_shortcut">Aggiungi collegamento</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">Nelle applicazioni a schermo intero</string>
     <string name="pref_wakelock_title">Mantieni schermo attivo</string>
     <string name="pref_button_shape_title">Forma del tasto</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Rotonda</item>
-        <item>Quadrata</item>
-    </string-array>
     <string name="pref_app_sort_title">Ordine applicazioni</string>
     <string-array name="pref_app_sort_entries">
         <item>Nome</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Codifica testo</string>
     <string name="pref_default_settings">Impostazioni predefinite</string>
     <string name="mapping_dialog_title">Premi un tasto</string>
-    <string name="mapping_dialog_message" formatted="false">Mappatura corrente: %1$s</string>
+    <string name="mapping_dialog_message">Mappatura corrente: %1$s</string>
     <string name="reset_mapping">Reimposta</string>
     <string name="parallel_screen_redrawing">Ridisegno parallelo della schermata</string>
 </resources>

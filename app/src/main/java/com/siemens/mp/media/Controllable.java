@@ -24,7 +24,7 @@
 package com.siemens.mp.media;
 
 public interface Controllable {
-	public abstract Control[] getControls();
+	Control[] getControls();
 
-	public abstract Control getControl(String s);
+	Control getControl(String s);
 }

@@ -38,7 +38,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * specific XML files being written with it.
  */
 public class FastXmlSerializer implements XmlSerializer {
-	private static final String ESCAPE_TABLE[] = new String[]{
+	private static final String[] ESCAPE_TABLE = new String[]{
 			"&#0;", "&#1;", "&#2;", "&#3;", "&#4;", "&#5;", "&#6;", "&#7;",  // 0-7
 			"&#8;", "&#9;", "&#10;", "&#11;", "&#12;", "&#13;", "&#14;", "&#15;", // 8-15
 			"&#16;", "&#17;", "&#18;", "&#19;", "&#20;", "&#21;", "&#22;", "&#23;", // 16-23

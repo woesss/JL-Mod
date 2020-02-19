@@ -18,8 +18,6 @@
     <string name="no_data_for_display">কোন তথ্য-উপাত্ত নেই</string>
     <string name="message_delete">আপনি কি সত্যিই এই অ্যাপটি মুছে ফেলতে চান?</string>
     <string name="converting_wait">JAR রূপান্তর...</string>
-    <string name="convert_complete">সম্পন্ন হয়েছে।</string>
-    <string name="converting_message">প্রক্রিয়াধীন...</string>
     <string name="permission_request_failed">এই অ্যাপ্লিকেশনটি স্টোরেজে লেখার অনুমতি প্রয়োজন ।</string>
     <string name="external_storage_not_mounted">অ্যাপটির এক্সটার্নাল স্টোরেজ প্রয়োজন ।</string>
     <string name="action_context_shortcut">শর্টকাট যুক্ত করুন</string>
@@ -113,10 +111,6 @@
     <string name="pref_enable_actionbar_summary">পর্দা জুড়ে প্রদর্শন</string>
     <string name="pref_wakelock_title">স্ক্রিন চালু রাখুন</string>
     <string name="pref_button_shape_title">বাটনের আকৃতি</string>
-    <string-array name="pref_button_shape_entries">
-        <item>গোল</item>
-        <item>বর্গ</item>
-    </string-array>
     <string name="pref_app_sort_title">অ্যাপ সর্ট আর্ডার</string>
     <string-array name="pref_app_sort_entries">
         <item>নাম</item>
@@ -126,7 +120,7 @@
     <string name="pref_encoding_title">এনকোডিং</string>
     <string name="pref_default_settings">ডিফল্ট সেটিংস</string>
     <string name="mapping_dialog_title">কী চাপুন</string>
-    <string name="mapping_dialog_message" formatted="false">বর্তমান মানচিত্র: %1$s</string>
+    <string name="mapping_dialog_message">বর্তমান মানচিত্র: %s</string>
     <string name="reset_mapping">রিসেট করুন</string>
     <string name="parallel_screen_redrawing">সমান্তরাল পর্দা পুনরায় আঁকানো</string>
 </resources>

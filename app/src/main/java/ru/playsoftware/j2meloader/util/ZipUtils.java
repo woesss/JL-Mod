@@ -47,7 +47,7 @@ public class ZipUtils {
 			if (file.isDirectory()) {
 				zipSubFolder(out, file, basePathLength);
 			} else {
-				byte data[] = new byte[BUFFER_SIZE];
+				byte[] data = new byte[BUFFER_SIZE];
 				String unmodifiedFilePath = file.getPath();
 				String relativePath = unmodifiedFilePath.substring(basePathLength);
 				FileInputStream fi = new FileInputStream(unmodifiedFilePath);
@@ -76,7 +76,7 @@ public class ZipUtils {
 			if (!entry.isDirectory() && !destFile.exists() && !entry.getName().endsWith(".class")) {
 				BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
 				int currentByte;
-				byte data[] = new byte[BUFFER_SIZE];
+				byte[] data = new byte[BUFFER_SIZE];
 				// write the current file to disk
 				FileOutputStream fos = new FileOutputStream(destFile);
 				BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER_SIZE);

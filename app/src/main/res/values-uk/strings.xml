@@ -16,9 +16,7 @@
     <string name="version">Версія: </string>
     <string name="no_data_for_display">Немає даних</string>
     <string name="message_delete">Ви дійсно хочете видалити данний додаток?</string>
-    <string name="converting_wait">Перетворення JAR...</string>
-    <string name="convert_complete">Завершено</string>
-    <string name="converting_message">Обробка...</string>
+    <string name="converting_wait">Перетворення JAR…</string>
     <string name="permission_request_failed">Данний додаток вимагає дозволу записування данних</string>
     <string name="external_storage_not_mounted">Данний додаток вимагає збереження даних у зовнішню пам\'ять</string>
     <string name="action_context_shortcut">Додати ярлик</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">У повноекранних додатках</string>
     <string name="pref_wakelock_title">Зберігати екран увімкненим</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Кругла</item>
-        <item>Квадратна</item>
-    </string-array>
     <string name="pref_app_sort_title">Порядок сортування додатків</string>
     <string-array name="pref_app_sort_entries">
         <item>Назва</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Кодування</string>
     <string name="pref_default_settings">Налаштування за замовчуванням</string>
     <string name="mapping_dialog_title">Натисніть клавішу</string>
-    <string name="mapping_dialog_message" formatted="false">Поточне зіставлення: %1$s</string>
+    <string name="mapping_dialog_message">Поточне зіставлення: %1$s</string>
     <string name="reset_mapping">Скинути</string>
     <string name="parallel_screen_redrawing">Паралельне перемальовування екрану</string>
 </resources>

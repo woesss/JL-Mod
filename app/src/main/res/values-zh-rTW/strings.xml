@@ -15,8 +15,6 @@
     <string name="no_data_for_display">無資料</string>
     <string name="message_delete">你真的想删除这个应用程序？</string>
     <string name="converting_wait">正在轉換 JAR..。</string>
-    <string name="convert_complete">完成</string>
-    <string name="converting_message">處理中...</string>
     <string name="permission_request_failed">此應用程式需要存儲寫入權限</string>
     <string name="external_storage_not_mounted">此應用程式需要外置存儲</string>
     <string name="action_context_shortcut">添加捷徑</string>

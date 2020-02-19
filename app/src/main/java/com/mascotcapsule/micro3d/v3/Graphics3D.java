@@ -70,7 +70,7 @@ public class Graphics3D {
 	private static boolean mIsBound = false;
 	private Graphics mGraphics;
 
-	private final void checkTargetIsValid() throws IllegalStateException {
+	private void checkTargetIsValid() throws IllegalStateException {
 		if (this.mGraphics == null) {
 			throw new IllegalStateException("No target is bound");
 		}

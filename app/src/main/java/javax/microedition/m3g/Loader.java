@@ -257,8 +257,6 @@ public class Loader {
 							format = Image2D.LUMINANCE;
 							break;
 						case 2:
-							format = Image2D.RGB;
-							break;
 						case 3:
 							format = Image2D.RGB;
 							break;
@@ -540,7 +538,7 @@ public class Loader {
 					int len = _getUserParameter(handle, i, j, null);
 					byte[] data = new byte[len];
 					int id = _getUserParameter(handle, i, j, data);
-					if (hash.put(new Integer(id), data) != null)
+					if (hash.put(Integer.valueOf(id), data) != null)
 						throw new IOException("Duplicate id in user data [" + iResourceName + "].");
 				}
 				Object3D object = Interface.getObjectInstance(obj[i]);
@@ -637,7 +635,7 @@ public class Loader {
 	/**
 	 * Read a byte integer from a stream
 	 */
-	private static final int readByte(InputStream aStream) throws IOException {
+	private static int readByte(InputStream aStream) throws IOException {
 		return aStream.read();
 	}
 
@@ -658,7 +656,7 @@ public class Loader {
 	/**
 	 * Read a unsigned integer from a stream
 	 */
-	private static final int readUInt32(InputStream aStream) throws IOException {
+	private static int readUInt32(InputStream aStream) throws IOException {
 		return aStream.read()
 				+ (aStream.read() << 8)
 				+ (aStream.read() << 16)

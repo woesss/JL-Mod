@@ -16,9 +16,7 @@
     <string name="version">Versão: </string>
     <string name="no_data_for_display">Sem dados</string>
     <string name="message_delete">Você tem certeza que deseja excluir este aplicativo?</string>
-    <string name="converting_wait">Convertendo JAR...</string>
-    <string name="convert_complete">Completo</string>
-    <string name="converting_message">Processando...</string>
+    <string name="converting_wait">Convertendo JAR…</string>
     <string name="permission_request_failed">Este aplicativo requer permissão de gravação no Armazenamento interno</string>
     <string name="external_storage_not_mounted">Este aplicativo requer armazenamento externo</string>
     <string name="action_context_shortcut">Adicionar atalho</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">Assistente para jogos em tela cheia</string>
     <string name="pref_wakelock_title">Manter a tela ligada</string>
     <string name="pref_button_shape_title">Formato dos botões</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Redondos</item>
-        <item>Quadrados</item>
-    </string-array>
     <string name="pref_app_sort_title">Ordenar jogos</string>
     <string-array name="pref_app_sort_entries">
         <item>Nome</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Codificação</string>
     <string name="pref_default_settings">Ajustes padrão</string>
     <string name="mapping_dialog_title">Pressione um botão</string>
-    <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
+    <string name="mapping_dialog_message">Mapeamento atual: %1$s</string>
     <string name="reset_mapping">Redefinir</string>
     <string name="parallel_screen_redrawing">Renderização paralela de tela</string>
 </resources>

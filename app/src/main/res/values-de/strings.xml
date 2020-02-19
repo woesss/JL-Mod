@@ -14,9 +14,7 @@
     <string name="version">Version: </string>
     <string name="no_data_for_display">Keine Daten</string>
     <string name="message_delete">Möchten Sie diese App wirklich löschen?</string>
-    <string name="converting_wait">Konvertiere Jar...</string>
-    <string name="convert_complete">Abgeschlossen</string>
-    <string name="converting_message">Verarbeitung läuft...</string>
+    <string name="converting_wait">Konvertiere Jar…</string>
     <string name="permission_request_failed">Diese App benötigt Schreibrechte</string>
     <string name="external_storage_not_mounted">Diese App benötigt externen Speicher</string>
     <string name="action_context_shortcut">Verknüpfung hinzufügen</string>
@@ -56,11 +54,11 @@
     <string name="PREF_VK_SOFT_KEYS">Virtuelle Tasten: </string>
     <string name="PREF_VK_NUM_KEYS">Ziffern: </string>
     <string name="PREF_VK_FIRE_KEY">Feuer: </string>
-    <string name="PREF_VK_SIZE_HINT">Grösse</string>
+    <string name="PREF_VK_SIZE_HINT">Größe</string>
     <string name="SIZE_PRESETS">Voreinstellungen</string>
     <string name="SWAP_SIZES">Grössen tauschen</string>
     <string name="error">Fehler</string>
-    <string name="FORCE_CLOSE_CONFIRMATION">Erzwungenes Schliessen der Anwendung kann zu Datenverlust führen oder die Anwendung beschädigen!\nFortfahren?</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">Erzwungenes Schließen der Anwendung kann zu Datenverlust führen oder die Anwendung beschädigen!\nFortfahren?</string>
     <string name="CONFIRMATION_REQUIRED">Bestätigung erforderlich</string>
     <string name="crash_dialog_message">Möchten Sie ein Fehlerbericht an den Entwickler senden?</string>
     <string name="crash_dialog_title">Fehler festgestellt</string>

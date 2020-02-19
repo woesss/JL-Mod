@@ -46,7 +46,7 @@ public class XmlUtils {
 	 * @see #writeValueXml
 	 * @see #readMapXml
 	 */
-	public static final void writeMapXml(Map val, OutputStream out)
+	public static void writeMapXml(Map val, OutputStream out)
 			throws XmlPullParserException, java.io.IOException {
 		XmlSerializer serializer = new FastXmlSerializer();
 		serializer.setOutput(out, "UTF-8");
@@ -69,7 +69,7 @@ public class XmlUtils {
 	 * @see #writeValueXml
 	 * @see #readMapXml
 	 */
-	public static final void writeMapXml(Map val, String name, XmlSerializer out)
+	public static void writeMapXml(Map val, String name, XmlSerializer out)
 			throws XmlPullParserException, java.io.IOException {
 		writeMapXml(val, name, out, null);
 	}
@@ -89,8 +89,8 @@ public class XmlUtils {
 	 * @see #writeValueXml
 	 * @see #readMapXml
 	 */
-	public static final void writeMapXml(Map val, String name, XmlSerializer out,
-										 WriteMapCallback callback) throws XmlPullParserException, java.io.IOException {
+	public static void writeMapXml(Map val, String name, XmlSerializer out,
+								   WriteMapCallback callback) throws XmlPullParserException, java.io.IOException {
 
 		if (val == null) {
 			out.startTag(null, "null");
@@ -121,8 +121,8 @@ public class XmlUtils {
 	 * @see #writeValueXml
 	 * @see #readMapXml
 	 */
-	public static final void writeMapXml(Map val, XmlSerializer out,
-										 WriteMapCallback callback) throws XmlPullParserException, java.io.IOException {
+	public static void writeMapXml(Map val, XmlSerializer out,
+								   WriteMapCallback callback) throws XmlPullParserException, java.io.IOException {
 		if (val == null) {
 			return;
 		}
@@ -143,12 +143,12 @@ public class XmlUtils {
 	 * @param name Name attribute to include with this list's tag, or null for
 	 *             none.
 	 * @param out  XmlSerializer to write the list into.
-	 * @see #writeListXml(List, OutputStream)
+	 * @see #writeListXml(List, String, XmlSerializer)
 	 * @see #writeMapXml
 	 * @see #writeValueXml
-	 * @see #readListXml
+	 * @see #readThisListXml(XmlPullParser, String, String[], ReadMapCallback, boolean)
 	 */
-	public static final void writeListXml(List val, String name, XmlSerializer out)
+	public static void writeListXml(List val, String name, XmlSerializer out)
 			throws XmlPullParserException, java.io.IOException {
 		if (val == null) {
 			out.startTag(null, "null");
@@ -171,7 +171,7 @@ public class XmlUtils {
 		out.endTag(null, "list");
 	}
 
-	public static final void writeSetXml(Set val, String name, XmlSerializer out)
+	public static void writeSetXml(Set val, String name, XmlSerializer out)
 			throws XmlPullParserException, java.io.IOException {
 		if (val == null) {
 			out.startTag(null, "null");
@@ -202,8 +202,8 @@ public class XmlUtils {
 	 * @see #writeMapXml
 	 * @see #writeValueXml
 	 */
-	public static final void writeByteArrayXml(byte[] val, String name,
-											   XmlSerializer out)
+	public static void writeByteArrayXml(byte[] val, String name,
+										 XmlSerializer out)
 			throws XmlPullParserException, java.io.IOException {
 
 		if (val == null) {
@@ -246,8 +246,8 @@ public class XmlUtils {
 	 * @see #writeValueXml
 	 * @see #readThisIntArrayXml
 	 */
-	public static final void writeIntArrayXml(int[] val, String name,
-											  XmlSerializer out)
+	public static void writeIntArrayXml(int[] val, String name,
+										XmlSerializer out)
 			throws XmlPullParserException, java.io.IOException {
 
 		if (val == null) {
@@ -285,7 +285,7 @@ public class XmlUtils {
 	 * @see #writeValueXml
 	 * @see #readThisIntArrayXml
 	 */
-	public static final void writeLongArrayXml(long[] val, String name, XmlSerializer out)
+	public static void writeLongArrayXml(long[] val, String name, XmlSerializer out)
 			throws XmlPullParserException, java.io.IOException {
 
 		if (val == null) {
@@ -323,7 +323,7 @@ public class XmlUtils {
 	 * @see #writeValueXml
 	 * @see #readThisIntArrayXml
 	 */
-	public static final void writeDoubleArrayXml(double[] val, String name, XmlSerializer out)
+	public static void writeDoubleArrayXml(double[] val, String name, XmlSerializer out)
 			throws XmlPullParserException, java.io.IOException {
 
 		if (val == null) {
@@ -361,7 +361,7 @@ public class XmlUtils {
 	 * @see #writeValueXml
 	 * @see #readThisIntArrayXml
 	 */
-	public static final void writeStringArrayXml(String[] val, String name, XmlSerializer out)
+	public static void writeStringArrayXml(String[] val, String name, XmlSerializer out)
 			throws XmlPullParserException, java.io.IOException {
 
 		if (val == null) {
@@ -399,7 +399,7 @@ public class XmlUtils {
 	 * @see #writeValueXml
 	 * @see #readThisIntArrayXml
 	 */
-	public static final void writeBooleanArrayXml(boolean[] val, String name, XmlSerializer out)
+	public static void writeBooleanArrayXml(boolean[] val, String name, XmlSerializer out)
 			throws XmlPullParserException, java.io.IOException {
 
 		if (val == null) {
@@ -440,7 +440,7 @@ public class XmlUtils {
 	 * @see #writeListXml
 	 * @see #readValueXml
 	 */
-	public static final void writeValueXml(Object v, String name, XmlSerializer out)
+	public static void writeValueXml(Object v, String name, XmlSerializer out)
 			throws XmlPullParserException, java.io.IOException {
 		writeValueXml(v, name, out, null);
 	}
@@ -461,8 +461,8 @@ public class XmlUtils {
 	 * @see #writeListXml
 	 * @see #readValueXml
 	 */
-	private static final void writeValueXml(Object v, String name, XmlSerializer out,
-											WriteMapCallback callback) throws XmlPullParserException, java.io.IOException {
+	private static void writeValueXml(Object v, String name, XmlSerializer out,
+									  WriteMapCallback callback) throws XmlPullParserException, java.io.IOException {
 		String typeStr;
 		if (v == null) {
 			out.startTag(null, "null");
@@ -548,13 +548,13 @@ public class XmlUtils {
 	 *
 	 * @param in The InputStream from which to read.
 	 * @return HashMap The resulting map.
-	 * @see #readListXml
+	 * @see #readThisListXml(XmlPullParser, String, String[], ReadMapCallback, boolean)
 	 * @see #readValueXml
 	 * @see #readThisMapXml
 	 * #see #writeMapXml
 	 */
 	@SuppressWarnings("unchecked")
-	public static final HashMap<String, Object> readMapXml(InputStream in)
+	public static HashMap<String, Object> readMapXml(InputStream in)
 			throws XmlPullParserException, java.io.IOException {
 		XmlPullParser parser = Xml.newPullParser();
 		parser.setInput(in, "UTF-8");
@@ -574,8 +574,8 @@ public class XmlUtils {
 	 * @hide
 	 * @see #readMapXml
 	 */
-	public static final HashMap<String, ?> readThisMapXml(XmlPullParser parser, String endTag,
-														  String[] name, ReadMapCallback callback)
+	public static HashMap<String, ?> readThisMapXml(XmlPullParser parser, String endTag,
+													String[] name, ReadMapCallback callback)
 			throws XmlPullParserException, java.io.IOException {
 		HashMap<String, Object> map = new HashMap<>();
 
@@ -603,8 +603,8 @@ public class XmlUtils {
 	 *
 	 * @hide
 	 */
-	public static final ArrayMap<String, ?> readThisArrayMapXml(XmlPullParser parser, String endTag,
-																String[] name, ReadMapCallback callback)
+	public static ArrayMap<String, ?> readThisArrayMapXml(XmlPullParser parser, String endTag,
+														  String[] name, ReadMapCallback callback)
 			throws XmlPullParserException, java.io.IOException {
 		ArrayMap<String, Object> map = new ArrayMap<>();
 
@@ -637,10 +637,10 @@ public class XmlUtils {
 	 * @param name   An array of one string, used to return the name attribute
 	 *               of the list's tag.
 	 * @return HashMap The newly generated list.
-	 * @see #readListXml
+	 * @see #readThisListXml(XmlPullParser, String, String[], ReadMapCallback, boolean)
 	 */
-	private static final ArrayList readThisListXml(XmlPullParser parser, String endTag,
-												   String[] name, ReadMapCallback callback, boolean arrayMap)
+	private static ArrayList readThisListXml(XmlPullParser parser, String endTag,
+											 String[] name, ReadMapCallback callback, boolean arrayMap)
 			throws XmlPullParserException, java.io.IOException {
 		ArrayList list = new ArrayList();
 
@@ -677,10 +677,10 @@ public class XmlUtils {
 	 * @throws XmlPullParserException
 	 * @throws java.io.IOException
 	 * @hide
-	 * @see #readSetXml
+	 * @see #readThisSetXml(XmlPullParser, String, String[], ReadMapCallback, boolean)
 	 */
-	private static final HashSet readThisSetXml(XmlPullParser parser, String endTag, String[] name,
-												ReadMapCallback callback, boolean arrayMap)
+	private static HashSet readThisSetXml(XmlPullParser parser, String endTag, String[] name,
+										  ReadMapCallback callback, boolean arrayMap)
 			throws XmlPullParserException, java.io.IOException {
 		HashSet set = new HashSet();
 
@@ -716,8 +716,8 @@ public class XmlUtils {
 	 * @return Returns a newly generated byte[].
 	 * @see #writeByteArrayXml
 	 */
-	public static final byte[] readThisByteArrayXml(XmlPullParser parser,
-													String endTag, String[] name)
+	public static byte[] readThisByteArrayXml(XmlPullParser parser,
+											  String endTag, String[] name)
 			throws XmlPullParserException, java.io.IOException {
 
 		int num;
@@ -779,10 +779,10 @@ public class XmlUtils {
 	 * @param name   An array of one string, used to return the name attribute
 	 *               of the list's tag.
 	 * @return Returns a newly generated int[].
-	 * @see #readListXml
+	 * @see #readThisListXml(XmlPullParser, String, String[], ReadMapCallback, boolean)
 	 */
-	public static final int[] readThisIntArrayXml(XmlPullParser parser,
-												  String endTag, String[] name)
+	public static int[] readThisIntArrayXml(XmlPullParser parser,
+											String endTag, String[] name)
 			throws XmlPullParserException, java.io.IOException {
 
 		int num;
@@ -846,10 +846,10 @@ public class XmlUtils {
 	 * @param name   An array of one string, used to return the name attribute
 	 *               of the list's tag.
 	 * @return Returns a newly generated long[].
-	 * @see #readListXml
+	 * @see #readThisListXml(XmlPullParser, String, String[], ReadMapCallback, boolean)
 	 */
-	public static final long[] readThisLongArrayXml(XmlPullParser parser,
-													String endTag, String[] name)
+	public static long[] readThisLongArrayXml(XmlPullParser parser,
+											  String endTag, String[] name)
 			throws XmlPullParserException, java.io.IOException {
 
 		int num;
@@ -905,10 +905,10 @@ public class XmlUtils {
 	 * @param name   An array of one string, used to return the name attribute
 	 *               of the list's tag.
 	 * @return Returns a newly generated double[].
-	 * @see #readListXml
+	 * @see #readThisListXml(XmlPullParser, String, String[], ReadMapCallback, boolean)
 	 */
-	public static final double[] readThisDoubleArrayXml(XmlPullParser parser, String endTag,
-														String[] name) throws XmlPullParserException, java.io.IOException {
+	public static double[] readThisDoubleArrayXml(XmlPullParser parser, String endTag,
+												  String[] name) throws XmlPullParserException, java.io.IOException {
 
 		int num;
 		try {
@@ -963,10 +963,10 @@ public class XmlUtils {
 	 * @param name   An array of one string, used to return the name attribute
 	 *               of the list's tag.
 	 * @return Returns a newly generated String[].
-	 * @see #readListXml
+	 * @see #readThisListXml(XmlPullParser, String, String[], ReadMapCallback, boolean)
 	 */
-	public static final String[] readThisStringArrayXml(XmlPullParser parser, String endTag,
-														String[] name) throws XmlPullParserException, java.io.IOException {
+	public static String[] readThisStringArrayXml(XmlPullParser parser, String endTag,
+												  String[] name) throws XmlPullParserException, java.io.IOException {
 
 		int num;
 		try {
@@ -1021,10 +1021,10 @@ public class XmlUtils {
 	 * @param name   An array of one string, used to return the name attribute
 	 *               of the list's tag.
 	 * @return Returns a newly generated boolean[].
-	 * @see #readListXml
+	 * @see #readThisListXml(XmlPullParser, String, String[], ReadMapCallback, boolean)
 	 */
-	public static final boolean[] readThisBooleanArrayXml(XmlPullParser parser, String endTag,
-														  String[] name) throws XmlPullParserException, java.io.IOException {
+	public static boolean[] readThisBooleanArrayXml(XmlPullParser parser, String endTag,
+													String[] name) throws XmlPullParserException, java.io.IOException {
 
 		int num;
 		try {
@@ -1080,10 +1080,10 @@ public class XmlUtils {
 	 *               of the value's tag.
 	 * @return Object The newly generated value object.
 	 * @see #readMapXml
-	 * @see #readListXml
+	 * @see #readThisListXml(XmlPullParser, String, String[], ReadMapCallback, boolean)
 	 * @see #writeValueXml
 	 */
-	public static final Object readValueXml(XmlPullParser parser, String[] name)
+	public static Object readValueXml(XmlPullParser parser, String[] name)
 			throws XmlPullParserException, java.io.IOException {
 		int eventType = parser.getEventType();
 		do {
@@ -1103,8 +1103,8 @@ public class XmlUtils {
 				"Unexpected end of document");
 	}
 
-	private static final Object readThisValueXml(XmlPullParser parser, String[] name,
-												 ReadMapCallback callback, boolean arrayMap)
+	private static Object readThisValueXml(XmlPullParser parser, String[] name,
+										   ReadMapCallback callback, boolean arrayMap)
 			throws XmlPullParserException, java.io.IOException {
 		final String valueName = parser.getAttributeValue(null, "name");
 		final String tagName = parser.getName();
@@ -1219,7 +1219,7 @@ public class XmlUtils {
 				"Unexpected end of document in <" + tagName + ">");
 	}
 
-	private static final Object readThisPrimitiveValueXml(XmlPullParser parser, String tagName)
+	private static Object readThisPrimitiveValueXml(XmlPullParser parser, String tagName)
 			throws XmlPullParserException, java.io.IOException {
 		try {
 			switch (tagName) {
@@ -1228,9 +1228,9 @@ public class XmlUtils {
 				case "long":
 					return Long.valueOf(parser.getAttributeValue(null, "value"));
 				case "float":
-					return new Float(parser.getAttributeValue(null, "value"));
+					return Float.valueOf(parser.getAttributeValue(null, "value"));
 				case "double":
-					return new Double(parser.getAttributeValue(null, "value"));
+					return Double.valueOf(parser.getAttributeValue(null, "value"));
 				case "boolean":
 					return Boolean.valueOf(parser.getAttributeValue(null, "value"));
 				default:
@@ -1260,7 +1260,7 @@ public class XmlUtils {
 		 * @throws IOException            on XmlSerializer serialization errors.
 		 * @hide
 		 */
-		public void writeUnknownObject(Object v, String name, XmlSerializer out)
+		void writeUnknownObject(Object v, String name, XmlSerializer out)
 				throws XmlPullParserException, IOException;
 	}
 
@@ -1279,7 +1279,7 @@ public class XmlUtils {
 		 * @throws IOException            on XmlPullParser serialization errors.
 		 * @hide
 		 */
-		public Object readThisUnknownObjectXml(XmlPullParser in, String tag)
+		Object readThisUnknownObjectXml(XmlPullParser in, String tag)
 				throws XmlPullParserException, IOException;
 	}
 }

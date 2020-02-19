@@ -17,19 +17,19 @@
 package javax.microedition.sensor;
 
 public interface ChannelInfo {
-	public static final int TYPE_DOUBLE = 1;
-	public static final int TYPE_INT = 2;
-	public static final int TYPE_OBJECT = 4;
+	int TYPE_DOUBLE = 1;
+	int TYPE_INT = 2;
+	int TYPE_OBJECT = 4;
 
-	public float getAccuracy();
+	float getAccuracy();
 
-	public int getDataType();
+	int getDataType();
 
-	public MeasurementRange[] getMeasurementRanges();
+	MeasurementRange[] getMeasurementRanges();
 
-	public String getName();
+	String getName();
 
-	public int getScale();
+	int getScale();
 
-	public Unit getUnit();
+	Unit getUnit();
 }

@@ -16,9 +16,7 @@
     <string name="version">판: </string>
     <string name="no_data_for_display">데이터 없음</string>
     <string name="message_delete">이 앱을 삭제하시겠습니까?</string>
-    <string name="converting_wait">JAR 변환 중...</string>
-    <string name="convert_complete">완성하다</string>
-    <string name="converting_message">처리 중...</string>
+    <string name="converting_wait">JAR 변환 중…</string>
     <string name="permission_request_failed">이 앱에는 스토리지 쓰기 권한이 필요함</string>
     <string name="external_storage_not_mounted">이 앱에는 외장 스토리지가 필요함</string>
     <string name="action_context_shortcut">바로 가기 추가</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">전체 화면 애플리케이션</string>
     <string name="pref_wakelock_title">화면 유지</string>
     <string name="pref_button_shape_title">단추 모양</string>
-    <string-array name="pref_button_shape_entries">
-        <item>둥근</item>
-        <item>광장</item>
-    </string-array>
     <string name="pref_app_sort_title">앱 정렬 순서</string>
     <string-array name="pref_app_sort_entries">
         <item>이름</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">인코딩</string>
     <string name="pref_default_settings">기본 설정</string>
     <string name="mapping_dialog_title">키를 누르십시오</string>
-    <string name="mapping_dialog_message" formatted="false">현재 매핑: %1$s</string>
+    <string name="mapping_dialog_message">현재 매핑: %1$s</string>
     <string name="reset_mapping">리셋</string>
     <string name="parallel_screen_redrawing">병렬 화면 다시 그리기</string>
 </resources>

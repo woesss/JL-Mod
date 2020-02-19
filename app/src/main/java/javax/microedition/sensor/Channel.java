@@ -17,17 +17,17 @@
 package javax.microedition.sensor;
 
 public interface Channel {
-	public void addCondition(ConditionListener listener, Condition condition);
+	void addCondition(ConditionListener listener, Condition condition);
 
-	public ChannelInfo getChannelInfo();
+	ChannelInfo getChannelInfo();
 
-	public String getChannelUrl();
+	String getChannelUrl();
 
-	public Condition[] getConditions(ConditionListener listener);
+	Condition[] getConditions(ConditionListener listener);
 
-	public void removeAllConditions();
+	void removeAllConditions();
 
-	public void removeCondition(ConditionListener listener, Condition condition);
+	void removeCondition(ConditionListener listener, Condition condition);
 
-	public void removeConditionListener(ConditionListener listener);
+	void removeConditionListener(ConditionListener listener);
 }

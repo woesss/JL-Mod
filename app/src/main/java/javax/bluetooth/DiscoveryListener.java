@@ -41,7 +41,7 @@ public interface DiscoveryListener {
 	 * @see #inquiryCompleted(int)
 	 * @see DiscoveryAgent#startInquiry(int, javax.bluetooth.DiscoveryListener)
 	 */
-	public static final int INQUIRY_COMPLETED = 0x00;
+	int INQUIRY_COMPLETED = 0x00;
 
 	/**
 	 * Indicates device discovery has been canceled by the application and did
@@ -53,7 +53,7 @@ public interface DiscoveryListener {
 	 * @see DiscoveryAgent#startInquiry(int, javax.bluetooth.DiscoveryListener)
 	 * @see DiscoveryAgent#cancelInquiry(javax.bluetooth.DiscoveryListener)
 	 */
-	public static final int INQUIRY_TERMINATED = 0x05;
+	int INQUIRY_TERMINATED = 0x05;
 
 	/**
 	 * Indicates that the inquiry request failed to complete normally, but was
@@ -64,7 +64,7 @@ public interface DiscoveryListener {
 	 * @see #inquiryCompleted(int)
 	 * @see DiscoveryAgent#startInquiry(int, javax.bluetooth.DiscoveryListener)
 	 */
-	public static final int INQUIRY_ERROR = 0x07;
+	int INQUIRY_ERROR = 0x07;
 
 	/**
 	 * Indicates the normal completion of service discovery. Used with the
@@ -76,7 +76,7 @@ public interface DiscoveryListener {
 	 * @see DiscoveryAgent#searchServices(int[], javax.bluetooth.UUID[],
 	 * javax.bluetooth.RemoteDevice, javax.bluetooth.DiscoveryListener)
 	 */
-	public static final int SERVICE_SEARCH_COMPLETED = 0x01;
+	int SERVICE_SEARCH_COMPLETED = 0x01;
 
 	/**
 	 * Indicates the service search has been canceled by the application and did
@@ -89,7 +89,7 @@ public interface DiscoveryListener {
 	 * javax.bluetooth.RemoteDevice, javax.bluetooth.DiscoveryListener)
 	 * @see DiscoveryAgent#cancelServiceSearch(int)
 	 */
-	public static final int SERVICE_SEARCH_TERMINATED = 0x02;
+	int SERVICE_SEARCH_TERMINATED = 0x02;
 
 	/**
 	 * Indicates the service search terminated with an error. Used with the
@@ -101,7 +101,7 @@ public interface DiscoveryListener {
 	 * @see DiscoveryAgent#searchServices(int[], javax.bluetooth.UUID[],
 	 * javax.bluetooth.RemoteDevice, javax.bluetooth.DiscoveryListener)
 	 */
-	public static final int SERVICE_SEARCH_ERROR = 0x03;
+	int SERVICE_SEARCH_ERROR = 0x03;
 
 	/**
 	 * Indicates the service search has completed with no service records found
@@ -113,7 +113,7 @@ public interface DiscoveryListener {
 	 * @see DiscoveryAgent#searchServices(int[], javax.bluetooth.UUID[],
 	 * javax.bluetooth.RemoteDevice, javax.bluetooth.DiscoveryListener)
 	 */
-	public static final int SERVICE_SEARCH_NO_RECORDS = 0x04;
+	int SERVICE_SEARCH_NO_RECORDS = 0x04;
 
 	/**
 	 * Indicates the service search could not be completed because the remote
@@ -128,7 +128,7 @@ public interface DiscoveryListener {
 	 * @see DiscoveryAgent#searchServices(int[], javax.bluetooth.UUID[],
 	 * javax.bluetooth.RemoteDevice, javax.bluetooth.DiscoveryListener)
 	 */
-	public static final int SERVICE_SEARCH_DEVICE_NOT_REACHABLE = 0x06;
+	int SERVICE_SEARCH_DEVICE_NOT_REACHABLE = 0x06;
 
 	/**
 	 * Called when a device is found during an inquiry. An inquiry searches for
@@ -140,7 +140,7 @@ public interface DiscoveryListener {
 	 *                 class of the remote device
 	 * @see DiscoveryAgent#startInquiry(int, javax.bluetooth.DiscoveryListener)
 	 */
-	public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod);
+	void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod);
 
 	/**
 	 * Called when service(s) are found during a service search.
@@ -151,7 +151,7 @@ public interface DiscoveryListener {
 	 * @see DiscoveryAgent#searchServices(int[], javax.bluetooth.UUID[],
 	 * javax.bluetooth.RemoteDevice, javax.bluetooth.DiscoveryListener)
 	 */
-	public void servicesDiscovered(int transID, ServiceRecord[] servRecord);
+	void servicesDiscovered(int transID, ServiceRecord[] servRecord);
 
 	/**
 	 * Called when a service search is completed or was terminated because of an
@@ -179,7 +179,7 @@ public interface DiscoveryListener {
 	 *                 initiated the service search
 	 * @param respCode the response code that indicates the status of the transaction
 	 */
-	public void serviceSearchCompleted(int transID, int respCode);
+	void serviceSearchCompleted(int transID, int respCode);
 
 	/**
 	 * Called when an inquiry is completed. The {@code discType} will be
@@ -196,5 +196,5 @@ public interface DiscoveryListener {
 	 * @see #INQUIRY_TERMINATED
 	 * @see #INQUIRY_ERROR
 	 */
-	public void inquiryCompleted(int discType);
+	void inquiryCompleted(int discType);
 }

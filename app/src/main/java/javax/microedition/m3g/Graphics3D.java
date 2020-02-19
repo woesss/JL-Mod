@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import javax.microedition.lcdui.Graphics;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Graphics3D {
 	//------------------------------------------------------------------
 	// Static data
@@ -49,7 +50,7 @@ public class Graphics3D {
 	private int cur_width, cur_height;
 
 	private Camera camera = null;
-	private Vector lights = new Vector();
+	private Vector<Light> lights = new Vector<>();
 
 	private java.lang.Object currentTarget = null;
 	private int offsetX, offsetY, hints = 0;
@@ -100,7 +101,7 @@ public class Graphics3D {
 	//------------------------------------------------------------------
 	// Constructor(s)
 	//------------------------------------------------------------------
-	public static final Graphics3D getInstance() {
+	public static Graphics3D getInstance() {
 
 		if (s_instance == null) {
 			s_instance = new Graphics3D();
@@ -403,27 +404,26 @@ public class Graphics3D {
 	/**
 	 *
 	 */
-	public static final Hashtable getProperties() {
-		Hashtable props = new Hashtable();
+	public static Hashtable<String, java.io.Serializable> getProperties() {
+		Hashtable<String, java.io.Serializable> props = new Hashtable<>();
 
-		props.put("supportAntialiasing", new java.lang.Boolean(
-				_isAASupported(Interface.getHandle())));
-		props.put("supportTrueColor", new java.lang.Boolean(Defs.supportTrueColor));
-		props.put("supportDithering", new java.lang.Boolean(Defs.supportDithering));
-		props.put("supportMipmapping", new java.lang.Boolean(Defs.supportMipmapping));
-		props.put("supportPerspectiveCorrection", new java.lang.Boolean(Defs.supportPerspectiveCorrection));
-		props.put("supportLocalCameraLighting", new java.lang.Boolean(Defs.supportLocalCameraLighting));
-		props.put("maxLights", new java.lang.Integer(Defs.MAX_LIGHTS));
-		props.put("maxViewportWidth", new java.lang.Integer(Defs.MAX_VIEWPORT_WIDTH));
-		props.put("maxViewportHeight", new java.lang.Integer(Defs.MAX_VIEWPORT_HEIGHT));
-		props.put("maxViewportDimension", new java.lang.Integer(Defs.MAX_VIEWPORT_DIMENSION));
-		props.put("maxTextureDimension", new java.lang.Integer(Defs.MAX_TEXTURE_DIMENSION));
-		props.put("maxSpriteCropDimension", new java.lang.Integer(Defs.MAX_TEXTURE_DIMENSION));
-		props.put("numTextureUnits", new java.lang.Integer(Defs.NUM_TEXTURE_UNITS));
-		props.put("maxTransformsPerVertex", new java.lang.Integer(Defs.MAX_TRANSFORMS_PER_VERTEX));
+		props.put("supportAntialiasing", _isAASupported(Interface.getHandle()));
+		props.put("supportTrueColor", Defs.supportTrueColor);
+		props.put("supportDithering", Defs.supportDithering);
+		props.put("supportMipmapping", Defs.supportMipmapping);
+		props.put("supportPerspectiveCorrection", Defs.supportPerspectiveCorrection);
+		props.put("supportLocalCameraLighting", Defs.supportLocalCameraLighting);
+		props.put("maxLights", Defs.MAX_LIGHTS);
+		props.put("maxViewportWidth", Defs.MAX_VIEWPORT_WIDTH);
+		props.put("maxViewportHeight", Defs.MAX_VIEWPORT_HEIGHT);
+		props.put("maxViewportDimension", Defs.MAX_VIEWPORT_DIMENSION);
+		props.put("maxTextureDimension", Defs.MAX_TEXTURE_DIMENSION);
+		props.put("maxSpriteCropDimension", Defs.MAX_TEXTURE_DIMENSION);
+		props.put("numTextureUnits", Defs.NUM_TEXTURE_UNITS);
+		props.put("maxTransformsPerVertex", Defs.MAX_TRANSFORMS_PER_VERTEX);
 
 		// Extra properties
-		props.put("m3gRelease", new java.lang.String("04_wk49"));
+		props.put("m3gRelease", "04_wk49");
 
 		return props;
 	}

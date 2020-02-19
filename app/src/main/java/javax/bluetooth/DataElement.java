@@ -332,7 +332,7 @@ public class DataElement {
 				throw new IllegalArgumentException();
 		}
 
-		this.value = new Long(value);
+		this.value = Long.valueOf(value);
 		this.valueType = valueType;
 	}
 

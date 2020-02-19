@@ -32,10 +32,10 @@ import javax.microedition.io.file.FileSystemListener;
 
 public interface FileSystemRegistryDelegate {
 
-	public boolean addFileSystemListener(FileSystemListener listener);
+	boolean addFileSystemListener(FileSystemListener listener);
 
-	public boolean removeFileSystemListener(FileSystemListener listener);
+	boolean removeFileSystemListener(FileSystemListener listener);
 
-	public Enumeration listRoots();
+	Enumeration listRoots();
 
 }

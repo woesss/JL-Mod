@@ -29,51 +29,51 @@ import java.io.IOException;
 
 public interface HttpConnection extends ContentConnection {
 
-	static final String HEAD = "HEAD";
-	static final String GET = "GET";
-	static final String POST = "POST";
+	String HEAD = "HEAD";
+	String GET = "GET";
+	String POST = "POST";
 
-	static final int HTTP_OK = 200;
-	static final int HTTP_CREATED = 201;
-	static final int HTTP_ACCEPTED = 202;
-	static final int HTTP_NOT_AUTHORITATIVE = 203;
-	static final int HTTP_NO_CONTENT = 204;
-	static final int HTTP_RESET = 205;
-	static final int HTTP_PARTIAL = 206;
+	int HTTP_OK = 200;
+	int HTTP_CREATED = 201;
+	int HTTP_ACCEPTED = 202;
+	int HTTP_NOT_AUTHORITATIVE = 203;
+	int HTTP_NO_CONTENT = 204;
+	int HTTP_RESET = 205;
+	int HTTP_PARTIAL = 206;
 
-	static final int HTTP_MULT_CHOICE = 300;
-	static final int HTTP_MOVED_PERM = 301;
-	static final int HTTP_MOVED_TEMP = 302;
-	static final int HTTP_SEE_OTHER = 303;
-	static final int HTTP_NOT_MODIFIED = 304;
-	static final int HTTP_USE_PROXY = 305;
-	static final int HTTP_TEMP_REDIRECT = 307;
+	int HTTP_MULT_CHOICE = 300;
+	int HTTP_MOVED_PERM = 301;
+	int HTTP_MOVED_TEMP = 302;
+	int HTTP_SEE_OTHER = 303;
+	int HTTP_NOT_MODIFIED = 304;
+	int HTTP_USE_PROXY = 305;
+	int HTTP_TEMP_REDIRECT = 307;
 
-	static final int HTTP_BAD_REQUEST = 400;
-	static final int HTTP_UNAUTHORIZED = 401;
-	static final int HTTP_PAYMENT_REQUIRED = 402;
-	static final int HTTP_FORBIDDEN = 403;
-	static final int HTTP_NOT_FOUND = 404;
-	static final int HTTP_BAD_METHOD = 405;
-	static final int HTTP_NOT_ACCEPTABLE = 406;
-	static final int HTTP_PROXY_AUTH = 407;
-	static final int HTTP_CLIENT_TIMEOUT = 408;
-	static final int HTTP_CONFLICT = 409;
-	static final int HTTP_GONE = 410;
-	static final int HTTP_LENGTH_REQUIRED = 411;
-	static final int HTTP_PRECON_FAILED = 412;
-	static final int HTTP_ENTITY_TOO_LARGE = 413;
-	static final int HTTP_REQ_TOO_LONG = 414;
-	static final int HTTP_UNSUPPORTED_TYPE = 415;
-	static final int HTTP_UNSUPPORTED_RANGE = 416;
-	static final int HTTP_EXPECT_FAILED = 417;
+	int HTTP_BAD_REQUEST = 400;
+	int HTTP_UNAUTHORIZED = 401;
+	int HTTP_PAYMENT_REQUIRED = 402;
+	int HTTP_FORBIDDEN = 403;
+	int HTTP_NOT_FOUND = 404;
+	int HTTP_BAD_METHOD = 405;
+	int HTTP_NOT_ACCEPTABLE = 406;
+	int HTTP_PROXY_AUTH = 407;
+	int HTTP_CLIENT_TIMEOUT = 408;
+	int HTTP_CONFLICT = 409;
+	int HTTP_GONE = 410;
+	int HTTP_LENGTH_REQUIRED = 411;
+	int HTTP_PRECON_FAILED = 412;
+	int HTTP_ENTITY_TOO_LARGE = 413;
+	int HTTP_REQ_TOO_LONG = 414;
+	int HTTP_UNSUPPORTED_TYPE = 415;
+	int HTTP_UNSUPPORTED_RANGE = 416;
+	int HTTP_EXPECT_FAILED = 417;
 
-	static final int HTTP_INTERNAL_ERROR = 500;
-	static final int HTTP_NOT_IMPLEMENTED = 501;
-	static final int HTTP_BAD_GATEWAY = 502;
-	static final int HTTP_UNAVAILABLE = 503;
-	static final int HTTP_GATEWAY_TIMEOUT = 504;
-	static final int HTTP_VERSION = 505;
+	int HTTP_INTERNAL_ERROR = 500;
+	int HTTP_NOT_IMPLEMENTED = 501;
+	int HTTP_BAD_GATEWAY = 502;
+	int HTTP_UNAVAILABLE = 503;
+	int HTTP_GATEWAY_TIMEOUT = 504;
+	int HTTP_VERSION = 505;
 
 
 	String getURL();

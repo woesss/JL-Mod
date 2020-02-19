@@ -21,29 +21,29 @@ import java.io.IOException;
 import javax.microedition.io.Connection;
 
 public interface SensorConnection extends Connection {
-	public static final int STATE_CLOSED = 4;
-	public static final int STATE_LISTENING = 2;
-	public static final int STATE_OPENED = 1;
+	int STATE_CLOSED = 4;
+	int STATE_LISTENING = 2;
+	int STATE_OPENED = 1;
 
-	public Channel getChannel(ChannelInfo channelInfo);
+	Channel getChannel(ChannelInfo channelInfo);
 
-	public Data[] getData(int bufferSize) throws IOException;
+	Data[] getData(int bufferSize) throws IOException;
 
-	public Data[] getData(int bufferSize, long bufferingPeriod, boolean isTimestampIncluded,
-						  boolean isUncertaintyIncluded, boolean isValidityIncluded) throws IOException;
+	Data[] getData(int bufferSize, long bufferingPeriod, boolean isTimestampIncluded,
+				   boolean isUncertaintyIncluded, boolean isValidityIncluded) throws IOException;
 
-	public int[] getErrorCodes();
+	int[] getErrorCodes();
 
-	public String getErrorText(int bufferSize);
+	String getErrorText(int bufferSize);
 
-	public SensorInfo getSensorInfo();
+	SensorInfo getSensorInfo();
 
-	public int getState();
+	int getState();
 
-	public void removeDataListener();
+	void removeDataListener();
 
-	public void setDataListener(DataListener listener, int bufferSize);
+	void setDataListener(DataListener listener, int bufferSize);
 
-	public void setDataListener(DataListener listener, int bufferSize, long bufferingPeriod, boolean isTimestampIncluded,
-								boolean isUncertaintyIncluded, boolean isValidityIncluded);
+	void setDataListener(DataListener listener, int bufferSize, long bufferingPeriod, boolean isTimestampIncluded,
+						 boolean isUncertaintyIncluded, boolean isValidityIncluded);
 }

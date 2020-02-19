@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name" translatable="false">J2ME Loader</string>
-    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
-    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <string name="close">Close</string>
     <string name="exit">Exit</string>
@@ -26,9 +24,7 @@
     <string name="version">Version: </string>
     <string name="no_data_for_display">No data</string>
     <string name="message_delete">Do you really want to delete this app?</string>
-    <string name="converting_wait">Converting JAR...</string>
-    <string name="convert_complete">Complete</string>
-    <string name="converting_message">Processing...</string>
+    <string name="converting_wait">Converting JAR…</string>
     <string name="permission_request_failed">This app requires storage write permission</string>
     <string name="external_storage_not_mounted">This app requires external storage</string>
     <string name="action_context_shortcut">Add shortcut</string>
@@ -147,14 +143,14 @@
     <string name="pref_enable_statusbar_title">Enable statusbar</string>
     <string name="pref_wakelock_title">Keep screen on</string>
     <string name="pref_button_shape_title">Button shape</string>
+    <string name="pref_button_shape_oval">Oval</string>
+    <string name="pref_button_shape_rect">Rectangle</string>
+    <string name="pref_button_shape_round">Rounded rectangle</string>
+
     <string-array name="pref_button_shape_entries">
-        <item>Oval</item>
-        <item>Rectangle</item>
-        <item>Rounded Rectangle</item>
-    </string-array>
-    <string-array name="pref_button_shape_values" translatable="false">
-        <item>round</item>
-        <item>square</item>
+        <item>@string/pref_button_shape_oval</item>
+        <item>@string/pref_button_shape_rect</item>
+        <item>@string/pref_button_shape_round</item>
     </string-array>
     <string name="pref_app_sort_title">App sort order</string>
     <string-array name="pref_app_sort_entries">
@@ -169,7 +165,6 @@
     <string name="pref_encoding_title">Encoding</string>
     <string name="pref_default_settings">Default settings</string>
 
-    <string name="_RESOLUTION_SEPARATOR" translatable="false">x</string>
     <string name="_FONT_SEPARATOR" translatable="false">-</string>
     <string name="_MINUS_ONE" translatable="false">-1</string>
     <string name="virtual_key_left_soft" translatable="false">L</string>
@@ -194,16 +189,13 @@
     <string name="virtual_key_star" translatable="false">*</string>
     <string name="virtual_key_pound" translatable="false">#</string>
     <string name="mapping_dialog_title">Press a key</string>
-    <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
+    <string name="mapping_dialog_message">Current mapping: %s</string>
     <string name="reset_mapping">Reset</string>
     <string name="parallel_screen_redrawing">Parallel screen redrawing</string>
-    <string name="mascot_not_supported">Mascot Capsule 3D not supported!</string>
-    <string name="toast_close_filepicker">Press again to close file picker</string>
+    <string name="toast_close_filepicker" tools:keep="@string/toast_close_filepicker">Press again to close file picker</string>
     <string name="action_context_default_template">Set as default config</string>
-    <string name="error_exists">Error: already exists!</string>
     <string name="default_template">" (default)"</string>
     <string name="config_virtual_screen_size">virtual screen size (original resolutions of MIDlet):</string>
-    <string name="invalid_resolution">Invalid %s, application may not work correctly</string>
     <string name="add_resolution_preset">Add resolution to presets</string>
     <string name="saved">Saved %s</string>
     <string name="not_saved_exists">Not saved: already exists</string>

@@ -116,7 +116,7 @@ public class RecordStoreImpl extends RecordStore {
 		dis.readInt(); // TODO Tag
 		byte[] data = new byte[dis.readInt()];
 		dis.read(data, 0, data.length);
-		this.records.put(new Integer(recordId), data);
+		this.records.put(Integer.valueOf(recordId), data);
 	}
 
 	public void writeHeader(DataOutputStream dos)
@@ -308,7 +308,7 @@ public class RecordStoreImpl extends RecordStore {
 
 		int nextRecordID = getNextRecordID();
 		synchronized (this) {
-			records.put(new Integer(nextRecordID), recordData);
+			records.put(Integer.valueOf(nextRecordID), recordData);
 			version++;
 			lastModified = System.currentTimeMillis();
 			lastRecordId++;
@@ -333,7 +333,7 @@ public class RecordStoreImpl extends RecordStore {
 		synchronized (this) {
 			// throws InvalidRecordIDException when no record found
 			getRecord(recordId);
-			records.remove(new Integer(recordId));
+			records.remove(Integer.valueOf(recordId));
 			version++;
 			lastModified = System.currentTimeMillis();
 			size--;
@@ -353,10 +353,10 @@ public class RecordStoreImpl extends RecordStore {
 		}
 
 		synchronized (this) {
-			byte[] data = records.get(new Integer(recordId));
+			byte[] data = records.get(Integer.valueOf(recordId));
 			if (data == null) {
 				recordStoreManager.loadRecord(this, recordId);
-				data = records.get(new Integer(recordId));
+				data = records.get(Integer.valueOf(recordId));
 				if (data == null) {
 					throw new InvalidRecordIDException();
 				}
@@ -372,7 +372,7 @@ public class RecordStoreImpl extends RecordStore {
 		int recordSize;
 		synchronized (this) {
 			recordSize = getRecordSize(recordId);
-			System.arraycopy(records.get(new Integer(recordId)), 0, buffer, offset, recordSize);
+			System.arraycopy(records.get(Integer.valueOf(recordId)), 0, buffer, offset, recordSize);
 		}
 
 		fireRecordListener(ExtendedRecordListener.RECORD_READ, recordId);
@@ -415,7 +415,7 @@ public class RecordStoreImpl extends RecordStore {
 		synchronized (this) {
 			// throws InvalidRecordIDException when no record found
 			getRecord(recordId);
-			records.put(new Integer(recordId), recordData);
+			records.put(Integer.valueOf(recordId), recordData);
 			version++;
 			lastModified = System.currentTimeMillis();
 		}

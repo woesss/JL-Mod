@@ -16,9 +16,7 @@
     <string name="version">Phiên bản: </string>
     <string name="no_data_for_display">Không có dữ liệu</string>
     <string name="message_delete">Bạn thực sự muốn xoá ứng dụng này?</string>
-    <string name="converting_wait">Đang chuyển đổi JAR...</string>
-    <string name="convert_complete">Hoàn thành</string>
-    <string name="converting_message">Đang xử lý...</string>
+    <string name="converting_wait">Đang chuyển đổi JAR…</string>
     <string name="permission_request_failed">Ứng dụng này yêu cầu quyền ghi vào bộ nhớ</string>
     <string name="external_storage_not_mounted">Ứng dụng này yêu cầu bộ nhớ ngoài</string>
     <string name="action_context_shortcut">Thêm lối tắt</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">Trong các ứng dụng toàn màn hình</string>
     <string name="pref_wakelock_title">Giữ màn hình mở</string>
     <string name="pref_button_shape_title">Kiểu nút</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Tròn</item>
-        <item>Vuông</item>
-    </string-array>
     <string name="pref_app_sort_title">Sắp xếp thứ tự ứng dụng</string>
     <string-array name="pref_app_sort_entries">
         <item>Tên</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Mã hóa</string>
     <string name="pref_default_settings">Thiết lập mặc định</string>
     <string name="mapping_dialog_title">Bấm một phím</string>
-    <string name="mapping_dialog_message" formatted="false">Ánh xạ hiện tại: %1$s</string>
+    <string name="mapping_dialog_message">Ánh xạ hiện tại: %1$s</string>
     <string name="reset_mapping">Thiết lập lại</string>
     <string name="parallel_screen_redrawing">Kéo ngược màn hình song song</string>
 </resources>

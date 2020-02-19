@@ -115,7 +115,7 @@ public interface ClientSession extends Connection {
 	 * @param auth the <code>Authenticator</code> to use for this connection
 	 * @throws NullPointerException if <code>auth</code> is <code>null</code>
 	 */
-	public void setAuthenticator(Authenticator auth);
+	void setAuthenticator(Authenticator auth);
 
 	/**
 	 * Creates a <code>javax.obex.HeaderSet</code> object. This object can be
@@ -124,7 +124,7 @@ public interface ClientSession extends Connection {
 	 * @return a new <code>javax.obex.HeaderSet</code> object
 	 * @see HeaderSet
 	 */
-	public HeaderSet createHeaderSet();
+	HeaderSet createHeaderSet();
 
 	/**
 	 * Sets the connection ID header to include in the request packets. If a
@@ -138,7 +138,7 @@ public interface ClientSession extends Connection {
 	 * @param id the connection ID to use
 	 * @throws IllegalArgumentException if <code>id</code> is not in the range 0 to 2<sup>32</sup>-1
 	 */
-	public void setConnectionID(long id);
+	void setConnectionID(long id);
 
 	/**
 	 * Retrieves the connection ID that is being used in the present connection.
@@ -147,7 +147,7 @@ public interface ClientSession extends Connection {
 	 * @return the connection ID being used or -1 if no connection ID is being
 	 * used
 	 */
-	public long getConnectionID();
+	long getConnectionID();
 
 	/**
 	 * Completes an OBEX CONNECT operation. If the <code>headers</code>
@@ -176,7 +176,7 @@ public interface ClientSession extends Connection {
 	 * @throws IllegalArgumentException if <code>headers</code> was not created by a call to
 	 *                                  <code>createHeaderSet()</code>
 	 */
-	public HeaderSet connect(HeaderSet headers) throws IOException;
+	HeaderSet connect(HeaderSet headers) throws IOException;
 
 	/**
 	 * Completes an OBEX DISCONNECT operation. If the <code>headers</code>
@@ -198,7 +198,7 @@ public interface ClientSession extends Connection {
 	 * @throws IllegalArgumentException if <code>headers</code> were not created by a call to
 	 *                                  <code>createHeaderSet()</code>
 	 */
-	public HeaderSet disconnect(HeaderSet headers) throws IOException;
+	HeaderSet disconnect(HeaderSet headers) throws IOException;
 
 	/**
 	 * Completes an OBEX SETPATH operation. This method will never return
@@ -224,7 +224,7 @@ public interface ClientSession extends Connection {
 	 * @throws IllegalArgumentException if <code>headers</code> were not created by a call to
 	 *                                  <code>createHeaderSet()</code>
 	 */
-	public HeaderSet setPath(HeaderSet headers, boolean backup, boolean create) throws IOException;
+	HeaderSet setPath(HeaderSet headers, boolean backup, boolean create) throws IOException;
 
 	/**
 	 * Performs an OBEX DELETE operation. This method will never return
@@ -242,7 +242,7 @@ public interface ClientSession extends Connection {
 	 * @throws IllegalArgumentException if <code>headers</code> were not created by a call to
 	 *                                  <code>createHeaderSet()</code>
 	 */
-	public HeaderSet delete(HeaderSet headers) throws IOException;
+	HeaderSet delete(HeaderSet headers) throws IOException;
 
 	/**
 	 * Performs an OBEX GET operation. This method will send the OBEX headers
@@ -263,7 +263,7 @@ public interface ClientSession extends Connection {
 	 *                                  <code>createHeaderSet()</code>
 	 * @see Operation
 	 */
-	public Operation get(HeaderSet headers) throws IOException;
+	Operation get(HeaderSet headers) throws IOException;
 
 	/**
 	 * Performs an OBEX PUT operation. This method will send the OBEX headers
@@ -284,5 +284,5 @@ public interface ClientSession extends Connection {
 	 *                                  <code>createHeaderSet()</code>
 	 * @see Operation
 	 */
-	public Operation put(HeaderSet headers) throws IOException;
+	Operation put(HeaderSet headers) throws IOException;
 }

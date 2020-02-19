@@ -19,13 +19,13 @@ package javax.microedition.amms.control;
 import javax.microedition.media.Control;
 
 public interface EffectControl extends Control {
-	public String[] getPresetNames();
+	String[] getPresetNames();
 
-	public void setPreset(String preset);
+	void setPreset(String preset);
 
-	public String getPreset();
+	String getPreset();
 
-	public void setEnabled(boolean enable);
+	void setEnabled(boolean enable);
 
-	public boolean isEnabled();
+	boolean isEnabled();
 }

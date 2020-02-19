@@ -16,9 +16,7 @@
     <string name="version">Sürüm: </string>
     <string name="no_data_for_display">Veri yok</string>
     <string name="message_delete">Bu uygulamayı gerçekten silmek istiyor musunuz?</string>
-    <string name="converting_wait">JAR dönüştürülüyor...</string>
-    <string name="convert_complete">Tamamlandı</string>
-    <string name="converting_message">İşleniyor...</string>
+    <string name="converting_wait">JAR dönüştürülüyor…</string>
     <string name="permission_request_failed">Bu uygulama için depolama izni gerekiyor</string>
     <string name="external_storage_not_mounted">Bu uygulama için harici depolama gerekiyor</string>
     <string name="action_context_shortcut">Kısayol ekle</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">Tam ekran uygulamalarda</string>
     <string name="pref_wakelock_title">Ekranı açık tut</string>
     <string name="pref_button_shape_title">Tuş şekli</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Yuvarlak</item>
-        <item>Kare</item>
-    </string-array>
     <string name="pref_app_sort_title">Uygulamaları sırala</string>
     <string-array name="pref_app_sort_entries">
         <item>Ada göre</item>
@@ -125,6 +119,6 @@
     <string name="pref_encoding_title">Kodlama</string>
     <string name="pref_default_settings">Varsayılan ayarlar</string>
     <string name="mapping_dialog_title">Herhangi bir tuşa bas</string>
-    <string name="mapping_dialog_message" formatted="false">Mevcut atama: %1$s</string>
+    <string name="mapping_dialog_message">Mevcut atama: %1$s</string>
     <string name="reset_mapping">Sıfırla</string>
 </resources>

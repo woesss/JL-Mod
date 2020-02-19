@@ -54,7 +54,7 @@ public class DirectUtils {
 	 * @param imageLength the length of the data in the array
 	 * @return the created mutable image
 	 */
-	public static Image createImage(byte imageData[], int imageOffset, int imageLength) {
+	public static Image createImage(byte[] imageData, int imageOffset, int imageLength) {
 		Image source = Image.createImage(imageData, imageOffset, imageLength);
 		Image target = Image.createImage(source.getWidth(), source.getHeight());
 		target.getGraphics().drawImage(source, 0, 0, 0);

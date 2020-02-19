@@ -17,8 +17,6 @@
     <string name="no_data_for_display">Нет данных</string>
     <string name="message_delete">Вы действительно хотите удалить это приложение?</string>
     <string name="converting_wait">Конвертация JAR…</string>
-    <string name="convert_complete">Завершено</string>
-    <string name="converting_message">Обработка…</string>
     <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
     <string name="external_storage_not_mounted">Для работы приложения требуется внешнее хранилище</string>
     <string name="action_context_shortcut">Добавить ярлык</string>
@@ -114,11 +112,9 @@
     <string name="pref_enable_actionbar_summary">В полноэкранных приложениях</string>
     <string name="pref_wakelock_title">Не отключать экран</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Овальные</item>
-        <item>Прямоугольные</item>
-        <item>Закруглённые</item>
-    </string-array>
+    <string name="pref_button_shape_oval">Овальные</string>
+    <string name="pref_button_shape_rect">Прямоугольные</string>
+    <string name="pref_button_shape_round">Закруглённые</string>
     <string name="pref_app_sort_title">Сортировка приложений</string>
     <string-array name="pref_app_sort_entries">
         <item>Имя</item>
@@ -128,17 +124,15 @@
     <string name="pref_encoding_title">Кодировка</string>
     <string name="pref_default_settings">Стандартные настройки</string>
     <string name="mapping_dialog_title">Нажмите кнопку</string>
-    <string name="mapping_dialog_message" formatted="false">Текущий маппинг: %1$s</string>
+    <string name="mapping_dialog_message">Текущий маппинг: %s</string>
     <string name="reset_mapping">Сброс</string>
     <string name="parallel_screen_redrawing">Параллельное обновление экрана</string>
     <string name="add_resolution_preset">Добавить в предустановки</string>
     <string name="action_context_default_template">Сделать шаблоном по-умолчанию</string>
     <string name="config_virtual_screen_size">"Размер виртуального экрана (оригинальное разрешение игры) "</string>
     <string name="create_apps_dir_failed">Не удалось создать папку \'%s\', эмулятор не может работать без неё.</string>
-    <string name="error_exists">Ошибка: уже существует!</string>
     <string name="install">установить</string>
     <string name="install_done">\n\nПриложение установлено!</string>
-    <string name="invalid_resolution">Invalid %s, application may not work correctly</string>
     <string name="saved">Saved %s</string>
     <string name="not_saved_exists">Not saved: already exists</string>
     <string name="invalid_resolution_not_saved">Некорректные размеры: не сохранено!</string>

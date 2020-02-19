@@ -26,20 +26,20 @@ package javax.microedition.pki;
 
 public interface Certificate {
 
-	public String getSubject();
+	String getSubject();
 
-	public String getIssuer();
+	String getIssuer();
 
-	public String getType();
+	String getType();
 
-	public String getVersion();
+	String getVersion();
 
-	public String getSigAlgName();
+	String getSigAlgName();
 
-	public long getNotBefore();
+	long getNotBefore();
 
-	public long getNotAfter();
+	long getNotAfter();
 
-	public String getSerialNumber();
+	String getSerialNumber();
 
 }

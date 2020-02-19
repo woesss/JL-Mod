@@ -76,8 +76,8 @@ public interface Authenticator {
 	 * @return a <code>PasswordAuthentication</code> object containing the
 	 * user name and password used for authentication
 	 */
-	public PasswordAuthentication onAuthenticationChallenge(String description, boolean isUserIdRequired,
-															boolean isFullAccess);
+	PasswordAuthentication onAuthenticationChallenge(String description, boolean isUserIdRequired,
+													 boolean isFullAccess);
 
 	/**
 	 * Called when a client or server receives an authentication response
@@ -90,5 +90,5 @@ public interface Authenticator {
 	 * <code>null</code> is returned then the authentication request
 	 * failed
 	 */
-	public byte[] onAuthenticationResponse(byte[] userName);
+	byte[] onAuthenticationResponse(byte[] userName);
 }

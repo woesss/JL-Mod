@@ -43,18 +43,18 @@ import javax.microedition.io.Connection;
  */
 public interface ConnectorDelegate extends Implementation {
 
-	public Connection open(String name) throws IOException;
+	Connection open(String name) throws IOException;
 
-	public Connection open(String name, int mode) throws IOException;
+	Connection open(String name, int mode) throws IOException;
 
-	public Connection open(String name, int mode, boolean timeouts) throws IOException;
+	Connection open(String name, int mode, boolean timeouts) throws IOException;
 
-	public DataInputStream openDataInputStream(String name) throws IOException;
+	DataInputStream openDataInputStream(String name) throws IOException;
 
-	public DataOutputStream openDataOutputStream(String name) throws IOException;
+	DataOutputStream openDataOutputStream(String name) throws IOException;
 
-	public InputStream openInputStream(String name) throws IOException;
+	InputStream openInputStream(String name) throws IOException;
 
-	public OutputStream openOutputStream(String name) throws IOException;
+	OutputStream openOutputStream(String name) throws IOException;
 
 }

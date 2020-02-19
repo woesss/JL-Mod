@@ -38,7 +38,7 @@ import javax.microedition.rms.RecordStoreException;
 import javax.microedition.rms.RecordStoreNotOpenException;
 
 public class RecordEnumerationImpl implements RecordEnumeration {
-	private RecordStoreImpl recordStoreImpl;
+	private final RecordStoreImpl recordStoreImpl;
 	private RecordFilter filter;
 	private RecordComparator comparator;
 	private boolean keepUpdated;
@@ -142,11 +142,7 @@ public class RecordEnumerationImpl implements RecordEnumeration {
 
 	@Override
 	public boolean hasNextElement() {
-		if (currentRecord == numRecords()) {
-			return false;
-		} else {
-			return true;
-		}
+		return currentRecord != numRecords();
 	}
 
 	@Override

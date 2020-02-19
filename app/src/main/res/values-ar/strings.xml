@@ -16,9 +16,7 @@
     <string name="version">الاصدار: </string>
     <string name="no_data_for_display">لا يوجد بيانات</string>
     <string name="message_delete">هل تريد حذف هذا التطبيق حقاً؟</string>
-    <string name="converting_wait">جار تحويل ملف تطبيق جافا...</string>
-    <string name="convert_complete">اكتمل</string>
-    <string name="converting_message">قيد المعالجة...</string>
+    <string name="converting_wait">جار تحويل ملف تطبيق جافا…</string>
     <string name="permission_request_failed">هذا التطبيق يتطلب إذونات الكتابة و التخزين</string>
     <string name="external_storage_not_mounted">هذا التطبيق يتطلب تخزين خارجي</string>
     <string name="action_context_shortcut">إضافة اختصار</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">في تطبيقات ملء الشاشة</string>
     <string name="pref_wakelock_title">أبقي الشاشة فعالة</string>
     <string name="pref_button_shape_title">شكل الزر</string>
-    <string-array name="pref_button_shape_entries">
-        <item>دائري</item>
-        <item>مربع</item>
-    </string-array>
     <string name="pref_app_sort_title">الفرز بحسب</string>
     <string-array name="pref_app_sort_entries">
         <item>الإسم</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">الترميز</string>
     <string name="pref_default_settings">الإعدادات الإفتراضية</string>
     <string name="mapping_dialog_title">اضغط على أي مفتاح</string>
-    <string name="mapping_dialog_message" formatted="false">التوجيه الحالي: %1$s</string>
+    <string name="mapping_dialog_message">التوجيه الحالي: %s</string>
     <string name="reset_mapping">إعادة تعيين</string>
     <string name="parallel_screen_redrawing">إعادة رسم الشاشة بشكل موازي</string>
 </resources>

@@ -16,9 +16,7 @@
     <string name="version">Versiune: </string>
     <string name="no_data_for_display">Nu există informații disponibile</string>
     <string name="message_delete">Chiar vrei sa ștergi această aplicație?</string>
-    <string name="converting_wait">Se convertește JAR...</string>
-    <string name="convert_complete">Finalizat</string>
-    <string name="converting_message">Se procesează...</string>
+    <string name="converting_wait">Se convertește JAR…</string>
     <string name="permission_request_failed">Această aplicație are nevoie de permisiuni de stocare</string>
     <string name="external_storage_not_mounted">Aceasta aplicație are nevoie de stocare externă</string>
     <string name="action_context_shortcut">Adaugă scurtătură</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">În aplicațiile pe tot ecranul</string>
     <string name="pref_wakelock_title">Tine ecranul aprins</string>
     <string name="pref_button_shape_title">Formă buton</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Rotund</item>
-        <item>Pătrat</item>
-    </string-array>
     <string name="pref_app_sort_title">Ordine sortare aplicații</string>
     <string-array name="pref_app_sort_entries">
         <item>Nume</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Codificare</string>
     <string name="pref_default_settings">Setări implicite</string>
     <string name="mapping_dialog_title">Apasă o tastă</string>
-    <string name="mapping_dialog_message" formatted="false">Mapari curente: %1$s</string>
+    <string name="mapping_dialog_message">Mapari curente: %1$s</string>
     <string name="reset_mapping">Resetare</string>
     <string name="parallel_screen_redrawing">Redesenarea ecranului în paralel</string>
 </resources>

@@ -194,7 +194,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 			recordStore.writeHeader(dos);
 			dos.close();
 		} catch (IOException e) {
-			Log.e(TAG, "RecordStore.saveToDisk: ERROR writting object to " + getHeaderFileName(recordStore.getName()), e);
+			Log.e(TAG, "RecordStore.saveToDisk: ERROR writing object to " + getHeaderFileName(recordStore.getName()), e);
 			throw new RecordStoreException(e.getMessage());
 		}
 
@@ -212,7 +212,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 			recordStore.writeHeader(dos);
 			dos.close();
 		} catch (IOException e) {
-			Log.e(TAG, "RecordStore.saveToDisk: ERROR writting object to " + getHeaderFileName(recordStore.getName()), e);
+			Log.e(TAG, "RecordStore.saveToDisk: ERROR writing object to " + getHeaderFileName(recordStore.getName()), e);
 			throw new RecordStoreException(e.getMessage());
 		}
 
@@ -223,7 +223,7 @@ public class AndroidRecordStoreManager implements RecordStoreManager {
 				recordStore.writeRecord(dos, recordId);
 				dos.close();
 			} catch (IOException e) {
-				Log.e(TAG, "RecordStore.saveToDisk: ERROR writting object to " + getRecordFileName(recordStore.getName(), recordId), e);
+				Log.e(TAG, "RecordStore.saveToDisk: ERROR writing object to " + getRecordFileName(recordStore.getName(), recordId), e);
 				throw new RecordStoreException(e.getMessage());
 			}
 		}

@@ -16,9 +16,7 @@
     <string name="version">Versi: </string>
     <string name="no_data_for_display">Tidak ada database yang ditampilkan</string>
     <string name="message_delete">Apakah Anda ingin menghapus aplikasi ini?</string>
-    <string name="converting_wait">Mengkonversi JAR...</string>
-    <string name="convert_complete">Selesai</string>
-    <string name="converting_message">Memproses...</string>
+    <string name="converting_wait">Mengkonversi JAR…</string>
     <string name="permission_request_failed">Aplikasi ini membutuhkan izin untuk menulis berkas</string>
     <string name="external_storage_not_mounted">Aplikasi ini membutuhkan penyimpanan eksternal</string>
     <string name="action_context_shortcut">Tambahkan pintasan (shortcut)</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">ActionBar menampilkan nama MIDlet dan menu. Non-aktifkan ini jika ingin dalam keadaan layar penuh.</string>
     <string name="pref_wakelock_title">Biarkan layar tetap menyala</string>
     <string name="pref_button_shape_title">Bentuk tombol</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Bulat</item>
-        <item>Kotak</item>
-    </string-array>
     <string name="pref_app_sort_title">Urutkan aplikasi berdasarkan</string>
     <string-array name="pref_app_sort_entries">
         <item>Nama</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Pengkodean</string>
     <string name="pref_default_settings">Pengaturan bawaan</string>
     <string name="mapping_dialog_title">Tekan tombol</string>
-    <string name="mapping_dialog_message" formatted="false">Pemetaan saat ini: %1$s</string>
+    <string name="mapping_dialog_message">Pemetaan saat ini: %1$s</string>
     <string name="reset_mapping">Setel ulang</string>
     <string name="parallel_screen_redrawing">Menggambar ulang layar paralel</string>
 </resources>

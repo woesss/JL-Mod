@@ -90,7 +90,7 @@ public interface ServiceRecord {
 	 *
 	 * @see #getConnectionURL(int, boolean)
 	 */
-	public static final int NOAUTHENTICATE_NOENCRYPT = 0;
+	int NOAUTHENTICATE_NOENCRYPT = 0;
 
 	/**
 	 * Authentication is required for connections to this service, but not
@@ -101,7 +101,7 @@ public interface ServiceRecord {
 	 *
 	 * @see #getConnectionURL(int, boolean)
 	 */
-	public static final int AUTHENTICATE_NOENCRYPT = 1;
+	int AUTHENTICATE_NOENCRYPT = 1;
 
 	/**
 	 * Authentication and encryption are required for connections to this
@@ -109,7 +109,7 @@ public interface ServiceRecord {
 	 * <p>
 	 * {@code AUTHENTICATE_ENCRYPT} is set to the constant value 0x02 (2).
 	 */
-	public static final int AUTHENTICATE_ENCRYPT = 2;
+	int AUTHENTICATE_ENCRYPT = 2;
 
 	/**
 	 * Returns the value of the service attribute ID provided it is present in
@@ -121,7 +121,7 @@ public interface ServiceRecord {
 	 * @throws IllegalArgumentException if {@code attrID} is negative or greater than
 	 *                                  or equal to 2<sup>16</sup>
 	 */
-	public DataElement getAttributeValue(int attrID);
+	DataElement getAttributeValue(int attrID);
 
 	/**
 	 * Returns the remote Bluetooth device that populated the service record
@@ -133,7 +133,7 @@ public interface ServiceRecord {
 	 * @return the remote Bluetooth device that populated the
 	 * service record, or {@code null} if the local device populated this {@code ServiceRecord}
 	 */
-	public RemoteDevice getHostDevice();
+	RemoteDevice getHostDevice();
 
 	/**
 	 * Returns the service attribute IDs whose value could be retrieved by a
@@ -146,7 +146,7 @@ public interface ServiceRecord {
 	 * of length zero.
 	 * @see #getAttributeValue(int)
 	 */
-	public int[] getAttributeIDs();
+	int[] getAttributeIDs();
 
 	/**
 	 * Retrieves the values by contacting the remote Bluetooth device for a set
@@ -184,7 +184,7 @@ public interface ServiceRecord {
 	 * @throws java.lang.RuntimeException         if this {@code ServiceRecord} describes a service on the local
 	 *                                            device rather than a service on a remote device
 	 */
-	public boolean populateRecord(int[] attrIDs) throws IOException;
+	boolean populateRecord(int[] attrIDs) throws IOException;
 
 	/**
 	 * Returns a {@link java.lang.String} including optional parameters that can
@@ -222,7 +222,7 @@ public interface ServiceRecord {
 	 * @see #NOAUTHENTICATE_NOENCRYPT
 	 * @see #AUTHENTICATE_NOENCRYPT
 	 */
-	public String getConnectionURL(int requiredSecurity, boolean mustBeMaster);
+	String getConnectionURL(int requiredSecurity, boolean mustBeMaster);
 
 	/**
 	 * Used by a server application to indicate the major service class bits
@@ -283,7 +283,7 @@ public interface ServiceRecord {
 	 *                                            if the {@code ServiceRecord} receiving the message was
 	 *                                            obtained from a remote device
 	 */
-	public void setDeviceServiceClasses(int classes);
+	void setDeviceServiceClasses(int classes);
 
 	/**
 	 * Modifies this {@code ServiceRecord} to contain the service attribute
@@ -322,6 +322,6 @@ public interface ServiceRecord {
 	 *                                            created by a call to
 	 *                                            {@link javax.bluetooth.DiscoveryAgent#searchServices(int[], UUID[], RemoteDevice, DiscoveryListener)}
 	 */
-	public boolean setAttributeValue(int attrID, DataElement attrValue);
+	boolean setAttributeValue(int attrID, DataElement attrValue);
 
 }

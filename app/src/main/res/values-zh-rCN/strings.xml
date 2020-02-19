@@ -16,9 +16,7 @@
     <string name="version">版本: </string>
     <string name="no_data_for_display">末安装应用</string>
     <string name="message_delete">确定要删除此应用？</string>
-    <string name="converting_wait">正在安装...</string>
-    <string name="convert_complete">完成</string>
-    <string name="converting_message">处理中…</string>
+    <string name="converting_wait">正在安装…</string>
     <string name="permission_request_failed">本应用需要获取存储读写权限</string>
     <string name="external_storage_not_mounted">本应用需要外部存储</string>
     <string name="action_context_shortcut">添加到桌面</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">在应用中全屏</string>
     <string name="pref_wakelock_title">保持屏幕常亮</string>
     <string name="pref_button_shape_title">按钮形状</string>
-    <string-array name="pref_button_shape_entries">
-        <item>圆形</item>
-        <item>矩形</item>
-    </string-array>
     <string name="pref_app_sort_title">应用排序</string>
     <string-array name="pref_app_sort_entries">
         <item>名称</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">编码</string>
     <string name="pref_default_settings">默认设置</string>
     <string name="mapping_dialog_title">按下一个按键</string>
-    <string name="mapping_dialog_message" formatted="false">当前映射: %1$s</string>
+    <string name="mapping_dialog_message">当前映射: %1$s</string>
     <string name="reset_mapping">重置</string>
     <string name="parallel_screen_redrawing">同步画面绘制</string>
 </resources>

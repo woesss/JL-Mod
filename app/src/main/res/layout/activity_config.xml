@@ -270,7 +270,9 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:inputType="numberDecimal"
-                    android:textDirection="ltr" />
+                    android:textDirection="ltr"
+                    android:layout_width="0dp"
+                    android:importantForAutofill="no" />
             </LinearLayout>
         </LinearLayout>
 
@@ -604,32 +606,28 @@
                         android:textColor="?attr/textColorSecondary"
                         android:textSize="15sp" />
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <EditText
+                        android:id="@+id/tfVKHideDelay"
+                        style="@style/EditTextStyle"
+                        android:layout_width="0dip"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:hint="@string/_MINUS_ONE"
+                        android:inputType="number|numberSigned"
+                        android:textDirection="ltr"
+                        android:importantForAutofill="no"
+                        tools:targetApi="jelly_bean_mr1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/tfVKHideDelay"
-                            style="@style/EditTextStyle"
-                            android:layout_width="0dip"
-                            android:layout_marginLeft="4dp"
-                            android:layout_marginRight="4dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:hint="@string/_MINUS_ONE"
-                            android:inputType="number|numberSigned"
-                            android:textDirection="ltr" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginRight="5dp"
-                            android:text="@string/PREF_UNIT_MS"
-                            android:textColor="?attr/textColorSecondary"
-                            android:textSize="15sp" />
-                    </LinearLayout>
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/PREF_UNIT_MS"
+                        android:textColor="?attr/textColorSecondary"
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <TableLayout
@@ -657,7 +655,9 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:hint="@string/PREF_COLOR_HINT"
-                            android:textDirection="ltr" />
+                            android:textDirection="ltr"
+                            android:importantForAutofill="no"
+                            tools:targetApi="jelly_bean_mr1" />
                     </TableRow>
 
                     <TableRow android:gravity="center_vertical">

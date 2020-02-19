@@ -16,9 +16,7 @@
     <string name="version">Verzió: </string>
     <string name="no_data_for_display">Nincs adat</string>
     <string name="message_delete">Biztosan törli ezt az alkalmazást?</string>
-    <string name="converting_wait">JAR konvertálása...</string>
-    <string name="convert_complete">Kész</string>
-    <string name="converting_message">Folyamatban...</string>
+    <string name="converting_wait">JAR konvertálása…</string>
     <string name="permission_request_failed">Ez az alkalmazás tárhelyírási engedélyt igényel</string>
     <string name="external_storage_not_mounted">Ennek az alkalmazásnak külső tárolóra van szüksége</string>
     <string name="action_context_shortcut">Parancsikon létrehozása</string>
@@ -112,10 +110,6 @@
     <string name="pref_enable_actionbar_summary">A teljes képernyős alkalmazásokban</string>
     <string name="pref_wakelock_title">Képernyő bekapcsolva tartása</string>
     <string name="pref_button_shape_title">Gombforma</string>
-    <string-array name="pref_button_shape_entries">
-        <item>Kerek</item>
-        <item>Négyszögletes</item>
-    </string-array>
     <string name="pref_app_sort_title">Alkalmazásrendezési sorrend</string>
     <string-array name="pref_app_sort_entries">
         <item>Név</item>
@@ -125,7 +119,7 @@
     <string name="pref_encoding_title">Kódolás</string>
     <string name="pref_default_settings">Alapértelmezett beállítások</string>
     <string name="mapping_dialog_title">Nyomjon meg egy billentyűt</string>
-    <string name="mapping_dialog_message" formatted="false">Jelenlegi hozzárendelés: %1$s</string>
+    <string name="mapping_dialog_message">Jelenlegi hozzárendelés: %1$s</string>
     <string name="reset_mapping">Alaphelyzetbe állítás</string>
     <string name="parallel_screen_redrawing">Párhuzamos képernyő-újrarajzolás</string>
 </resources>

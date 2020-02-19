@@ -12,9 +12,7 @@
     <string name="version">Versão: </string>
     <string name="no_data_for_display">Sem informação</string>
     <string name="message_delete">Você quer mesmo excluir este app?</string>
-    <string name="converting_wait">Convertendo JAR...</string>
-    <string name="convert_complete">Concluído</string>
-    <string name="converting_message">Processando...</string>
+    <string name="converting_wait">Convertendo JAR…</string>
     <string name="permission_request_failed">Este aplicativo requer permissão de gravação de armazenamento</string>
     <string name="external_storage_not_mounted">Este aplicativo requer acesso à memória</string>
     <string name="action_context_shortcut">Adicionar atalho</string>
@@ -93,6 +91,6 @@
     </string-array>
     <string name="pref_map_keys">Mapeamentos de teclas</string>
     <string name="mapping_dialog_title">Pressione uma tecla</string>
-    <string name="mapping_dialog_message" formatted="false">Mapeamento atual: %1$s</string>
+    <string name="mapping_dialog_message">Mapeamento atual: %s</string>
     <string name="reset_mapping">Redefinir</string>
 </resources>

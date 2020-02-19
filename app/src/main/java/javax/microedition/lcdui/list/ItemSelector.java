@@ -17,5 +17,5 @@
 package javax.microedition.lcdui.list;
 
 public interface ItemSelector {
-	public boolean isSelected(int elementNum);
+	boolean isSelected(int elementNum);
 }

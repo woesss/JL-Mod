@@ -141,11 +141,11 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		neutral = -1;
 
 		for (int i = 0; i < commands.length; i++) {
-			int cmdtype = commands[i].getCommandType();
+			int cmdType = commands[i].getCommandType();
 
-			if (positive < 0 && cmdtype == Command.OK) {
+			if (positive < 0 && cmdType == Command.OK) {
 				positive = i;
-			} else if (negative < 0 && cmdtype == Command.CANCEL) {
+			} else if (negative < 0 && cmdType == Command.CANCEL) {
 				negative = i;
 			} else if (neutral < 0) {
 				neutral = i;

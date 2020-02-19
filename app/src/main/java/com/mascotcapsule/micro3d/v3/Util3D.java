@@ -17,15 +17,15 @@
 package com.mascotcapsule.micro3d.v3;
 
 public class Util3D {
-	public static final int sqrt(int p) {
+	public static int sqrt(int p) {
 		return (int) Math.sqrt(p);
 	}
 
-	public static final int sin(int p) {
+	public static int sin(int p) {
 		return (int) Math.sin(p);
 	}
 
-	public static final int cos(int p) {
+	public static int cos(int p) {
 		return (int) Math.cos(p);
 	}
 }

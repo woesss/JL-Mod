@@ -82,7 +82,7 @@ public interface SessionNotifier extends Connection {
 	 *                                      mode because the device user has configured the device to
 	 *                                      be non-connectable
 	 */
-	public Connection acceptAndOpen(ServerRequestHandler handler) throws IOException;
+	Connection acceptAndOpen(ServerRequestHandler handler) throws IOException;
 
 	/**
 	 * Waits for a transport layer connection to be established and specifies
@@ -142,5 +142,5 @@ public interface SessionNotifier extends Connection {
 	 *                                      mode because the device user has configured the device to
 	 *                                      be non-connectable
 	 */
-	public Connection acceptAndOpen(ServerRequestHandler handler, Authenticator auth) throws IOException;
+	Connection acceptAndOpen(ServerRequestHandler handler, Authenticator auth) throws IOException;
 }

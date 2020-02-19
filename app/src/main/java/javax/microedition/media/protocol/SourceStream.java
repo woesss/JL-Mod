@@ -21,25 +21,25 @@ import javax.microedition.media.Controllable;
 
 public interface SourceStream extends Controllable {
 
-	public static final int NOT_SEEKABLE = 0;
+	int NOT_SEEKABLE = 0;
 
-	public static final int SEEKABLE_TO_START = 1;
+	int SEEKABLE_TO_START = 1;
 
-	public static final int RANDOM_ACCESSIBLE = 2;
+	int RANDOM_ACCESSIBLE = 2;
 
-	public abstract ContentDescriptor getContentDescriptor();
+	ContentDescriptor getContentDescriptor();
 
-	public abstract long getContentLength();
+	long getContentLength();
 
-	public abstract int getSeekType();
+	int getSeekType();
 
-	public abstract int getTransferSize();
+	int getTransferSize();
 
-	public abstract int read(byte[] buffer, int offset, int length) throws IOException;
+	int read(byte[] buffer, int offset, int length) throws IOException;
 
-	public abstract long seek(long pos) throws IOException;
+	long seek(long pos) throws IOException;
 
-	public abstract long tell();
+	long tell();
 
 
 }
