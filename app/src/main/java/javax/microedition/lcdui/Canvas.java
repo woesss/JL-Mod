@@ -105,20 +105,14 @@ public abstract class Canvas extends Displayable {
 	private static final int MOTOROLA_KEY_SOFT_LEFT = -21;
 	private static final int MOTOROLA_KEY_SOFT_RIGHT = -22;
 
-	private static SparseIntArray keyCodeToSiemensCode;
-	private static SparseIntArray keyCodeToMotorolaCode;
+	private static SparseIntArray keyCodeToSiemensCode = new SparseIntArray();
+	private static SparseIntArray keyCodeToMotorolaCode = new SparseIntArray();
 	private static SparseIntArray androidToMIDP;
-	private static SparseIntArray keyCodeToGameAction;
-	private static SparseIntArray gameActionToKeyCode;
-	private static SparseArrayCompat<String> keyCodeToKeyName;
+	private static SparseIntArray keyCodeToGameAction = new SparseIntArray();
+	private static SparseIntArray gameActionToKeyCode = new SparseIntArray();
+	private static SparseArrayCompat<String> keyCodeToKeyName = new SparseArrayCompat<>();
 
 	static {
-		keyCodeToSiemensCode = new SparseIntArray();
-		keyCodeToMotorolaCode = new SparseIntArray();
-		keyCodeToGameAction = new SparseIntArray();
-		gameActionToKeyCode = new SparseIntArray();
-		keyCodeToKeyName = new SparseArrayCompat<>();
-
 		mapKeyCode(KEY_NUM0, 0, "0");
 		mapKeyCode(KEY_NUM1, 0, "1");
 		mapKeyCode(KEY_NUM2, UP, "2");
@@ -199,9 +193,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private static void mapKeyCode(int midpKeyCode, int gameAction, String keyName) {
-		if (gameAction != 0) {
-			keyCodeToGameAction.put(midpKeyCode, gameAction);
-		}
+		keyCodeToGameAction.put(midpKeyCode, gameAction);
 		keyCodeToKeyName.put(midpKeyCode, keyName);
 	}
 
@@ -250,6 +242,18 @@ public abstract class Canvas extends Displayable {
 		} else {
 			throw new IllegalArgumentException("unknown keycode " + keyCode);
 		}
+	}
+
+	public void postKeyPressed(int keyCode) {
+		postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, convertKeyCode(keyCode)));
+	}
+
+	public void postKeyReleased(int keyCode) {
+		postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, convertKeyCode(keyCode)));
+	}
+
+	public void postKeyRepeated(int keyCode) {
+		postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, convertKeyCode(keyCode)));
 	}
 
 	private class InnerView extends SurfaceView implements SurfaceHolder.Callback {
@@ -309,6 +313,11 @@ public abstract class Canvas extends Displayable {
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_RELEASED, keyCode));
 			}
 			return true;
+		}
+
+		@Override
+		public boolean onGenericMotionEvent(MotionEvent event) {
+			return super.onGenericMotionEvent(event);
 		}
 
 		@Override

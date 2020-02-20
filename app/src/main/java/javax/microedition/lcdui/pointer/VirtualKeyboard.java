@@ -833,9 +833,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						vibrate();
 						associatedKeys[pointer] = aKeypad;
 						aKeypad.setSelected(true);
-						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getKeyCode()));
+						target.postKeyPressed(aKeypad.getKeyCode());
 						if (aKeypad.getSecondKeyCode() != 0) {
-							target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_PRESSED, aKeypad.getSecondKeyCode()));
+							target.postKeyPressed(aKeypad.getSecondKeyCode());
 						}
 						repaint();
 						break;
@@ -891,9 +891,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				if (key == null) {
 					pointerPressed(pointer, x, y);
 				} else if (!key.contains(x, y)) {
-					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, key.getKeyCode()));
+					target.postKeyReleased(key.getKeyCode());
 					if (key.getSecondKeyCode() != 0) {
-						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, key.getSecondKeyCode()));
+						target.postKeyReleased(key.getSecondKeyCode());
 					}
 					key.setSelected(false);
 					associatedKeys[pointer] = null;
@@ -901,9 +901,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					pointerPressed(pointer, x, y);
 				} else if (SystemClock.uptimeMillis() - key.lastActionTime >= KEY_REPEAT_INTERVAL) {
 					key.lastActionTime = SystemClock.uptimeMillis();
-					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, key.getKeyCode()));
+					target.postKeyRepeated(key.getKeyCode());
 					if (key.getSecondKeyCode() != 0) {
-						target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_REPEATED, key.getSecondKeyCode()));
+						target.postKeyRepeated(key.getSecondKeyCode());
 					}
 				}
 				break;
@@ -971,10 +971,11 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			if (pointer > associatedKeys.length) {
 				return checkPointerHandled(x, y);
 			}
-			if (associatedKeys[pointer] != null) {
-				target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getKeyCode()));
+			VirtualKey key = associatedKeys[pointer];
+			if (key != null) {
+				target.postKeyReleased(associatedKeys[pointer].getKeyCode());
 				if (associatedKeys[pointer].getSecondKeyCode() != 0) {
-					target.postEvent(CanvasEvent.getInstance(target, CanvasEvent.KEY_RELEASED, associatedKeys[pointer].getSecondKeyCode()));
+					target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
 				}
 				associatedKeys[pointer].setSelected(false);
 				associatedKeys[pointer] = null;

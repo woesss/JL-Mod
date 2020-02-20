@@ -22,14 +22,23 @@ import javax.microedition.lcdui.Image;
 
 public class GameCanvas extends Canvas {
 
+	@SuppressWarnings("WeakerAccess")
 	public static final int UP_PRESSED = 1 << Canvas.UP;
+	@SuppressWarnings("WeakerAccess")
 	public static final int DOWN_PRESSED = 1 << Canvas.DOWN;
+	@SuppressWarnings("WeakerAccess")
 	public static final int LEFT_PRESSED = 1 << Canvas.LEFT;
+	@SuppressWarnings("WeakerAccess")
 	public static final int RIGHT_PRESSED = 1 << Canvas.RIGHT;
+	@SuppressWarnings("WeakerAccess")
 	public static final int FIRE_PRESSED = 1 << Canvas.FIRE;
+	@SuppressWarnings("WeakerAccess")
 	public static final int GAME_A_PRESSED = 1 << Canvas.GAME_A;
+	@SuppressWarnings("WeakerAccess")
 	public static final int GAME_B_PRESSED = 1 << Canvas.GAME_B;
+	@SuppressWarnings("WeakerAccess")
 	public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
+	@SuppressWarnings("WeakerAccess")
 	public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
 	private Image image;
@@ -78,36 +87,42 @@ public class GameCanvas extends Canvas {
 		}
 	}
 
-	public void gameKeyPressed(int keyCode, int originalKeycode) {
-		if (!(suppressCommands && checkGameAction(keyCode))) {
-			keyPressed(keyCode);
+	@Override
+	public void postKeyPressed(int keyCode) {
+		key |= convertGameKeyCode(keyCode);
+		if (suppressCommands && isGameAction(keyCode)) {
+			return;
 		}
-		key |= convertGameKeyCode(originalKeycode);
+		super.postKeyPressed(keyCode);
 	}
 
-	public void gameKeyReleased(int keyCode, int originalKeycode) {
-		if (!(suppressCommands && checkGameAction(keyCode))) {
-			keyReleased(keyCode);
+	@Override
+	public void postKeyReleased(int keyCode) {
+		repeatedKey &= ~convertGameKeyCode(keyCode);
+		if (suppressCommands && isGameAction(keyCode)) {
+			return;
 		}
-		repeatedKey &= ~convertGameKeyCode(originalKeycode);
+		super.postKeyReleased(keyCode);
 	}
 
-	public void gameKeyRepeated(int keyCode, int originalKeycode) {
-		if (!(suppressCommands && checkGameAction(keyCode))) {
-			keyRepeated(keyCode);
+	@Override
+	public void postKeyRepeated(int keyCode) {
+		repeatedKey |= convertGameKeyCode(keyCode);
+		if (suppressCommands && isGameAction(keyCode)) {
+			return;
 		}
-		repeatedKey |= convertGameKeyCode(originalKeycode);
+		super.postKeyRepeated(keyCode);
 	}
 
-	private boolean checkGameAction(int keyCode) {
+	private boolean isGameAction(int keyCode) {
 		try {
-			getGameAction(keyCode);
-			return true;
+			return getGameAction(keyCode) != 0;
 		} catch (IllegalArgumentException iae) {
 			return false;
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public int getKeyStates() {
 		int temp = key;
 		temp |= repeatedKey;
@@ -119,10 +134,12 @@ public class GameCanvas extends Canvas {
 		return image.getGraphics();
 	}
 
+	@SuppressWarnings("unused")
 	public void flushGraphics() {
 		flushGraphics(0, 0, width, height);
 	}
 
+	@SuppressWarnings("WeakerAccess")
 	public void flushGraphics(int x, int y, int width, int height) {
 		flushBuffer(image);
 	}
