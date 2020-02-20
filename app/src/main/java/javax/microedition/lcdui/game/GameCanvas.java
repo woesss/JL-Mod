@@ -141,6 +141,6 @@ public class GameCanvas extends Canvas {
 
 	@SuppressWarnings("WeakerAccess")
 	public void flushGraphics(int x, int y, int width, int height) {
-		flushBuffer(image);
+		flushBuffer(image, x, y, width, height);
 	}
 }

@@ -492,4 +492,9 @@ public class Graphics {
 	public void drawRect(RectF rect) {
 		canvas.drawRect(rect, drawPaint);
 	}
+
+	public void flush(Image image, int x, int y, int width, int height) {
+		intRect.set(x, y, x + width, y + height);
+		canvas.drawBitmap(image.getBitmap(), intRect, intRect, null);
+	}
 }

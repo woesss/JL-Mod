@@ -95,6 +95,10 @@ public class AndroidClassVisitor extends ClassVisitor {
 				injectGetPropertyEncoding();
 				mv.visitMethodInsn(opcode, owner, name, "(Ljava/io/OutputStream;Z" + TYPE_STRING + ")V", itf);
 				return;
+			} else if (owner.equals("com/siemens/mp/io/Connection")
+					&& opcode == Opcodes.INVOKESTATIC
+					&& name.equals("setListener")) {
+				name = name + "Old";
 			}
 			mv.visitMethodInsn(opcode, owner, name, desc, itf);
 		}

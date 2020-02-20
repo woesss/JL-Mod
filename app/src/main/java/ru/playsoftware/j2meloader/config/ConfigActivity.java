@@ -706,15 +706,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		if (height.isEmpty()) height = "-1";
 		int w = Integer.parseInt(width);
 		int h = Integer.parseInt(height);
-		if (w <= 96 || h <= 96) {
+		if (w <= 0 || h <= 0) {
 			Toast.makeText(this, R.string.invalid_resolution_not_saved, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		String preset = width + " x " + height;
-		if (screenPresets.contains(preset)) {
-			Toast.makeText(this, R.string.not_saved_exists, Toast.LENGTH_SHORT).show();
-				return;
-		}
 
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		Set<String> set = preferences.getStringSet("ResolutionsPreset", null);

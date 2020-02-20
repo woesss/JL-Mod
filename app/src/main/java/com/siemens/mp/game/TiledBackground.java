@@ -1,84 +1,103 @@
 /*
- *  Siemens API for MicroEmulator
- *  Copyright (C) 2003 Markus Heberling <markus@heberling.net>
+ *  Copyright 2020 Yury Kharchenko
  *
- *  It is licensed under the following two licenses as alternatives:
- *    1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
- *    2. Apache License (the "AL") Version 2.0
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *  You may not use this file except in compliance with at least one of
- *  the above two licenses.
- *
- *  You may obtain a copy of the LGPL at
- *      http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
- *
- *  You may obtain a copy of the AL at
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the LGPL or the AL for the specific language governing permissions and
- *  limitations.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package com.siemens.mp.game;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.Shader;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 public class TiledBackground extends GraphicObject {
-	private Image[] pixels;
-	private byte[] map;
+	private Image pixels;
+	private byte[][] map;
 	private int widthInTiles;
 	private int heightInTiles;
-	private int posx;
-	private int posy;
+	private int posX;
+	private int posY;
 
-	public TiledBackground(byte[] tilePixels, byte[] tileMask, byte[] map, int widthInTiles, int heightInTiles) {
+	public TiledBackground(byte[] tilePixels, byte[] tileMask, byte[] map,
+						   int widthInTiles, int heightInTiles) {
 		this(
-				com.siemens.mp.ui.Image.createImageFromBitmap(tilePixels, 8, tilePixels.length),
-				com.siemens.mp.ui.Image.createImageFromBitmap(tileMask, 8, tilePixels.length),
+				com.siemens.mp.ui.Image.createImageFromBitmap(tilePixels, tileMask, 8, tilePixels.length),
+				null,
 				map,
 				widthInTiles,
 				heightInTiles
 		);
 	}
 
-	public TiledBackground(ExtendedImage tilePixels, ExtendedImage tileMask, byte[] map, int widthInTiles, int heightInTiles) {
+	public TiledBackground(ExtendedImage tilePixels, ExtendedImage tileMask, byte[] map,
+						   int widthInTiles, int heightInTiles) {
 		this(tilePixels.getImage(), tileMask.getImage(), map, widthInTiles, heightInTiles);
 	}
 
 	public TiledBackground(Image tilePixels, Image tileMask, byte[] map, int widthInTiles, int heightInTiles) {
-		this.map = map;
+		this.map = new byte[heightInTiles][widthInTiles];
 		this.heightInTiles = heightInTiles;
 		this.widthInTiles = widthInTiles;
 
-		pixels = new Image[tilePixels.getHeight() / 8 + 3];
-		pixels[0] = Image.createImage(8, 8);
-		pixels[1] = Image.createImage(8, 8);
-		pixels[2] = Image.createImage(8, 8);
-		pixels[2].getGraphics().fillRect(0, 0, 8, 8);
+		pixels = Image.createImage(widthInTiles * 8, heightInTiles * 8);
 
-		for (int i = 0; i < this.pixels.length - 3; i++) {
-			Image img = Image.createImage(8, 8);
-
-			img.getGraphics().drawImage(tilePixels, 0, -i * 8, 0);
-			pixels[i + 3] = img;
+		Canvas canvas = pixels.getCanvas();
+		Bitmap bitmap = tilePixels.getBitmap();
+		int idx = 0;
+		Rect src = new Rect(0, 0, 8, 8);
+		Rect dst = new Rect(0, 0, 8, 8);
+		Paint paint = new Paint();
+		for (int i = 0; i < heightInTiles; i++) {
+			for (int j = 0; j < widthInTiles; j++) {
+				dst.offsetTo(j * 8, i * 8);
+				int tile = map[idx++] & 0xff;
+				switch (tile) {
+					case 0:
+						break;
+					case 1:
+						paint.setColor(Color.WHITE);
+						canvas.drawRect(dst, paint);
+						break;
+					case 2:
+						paint.setColor(Color.BLACK);
+						canvas.drawRect(dst, paint);
+						break;
+					default:
+						src.offsetTo(0, (tile - 3) * 8);
+						canvas.drawBitmap(bitmap, src, dst, null);
+				}
+			}
 		}
 	}
 
 	public void setPositionInMap(int x, int y) {
-		posx = x;
-		posy = y;
+		posX = x;
+		posY = y;
 	}
 
-	protected void paint(Graphics g) {
-		for (int y = posy / 8; y < heightInTiles; y++) {
-			for (int x = posx / 8; x < widthInTiles; x++) {
-				if (map[y * widthInTiles + x] < 0) break;
-				g.drawImage(pixels[map[y * widthInTiles + x]], -posx + x * 8, -posy + y * 8, 0);
-			}
-		}
+	protected void paint(Graphics g, int x, int y) {
+		Canvas canvas = g.getCanvas();
+		Bitmap bitmap = pixels.getBitmap();
+		Rect src = new Rect(posX, posY, bitmap.getWidth(), bitmap.getHeight());
+		Rect dst = new Rect(src);
+		dst.offsetTo(x, y);
+     	canvas.drawBitmap(bitmap, src, dst, null);
 	}
 }

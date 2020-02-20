@@ -40,6 +40,7 @@ public class Image {
 
 	private Bitmap bitmap;
 	private Canvas canvas;
+	private Graphics mGraphics;
 
 	public Image(Bitmap bitmap) {
 		if (bitmap == null) {
@@ -55,7 +56,7 @@ public class Image {
 			return new Image(bitmap);
 		}
 		reuse.getCanvas().setBitmap(bitmap);
-		reuse.copyPixels(reuse);
+		reuse.copyTo(reuse);
 		reuse.bitmap = bitmap;
 		return new Image(bitmap);
 	}
@@ -143,7 +144,17 @@ public class Image {
 		bitmap.getPixels(rgbData, offset, scanlength, x, y, width, height);
 	}
 
-	void copyPixels(Image dst) {
+	void copyTo(Image dst) {
 		dst.getCanvas().drawBitmap(bitmap, 0, 0, null);
+	}
+
+	void copyTo(Image dst, int x, int y) {
+		dst.getCanvas().drawBitmap(bitmap, x, y, null);
+	}
+
+	public Graphics getSingleGraphics() {
+		if (mGraphics == null)
+			mGraphics = getGraphics();
+		return mGraphics;
 	}
 }

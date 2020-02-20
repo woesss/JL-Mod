@@ -41,6 +41,7 @@ import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
 import javax.microedition.lcdui.event.EventQueue;
+import javax.microedition.lcdui.game.Sprite;
 import javax.microedition.lcdui.overlay.FpsCounter;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.lcdui.overlay.OverlayView;
@@ -455,7 +456,7 @@ public abstract class Canvas extends Displayable {
 				} catch (Throwable t) {
 					t.printStackTrace();
 				}
-				offscreen.copyPixels(offscreenCopy);
+				offscreen.copyTo(offscreenCopy);
 				if (!parallelRedraw) {
 					repaintScreen();
 				} else if (!uiHandler.hasMessages(0)) {
@@ -838,10 +839,23 @@ public abstract class Canvas extends Displayable {
 	}
 
 	// GameCanvas
-	public void flushBuffer(Image image) {
+	public void flushBuffer(Image image, int x, int y, int width, int height) {
 		limitFps();
 		synchronized (paintSync) {
-			image.copyPixels(offscreenCopy);
+			offscreenCopy.getSingleGraphics().flush(image, x, y, width, height);
+			if (!parallelRedraw) {
+				repaintScreen();
+			} else if (!uiHandler.hasMessages(0)) {
+				uiHandler.sendEmptyMessage(0);
+			}
+		}
+	}
+
+	// ExtendedImage
+	public void flushBuffer(Image image, int x, int y) {
+		limitFps();
+		synchronized (paintSync) {
+			image.copyTo(offscreenCopy, x, y);
 			if (!parallelRedraw) {
 				repaintScreen();
 			} else if (!uiHandler.hasMessages(0)) {
@@ -890,6 +904,7 @@ public abstract class Canvas extends Displayable {
 			if (fpsCounter != null) {
 				fpsCounter.increment();
 			}
+			if (parallelRedraw) uiHandler.removeMessages(0);
 		} catch (Exception e) {
 			Log.w(TAG, "repaintScreen: " + e);
 		}

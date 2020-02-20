@@ -24,6 +24,8 @@
 
 package com.siemens.mp.ui;
 
+import android.graphics.Color;
+
 public class Image extends com.siemens.mp.misc.NativeMem {
 
 	public static javax.microedition.lcdui.Image createImageFromBitmap(byte[] imageData, int imageWidth, int imageHeight) {
@@ -35,18 +37,19 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 
 		if (imageWidth < 8) imageWidth = 8;
 
-		int c;
-		int[] pixres = new int[imageHeight * imageWidth];
-		for (int y = 0; y < imageHeight; y++) {
-			for (int x = 0; x < imageWidth / 8; x++) {
-				for (int b = 0; b < 8; b++) {
-					c = doAlpha(imageData, alpha, y * imageWidth / 8 + x, b);
-					pixres[x * 8 + 7 - b + y * imageWidth] = c;
-				}
+		int pixLen = imageWidth * imageHeight;
+		int[] pixres = new int[pixLen];
+		int idx = 0;
+		for (int i = 0; i < imageData.length; i++) {
+			int c = imageData[i] & 0xff;
+			int a = alpha == null ? 0xff : alpha[i] & 0xff;
+			for (int j = 7; j >= 0; j--) {
+				int cb = c >> j;
+				int ab = a >> j;
+				pixres[idx++] = Color.BLACK * (ab & 1) | 0xffffff * (1 - (cb & 1));
 			}
 		}
-		javax.microedition.lcdui.Image image = javax.microedition.lcdui.Image.createRGBImage(pixres, imageWidth, imageHeight, true);
-		return image;
+		return javax.microedition.lcdui.Image.createRGBImage(pixres, imageWidth, imageHeight, true);
 	}
 
 	public static javax.microedition.lcdui.Image createImageWithoutScaling(String name) throws java.io.IOException {

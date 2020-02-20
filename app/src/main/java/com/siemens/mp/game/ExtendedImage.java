@@ -24,20 +24,30 @@
 
 package com.siemens.mp.game;
 
+import android.util.Log;
+
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
+	private static final String TAG = ExtendedImage.class.getName();
 	private Image image;
 
 	public ExtendedImage(Image image) {
+		if (image == null || image.getWidth() % 8 != 0) {
+			throw new IllegalArgumentException("ExtendedImage: width is not divisible by 8");
+		}
 		this.image = image;
 	}
 
 	public void blitToScreen(int x, int y) {
-		((Canvas) Display.getDisplay(null).getCurrent()).flushBuffer(image);
+		Displayable current = Display.getDisplay(null).getCurrent();
+		if (current instanceof Canvas) {
+			((Canvas) current).flushBuffer(image, x, y);
+		}
 	}
 
 	public void clear(byte color) {
@@ -52,16 +62,20 @@ public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 	}
 
 	public int getPixel(int x, int y) {
+		Log.d(TAG, "getPixel called!");
 		return 0;
 	}
 
 	public void getPixelBytes(byte[] pixels, int x, int y, int width, int height) {
+		Log.d(TAG, "getPixelBytes: called!");
 	}
 
 	public void setPixel(int x, int y, byte color) {
+		Log.d(TAG, "setPixel: called!");
 	}
 
 	public void setPixels(byte[] pixels, int x, int y, int width, int height) {
+		Log.d(TAG, "setPixels: called!");
 		Image img = com.siemens.mp.ui.Image.createImageFromBitmap(pixels, width, height);
 		image.getGraphics().drawImage(img, x, y, 0);
 	}

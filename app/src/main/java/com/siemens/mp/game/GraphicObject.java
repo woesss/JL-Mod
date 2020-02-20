@@ -24,8 +24,10 @@
 
 package com.siemens.mp.game;
 
+import javax.microedition.lcdui.Graphics;
+
 public class GraphicObject extends com.siemens.mp.misc.NativeMem {
-	private boolean visible;
+	private boolean visible = true;
 
 	protected GraphicObject() {
 		super();
@@ -39,4 +41,5 @@ public class GraphicObject extends com.siemens.mp.misc.NativeMem {
 		this.visible = visible;
 	}
 
+	protected void paint(Graphics g, int x, int y) {}
 }
