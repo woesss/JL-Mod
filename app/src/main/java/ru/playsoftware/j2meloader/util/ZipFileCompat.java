@@ -31,9 +31,8 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class ZipFileCompat implements Closeable {
-
 	private ZipFile zipFile;
-	private Enumeration zipFileEntries;
+	private Enumeration<? extends ZipEntry> zipFileEntries;
 	private ZipInputStream zis;
 
 	public ZipFileCompat(File file) throws IOException {
@@ -52,7 +51,7 @@ public class ZipFileCompat implements Closeable {
 
 	public ZipEntry getNextEntry() throws IOException {
 		if (zipFile != null) {
-			return zipFileEntries.hasMoreElements() ? (ZipEntry) zipFileEntries.nextElement() : null;
+			return zipFileEntries.hasMoreElements() ? zipFileEntries.nextElement() : null;
 		} else {
 			return zis.getNextEntry();
 		}

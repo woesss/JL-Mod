@@ -21,15 +21,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class FileUtils {
 
@@ -119,5 +125,16 @@ public class FileUtils {
 			}
 		}
 		return file.getPath();
+	}
+
+	public static byte[] getBytes(File file) {
+		try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
+			byte[] b = new byte[(int) file.length()];
+			dis.readFully(b);
+			return b;
+		} catch (Exception e) {
+			Log.w(TAG, "getBytes: " + file, e);
+		}
+		return null;
 	}
 }

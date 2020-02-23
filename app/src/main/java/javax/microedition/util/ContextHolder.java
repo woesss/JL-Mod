@@ -25,12 +25,10 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
@@ -40,7 +38,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.util.ZipUtils;
 
 public class ContextHolder {
 	private static final String TAG = ContextHolder.class.getName();
@@ -93,7 +90,7 @@ public class ContextHolder {
 		// Add support for Siemens file path
 		String normName = resName.replace('\\', '/');
 		// Remove double slashes
-		normName = normName.replace("//", "/");
+		normName = normName.replaceAll("//+", "/");
 		if (normName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
 			String className = resClass.getPackage().getName().replace('.', '/');
 			normName = className + "/" + normName;
@@ -102,30 +99,10 @@ public class ContextHolder {
 		if (normName.charAt(0) == '/') {
 			normName = normName.substring(1);
 		}
-		// Remove leading slash
-		if (normName.charAt(0) == '/') {
-			normName = normName.substring(1);
-		}
-		try {
-			return getResource(normName);
-		} catch (IOException | NullPointerException e) {
+		byte[] data = MyClassLoader.getResourceBytes(normName);
+		if (data == null) {
 			Log.w(TAG, "Can't load res: " + resName);
 			return null;
-		}
-	}
-
-	private static InputStream getResource(String resName) throws IOException {
-		byte[] data;
-		File midletResFile = new File(Config.APP_DIR,
-				MyClassLoader.getDirName() + Config.MIDLET_RES_FILE);
-		if (midletResFile.exists()) {
-			data = ZipUtils.unzipEntry(midletResFile, resName);
-		} else {
-			File resFile = new File(MyClassLoader.getResFolder(), resName);
-			data = new byte[(int) resFile.length()];
-			try (DataInputStream dis = new DataInputStream(new FileInputStream(resFile))) {
-				dis.readFully(data);
-			}
 		}
 		return new ByteArrayInputStream(data);
 	}
@@ -143,7 +120,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		return new File(Config.DATA_DIR + MyClassLoader.getDirName(), name);
+		return new File(Config.DATA_DIR + MyClassLoader.getName(), name);
 	}
 
 	public static File getCacheDir() {

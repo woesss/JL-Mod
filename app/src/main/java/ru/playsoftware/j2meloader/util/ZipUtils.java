@@ -16,6 +16,8 @@
 
 package ru.playsoftware.j2meloader.util;
 
+import android.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,6 +33,7 @@ import java.util.zip.ZipOutputStream;
 public class ZipUtils {
 
 	private static final int BUFFER_SIZE = 8096;
+	private static final String TAG = ZipUtils.class.getName();
 
 	public static void zip(File sourceFolder, File zipFile) throws IOException {
 		FileOutputStream dest = new FileOutputStream(zipFile);
@@ -39,9 +42,12 @@ public class ZipUtils {
 		out.close();
 	}
 
-	private static void zipSubFolder(ZipOutputStream out, File folder,
-									 int basePathLength) throws IOException {
+	private static void zipSubFolder(ZipOutputStream out, File folder, int basePathLength)
+			throws IOException {
 		File[] fileList = folder.listFiles();
+		if (fileList == null) {
+			throw new IOException("Can't access dir: " + folder);
+		}
 		BufferedInputStream origin;
 		for (File file : fileList) {
 			if (file.isDirectory()) {
@@ -63,31 +69,43 @@ public class ZipUtils {
 		}
 	}
 
-	public static void unzip(File zipFile, File extractFolder) throws IOException {
-		ZipFile zip = new ZipFile(zipFile);
-		extractFolder.mkdir();
-		Enumeration zipFileEntries = zip.entries();
-		while (zipFileEntries.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
-			String currentEntry = entry.getName();
-			File destFile = new File(extractFolder, currentEntry);
-			File destinationParent = destFile.getParentFile();
-			destinationParent.mkdirs();
-			if (!entry.isDirectory() && !destFile.exists() && !entry.getName().endsWith(".class")) {
-				BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
-				int currentByte;
-				byte[] data = new byte[BUFFER_SIZE];
-				// write the current file to disk
-				FileOutputStream fos = new FileOutputStream(destFile);
-				BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER_SIZE);
-				while ((currentByte = is.read(data, 0, BUFFER_SIZE)) != -1) {
-					dest.write(data, 0, currentByte);
+	public static boolean unzip(File zipFile, File extractFolder) throws IOException {
+		boolean warn = false;
+		try (ZipFile zip = new ZipFile(zipFile)) {
+			if (!extractFolder.exists() && !extractFolder.mkdir()) {
+				throw new IOException("Can't make directory: " + extractFolder);
+			}
+			Enumeration zipFileEntries = zip.entries();
+			while (zipFileEntries.hasMoreElements()) {
+				ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
+				if (entry.isDirectory()) {
+					continue;
 				}
-				dest.flush();
-				dest.close();
-				is.close();
+				File dstFile = new File(extractFolder, entry.getName());
+				if (dstFile.exists()) {
+					warn = true;
+					continue;
+				}
+				File dstDir = dstFile.getParentFile();
+				if (dstDir != null && !dstDir.exists() && !dstDir.mkdirs()) {
+					throw new IOException("Can't make directory: " + dstDir);
+				}
+				try (BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
+					BufferedOutputStream dest = new BufferedOutputStream(
+							new FileOutputStream(dstFile), BUFFER_SIZE)) {
+					int currentByte;
+					byte[] data = new byte[BUFFER_SIZE];
+					// write the current file to disk
+					while ((currentByte = is.read(data, 0, BUFFER_SIZE)) != -1) {
+						dest.write(data, 0, currentByte);
+					}
+					dest.flush();
+				} catch (Exception e) {
+					Log.w(TAG, "unzip: [entry=" + entry.getName() + "]", e);
+				}
 			}
 		}
+		return warn;
 	}
 
 	public static void unzipEntry(File srcZip, String name, File dst) throws IOException {

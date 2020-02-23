@@ -160,6 +160,7 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
+	@SuppressLint("SourceLockedOrientationActivity")
 	private void setOrientation(int orientation) {
 		switch (orientation) {
 			case ORIENTATION_AUTO:
@@ -251,7 +252,7 @@ public class MicroActivity extends AppCompatActivity {
 				if (!actionBarEnabled) {
 					actionBar.hide();
 				} else {
-					actionBar.setTitle(MyClassLoader.getDirName());
+					actionBar.setTitle(MyClassLoader.getName());
 					layoutParams.height = (int) (getToolBarHeight() / 1.5);
 				}
 			} else {
