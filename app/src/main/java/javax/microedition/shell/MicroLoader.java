@@ -63,7 +63,7 @@ public class MicroLoader {
 	private SharedPreferencesContainer params;
 	private String appPath;
 
-	public MicroLoader(Context context, String appPath) {
+	MicroLoader(Context context, String appPath) {
 		this.context = context;
 		this.appPath = appPath;
 		this.path = Config.APP_DIR + appPath;
@@ -83,7 +83,7 @@ public class MicroLoader {
 		params.load(false);
 	}
 
-	public LinkedHashMap<String, String> loadMIDletList() throws IOException {
+	LinkedHashMap<String, String> loadMIDletList() throws IOException {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
 		Descriptor descriptor = new Descriptor(new File(path, Config.MIDLET_MANIFEST_FILE), false);
 		Map<String, String> attr = descriptor.getAttrs();
@@ -99,7 +99,7 @@ public class MicroLoader {
 		return midlets;
 	}
 
-	public MIDlet loadMIDlet(String mainClass)
+	MIDlet loadMIDlet(String mainClass)
 			throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		File dexSource = new File(path, Config.MIDLET_DEX_FILE);
 		File dexTargetDir = new File(context.getApplicationInfo().dataDir, Config.TEMP_DEX_DIR);
@@ -140,19 +140,22 @@ public class MicroLoader {
 		System.setProperty("microedition.locale", defaultLocale.getLanguage()
 				+ (country.length() == 2 ? "-" + country : ""));
 		System.setProperty("microedition.encoding", "ISO-8859-1");
-		System.setProperty("user.home", Environment.getExternalStorageDirectory().getPath());
+		final String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
+		System.setProperty("user.home", externalStoragePath);
 		System.setProperty("com.siemens.IMEI", "000000000000000");
 		System.setProperty("com.siemens.mp.systemfolder.ringingtone", "fs/MyStuff/Ringtones");
 		System.setProperty("com.siemens.mp.systemfolder.pictures", "fs/MyStuff/Pictures");
 		System.setProperty("com.siemens.OSVersion", "11");
 		System.setProperty("device.imei", "000000000000000");
+		System.setProperty("fileconn.dir.cache", "file:///c:"
+				+ Config.DATA_DIR.substring(externalStoragePath.length()) + appPath);
 	}
 
 	public int getOrientation() {
 		return params.getInt("Orientation", 0);
 	}
 
-	public void applyConfiguration() {
+	void applyConfiguration() {
 		try {
 			boolean cxShowKeyboard = params.getBoolean(("ShowKeyboard"), true);
 
@@ -280,7 +283,7 @@ public class MicroLoader {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public Single<String> takeScreenshot(Canvas canvas) {
+	Single<String> takeScreenshot(Canvas canvas) {
 		return Single.create(emitter -> {
 			Bitmap bitmap = canvas.getOffscreenCopy().getBitmap();
 			Calendar calendar = Calendar.getInstance();
