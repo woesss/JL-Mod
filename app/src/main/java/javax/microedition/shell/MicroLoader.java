@@ -149,6 +149,8 @@ public class MicroLoader {
 		System.setProperty("device.imei", "000000000000000");
 		System.setProperty("fileconn.dir.cache", "file:///c:"
 				+ Config.DATA_DIR.substring(externalStoragePath.length()) + appPath);
+		System.setProperty("com.nokia.mid.impl.isa.visual_radio_operator_id", "0");
+		System.setProperty("com.nokia.mid.impl.isa.visual_radio_channel_freq", "0");
 	}
 
 	public int getOrientation() {
