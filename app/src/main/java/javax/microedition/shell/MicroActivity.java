@@ -280,8 +280,8 @@ public class MicroActivity extends AppCompatActivity {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
-				.setPositiveButton(android.R.string.yes, (d, w) -> MidletThread.destroyApp())
-				.setNegativeButton(android.R.string.no, null);
+				.setPositiveButton(android.R.string.ok, (d, w) -> MidletThread.destroyApp())
+				.setNegativeButton(android.R.string.cancel, null);
 		alertBuilder.create().show();
 	}
 

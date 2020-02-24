@@ -604,12 +604,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_clear_data)
-				.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
 					FileUtils.deleteDirectory(dataDir);
 					//noinspection ResultOfMethodCallIgnored
 					dataDir.mkdirs();
 				})
-				.setNegativeButton(android.R.string.no, null);
+				.setNegativeButton(android.R.string.cancel, null);
 		builder.show();
 	}
 
