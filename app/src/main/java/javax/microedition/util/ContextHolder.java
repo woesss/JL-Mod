@@ -20,11 +20,9 @@ package javax.microedition.util;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Process;
-import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -82,29 +80,7 @@ public class ContextHolder {
 	}
 
 	public static InputStream getResourceAsStream(Class resClass, String resName) {
-		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
-		if (resName == null || resName.equals("")) {
-			Log.w(TAG, "Can't load res on empty path");
-			return null;
-		}
-		// Add support for Siemens file path
-		String normName = resName.replace('\\', '/');
-		// Remove double slashes
-		normName = normName.replaceAll("//+", "/");
-		if (normName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
-			String className = resClass.getPackage().getName().replace('.', '/');
-			normName = className + "/" + normName;
-		}
-		// Remove leading slash
-		if (normName.charAt(0) == '/') {
-			normName = normName.substring(1);
-		}
-		byte[] data = AppClassLoader.getResourceBytes(normName);
-		if (data == null) {
-			Log.w(TAG, "Can't load res: " + resName);
-			return null;
-		}
-		return new ByteArrayInputStream(data);
+		return AppClassLoader.getResourceAsStream(resClass, resName);
 	}
 
 	public static FileOutputStream openFileOutput(String name) throws FileNotFoundException {

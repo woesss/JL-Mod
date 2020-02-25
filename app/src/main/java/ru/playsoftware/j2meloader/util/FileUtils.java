@@ -127,14 +127,11 @@ public class FileUtils {
 		return file.getPath();
 	}
 
-	public static byte[] getBytes(File file) {
+	public static byte[] getBytes(File file) throws IOException {
 		try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
 			byte[] b = new byte[(int) file.length()];
 			dis.readFully(b);
 			return b;
-		} catch (Exception e) {
-			Log.w(TAG, "getBytes: " + file, e);
 		}
-		return null;
 	}
 }

@@ -24,10 +24,10 @@ public class CoreClassLoader extends ClassLoader {
 
 	@Override
 	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-		if (!(name.startsWith("java.") || name.startsWith("javax.") || name.startsWith("com.")
-				|| name.startsWith("org.xml.sax"))) {
-			throw new ClassNotFoundException();
+		if (name.startsWith("java.") || name.startsWith("javax.") || name.startsWith("com.")
+				|| name.startsWith("org.xml.sax")) {
+			return super.loadClass(name, resolve);
 		}
-		return super.loadClass(name, resolve);
+		throw new ClassNotFoundException();
 	}
 }

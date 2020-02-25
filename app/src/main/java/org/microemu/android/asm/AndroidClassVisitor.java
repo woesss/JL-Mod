@@ -59,8 +59,8 @@ public class AndroidClassVisitor extends ClassVisitor {
 		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 			if (owner.equals("java/lang/Class")) {
 				if (name.equals("getResourceAsStream")) {
-					mv.visitMethodInsn(Opcodes.INVOKESTATIC, "javax/microedition/util/ContextHolder", name,
-							"(Ljava/lang/Class;" + TYPE_STRING + ")Ljava/io/InputStream;", itf);
+					mv.visitMethodInsn(Opcodes.INVOKESTATIC, "javax/microedition/shell/AppClassLoader",
+							name, "(Ljava/lang/Class;" + TYPE_STRING + ")Ljava/io/InputStream;", itf);
 					return;
 				}
 			} else if (owner.equals("java/lang/String")) {

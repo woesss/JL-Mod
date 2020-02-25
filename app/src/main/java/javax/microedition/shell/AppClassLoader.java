@@ -17,12 +17,15 @@
 
 package javax.microedition.shell;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.acra.ACRA;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.zip.ZipEntry;
 
@@ -53,6 +56,33 @@ public class AppClassLoader extends DexClassLoader {
 		File midletResFile = new File(Config.APP_DIR, name + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) loadNamesFromJar(midletResFile);
 		else loadNamesFromDir(resDir);
+	}
+
+	@Nullable
+	public static InputStream getResourceAsStream(Class resClass, String resName) {
+		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
+		if (resName == null || resName.equals("")) {
+			Log.w(TAG, "Can't load res on empty path");
+			return null;
+		}
+		// Add support for Siemens file path
+		String normName = resName.replace('\\', '/');
+		// Remove double slashes
+		normName = normName.replaceAll("//+", "/");
+		if (normName.charAt(0) != '/' && resClass != null && resClass.getPackage() != null) {
+			String className = resClass.getPackage().getName().replace('.', '/');
+			normName = className + "/" + normName;
+		}
+		// Remove leading slash
+		if (normName.charAt(0) == '/') {
+			normName = normName.substring(1);
+		}
+		byte[] data = getResourceBytes(normName);
+		if (data == null) {
+			Log.w(TAG, "Can't load res: " + resName);
+			return null;
+		}
+		return new ByteArrayInputStream(data);
 	}
 
 	private void loadNamesFromJar(File jar) {
@@ -102,7 +132,7 @@ public class AppClassLoader extends DexClassLoader {
 		}
 	}
 
-	public static byte[] getResourceBytes(String name) {
+	private static byte[] getResourceBytes(String name) {
 		HashMap<String, String> resources = instance.resources;
 		String path = resources.get(name);
 		if (path == null) path = resources.get(name.toLowerCase());
@@ -115,11 +145,17 @@ public class AppClassLoader extends DexClassLoader {
 			try {
 				return ZipUtils.unzipEntry(midletResFile, path);
 			} catch (IOException e) {
-				Log.w(TAG, "getResourceBytes from jar, entry: " + name, e);
+				Log.w(TAG, "getResourceBytes: from jar [entry=" + name + "]", e);
 				return null;
 			}
 		} else {
-			return FileUtils.getBytes(new File(instance.resFolderPath, path));
+			final File file = new File(instance.resFolderPath, path);
+			try {
+				return FileUtils.getBytes(file);
+			} catch (Exception e) {
+				 Log.w(TAG, "getResourceBytes: from file=" + file, e);
+				return null;
+			}
 		}
 	}
 

@@ -29,7 +29,6 @@ import java.io.IOException;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Graphics;
-import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.overlay.Overlay;
 
 public class VirtualKeyboard implements Overlay, Runnable {
