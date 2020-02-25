@@ -32,7 +32,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
-import javax.microedition.shell.MyClassLoader;
+import javax.microedition.shell.AppClassLoader;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -99,7 +99,7 @@ public class ContextHolder {
 		if (normName.charAt(0) == '/') {
 			normName = normName.substring(1);
 		}
-		byte[] data = MyClassLoader.getResourceBytes(normName);
+		byte[] data = AppClassLoader.getResourceBytes(normName);
 		if (data == null) {
 			Log.w(TAG, "Can't load res: " + resName);
 			return null;
@@ -120,7 +120,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		return new File(Config.DATA_DIR + MyClassLoader.getName(), name);
+		return new File(Config.DATA_DIR + AppClassLoader.getName(), name);
 	}
 
 	public static File getCacheDir() {

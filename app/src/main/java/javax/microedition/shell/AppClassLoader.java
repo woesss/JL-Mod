@@ -32,17 +32,17 @@ import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.ZipFileCompat;
 import ru.playsoftware.j2meloader.util.ZipUtils;
 
-public class MyClassLoader extends DexClassLoader {
-	private static final String TAG = MyClassLoader.getName();
+public class AppClassLoader extends DexClassLoader {
+	private static final String TAG = AppClassLoader.getName();
 
-	private static MyClassLoader instance;
+	private static AppClassLoader instance;
 	private static String name;
 
 	private final HashMap<String, String> resources = new HashMap<>();
 	private String resFolderPath;
 
-	MyClassLoader(String paths, String tmpDir, ClassLoader parent, File resDir) {
-		super(paths, tmpDir, null, new MyCoreClassLoader(parent));
+	AppClassLoader(String paths, String tmpDir, ClassLoader parent, File resDir) {
+		super(paths, tmpDir, null, new CoreClassLoader(parent));
 		resFolderPath = resDir.getPath();
 		File appDir = resDir.getParentFile();
 		if (appDir == null)
@@ -127,7 +127,7 @@ public class MyClassLoader extends DexClassLoader {
 		return name;
 	}
 
-	public static MyClassLoader getInstance() {
+	public static AppClassLoader getInstance() {
 		return instance;
 	}
 }
