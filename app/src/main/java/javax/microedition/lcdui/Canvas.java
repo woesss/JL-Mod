@@ -51,6 +51,7 @@ import androidx.annotation.NonNull;
 import androidx.collection.SparseArrayCompat;
 import ru.playsoftware.j2meloader.R;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class Canvas extends Displayable {
 	public static final int KEY_POUND = 35;
 	public static final int KEY_STAR = 42;
@@ -379,14 +380,14 @@ public abstract class Canvas extends Displayable {
 		}
 
 		@Override
-		public void surfaceChanged(SurfaceHolder holder, int format, int newwidth, int newheight) {
-			Rect offsetViewBounds = new Rect(0, 0, newwidth, newheight);
+		public void surfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight) {
+			Rect offsetViewBounds = new Rect(0, 0, newWidth, newHeight);
 			// calculates the relative coordinates to the parent
 			rootView.offsetDescendantRectToMyCoords(this, offsetViewBounds);
-			synchronized (paintsync) {
+			synchronized (paintSync) {
 				overlayView.setTargetBounds(offsetViewBounds);
-				displayWidth = newwidth;
-				displayHeight = newheight;
+				displayWidth = newWidth;
+				displayHeight = newHeight;
 				if (checkSizeChanged() || !sizeChangedCalled) {
 					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
 							width, height));
@@ -398,7 +399,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
-			synchronized (paintsync) {
+			synchronized (paintSync) {
 				surface = holder.getSurface();
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
 			}
@@ -411,7 +412,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
-			synchronized (paintsync) {
+			synchronized (paintSync) {
 				surface = null;
 				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
 				if (fpsCounter != null) {
@@ -442,7 +443,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void process() {
-			synchronized (paintsync) {
+			synchronized (paintSync) {
 				if (surface == null || !surface.isValid() || !isShown()) {
 					return;
 				}
@@ -498,7 +499,7 @@ public abstract class Canvas extends Displayable {
 
 	private static final float FULLSCREEN_HEIGHT_RATIO = 0.85f;
 	private static final String TAG = Canvas.class.getName();
-	private final Object paintsync = new Object();
+	private final Object paintSync = new Object();
 
 	private PaintEvent paintEvent = new PaintEvent();
 
@@ -776,7 +777,7 @@ public abstract class Canvas extends Displayable {
 
 	@Override
 	public void clearDisplayableView() {
-		synchronized (paintsync) {
+		synchronized (paintSync) {
 			super.clearDisplayableView();
 			layout = null;
 			innerView = null;
@@ -784,7 +785,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void setFullScreenMode(boolean flag) {
-		synchronized (paintsync) {
+		synchronized (paintSync) {
 			if (fullscreen != flag) {
 				fullscreen = flag;
 				updateSize();
@@ -839,7 +840,7 @@ public abstract class Canvas extends Displayable {
 	// GameCanvas
 	public void flushBuffer(Image image) {
 		limitFps();
-		synchronized (paintsync) {
+		synchronized (paintSync) {
 			image.copyPixels(offscreenCopy);
 			if (!parallelRedraw) {
 				repaintScreen();
@@ -912,6 +913,7 @@ public abstract class Canvas extends Displayable {
 		 * otherwise mutual blocking of two threads is possible (everything will hang)
 		 */
 
+		//noinspection SynchronizationOnLocalVariableOrMethodParameter
 		synchronized (queue) {
 			/*
 			 * This synchronization actually stops the events processing
@@ -926,7 +928,7 @@ public abstract class Canvas extends Displayable {
 				 * then you just need to wait for it to finish
 				 */
 
-				if (Thread.holdsLock(paintsync)) { // Avoid deadlock
+				if (Thread.holdsLock(paintSync)) { // Avoid deadlock
 					return;
 				}
 

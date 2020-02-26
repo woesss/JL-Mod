@@ -26,6 +26,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,6 +40,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
@@ -77,11 +79,12 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean loaded;
 	private boolean started;
 	private boolean actionBarEnabled;
-	private boolean statusbarEnabled;
+	private boolean statusBarEnabled;
 	private boolean keyLongPressed;
 	private LinearLayout layout;
 	private Toolbar toolbar;
 	private MicroLoader microLoader;
+	private String appName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -96,13 +99,13 @@ public class MicroActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		actionBarEnabled = sp.getBoolean("pref_actionbar_switch", false);
-		statusbarEnabled = sp.getBoolean("pref_statusbar_switch", false);
+		statusBarEnabled = sp.getBoolean("pref_statusbar_switch", false);
 		boolean wakelockEnabled = sp.getBoolean("pref_wakelock_switch", false);
 		if (wakelockEnabled) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 		Intent intent = getIntent();
-		String appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
+		appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
 		microLoader = new MicroLoader(this, intent.getDataString());
 		microLoader.init();
 		microLoader.applyConfiguration();
@@ -245,20 +248,22 @@ public class MicroActivity extends AppCompatActivity {
 			layout.removeAllViews();
 			layout.addView(current.getDisplayableView());
 			invalidateOptionsMenu();
-			ActionBar actionBar = getSupportActionBar();
+			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
 			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
 			if (current instanceof Canvas) {
 				hideSystemUI();
 				if (!actionBarEnabled) {
 					actionBar.hide();
 				} else {
-					actionBar.setTitle(AppClassLoader.getName());
+					final String title = current.getTitle();
+					actionBar.setTitle(title == null ? appName : title);
 					layoutParams.height = (int) (getToolBarHeight() / 1.5);
 				}
 			} else {
 				showSystemUI();
 				actionBar.show();
-				actionBar.setTitle(current.getTitle());
+				final String title = current.getTitle();
+				actionBar.setTitle(title == null ? appName : title);
 				layoutParams.height = getToolBarHeight();
 			}
 			toolbar.setLayoutParams(layoutParams);
@@ -276,12 +281,12 @@ public class MicroActivity extends AppCompatActivity {
 	private void hideSystemUI() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-			if (!statusbarEnabled) {
+			if (!statusBarEnabled) {
 				flags |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN;
 			}
 			getWindow().getDecorView().setSystemUiVisibility(flags);
-		} else if (!statusbarEnabled) {
+		} else if (!statusBarEnabled) {
 			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 					WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
@@ -295,8 +300,8 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
-	public void setCurrent(Displayable disp) {
-		current = disp;
+	public void setCurrent(Displayable displayable) {
+		current = displayable;
 		ViewHandler.postEvent(msgSetCurrent);
 	}
 
@@ -393,7 +398,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		if (current != null) {
 			int id = item.getItemId();
 			if (item.getGroupId() == R.id.action_group_common_settings) {
@@ -448,7 +453,7 @@ public class MicroActivity extends AppCompatActivity {
 		microLoader.takeScreenshot((Canvas) current)
 				.subscribeOn(Schedulers.computation())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribeWith(new SingleObserver<String>() {
+				.subscribe(new SingleObserver<String>() {
 					@Override
 					public void onSubscribe(Disposable d) {
 					}
@@ -488,7 +493,7 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(@NonNull MenuItem item) {
 		if (current instanceof Form) {
 			((Form) current).contextMenuItemSelected(item);
 		} else if (current instanceof List) {
