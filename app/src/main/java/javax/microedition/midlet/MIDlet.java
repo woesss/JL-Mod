@@ -29,7 +29,6 @@ import javax.microedition.util.ContextHolder;
 public abstract class MIDlet {
 
 	private static Map<String, String> properties;
-	private boolean destroyAppCalled = false;
 
 	public static void initProps(Map<String, String> p) {
 		properties = p;
@@ -52,9 +51,7 @@ public abstract class MIDlet {
 	 * Calls to this method from destroyApp() are ignored.
 	 */
 	public final void notifyDestroyed() {
-		if (!destroyAppCalled) {
-			ContextHolder.notifyDestroyed();
-		}
+		ContextHolder.notifyDestroyed();
 	}
 
 	/**
@@ -76,23 +73,6 @@ public abstract class MIDlet {
 	 *                      sense for Android.
 	 */
 	public abstract void destroyApp(boolean unconditional) throws MIDletStateChangeException;
-
-	/**
-	 * Correctly call destroyApp(). During the execution of this method,
-	 * notifyDestroyed() calls are ignored.
-	 *
-	 * @param unconditional unconditional completion flag, has no particular
-	 *                      sense for Android.
-	 */
-	public final void callDestroyApp(boolean unconditional) {
-		destroyAppCalled = true;
-		try {
-			destroyApp(unconditional);
-		} catch (MIDletStateChangeException e) {
-			e.printStackTrace();
-		}
-		destroyAppCalled = false;
-	}
 
 	public boolean platformRequest(String url)
 			throws ConnectionNotFoundException {
