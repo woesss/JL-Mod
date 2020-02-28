@@ -389,16 +389,11 @@ public class Graphics {
 		canvas.drawBitmap(image.getBitmap(), x, y, null);
 	}
 
-	public void drawImage(Image image, int x, int y, int width, int height, boolean filter, int alpha) {
+	void drawImage(Image image, int x, int y, int width, int height, boolean filter, int alpha) {
 		imagePaint.setFilterBitmap(filter);
 		imagePaint.setAlpha(alpha);
-
-		if (width > 0 && height > 0) {
-			intRect.set(x, y, x + width, y + height);
-			canvas.drawBitmap(image.getBitmap(), null, intRect, imagePaint);
-		} else {
-			canvas.drawBitmap(image.getBitmap(), x, y, imagePaint);
-		}
+		intRect.set(x, y, x + width, y + height);
+		canvas.drawBitmap(image.getBitmap(), image.getBounds(), intRect, imagePaint);
 	}
 
 	public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) {
@@ -412,7 +407,7 @@ public class Graphics {
 			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
 			RectF dstR = new RectF(0, 0, width, height);
 			RectF deviceR = new RectF();
-			Matrix matrix = Sprite.transformMatrix(transform, width / 2, height / 2);
+			Matrix matrix = Sprite.transformMatrix(transform, width / 2.0f, height / 2.0f);
 			matrix.mapRect(deviceR, dstR);
 
 			if ((anchor & Graphics.RIGHT) != 0) {
@@ -472,8 +467,20 @@ public class Graphics {
 
 	public void copyArea(int x_src, int y_src, int width, int height,
 						 int x_dest, int y_dest, int anchor) {
-		Bitmap bitmap = Bitmap.createBitmap(canvasBitmap, x_src, y_src, width, height);
-		drawImage(new Image(bitmap), x_dest, y_dest, anchor);
+		if (width == 0 || height == 0) return;
+		final int[] pixels = new int[width * height];
+		canvasBitmap.getPixels(pixels, 0, width, x_src, y_src, width, height);
+		if ((anchor & Graphics.RIGHT) != 0) {
+			x_dest -= width;
+		} else if ((anchor & Graphics.HCENTER) != 0) {
+			x_dest -= width / 2;
+		}
+		if ((anchor & Graphics.BOTTOM) != 0) {
+			y_dest -= height;
+		} else if ((anchor & Graphics.VCENTER) != 0) {
+			y_dest -= height / 2;
+		}
+		canvas.drawBitmap(pixels, 0, width, x_dest, y_dest, width, height, false, null);
 	}
 
 	public void getPixels(int[] pixels, int offset, int stride,

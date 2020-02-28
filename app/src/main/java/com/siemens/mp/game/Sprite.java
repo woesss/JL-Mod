@@ -37,7 +37,8 @@ public class Sprite extends GraphicObject {
 	private int posX;
 	private int posY;
 
-	public Sprite(byte[] pixels, int pixel_offset, int width, int height, byte[] mask, int mask_offset, int numFrames) {
+	public Sprite(byte[] pixels, int pixel_offset, int width, int height,
+				  byte[] mask, int mask_offset, int numFrames) {
 		if (pixels == null
 				|| pixel_offset != 0
 				|| mask_offset != 0

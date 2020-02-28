@@ -547,7 +547,6 @@ public abstract class Canvas extends Displayable {
 		}
 		displayWidth = ContextHolder.getDisplayWidth();
 		displayHeight = ContextHolder.getDisplayHeight();
-		Log.d("Canvas", "Constructor. w=" + displayWidth + " h=" + displayHeight);
 		if (forceFullscreen) {
 			setFullScreenMode(true);
 		} else {
@@ -737,9 +736,15 @@ public abstract class Canvas extends Displayable {
 		RectF screen = new RectF(0, 0, displayWidth, displayHeight);
 		RectF virtualScreen = new RectF(onX, onY, onX + onWidth, onY + onHeight);
 
-		if (offscreen == null || offscreen.getWidth() != width || offscreen.getHeight() != height) {
-			offscreen = Image.createImage(width, height, offscreen);
-			offscreenCopy = Image.createImage(width, height, offscreenCopy);
+		if (offscreen == null) {
+			offscreen = Image.createImage(width, maxHeight);
+			offscreenCopy = Image.createImage(width, maxHeight);
+		}
+		if (offscreen.getWidth() != width || offscreen.getHeight() != height) {
+			offscreen.resetCanvas();
+			offscreenCopy.resetCanvas();
+			offscreen.setSize(width, height);
+			offscreenCopy.setSize(width, height);
 		}
 		if (overlay != null) {
 			overlay.resize(screen, virtualScreen);

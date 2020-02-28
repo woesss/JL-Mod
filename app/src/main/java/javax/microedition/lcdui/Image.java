@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.LruCache;
 
 import java.io.IOException;
@@ -38,36 +39,29 @@ public class Image {
 		}
 	};
 
-	private Bitmap bitmap;
+	private Bitmap mBitmap;
 	private Canvas canvas;
 	private Graphics mGraphics;
+	private int save;
+	private Rect mBounds;
+	private boolean isBlackWhiteAlpha;
 
-	public Image(Bitmap bitmap) {
+	private Image(Bitmap bitmap) {
 		if (bitmap == null) {
 			throw new NullPointerException();
 		}
-
-		this.bitmap = bitmap;
-	}
-
-	public static Image createImage(int width, int height, Image reuse) {
-		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		if (reuse == null) {
-			return new Image(bitmap);
-		}
-		reuse.getCanvas().setBitmap(bitmap);
-		reuse.copyTo(reuse);
-		reuse.bitmap = bitmap;
-		return new Image(bitmap);
+		this.mBitmap = bitmap;
+		mBounds = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 	}
 
 	public Bitmap getBitmap() {
-		return bitmap;
+		return mBitmap;
 	}
 
 	public Canvas getCanvas() {
 		if (canvas == null) {
-			canvas = new Canvas(bitmap);
+			canvas = new Canvas(mBitmap);
+			save = canvas.save();
 		}
 
 		return canvas;
@@ -105,11 +99,11 @@ public class Image {
 	}
 
 	public static Image createImage(Image image, int x, int y, int width, int height, int transform) {
-		return new Image(Bitmap.createBitmap(image.bitmap, x, y, width, height, Sprite.transformMatrix(transform, width / 2f, height / 2f), false));
+		return new Image(Bitmap.createBitmap(image.mBitmap, x, y, width, height, Sprite.transformMatrix(transform, width / 2f, height / 2f), false));
 	}
 
 	public static Image createImage(Image image) {
-		return new Image(Bitmap.createBitmap(image.bitmap));
+		return new Image(Bitmap.createBitmap(image.mBitmap));
 	}
 
 	public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) {
@@ -124,37 +118,68 @@ public class Image {
 
 	public Graphics getGraphics() {
 		Graphics graphics = new Graphics();
-		graphics.setCanvas(new Canvas(bitmap), bitmap);
+		graphics.setCanvas(new Canvas(mBitmap), mBitmap);
 		return graphics;
 	}
 
 	public boolean isMutable() {
-		return bitmap.isMutable();
+		return mBitmap.isMutable();
 	}
 
 	public int getWidth() {
-		return bitmap.getWidth();
+		return mBounds.right;
 	}
 
 	public int getHeight() {
-		return bitmap.getHeight();
+		return mBounds.bottom;
 	}
 
 	public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) {
-		bitmap.getPixels(rgbData, offset, scanlength, x, y, width, height);
+		mBitmap.getPixels(rgbData, offset, scanlength, x, y, width, height);
 	}
 
 	void copyTo(Image dst) {
-		dst.getCanvas().drawBitmap(bitmap, 0, 0, null);
+		dst.getCanvas().drawBitmap(mBitmap, mBounds, mBounds, null);
 	}
 
 	void copyTo(Image dst, int x, int y) {
-		dst.getCanvas().drawBitmap(bitmap, x, y, null);
+		Rect r = new Rect(x, y, x + mBounds.right, y + mBounds.bottom);
+		dst.getCanvas().drawBitmap(mBitmap, mBounds, r, null);
 	}
 
-	public Graphics getSingleGraphics() {
-		if (mGraphics == null)
+	Graphics getSingleGraphics() {
+		if (mGraphics == null) {
 			mGraphics = getGraphics();
+			mGraphics.setCanvas(getCanvas(), mBitmap);
+		}
 		return mGraphics;
+	}
+
+	void resetCanvas() {
+		getCanvas();
+		try {
+			canvas.restoreToCount(save);
+		} catch (Exception e) {
+			canvas.restoreToCount(1);
+		}
+		save = canvas.save();
+	}
+
+	void setSize(int width, int height) {
+		mBounds.right = width;
+		mBounds.bottom = height;
+		getCanvas().clipRect(mBounds);
+	}
+
+	Rect getBounds() {
+		return mBounds;
+	}
+
+	public boolean isBlackWhiteAlpha() {
+		return isBlackWhiteAlpha;
+	}
+
+	public void setBlackWhiteAlpha(boolean blackWhiteAlpha) {
+		isBlackWhiteAlpha = blackWhiteAlpha;
 	}
 }

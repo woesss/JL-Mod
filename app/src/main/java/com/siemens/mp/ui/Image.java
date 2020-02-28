@@ -49,7 +49,9 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 				pixres[idx++] = Color.BLACK * (ab & 1) | 0xffffff * (1 - (cb & 1));
 			}
 		}
-		return javax.microedition.lcdui.Image.createRGBImage(pixres, imageWidth, imageHeight, true);
+		javax.microedition.lcdui.Image rgbImage = javax.microedition.lcdui.Image.createRGBImage(pixres, imageWidth, imageHeight, true);
+		rgbImage.setBlackWhiteAlpha(alpha != null);
+		return rgbImage;
 	}
 
 	public static javax.microedition.lcdui.Image createImageWithoutScaling(String name) throws java.io.IOException {
@@ -71,6 +73,7 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 			}
 		}
 		javax.microedition.lcdui.Image image = javax.microedition.lcdui.Image.createRGBImage(pixres, imageWidth, imageHeight, true);
+		image.setBlackWhiteAlpha(true);
 		return image;
 	}
 
@@ -92,17 +95,4 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 		return p | a;
 	}
 
-	private static int doAlpha(byte[] pix, byte[] alpha, int pos, int shift) {
-		int p;
-		int a;
-		if (isBitSet(pix[pos], shift))
-			p = 0;
-		else
-			p = 0x00FFFFFF;
-		if (alpha == null || isBitSet(alpha[pos], shift))
-			a = 0xFF000000;
-		else
-			a = 0;
-		return p | a;
-	}
 }
