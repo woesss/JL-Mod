@@ -32,6 +32,7 @@ import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
+@SuppressWarnings("unused")
 public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 	private final boolean hasAlpha;
 	private Image image;

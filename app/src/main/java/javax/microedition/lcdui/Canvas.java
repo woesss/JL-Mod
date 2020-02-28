@@ -431,6 +431,7 @@ public abstract class Canvas extends Displayable {
 			Graphics g = mGraphics;
 			g.setSurfaceCanvas(canvas);
 			g.clear(backgroundColor);
+			offscreenCopy.getBitmap().prepareToDraw();
 			g.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
 			if (fpsCounter != null) {
 				fpsCounter.increment();
@@ -904,6 +905,7 @@ public abstract class Canvas extends Displayable {
 			Graphics g = this.graphics;
 			g.setSurfaceCanvas(canvas);
 			g.clear(backgroundColor);
+			offscreenCopy.getBitmap().prepareToDraw();
 			g.drawImage(offscreenCopy, onX, onY, onWidth, onHeight, filter, 255);
 			surface.unlockCanvasAndPost(canvas);
 			if (fpsCounter != null) {

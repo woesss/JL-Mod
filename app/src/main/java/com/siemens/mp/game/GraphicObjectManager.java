@@ -24,6 +24,8 @@
 
 package com.siemens.mp.game;
 
+import android.graphics.Canvas;
+
 import java.util.Vector;
 
 import javax.microedition.lcdui.Graphics;
@@ -78,10 +80,10 @@ public class GraphicObjectManager extends com.siemens.mp.misc.NativeMem {
 	}
 
 	public void paint(Image image, int x, int y) {
-		Graphics g = image.getGraphics();
+		Canvas c = image.getCanvas();
 		for (GraphicObject go : v) {
 			if (go.getVisible()) {
-				go.paint(g, x, y);
+				go.paint(c, x, y);
 			}
 		}
 

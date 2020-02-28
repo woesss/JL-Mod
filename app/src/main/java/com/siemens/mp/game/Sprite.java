@@ -24,7 +24,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 
-import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 public class Sprite extends GraphicObject {
@@ -74,7 +73,7 @@ public class Sprite extends GraphicObject {
 					0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0,
-					1, 1, 1, 0, -1,
+					1f/3f, 1f/3f, 1f/3f, 0, -255,
 			};
 			paint.setColorFilter(new ColorMatrixColorFilter(src));
 			paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
@@ -123,9 +122,8 @@ public class Sprite extends GraphicObject {
 		posY = y;
 	}
 
-	protected void paint(Graphics g, int x, int y) {
-		Canvas canvas = g.getCanvas();
+	protected void paint(Canvas c, int x, int y) {
 		dstBounds.offsetTo(x + posX, y + posY);
-		canvas.drawBitmap(sprite, frameBounds, dstBounds, null);
+		c.drawBitmap(sprite, frameBounds, dstBounds, null);
 	}
 }
