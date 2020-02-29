@@ -74,8 +74,6 @@ public class MicroActivity extends AppCompatActivity {
 
 	private Displayable current;
 	private boolean visible;
-	private boolean loaded;
-	private boolean started;
 	private boolean actionBarEnabled;
 	private boolean statusBarEnabled;
 	private boolean keyLongPressed;
