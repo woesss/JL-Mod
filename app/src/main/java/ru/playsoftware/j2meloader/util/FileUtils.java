@@ -21,7 +21,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,13 +28,9 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class FileUtils {
 
@@ -47,11 +42,14 @@ public class FileUtils {
 	public static void copyFiles(String src, String dest, FilenameFilter filter) {
 		File srcFile = new File(src);
 		File dstFile = new File(dest);
-		dstFile.mkdirs();
-		String to;
+		if (!dstFile.exists() && !dstFile.mkdirs())
+			return;
 		File[] list = srcFile.listFiles(filter);
+		if (list == null) {
+			return;
+		}
 		for (File entry : list) {
-			to = entry.getPath().replace(src, dest);
+			String to = entry.getPath().replace(src, dest);
 			if (entry.isDirectory()) {
 				copyFiles(entry.getPath(), to, filter);
 			} else {
@@ -132,6 +130,20 @@ public class FileUtils {
 			byte[] b = new byte[(int) file.length()];
 			dis.readFully(b);
 			return b;
+		}
+	}
+
+	public static void clearDirectory(File dir) {
+		if (!dir.isDirectory()) return;
+		final File[] files = dir.listFiles();
+		if (files == null) return;
+		for (File file : files) {
+			if (file.isDirectory()) {
+				deleteDirectory(dir);
+			} else {
+				//noinspection ResultOfMethodCallIgnored
+				file.delete();
+			}
 		}
 	}
 }

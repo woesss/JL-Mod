@@ -31,7 +31,7 @@
         android:padding="5dp"
         android:paddingTop="?android:attr/listPreferredItemHeightSmall"
         android:textIsSelectable="true"
-        tools:text="@string/reinstall_oldest"/>
+        tools:text="@string/reinstall_oldest" />
 
     <ProgressBar
         android:id="@+id/progress"
@@ -67,7 +67,7 @@
             style="?attr/buttonBarNegativeButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/CANCEL_CMD"
+            android:text="@android:string/cancel"
             android:visibility="gone"
             tools:visibility="visible"
             tools:ignore="ButtonOrder" />
