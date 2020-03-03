@@ -7,7 +7,7 @@
     <string name="more">更多</string>
     <string name="search">搜尋</string>
     <string name="licenses">授權</string>
-    <string name="templates">範本</string>
+    <string name="profiles">範本</string>
     <string name="about_message">这个应用程序允许您在Android上启动J2ME应用程序和游戏。 它支持大多数2D游戏，3D也有一些限制。＆lt; BR＆gt;</string>
     <string name="author">作者: </string>
     <string name="version">版本： </string>
@@ -25,8 +25,8 @@
     <string name="CLEAR_DATA_CMD">清除資料</string>
     <string name="RESET_SETTINGS_CMD">恢復預設值</string>
     <string name="RESET_LAYOUT_CMD">重置 keylayout</string>
-    <string name="LOAD_TEMPLATE_CMD">載入範本</string>
-    <string name="SAVE_TEMPLATE_CMD">儲存範本</string>
+    <string name="load_profile">載入範本</string>
+    <string name="save_profile">儲存範本</string>
     <string name="PREF_SCREEN_OPTIONS">螢幕選項</string>
     <string name="PREF_SCALE_RATIO">縮放%</string>
     <string name="PREF_SCALE_TO_FIT">縮放以適合</string>

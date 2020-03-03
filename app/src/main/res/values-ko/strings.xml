@@ -7,7 +7,7 @@
     <string name="more">더</string>
     <string name="search">서치</string>
     <string name="licenses">라이선스</string>
-    <string name="templates">템플릿</string>
+    <string name="profiles">템플릿</string>
     <string name="save_log">Log 저장</string>
     <string name="about_message">이 앱을 통해 안드로이드에서 J2ME 앱과 게임을 시작할 수 있습니다. 대부분의 2D 게임과 3D 게임도 지원하며 몇 가지 제한 사항이 있습니다.&lt;BR&gt;</string>
     <string name="help_message">&#8226;일부 경우에 필터링을 활성화하면 성능이 크게 저하될 수 있다. 게임이 너무 느린 경우 이 옵션 사용 안 함.&lt;BR&gt;&#8226;이미지 깜박임 문제는 \"즉시 처리 모드\" 옵션을 활성화하여 해결할 수 있습니다.</string>
@@ -27,8 +27,8 @@
     <string name="CLEAR_DATA_CMD">데이터 지우기</string>
     <string name="RESET_SETTINGS_CMD">재설정 설정</string>
     <string name="RESET_LAYOUT_CMD">키 레이아웃 재설정</string>
-    <string name="LOAD_TEMPLATE_CMD">템플릿 로드</string>
-    <string name="SAVE_TEMPLATE_CMD">템플릿 저장</string>
+    <string name="load_profile">템플릿 로드</string>
+    <string name="save_profile">템플릿 저장</string>
     <string name="PREF_SCREEN_OPTIONS">화면 옵션</string>
     <string name="PREF_SCALE_RATIO">척도(%)</string>
     <string name="PREF_SCALE_TO_FIT">맞도록 축척</string>

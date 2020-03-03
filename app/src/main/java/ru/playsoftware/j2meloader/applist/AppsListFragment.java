@@ -66,7 +66,7 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
-import ru.playsoftware.j2meloader.config.TemplatesActivity;
+import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
@@ -303,9 +303,9 @@ public class AppsListFragment extends ListFragment {
 				Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
 				startActivity(settingsIntent);
 				break;
-			case R.id.action_templates:
-				Intent templatesIntent = new Intent(getActivity(), TemplatesActivity.class);
-				startActivity(templatesIntent);
+			case R.id.action_profiles:
+				Intent intentProfiles = new Intent(getActivity(), ProfilesActivity.class);
+				startActivity(intentProfiles);
 				break;
 			case R.id.action_help:
 				HelpDialogFragment helpDialogFragment = new HelpDialogFragment();

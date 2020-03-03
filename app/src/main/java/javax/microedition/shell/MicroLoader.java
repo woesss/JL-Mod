@@ -250,7 +250,7 @@ public class MicroLoader {
 		vk.setHasHapticFeedback(vkFeedback);
 		vk.setButtonShape(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
 
-		File keylayoutFile = new File(Config.CONFIGS_DIR, appPath + Config.MIDLET_KEYLAYOUT_FILE);
+		File keylayoutFile = new File(Config.CONFIGS_DIR, appPath + Config.MIDLET_KEY_LAYOUT_FILE);
 		if (keylayoutFile.exists()) {
 			try {
 				FileInputStream fis = new FileInputStream(keylayoutFile);

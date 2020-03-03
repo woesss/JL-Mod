@@ -7,7 +7,7 @@
     <string name="more">Więcej</string>
     <string name="search">Szukaj</string>
     <string name="licenses">Licencje</string>
-    <string name="templates">Szablony</string>
+    <string name="profiles">Szablony</string>
     <string name="save_log">Zapisz log</string>
     <string name="about_message">Ta aplikacja pozwala uruchamiać aplikacje i gry J2ME na urządzeniu z systemem Android. Obsługuje większość gier 2D, a także 3D z pewnymi ograniczeniami.&lt;BR&gt;</string>
     <string name="help_message">&#8226;Włączenie filtrowania w niektórych przypadkach może negatywnie wpłynąć na wydajność. Wyłącz tą opcję jeśli gra działa zbyt wolno.&lt;BR&gt;&#8226;Problem migotania obrazu może być naprawiony poprzez zaznaczenie opcji \"Tryb natychmiastowego przetwarzania\".</string>
@@ -27,8 +27,8 @@
     <string name="CLEAR_DATA_CMD">Wyczyść dane</string>
     <string name="RESET_SETTINGS_CMD">Zresetuj ustawienia</string>
     <string name="RESET_LAYOUT_CMD">Zresetuj układ przycisków</string>
-    <string name="LOAD_TEMPLATE_CMD">Wczytaj szablon</string>
-    <string name="SAVE_TEMPLATE_CMD">Zapisz szablon</string>
+    <string name="load_profile">Wczytaj szablon</string>
+    <string name="save_profile">Zapisz szablon</string>
     <string name="PREF_SCREEN_OPTIONS">Opcje ekranu</string>
     <string name="PREF_SCALE_RATIO">Skala(%)</string>
     <string name="PREF_SCALE_TO_FIT">Skaluj, aby dopasować</string>

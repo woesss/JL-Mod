@@ -7,7 +7,7 @@
     <string name="more">Подробнее</string>
     <string name="search">Поиск</string>
     <string name="licenses">Лицензии</string>
-    <string name="templates">Шаблоны</string>
+    <string name="profiles">Профили</string>
     <string name="save_log">Сохранить лог</string>
     <string name="about_message">Данный эмулятор позволяет запускать J2ME приложения на Android. Для работы программы не нужен интернет, конвертация приложений происходит прямо на устройстве.&lt;BR&gt;На данный момент поддерживается большинство 2д игр, поддержка 3д присутствует, но с некоторыми ограничениями.&lt;BR&gt;Есть виртуальная клавиатура, индивидуальные настройки для каждого приложения, присутствует поддержка масштабирования.&lt;BR&gt;</string>
     <string name="help_message">&#8226; Включение фильтрации в некоторых случаях может значительно снизить производительность. Отключите эту опцию, если игра работает слишком медленно. &lt;BR&gt;&#8226; Проблемы с мерцанием изображения могут быть решены с помощью опции \"Режим неотложной обработки\".</string>
@@ -27,8 +27,8 @@
     <string name="CLEAR_DATA_CMD">Очистить данные</string>
     <string name="RESET_SETTINGS_CMD">Сброс настроек</string>
     <string name="RESET_LAYOUT_CMD">Сброс раскладки</string>
-    <string name="LOAD_TEMPLATE_CMD">Загрузить шаблон</string>
-    <string name="SAVE_TEMPLATE_CMD">Сохранить шаблон</string>
+    <string name="load_profile">Загрузить профиль</string>
+    <string name="save_profile">Сохранить профиль</string>
     <string name="PREF_SCREEN_OPTIONS">Параметры экрана</string>
     <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
     <string name="PREF_SCALE_TO_FIT">Масштабировать</string>
@@ -126,7 +126,6 @@
     <string name="reset_mapping">Сброс</string>
     <string name="parallel_screen_redrawing">Параллельное обновление экрана</string>
     <string name="add_resolution_preset">Добавить в предустановки</string>
-    <string name="action_context_default_template">Использовать как стандартный</string>
     <string name="config_virtual_screen_size">"Размер виртуального экрана (оригинальное разрешение игры) "</string>
     <string name="create_apps_dir_failed">Не удалось создать папку \'%s\', эмулятор не может работать без неё.</string>
     <string name="install">установить</string>
@@ -147,11 +146,11 @@
     <string name="error_name">Введите название шаблона!</string>
     <string name="set_as_default">Сделать стандартным</string>
     <string name="edit">Изменить</string>
-    <string name="set_default_template_description">Выбрать этот шаблон как стандартную настройку для всех приложений, которые будут устанавливаться позже</string>
+    <string name="set_default_profile_description">Выбрать этот шаблон как стандартную настройку для всех приложений, которые будут устанавливаться позже</string>
     <string name="pref_enable_statusbar_title">Включить строку состояния</string>
-    <string name="default_template">%s (стандартный)</string>
+    <string name="default_label">%s (стандартный)</string>
     <string name="add">Создать</string>
-    <string name="add_template_description">Создать новый шаблон</string>
+    <string name="add_profile_description">Создать новый шаблон</string>
     <string name="enter_name">Введите название</string>
     <string name="enter_new_name">Введите новое название</string>
     <string name="toast_close_filepicker">Нажмите ещё раз, чтобы закрыть проводник</string>

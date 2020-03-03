@@ -102,7 +102,7 @@
         <activity
             android:name=".filepicker.FilteredFilePickerActivity"
             android:theme="@style/FilePickerTheme" />
-        <activity android:name=".config.TemplatesActivity" />
+        <activity android:name=".config.ProfilesActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
