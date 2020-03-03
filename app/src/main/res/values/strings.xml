@@ -192,12 +192,12 @@
     <string name="reset_mapping">Reset</string>
     <string name="parallel_screen_redrawing">Parallel screen redrawing</string>
     <string name="toast_close_filepicker">Press again to close file picker</string>
-    <string name="action_context_default_template">Set as default config</string>
+    <string name="action_context_default_template">Set as default</string>
     <string name="default_template">"%s (default)"</string>
     <string name="config_virtual_screen_size">virtual screen size (original resolutions of MIDlet):</string>
     <string name="add_resolution_preset">Add resolution to presets</string>
     <string name="saved">Saved %s</string>
-    <string name="not_saved_exists">Not saved: already exists</string>
+    <string name="not_saved_exists">Already exists</string>
     <string name="invalid_resolution_not_saved">Invalid resolutions: not saved!</string>
     <string name="midlet_name"><b>Name:</b> </string>
     <string name="midlet_vendor"><b>Vendor:</b> </string>
@@ -217,7 +217,8 @@
     <string name="edit">Edit</string>
     <string name="add">Add</string>
     <string name="add_template_description">Create new template</string>
-    <string name="enter_name">Enter name:</string>
-    <string name="enter_new_name">Enter new name:</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_new_name">Enter new name</string>
     <string name="set_default_template_description">Select this template as a standard settings for all apps that will be installed later</string>
+    <string name="error_name_exists">Already exists, enter other name</string>
 </resources>

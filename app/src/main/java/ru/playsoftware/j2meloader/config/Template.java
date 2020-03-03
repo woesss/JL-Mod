@@ -57,7 +57,7 @@ public class Template implements Comparable<Template> {
 		return new File(Config.TEMPLATES_DIR, name + Config.MIDLET_CONFIG_FILE);
 	}
 
-	public File getKeylayout() {
+	public File getKeyLayout() {
 		return new File(Config.TEMPLATES_DIR, name + Config.MIDLET_KEYLAYOUT_FILE);
 	}
 
@@ -69,5 +69,13 @@ public class Template implements Comparable<Template> {
 	@Override
 	public int compareTo(@NonNull Template o) {
 		return name.compareTo(o.name);
+	}
+
+	boolean hasConfig() {
+		return getConfig().exists();
+	}
+
+	boolean hasKeyLayout() {
+		return getKeyLayout().exists();
 	}
 }

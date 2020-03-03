@@ -126,13 +126,13 @@
     <string name="reset_mapping">Сброс</string>
     <string name="parallel_screen_redrawing">Параллельное обновление экрана</string>
     <string name="add_resolution_preset">Добавить в предустановки</string>
-    <string name="action_context_default_template">Сделать шаблоном по-умолчанию</string>
+    <string name="action_context_default_template">Использовать как стандартный</string>
     <string name="config_virtual_screen_size">"Размер виртуального экрана (оригинальное разрешение игры) "</string>
     <string name="create_apps_dir_failed">Не удалось создать папку \'%s\', эмулятор не может работать без неё.</string>
     <string name="install">установить</string>
     <string name="install_done">\n\nПриложение установлено!</string>
-    <string name="saved">Saved %s</string>
-    <string name="not_saved_exists">Not saved: already exists</string>
+    <string name="saved">Сохранено %s</string>
+    <string name="not_saved_exists">Уже существует</string>
     <string name="invalid_resolution_not_saved">Некорректные размеры: не сохранено!</string>
     <string name="midlet_name"><b>Название:</b> </string>
     <string name="midlet_vendor"><b>Разработчик:</b> </string>
@@ -152,6 +152,8 @@
     <string name="default_template">%s (стандартный)</string>
     <string name="add">Создать</string>
     <string name="add_template_description">Создать новый шаблон</string>
-    <string name="enter_name">Введите название:</string>
-    <string name="enter_new_name">Введите новое название:</string>
+    <string name="enter_name">Введите название</string>
+    <string name="enter_new_name">Введите новое название</string>
+    <string name="toast_close_filepicker">Нажмите ещё раз, чтобы закрыть проводник</string>
+    <string name="error_name_exists">Уже есть, введите другое название</string>
 </resources>
