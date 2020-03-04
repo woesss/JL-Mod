@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -70,6 +71,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	public static final String ACTION_EDIT_PROFILE = "config.edit.profile";
 	public static final String CONFIG_PATH_KEY = "configPath";
 	public static final String MIDLET_NAME_KEY = "midletName";
+	private static final int[] SCREEN_SIZES = {128, 176, 220, 320};
+	private static final int[] FONT_SIZES = {
+			9, 13, 15, // 128
+			13, 15, 20, // 176
+			15, 18, 22, // 220
+			18, 22, 26, // 320
+	};
 
 	protected ScrollView rootContainer;
 	protected EditText tfScreenWidth;
@@ -501,17 +509,24 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		try {
 			params.edit();
 
-			String width = tfScreenWidth.getText().toString();
-			String height = tfScreenHeight.getText().toString();
-			if (width.isEmpty() || width.equals("-")) width = "-1";
-			if (height.isEmpty() || height.equals("-")) height = "-1";
-			int w = Integer.parseInt(width);
-			int h = Integer.parseInt(height);
-			if (w == 0) w = -1;
-			if (h == 0) h = -1;
-			params.putInt("ScreenWidth", w);
-			params.putInt("ScreenHeight", h);
-			params.putInt("ScreenBackgroundColor", Integer.parseInt(tfScreenBack.getText().toString(), 16));
+			int width;
+			try {
+				width = Integer.parseInt(tfScreenWidth.getText().toString());
+			} catch (NumberFormatException e) {
+				width = 0;
+			}
+			params.putInt("ScreenWidth", width);
+			int height;
+			try {
+				height = Integer.parseInt(tfScreenHeight.getText().toString());
+			} catch (NumberFormatException e) {
+				height = 0;
+			}
+			params.putInt("ScreenHeight", height);
+			try {
+				int value = Color.parseColor(tfScreenBack.getText().toString());
+				params.putInt("ScreenBackgroundColor", value);
+			} catch (Exception ignored) {}
 			params.putInt("ScreenScaleRatio", sbScaleRatio.getProgress());
 			params.putInt("Orientation", spOrientation.getSelectedItemPosition());
 			params.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
@@ -523,14 +538,30 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putBoolean("ForceFullscreen", cxForceFullscreen.isChecked());
 			params.putBoolean("ShowFps", cxShowFps.isChecked());
 			params.putBoolean("LimitFps", cxLimitFps.isChecked());
-			params.putInt("FpsLimit", Integer.parseInt(tfFpsLimit.getText().toString()));
+			try {
+				params.putInt("FpsLimit", Integer.parseInt(tfFpsLimit.getText().toString()));
+			} catch (NumberFormatException e) {
+				params.putInt("FpsLimit", 0);
+			}
 
-			params.putInt("FontSizeSmall",
-					Integer.parseInt(tfFontSizeSmall.getText().toString()));
-			params.putInt("FontSizeMedium",
-					Integer.parseInt(tfFontSizeMedium.getText().toString()));
-			params.putInt("FontSizeLarge",
-					Integer.parseInt(tfFontSizeLarge.getText().toString()));
+			try {
+				int value = Integer.parseInt(tfFontSizeSmall.getText().toString());
+				params.putInt("FontSizeSmall", value);
+			} catch (NumberFormatException e) {
+				params.putInt("FontSizeSmall", getFontSizeForResolution(0, width, height));
+			}
+			try {
+				int value = Integer.parseInt(tfFontSizeMedium.getText().toString());
+				params.putInt("FontSizeMedium", value);
+			} catch (NumberFormatException e) {
+				params.putInt("FontSizeMedium", getFontSizeForResolution(1, width, height));
+			}
+			try {
+				int value = Integer.parseInt(tfFontSizeLarge.getText().toString());
+				params.putInt("FontSizeLarge", value);
+			} catch (NumberFormatException e) {
+				params.putInt("FontSizeLarge", getFontSizeForResolution(2, width, height));
+			}
 			params.putBoolean("FontApplyDimensions", cxFontSizeInSP.isChecked());
 			params.putString("SystemProperties", tfSystemProperties.getText().toString());
 			params.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
@@ -541,23 +572,49 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putInt("Layout", spLayout.getSelectedItemPosition());
 			params.putInt("ButtonShape", spButtonsShape.getSelectedItemPosition());
 			params.putInt("VirtualKeyboardAlpha", sbVKAlpha.getProgress());
-			params.putInt("VirtualKeyboardDelay",
-					Integer.parseInt(tfVKHideDelay.getText().toString()));
-			params.putInt("VirtualKeyboardColorBackground",
-					Integer.parseInt(tfVKBack.getText().toString(), 16));
-			params.putInt("VirtualKeyboardColorForeground",
-					Integer.parseInt(tfVKFore.getText().toString(), 16));
-			params.putInt("VirtualKeyboardColorBackgroundSelected",
-					Integer.parseInt(tfVKSelBack.getText().toString(), 16));
-			params.putInt("VirtualKeyboardColorForegroundSelected",
-					Integer.parseInt(tfVKSelFore.getText().toString(), 16));
-			params.putInt("VirtualKeyboardColorOutline",
-					Integer.parseInt(tfVKOutline.getText().toString(), 16));
+			try {
+				int value = Integer.parseInt(tfVKHideDelay.getText().toString());
+				params.putInt("VirtualKeyboardDelay", value);
+			} catch (NumberFormatException e) {
+				params.putInt("VirtualKeyboardDelay", 0);
+			}
+			try {
+				int value = Color.parseColor(tfVKBack.getText().toString());
+				params.putInt("VirtualKeyboardColorBackground", value);
+			} catch (Exception ignored) {}
+			try {
+				int value = Color.parseColor(tfVKFore.getText().toString());
+				params.putInt("VirtualKeyboardColorForeground", value);
+			} catch (Exception ignored) {}
+			try {
+				int value = Color.parseColor(tfVKSelBack.getText().toString());
+				params.putInt("VirtualKeyboardColorBackgroundSelected", value);
+			} catch (Exception ignored) {}
+			try {
+				int value = Color.parseColor(tfVKSelFore.getText().toString());
+				params.putInt("VirtualKeyboardColorForegroundSelected", value);
+			} catch (Exception ignored) {}
+			try {
+				int value = Color.parseColor(tfVKOutline.getText().toString());
+				params.putInt("VirtualKeyboardColorOutline", value);
+			} catch (Exception ignored) {}
 
 			params.apply();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
+	}
+
+	private int getFontSizeForResolution(int sizeType, int width, int height) {
+		int size = Math.max(width, height);
+		if (size > 0) {
+			for (int i = 0; i < SCREEN_SIZES.length; i++) {
+				if (SCREEN_SIZES[i] >= size) {
+					return FONT_SIZES[i * 3 + sizeType];
+				}
+			}
+		}
+		return FONT_SIZES[FONT_SIZES.length - (3 - sizeType)];
 	}
 
 	@Override
@@ -620,9 +677,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_clear_data)
-				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-					FileUtils.clearDirectory(dataDir);
-				})
+				.setPositiveButton(android.R.string.ok, (d, w) -> FileUtils.clearDirectory(dataDir))
 				.setNegativeButton(android.R.string.cancel, null);
 		builder.show();
 	}

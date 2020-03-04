@@ -155,4 +155,6 @@
     <string name="enter_new_name">Введите новое название</string>
     <string name="toast_close_filepicker">Нажмите ещё раз, чтобы закрыть проводник</string>
     <string name="error_name_exists">Уже есть, введите другое название</string>
+    <string name="disabled">не скрывать</string>
+    <string name="unlimited">без ограничений</string>
 </resources>
