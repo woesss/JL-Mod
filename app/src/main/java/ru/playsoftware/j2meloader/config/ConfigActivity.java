@@ -21,20 +21,20 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
@@ -101,8 +102,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected EditText tfFontSizeMedium;
 	protected EditText tfFontSizeLarge;
 	protected CheckBox cxFontSizeInSP;
-	private Spinner spEncoding;
-	protected EditText tfSystemProperties;
 	protected CheckBox cxShowKeyboard;
 
 	private View vkContainer;
@@ -120,6 +119,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected EditText tfVKSelBack;
 	protected EditText tfVKOutline;
 
+	protected EditText tfSystemProperties;
+
 	protected ArrayList<String> screenPresets = new ArrayList<>();
 
 	protected ArrayList<Integer> fontSmall;
@@ -134,7 +135,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	private boolean isProfile;
 	private Display display;
 	private File configDir;
-	private final ArrayList<String> charsets = new ArrayList<>(Charset.availableCharsets().keySet());
 	private String defProfile;
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
@@ -164,6 +164,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 		params = new SharedPreferencesContainer(configDir);
 		boolean loaded = params.load();
+		if (params.getInt("version", 0) < 1) {
+			updateProperties();
+			params.edit().putInt("version", 1).apply();
+		}
 
 		if (loaded && !showSettings) {
 			startMIDlet();
@@ -204,7 +208,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFontSizeMedium = findViewById(R.id.tfFontSizeMedium);
 		tfFontSizeLarge = findViewById(R.id.tfFontSizeLarge);
 		cxFontSizeInSP = findViewById(R.id.cxFontSizeInSP);
-		spEncoding = findViewById(R.id.spEncoding);
 		tfSystemProperties = findViewById(R.id.tfSystemProperties);
 
 		cxTouchInput = findViewById(R.id.cxTouchInput);
@@ -236,8 +239,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		addFontSizePreset("176 x 220", 15, 18, 22);
 		addFontSizePreset("240 x 320", 18, 22, 26);
 
-		initEncoding();
-
 		findViewById(R.id.cmdScreenSizePresets).setOnClickListener(this::showScreenPresets);
 		findViewById(R.id.cmdSwapSizes).setOnClickListener(this);
 		findViewById(R.id.cmdAddToPreset).setOnClickListener(v -> addResolutionToPresets());
@@ -248,6 +249,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		findViewById(R.id.cmdVKSelBack).setOnClickListener(this);
 		findViewById(R.id.cmdVKSelFore).setOnClickListener(this);
 		findViewById(R.id.cmdVKOutline).setOnClickListener(this);
+		findViewById(R.id.btEncoding).setOnClickListener(this::showCharsetPicker);
 		sbScaleRatio.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -306,41 +308,41 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		});
 	}
 
-	private void initEncoding() {
-		ArrayAdapter<String> encodingAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, charsets);
-		encodingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spEncoding.setAdapter(encodingAdapter);
-		spEncoding.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				String enc = "microedition.encoding: "
-						+ parent.getItemAtPosition(position).toString();
-				String[] props = tfSystemProperties.getText().toString().split("\\n");
-				int propsLength = props.length;
-				if (propsLength == 0) {
-					tfSystemProperties.setText(enc);
-					return;
-				}
-				int i = propsLength - 1;
-				while (i >= 0) {
-					if (props[i].startsWith("microedition.encoding")) {
-						props[i] = enc;
-						break;
-					}
-					i--;
-				}
-				if (i < 0) {
-					tfSystemProperties.setText(enc);
-					return;
-				}
-				tfSystemProperties.setText(TextUtils.join("\n", props));
-			}
+	private void updateProperties() {
+		String[] defaults = getDefaultProperties().split("\\n");
+		String properties = params.getString("SystemProperties", "");
+		StringBuilder sb = new StringBuilder(properties);
+		for (String line : defaults) {
+			if (properties.contains(line.substring(0, line.indexOf(':')))) continue;
+			sb.append(line).append('\n');
+		}
+		params.putString("SystemProperties", sb.toString()).apply();
+	}
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-
+	private void showCharsetPicker(View v) {
+		String[] charsets = Charset.availableCharsets().keySet().toArray(new String[0]);
+		new AlertDialog.Builder(this).setItems(charsets, (d, w) -> {
+			String enc = "microedition.encoding: " + charsets[w];
+			String[] props = tfSystemProperties.getText().toString().split("\n");
+			int propsLength = props.length;
+			if (propsLength == 0) {
+				tfSystemProperties.setText(enc);
+				return;
 			}
-		});
+			int i = propsLength - 1;
+			while (i >= 0) {
+				if (props[i].startsWith("microedition.encoding")) {
+					props[i] = enc;
+					break;
+				}
+				i--;
+			}
+			if (i < 0) {
+				tfSystemProperties.append(enc);
+				return;
+			}
+			tfSystemProperties.setText(TextUtils.join("\n", props));
+		}).setTitle(R.string.pref_encoding_title).show();
 	}
 
 	private void loadKeyLayout() {
@@ -436,11 +438,15 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	@SuppressLint("SetTextI18n")
 	public void loadParams() {
+		int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics());
 		params.load();
 		tfScreenWidth.setText(Integer.toString(params.getInt("ScreenWidth", 240)));
 		tfScreenHeight.setText(Integer.toString(params.getInt("ScreenHeight", 320)));
-		tfScreenBack.setText(Integer.toHexString(params.
-				getInt("ScreenBackgroundColor", 0xD0D0D0)).toUpperCase());
+		int color = params.getInt("ScreenBackgroundColor", 0xD0D0D0);
+		tfScreenBack.setText(String.format("%06X", color));
+		ColorDrawable colorDrawable = new ColorDrawable(color | 0xff000000);
+		colorDrawable.setBounds(0,0, size, size);
+		tfScreenBack.setCompoundDrawables(null, null, colorDrawable, null);
 		sbScaleRatio.setProgress(params.getInt("ScreenScaleRatio", 100));
 		tfScaleRatioValue.setText(String.valueOf(sbScaleRatio.getProgress()));
 		spOrientation.setSelection(params.getInt("Orientation", 0));
@@ -458,30 +464,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFontSizeMedium.setText(Integer.toString(params.getInt("FontSizeMedium", 22)));
 		tfFontSizeLarge.setText(Integer.toString(params.getInt("FontSizeLarge", 26)));
 		cxFontSizeInSP.setChecked(params.getBoolean("FontApplyDimensions", false));
-		String systemProperties = params.getString("SystemProperties", "");
-		tfSystemProperties.setText(systemProperties);
-		String encoding = "iso-8859-1";
-		String[] split = systemProperties.split("\\n");
-		for (int i = split.length - 1; i >= 0; i--) {
-			String s = split[i].toLowerCase();
-			if (s.startsWith("microedition.encoding") && s.length() > 22) {
-				s = s.substring(22).trim();
-				if (!s.isEmpty()) {
-					encoding = s;
-					break;
-				}
-			}
-		}
-
-		int i = 0;
-		while (i < charsets.size()) {
-			if (charsets.get(i).toLowerCase().equals(encoding)) {
-				break;
-			}
-			i++;
-		}
-		if (i < charsets.size())
-			spEncoding.setSelection(i);
 		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
 		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
 		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());
@@ -493,22 +475,71 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		spButtonsShape.setSelection(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
 		tfVKHideDelay.setText(Integer.toString(params.getInt("VirtualKeyboardDelay", -1)));
-		tfVKBack.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0)).toUpperCase());
-		tfVKFore.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorForeground", 0x000080)).toUpperCase());
-		tfVKSelBack.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorBackgroundSelected", 0x000080)).toUpperCase());
-		tfVKSelFore.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF)).toUpperCase());
-		tfVKOutline.setText(Integer.toHexString(
-				params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF)).toUpperCase());
+
+		color = params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0);
+		colorDrawable = new ColorDrawable(color | 0xff000000);
+		colorDrawable.setBounds(0,0, size, size);
+		tfVKBack.setCompoundDrawables(null, null, colorDrawable, null);
+		tfVKBack.setText(String.format("%06X", color));
+
+		color = params.getInt("VirtualKeyboardColorForeground", 0x000080);
+		colorDrawable = new ColorDrawable(color | 0xff000000);
+		colorDrawable.setBounds(0,0, size, size);
+		tfVKFore.setCompoundDrawables(null, null, colorDrawable, null);
+		tfVKFore.setText(String.format("%06X", color));
+
+		color = params.getInt("VirtualKeyboardColorBackgroundSelected", 0x000080);
+		colorDrawable = new ColorDrawable(color | 0xff000000);
+		colorDrawable.setBounds(0,0, size, size);
+		tfVKSelBack.setCompoundDrawables(null, null, colorDrawable, null);
+		tfVKSelBack.setText(String.format("%06X", color));
+
+		color = params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF);
+		colorDrawable = new ColorDrawable(color | 0xff000000);
+		colorDrawable.setBounds(0,0, size, size);
+		tfVKSelFore.setCompoundDrawables(null, null, colorDrawable, null);
+		tfVKSelFore.setText(String.format("%06X", color));
+
+		color = params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF);
+		colorDrawable = new ColorDrawable(color | 0xff000000);
+		colorDrawable.setBounds(0,0, size, size);
+		tfVKOutline.setCompoundDrawables(null, null, colorDrawable, null);
+		tfVKOutline.setText(String.format("%06X", color));
+
+		String systemProperties = params.getString("SystemProperties", null);
+		if (systemProperties == null) systemProperties = getDefaultProperties();
+		tfSystemProperties.setText(systemProperties);
+	}
+
+	public static String getDefaultProperties() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("microedition.sensor.version").append(": ").append("1").append('\n');
+		sb.append("microedition.platform").append(": ").append("Nokia 6233").append('\n');
+		sb.append("microedition.configuration").append(": ").append("CDLC-1.1").append('\n');
+		sb.append("microedition.profiles").append(": ").append("MIDP-2.0").append('\n');
+		sb.append("microedition.m3g.version").append(": ").append("1.1").append('\n');
+		sb.append("microedition.media.version").append(": ").append("1.0").append('\n');
+		sb.append("supports.mixing").append(": ").append("true").append('\n');
+		sb.append("supports.audio.capture").append(": ").append("true").append('\n');
+		sb.append("supports.video.capture").append(": ").append("false").append('\n');
+		sb.append("supports.recording").append(": ").append("false").append('\n');
+		sb.append("microedition.pim.version").append(": ").append("1.0").append('\n');
+		sb.append("microedition.io.file.FileConnection.version").append(": ").append("1.0").append('\n');
+		sb.append("microedition.encoding").append(": ").append("ISO-8859-1").append('\n');
+		final String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
+		sb.append("user.home").append(": ").append(externalStoragePath).append('\n');
+		sb.append("com.siemens.IMEI").append(": ").append("000000000000000").append('\n');
+		sb.append("com.siemens.mp.systemfolder.ringingtone").append(": ").append("fs/MyStuff/Ringtones").append('\n');
+		sb.append("com.siemens.mp.systemfolder.pictures").append(": ").append("fs/MyStuff/Pictures").append('\n');
+		sb.append("com.siemens.OSVersion").append(": ").append("11").append('\n');
+		sb.append("device.imei").append(": ").append("000000000000000").append('\n');
+		sb.append("com.nokia.mid.impl.isa.visual_radio_operator_id").append(": ").append("0").append('\n');
+		sb.append("com.nokia.mid.impl.isa.visual_radio_channel_freq").append(": ").append("0").append('\n');
+		return sb.toString();
 	}
 
 	private void saveParams() {
 		try {
-			params.edit();
-
 			int width;
 			try {
 				width = Integer.parseInt(tfScreenWidth.getText().toString());
@@ -524,9 +555,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			}
 			params.putInt("ScreenHeight", height);
 			try {
-				int value = Color.parseColor(tfScreenBack.getText().toString());
-				params.putInt("ScreenBackgroundColor", value);
-			} catch (Exception ignored) {}
+				params.putInt("ScreenBackgroundColor", Integer.parseInt(tfScreenBack.getText().toString(), 16));
+			} catch (NumberFormatException ignored) {}
 			params.putInt("ScreenScaleRatio", sbScaleRatio.getProgress());
 			params.putInt("Orientation", spOrientation.getSelectedItemPosition());
 			params.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
@@ -563,7 +593,6 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				params.putInt("FontSizeLarge", getFontSizeForResolution(2, width, height));
 			}
 			params.putBoolean("FontApplyDimensions", cxFontSizeInSP.isChecked());
-			params.putString("SystemProperties", tfSystemProperties.getText().toString());
 			params.putBoolean("ShowKeyboard", cxShowKeyboard.isChecked());
 			params.putBoolean("VirtualKeyboardFeedback", cxVKFeedback.isChecked());
 			params.putBoolean("TouchInput", cxTouchInput.isChecked());
@@ -579,30 +608,53 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				params.putInt("VirtualKeyboardDelay", 0);
 			}
 			try {
-				int value = Color.parseColor(tfVKBack.getText().toString());
+				int value = Integer.parseInt(tfVKBack.getText().toString(), 16);
 				params.putInt("VirtualKeyboardColorBackground", value);
 			} catch (Exception ignored) {}
 			try {
-				int value = Color.parseColor(tfVKFore.getText().toString());
+				int value = Integer.parseInt(tfVKFore.getText().toString(), 16);
 				params.putInt("VirtualKeyboardColorForeground", value);
 			} catch (Exception ignored) {}
 			try {
-				int value = Color.parseColor(tfVKSelBack.getText().toString());
+				int value = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
 				params.putInt("VirtualKeyboardColorBackgroundSelected", value);
 			} catch (Exception ignored) {}
 			try {
-				int value = Color.parseColor(tfVKSelFore.getText().toString());
+				int value = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
 				params.putInt("VirtualKeyboardColorForegroundSelected", value);
 			} catch (Exception ignored) {}
 			try {
-				int value = Color.parseColor(tfVKOutline.getText().toString());
+				int value = Integer.parseInt(tfVKOutline.getText().toString(), 16);
 				params.putInt("VirtualKeyboardColorOutline", value);
 			} catch (Exception ignored) {}
+			params.putString("SystemProperties", getSystemProperties());
 
 			params.apply();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
+	}
+
+	@NonNull
+	private String getSystemProperties() {
+		String s = tfSystemProperties.getText().toString();
+		String[] lines = s.split("\\n");
+		StringBuilder sb = new StringBuilder(s.length());
+		boolean validCharset = false;
+		for (int i = lines.length - 1; i >= 0; i--) {
+			String line = lines[i];
+			if (line.startsWith("microedition.encoding:")) {
+				if (validCharset) continue;
+				try {
+					Charset.forName(line.substring(22).trim());
+					validCharset = true;
+				} catch (Exception ignored) {
+					continue;
+				}
+			}
+			sb.append(line).append('\n');
+		}
+		return sb.toString();
 	}
 
 	private int getFontSizeForResolution(int sizeType, int width, int height) {
@@ -647,19 +699,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				loadKeyLayout();
 				break;
 			case R.id.action_load_profile:
-				LoadProfileAlert loadProfileAlert = new LoadProfileAlert();
-				Bundle bundleLoad = new Bundle();
-				bundleLoad.putString(CONFIG_PATH_KEY, keylayoutFile.getParent());
-				loadProfileAlert.setArguments(bundleLoad);
-				loadProfileAlert.show(fragmentManager, "load_profile");
+				LoadProfileAlert.newInstance(keylayoutFile.getParent())
+						.show(fragmentManager, "load_profile");
 				break;
 			case R.id.action_save_profile:
 				saveParams();
-				SaveProfileAlert saveProfileAlert = new SaveProfileAlert();
-				Bundle bundleSave = new Bundle();
-				bundleSave.putString(CONFIG_PATH_KEY, keylayoutFile.getParent());
-				saveProfileAlert.setArguments(bundleSave);
-				saveProfileAlert.show(fragmentManager, "save_profile");
+				SaveProfileAlert.getInstance(keylayoutFile.getParent())
+						.show(fragmentManager, "save_profile");
 				break;
 			case R.id.action_map_keys:
 				Intent i = new Intent(getIntent());
@@ -751,7 +797,9 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		AmbilWarnaDialog.OnAmbilWarnaListener colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
 			@Override
 			public void onOk(AmbilWarnaDialog dialog, int color) {
-				et.setText(Integer.toHexString(color & 0xFFFFFF).toUpperCase());
+				et.setText(String.format("%06X", color & 0xFFFFFF));
+				ColorDrawable drawable = (ColorDrawable) et.getCompoundDrawables()[2];
+				drawable.setColor(color);
 			}
 
 			@Override
