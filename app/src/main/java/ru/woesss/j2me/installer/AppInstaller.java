@@ -226,7 +226,7 @@ public class AppInstaller {
 		if (oldApp == null) {
 			return STATUS_NEW;
 		}
-		File file = new File(targetDir, Config.MIDLET_MANIFEST_FILE);
+		File file = new File(oldApp.getPathExt(), Config.MIDLET_MANIFEST_FILE);
 		oldDesc = new Descriptor(file, false);
 		return Integer.signum(newDesc.getVersion().compareTo(oldApp.getVersion()));
 	}
