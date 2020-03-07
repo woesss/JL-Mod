@@ -135,8 +135,11 @@
     <string name="PREF_SHADER_FILTER">Шейдер:</string>
     <string name="PREF_SHOW_FPS">Показать FPS</string>
     <string name="PREF_SYS_PROPS">Системные параметры</string>
+    <string name="pref_theme_auto_battery">Авто, по режиму энергосбережения</string>
+    <string name="pref_theme_auto_time">Авто, по времени суток</string>
     <string name="pref_theme_light">Светлая</string>
     <string name="pref_theme_night">Тёмная</string>
+    <string name="pref_theme_system">Следовать настройкам системы</string>
     <string name="pref_theme_title">Тема</string>
     <string name="PREF_TOUCH_INPUT">Сенсорный ввод</string>
     <string name="PREF_UNIT_MS">мс</string>

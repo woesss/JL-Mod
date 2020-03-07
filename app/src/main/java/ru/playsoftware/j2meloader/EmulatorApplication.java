@@ -19,12 +19,15 @@ package ru.playsoftware.j2meloader;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
+import androidx.preference.PreferenceManager;
 
 import org.acra.ACRA;
 import org.acra.config.CoreConfigurationBuilder;
@@ -36,10 +39,17 @@ import java.util.Arrays;
 
 import javax.microedition.util.ContextHolder;
 
-public class EmulatorApplication extends Application {
+import ru.playsoftware.j2meloader.util.Constants;
 
+public class EmulatorApplication extends Application {
 	private static final byte[] SIGNATURE_SHA = {
 			125, 47, 64, 33, 91, -86, -121, 89, 11, 24, -118, -93, 35, 53, -34, -114, -119, -60, -48, 55
+	};
+
+	private final SharedPreferences.OnSharedPreferenceChangeListener themeListener = (sharedPreferences, key) -> {
+		if (key.equals(Constants.PREF_THEME)) {
+			setNightMode(sharedPreferences.getString(Constants.PREF_THEME, "light"));
+		}
 	};
 
 	@Override
@@ -63,6 +73,9 @@ public class EmulatorApplication extends Application {
 					.withEnabled(true);
 			ACRA.init(this, builder);
 		}
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+		sp.registerOnSharedPreferenceChangeListener(themeListener);
+		setNightMode(sp.getString(Constants.PREF_THEME, "light"));
 	}
 
 	@SuppressLint("PackageManagerGetSignatures")
@@ -91,5 +104,27 @@ public class EmulatorApplication extends Application {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	void setNightMode(String theme) {
+		switch (theme) {
+			case "light":
+				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+				break;
+			case "dark":
+				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+				break;
+			case "auto-battery":
+				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
+				break;
+			case "auto-time":
+				//noinspection deprecation
+				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_TIME);
+				break;
+			default:
+			case "system":
+				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+				break;
+		}
 	}
 }
