@@ -152,7 +152,9 @@
                     android:ems="2"
                     android:gravity="center"
                     android:inputType="numberDecimal"
-                    android:textDirection="ltr" />
+                    android:hint="100"
+                    android:textDirection="ltr"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
@@ -588,7 +590,6 @@
                             android:id="@+id/tfVKFore"
                             style="@style/EditTextStyle"
                             android:layout_width="0dp"
-                            android:layout_height="38dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginEnd="6dp"
@@ -614,7 +615,6 @@
                             android:id="@+id/tfVKBack"
                             style="@style/EditTextStyle"
                             android:layout_width="0dp"
-                            android:layout_height="38dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginEnd="6dp"

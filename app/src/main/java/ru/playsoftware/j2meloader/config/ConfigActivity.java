@@ -49,7 +49,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
@@ -271,7 +270,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				sbScaleRatio.setProgress(Integer.parseInt(s.toString()));
+				try {
+					sbScaleRatio.setProgress(Integer.parseInt(s.toString()));
+				} catch (NumberFormatException e) {
+					sbScaleRatio.setProgress(100);
+				}
 			}
 
 			@Override
@@ -445,7 +448,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		int color = params.getInt("ScreenBackgroundColor", 0xD0D0D0);
 		tfScreenBack.setText(String.format("%06X", color));
 		ColorDrawable colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0,0, size, size);
+		colorDrawable.setBounds(0, 0, size, size);
 		tfScreenBack.setCompoundDrawables(null, null, colorDrawable, null);
 		sbScaleRatio.setProgress(params.getInt("ScreenScaleRatio", 100));
 		tfScaleRatioValue.setText(String.valueOf(sbScaleRatio.getProgress()));
@@ -478,31 +481,31 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 		color = params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0);
 		colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0,0, size, size);
+		colorDrawable.setBounds(0, 0, size, size);
 		tfVKBack.setCompoundDrawables(null, null, colorDrawable, null);
 		tfVKBack.setText(String.format("%06X", color));
 
 		color = params.getInt("VirtualKeyboardColorForeground", 0x000080);
 		colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0,0, size, size);
+		colorDrawable.setBounds(0, 0, size, size);
 		tfVKFore.setCompoundDrawables(null, null, colorDrawable, null);
 		tfVKFore.setText(String.format("%06X", color));
 
 		color = params.getInt("VirtualKeyboardColorBackgroundSelected", 0x000080);
 		colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0,0, size, size);
+		colorDrawable.setBounds(0, 0, size, size);
 		tfVKSelBack.setCompoundDrawables(null, null, colorDrawable, null);
 		tfVKSelBack.setText(String.format("%06X", color));
 
 		color = params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF);
 		colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0,0, size, size);
+		colorDrawable.setBounds(0, 0, size, size);
 		tfVKSelFore.setCompoundDrawables(null, null, colorDrawable, null);
 		tfVKSelFore.setText(String.format("%06X", color));
 
 		color = params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF);
 		colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0,0, size, size);
+		colorDrawable.setBounds(0, 0, size, size);
 		tfVKOutline.setCompoundDrawables(null, null, colorDrawable, null);
 		tfVKOutline.setText(String.format("%06X", color));
 
@@ -556,7 +559,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.putInt("ScreenHeight", height);
 			try {
 				params.putInt("ScreenBackgroundColor", Integer.parseInt(tfScreenBack.getText().toString(), 16));
-			} catch (NumberFormatException ignored) {}
+			} catch (NumberFormatException ignored) {
+			}
 			params.putInt("ScreenScaleRatio", sbScaleRatio.getProgress());
 			params.putInt("Orientation", spOrientation.getSelectedItemPosition());
 			params.putBoolean("ScreenScaleToFit", cxScaleToFit.isChecked());
@@ -610,23 +614,28 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			try {
 				int value = Integer.parseInt(tfVKBack.getText().toString(), 16);
 				params.putInt("VirtualKeyboardColorBackground", value);
-			} catch (Exception ignored) {}
+			} catch (Exception ignored) {
+			}
 			try {
 				int value = Integer.parseInt(tfVKFore.getText().toString(), 16);
 				params.putInt("VirtualKeyboardColorForeground", value);
-			} catch (Exception ignored) {}
+			} catch (Exception ignored) {
+			}
 			try {
 				int value = Integer.parseInt(tfVKSelBack.getText().toString(), 16);
 				params.putInt("VirtualKeyboardColorBackgroundSelected", value);
-			} catch (Exception ignored) {}
+			} catch (Exception ignored) {
+			}
 			try {
 				int value = Integer.parseInt(tfVKSelFore.getText().toString(), 16);
 				params.putInt("VirtualKeyboardColorForegroundSelected", value);
-			} catch (Exception ignored) {}
+			} catch (Exception ignored) {
+			}
 			try {
 				int value = Integer.parseInt(tfVKOutline.getText().toString(), 16);
 				params.putInt("VirtualKeyboardColorOutline", value);
-			} catch (Exception ignored) {}
+			} catch (Exception ignored) {
+			}
 			params.putString("SystemProperties", getSystemProperties());
 
 			params.apply();
@@ -821,8 +830,20 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		String height = tfScreenHeight.getText().toString();
 		if (width.isEmpty()) width = "-1";
 		if (height.isEmpty()) height = "-1";
-		int w = Integer.parseInt(width);
-		int h = Integer.parseInt(height);
+		int w;
+		try {
+			w = Integer.parseInt(width);
+		} catch (NumberFormatException e) {
+			Toast.makeText(this, R.string.invalid_resolution_not_saved, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		int h;
+		try {
+			h = Integer.parseInt(height);
+		} catch (NumberFormatException e) {
+			Toast.makeText(this, R.string.invalid_resolution_not_saved, Toast.LENGTH_SHORT).show();
+			return;
+		}
 		if (w <= 0 || h <= 0) {
 			Toast.makeText(this, R.string.invalid_resolution_not_saved, Toast.LENGTH_SHORT).show();
 			return;
