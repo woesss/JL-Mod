@@ -68,20 +68,16 @@
     <string name="SWAP_SIZES">스왑 사이즈</string>
     <string name="PREF_SYS_PROPS">시스템 속성</string>
     <string name="PREF_ORIENTATION">화면 방향</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>체납</item>
-        <item>자동차</item>
-        <item>초상화</item>
-        <item>풍경</item>
-    </string-array>
+    <string name="pref_orientation_default">체납</string>
+    <string name="pref_orientation_auto">자동차</string>
+    <string name="pref_orientation_port">초상화</string>
+    <string name="pref_orientation_land">풍경</string>
     <string name="error">오류</string>
     <string name="message_clear_data">앱 데이터를 지우시겠습니까?</string>
     <string name="PREF_VK_TYPE">키보드 유형</string>
-    <string-array name="PREF_VK_TYPE_ENTRIES">
-        <item>사용자 지정 가능</item>
-        <item>전화</item>
-        <item>전화(화살)</item>
-    </string-array>
+    <string name="pref_vk_type_custom">사용자 지정 가능</string>
+    <string name="pref_vk_type_phone">전화</string>
+    <string name="pref_vk_type_phone_arrows">전화(화살)</string>
     <string name="FORCE_CLOSE_CONFIRMATION">애플리케이션을 강제로 닫으면 데이터가 손실되거나 완전히 손상될 수 있다!\n진행?</string>
     <string name="CONFIRMATION_REQUIRED">확인 필요</string>
     <string name="select_dialog_title">MIDlet 선택</string>
@@ -99,20 +95,16 @@
     <string name="log_saved">Log 저장됨</string>
     <string name="common_settings">[공통 설정]</string>
     <string name="pref_theme_title">주제</string>
-    <string-array name="pref_theme_entries">
-        <item>빛</item>
-        <item>어두운</item>
-    </string-array>
+    <string name="pref_theme_light">빛</string>
+    <string name="pref_theme_night">어두운</string>
     <string name="pref_requires_restart_summary">재시작 필요</string>
     <string name="pref_enable_actionbar_title">Enable ActionBar</string>
     <string name="pref_enable_actionbar_summary">전체 화면 애플리케이션</string>
     <string name="pref_wakelock_title">화면 유지</string>
     <string name="pref_button_shape_title">단추 모양</string>
     <string name="pref_app_sort_title">앱 정렬 순서</string>
-    <string-array name="pref_app_sort_entries">
-        <item>이름</item>
-        <item>날짜</item>
-    </string-array>
+    <string name="pref_app_sort_name">이름</string>
+    <string name="pref_app_sort_date">날짜</string>
     <string name="pref_map_keys">키 매핑</string>
     <string name="pref_encoding_title">인코딩</string>
     <string name="pref_default_settings">기본 설정</string>

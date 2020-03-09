@@ -65,12 +65,10 @@
     <string name="SWAP_SIZES">交換大小 ︰</string>
     <string name="PREF_SYS_PROPS">系統內容</string>
     <string name="PREF_ORIENTATION">螢幕方向</string>
-    <string-array name="PREF_ORIENTATION_ENTRIES">
-        <item>預設</item>
-        <item>自動</item>
-        <item>縱向顯示</item>
-        <item>Landscape</item>
-    </string-array>
+    <string name="pref_orientation_default">預設</string>
+    <string name="pref_orientation_auto">自動</string>
+    <string name="pref_orientation_port">縱向顯示</string>
+    <string name="pref_orientation_land">Landscape</string>
     <string name="error">錯誤</string>
     <string name="FORCE_CLOSE_CONFIRMATION">強制關閉應用程序可能會導致數據丟失甚至完全破壞！\nProceed？</string>
     <string name="CONFIRMATION_REQUIRED">需要确认</string>
@@ -87,18 +85,14 @@
     <string name="screenshot_saved">螢幕截圖已保存到</string>
     <string name="common_settings">[常用設置]</string>
     <string name="pref_theme_title">主題</string>
-    <string-array name="pref_theme_entries">
-        <item>白色主題</item>
-        <item>深色主題</item>
-    </string-array>
+    <string name="pref_theme_light">白色主題</string>
+    <string name="pref_theme_night">深色主題</string>
     <string name="pref_requires_restart_summary">需要重新啟動</string>
     <string name="pref_enable_actionbar_title">啟用 ActionBar</string>
     <string name="pref_enable_actionbar_summary">在全屏应用程序中</string>
     <string name="pref_wakelock_title">保持螢幕開啓</string>
-    <string-array name="pref_app_sort_entries">
-        <item>名稱</item>
-        <item>日期</item>
-    </string-array>
+    <string name="pref_app_sort_name">名稱</string>
+    <string name="pref_app_sort_date">日期</string>
     <string name="mapping_dialog_title">按任意按鍵</string>
     <string name="reset_mapping">重設</string>
 </resources>
