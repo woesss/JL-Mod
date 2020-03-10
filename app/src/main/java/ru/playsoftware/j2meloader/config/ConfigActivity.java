@@ -21,12 +21,16 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -309,6 +313,12 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			};
 			rootContainer.addOnLayoutChangeListener(onLayoutChangeListener);
 		});
+		tfScreenBack.addTextChangedListener(new ColorTextWatcher(tfScreenBack));
+		tfVKFore.addTextChangedListener(new ColorTextWatcher(tfVKFore));
+		tfVKBack.addTextChangedListener(new ColorTextWatcher(tfVKBack));
+		tfVKSelFore.addTextChangedListener(new ColorTextWatcher(tfVKSelFore));
+		tfVKSelBack.addTextChangedListener(new ColorTextWatcher(tfVKSelBack));
+		tfVKOutline.addTextChangedListener(new ColorTextWatcher(tfVKOutline));
 	}
 
 	private void updateProperties() {
@@ -441,17 +451,14 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	@SuppressLint("SetTextI18n")
 	public void loadParams() {
-		int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics());
 		params.load();
 		tfScreenWidth.setText(Integer.toString(params.getInt("ScreenWidth", 240)));
 		tfScreenHeight.setText(Integer.toString(params.getInt("ScreenHeight", 320)));
 		int color = params.getInt("ScreenBackgroundColor", 0xD0D0D0);
 		tfScreenBack.setText(String.format("%06X", color));
-		ColorDrawable colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0, 0, size, size);
-		tfScreenBack.setCompoundDrawables(null, null, colorDrawable, null);
-		sbScaleRatio.setProgress(params.getInt("ScreenScaleRatio", 100));
-		tfScaleRatioValue.setText(String.valueOf(sbScaleRatio.getProgress()));
+		int scale = params.getInt("ScreenScaleRatio", 100);
+		sbScaleRatio.setProgress(scale);
+		tfScaleRatioValue.setText(Integer.toString(scale));
 		spOrientation.setSelection(params.getInt("Orientation", 0));
 		cxScaleToFit.setChecked(params.getBoolean("ScreenScaleToFit", true));
 		cxKeepAspectRatio.setChecked(params.getBoolean("ScreenKeepAspectRatio", true));
@@ -480,33 +487,18 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfVKHideDelay.setText(Integer.toString(params.getInt("VirtualKeyboardDelay", -1)));
 
 		color = params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0);
-		colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0, 0, size, size);
-		tfVKBack.setCompoundDrawables(null, null, colorDrawable, null);
 		tfVKBack.setText(String.format("%06X", color));
 
 		color = params.getInt("VirtualKeyboardColorForeground", 0x000080);
-		colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0, 0, size, size);
-		tfVKFore.setCompoundDrawables(null, null, colorDrawable, null);
 		tfVKFore.setText(String.format("%06X", color));
 
 		color = params.getInt("VirtualKeyboardColorBackgroundSelected", 0x000080);
-		colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0, 0, size, size);
-		tfVKSelBack.setCompoundDrawables(null, null, colorDrawable, null);
 		tfVKSelBack.setText(String.format("%06X", color));
 
 		color = params.getInt("VirtualKeyboardColorForegroundSelected", 0xFFFFFF);
-		colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0, 0, size, size);
-		tfVKSelFore.setCompoundDrawables(null, null, colorDrawable, null);
 		tfVKSelFore.setText(String.format("%06X", color));
 
 		color = params.getInt("VirtualKeyboardColorOutline", 0xFFFFFF);
-		colorDrawable = new ColorDrawable(color | 0xff000000);
-		colorDrawable.setBounds(0, 0, size, size);
-		tfVKOutline.setCompoundDrawables(null, null, colorDrawable, null);
 		tfVKOutline.setText(String.format("%06X", color));
 
 		String systemProperties = params.getString("SystemProperties", null);
@@ -861,6 +853,62 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			Toast.makeText(this, getString(R.string.saved, preset), Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(this, R.string.not_saved_exists, Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	private static class ColorTextWatcher implements TextWatcher {
+		private final EditText editText;
+		private final ColorDrawable drawable;
+
+		ColorTextWatcher(EditText editText) {
+			this.editText = editText;
+			int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32,
+					editText.getResources().getDisplayMetrics());
+			ColorDrawable colorDrawable = new ColorDrawable();
+			colorDrawable.setBounds(0, 0, size, size);
+			editText.setCompoundDrawables(null, null, colorDrawable, null);
+			drawable = colorDrawable;
+			editText.setFilters(new InputFilter[]{this::filter});
+			editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+		}
+
+		private CharSequence filter(CharSequence src, int ss, int se, Spanned dst, int ds, int de) {
+			StringBuilder sb = new StringBuilder(se - ss);
+			for (int i = ss; i < se; i++) {
+				char c = src.charAt(i);
+				if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
+					sb.append(c);
+				} else if (c  >= 'a' && c <= 'f') {
+					sb.append((char)(c - 32));
+				}
+			}
+			return sb;
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+			if (s.length() > 6) {
+				if (start >= 6) editText.getText().delete(6, s.length());
+				else {
+					int st = start + count;
+					int end = st + (before == 0 ? count : before);
+					editText.getText().delete(st, Math.min(end, s.length()));
+				}
+			}
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			try {
+				int color = Integer.parseInt(s.toString(), 16);
+				drawable.setColor(color | Color.BLACK);
+			} catch (NumberFormatException e) {
+				drawable.setColor(Color.BLACK);
+			}
 		}
 	}
 }
