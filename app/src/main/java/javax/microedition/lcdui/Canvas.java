@@ -41,7 +41,6 @@ import javax.microedition.lcdui.event.CanvasEvent;
 import javax.microedition.lcdui.event.Event;
 import javax.microedition.lcdui.event.EventFilter;
 import javax.microedition.lcdui.event.EventQueue;
-import javax.microedition.lcdui.game.Sprite;
 import javax.microedition.lcdui.overlay.FpsCounter;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.lcdui.overlay.OverlayView;
@@ -247,15 +246,15 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void postKeyPressed(int keyCode) {
-		postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, convertKeyCode(keyCode)));
 	}
 
 	public void postKeyReleased(int keyCode) {
-		postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, convertKeyCode(keyCode)));
 	}
 
 	public void postKeyRepeated(int keyCode) {
-		postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, convertKeyCode(keyCode)));
 	}
 
 	private class InnerView extends SurfaceView implements SurfaceHolder.Callback {
@@ -295,11 +294,11 @@ public abstract class Canvas extends Displayable {
 			}
 			if (event.getRepeatCount() == 0) {
 				if (overlay == null || !overlay.keyPressed(keyCode)) {
-					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_PRESSED, keyCode));
+					postKeyPressed(keyCode);
 				}
 			} else {
 				if (overlay == null || !overlay.keyRepeated(keyCode)) {
-					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_REPEATED, keyCode));
+					postKeyRepeated(keyCode);
 				}
 			}
 			return true;
@@ -312,7 +311,7 @@ public abstract class Canvas extends Displayable {
 				return false;
 			}
 			if (overlay == null || !overlay.keyReleased(keyCode)) {
-				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.KEY_RELEASED, keyCode));
+				postKeyReleased(keyCode);
 			}
 			return true;
 		}
@@ -335,7 +334,7 @@ public abstract class Canvas extends Displayable {
 					int id = event.getPointerId(index);
 					if ((overlay == null || !overlay.pointerPressed(id, event.getX(index), event.getY(index)))
 							&& touchInput && id == 0) {
-						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_PRESSED, id,
+						Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_PRESSED, id,
 								convertPointerX(event.getX()), convertPointerY(event.getY())));
 					}
 					break;
@@ -347,7 +346,7 @@ public abstract class Canvas extends Displayable {
 							id = event.getPointerId(p);
 							if ((overlay == null || !overlay.pointerDragged(id, event.getHistoricalX(p, h), event.getHistoricalY(p, h)))
 									&& touchInput && id == 0) {
-								postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, id,
+								Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, id,
 										convertPointerX(event.getHistoricalX(p, h)), convertPointerY(event.getHistoricalY(p, h))));
 							}
 						}
@@ -356,7 +355,7 @@ public abstract class Canvas extends Displayable {
 						id = event.getPointerId(p);
 						if ((overlay == null || !overlay.pointerDragged(id, event.getX(p), event.getY(p)))
 								&& touchInput && id == 0) {
-							postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, id,
+							Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_DRAGGED, id,
 									convertPointerX(event.getX(p)), convertPointerY(event.getY(p))));
 						}
 					}
@@ -370,7 +369,7 @@ public abstract class Canvas extends Displayable {
 					id = event.getPointerId(index);
 					if ((overlay == null || !overlay.pointerReleased(id, event.getX(index), event.getY(index)))
 							&& touchInput && id == 0) {
-						postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_RELEASED, id,
+						Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.POINTER_RELEASED, id,
 								convertPointerX(event.getX()), convertPointerY(event.getY())));
 					}
 					break;
@@ -390,19 +389,19 @@ public abstract class Canvas extends Displayable {
 				displayWidth = newWidth;
 				displayHeight = newHeight;
 				if (checkSizeChanged() || !sizeChangedCalled) {
-					postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
+					Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
 							width, height));
 					sizeChangedCalled = true;
 				}
 			}
-			postEvent(paintEvent);
+			Display.postEvent(paintEvent);
 		}
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
 			synchronized (paintSync) {
 				surface = holder.getSurface();
-				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
+				Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
 			}
 			if (showFps) {
 				fpsCounter = new FpsCounter(overlayView);
@@ -415,7 +414,7 @@ public abstract class Canvas extends Displayable {
 		public void surfaceDestroyed(SurfaceHolder holder) {
 			synchronized (paintSync) {
 				surface = null;
-				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
+				Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.HIDE_NOTIFY));
 				if (fpsCounter != null) {
 					fpsCounter.stop();
 					overlayView.removeLayer(fpsCounter);
@@ -798,7 +797,7 @@ public abstract class Canvas extends Displayable {
 			if (fullscreen != flag) {
 				fullscreen = flag;
 				updateSize();
-				postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
+				Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SIZE_CHANGED,
 						width, height));
 			}
 		}
@@ -838,7 +837,7 @@ public abstract class Canvas extends Displayable {
 
 	public final void repaint(int x, int y, int width, int height) {
 		limitFps();
-		postEvent(paintEvent);
+		Display.postEvent(paintEvent);
 	}
 
 	@Override
@@ -925,7 +924,7 @@ public abstract class Canvas extends Displayable {
 	 * and the calling thread is blocked until it is completed.
 	 */
 	public final void serviceRepaints() {
-		EventQueue queue = getEventQueue();
+		EventQueue queue = Display.getEventQueue();
 
 		/*
 		 * blocking order:

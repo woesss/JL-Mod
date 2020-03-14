@@ -19,6 +19,7 @@ package javax.microedition.lcdui.pointer;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
@@ -27,9 +28,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.overlay.Overlay;
+import javax.microedition.util.ContextHolder;
 
 public class VirtualKeyboard implements Overlay, Runnable {
 
@@ -144,6 +145,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			return label;
 		}
 
+		@NonNull
 		public String toString() {
 			return "[" + label + ": " + rect.left + ", " + rect.top + ", " + rect.right + ", " + rect.bottom + "]";
 		}
@@ -158,33 +160,33 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	private static final int KEYBOARD_SIZE = 25;
-	protected static final int SCREEN = -1;
+	static final int SCREEN = -1;
 
-	protected static final int KEY_NUM1 = 0;
-	protected static final int KEY_NUM2 = 1;
-	protected static final int KEY_NUM3 = 2;
-	protected static final int KEY_NUM4 = 3;
-	protected static final int KEY_NUM5 = 4;
-	protected static final int KEY_NUM6 = 5;
-	protected static final int KEY_NUM7 = 6;
-	protected static final int KEY_NUM8 = 7;
-	protected static final int KEY_NUM9 = 8;
-	protected static final int KEY_NUM0 = 9;
-	protected static final int KEY_STAR = 10;
-	protected static final int KEY_POUND = 11;
-	protected static final int KEY_SOFT_LEFT = 12;
-	protected static final int KEY_SOFT_RIGHT = 13;
-	protected static final int KEY_DIAL = 14;
-	protected static final int KEY_CANCEL = 15;
-	protected static final int KEY_UP_LEFT = 16;
-	protected static final int KEY_UP = 17;
-	protected static final int KEY_UP_RIGHT = 18;
-	protected static final int KEY_LEFT = 19;
-	protected static final int KEY_RIGHT = 20;
-	protected static final int KEY_DOWN_LEFT = 21;
-	protected static final int KEY_DOWN = 22;
-	protected static final int KEY_DOWN_RIGHT = 23;
-	protected static final int KEY_FIRE = 24;
+	static final int KEY_NUM1 = 0;
+	static final int KEY_NUM2 = 1;
+	static final int KEY_NUM3 = 2;
+	static final int KEY_NUM4 = 3;
+	static final int KEY_NUM5 = 4;
+	static final int KEY_NUM6 = 5;
+	static final int KEY_NUM7 = 6;
+	static final int KEY_NUM8 = 7;
+	static final int KEY_NUM9 = 8;
+	static final int KEY_NUM0 = 9;
+	static final int KEY_STAR = 10;
+	static final int KEY_POUND = 11;
+	static final int KEY_SOFT_LEFT = 12;
+	static final int KEY_SOFT_RIGHT = 13;
+	static final int KEY_DIAL = 14;
+	static final int KEY_CANCEL = 15;
+	static final int KEY_UP_LEFT = 16;
+	static final int KEY_UP = 17;
+	static final int KEY_UP_RIGHT = 18;
+	static final int KEY_LEFT = 19;
+	static final int KEY_RIGHT = 20;
+	static final int KEY_DOWN_LEFT = 21;
+	static final int KEY_DOWN = 22;
+	static final int KEY_DOWN_RIGHT = 23;
+	static final int KEY_FIRE = 24;
 
 	private static final int LAYOUT_SIGNATURE = 0x564B4C00;
 	private static final int LAYOUT_VERSION_1 = 1;
@@ -1085,7 +1087,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	private void vibrate() {
-		if (feedback) Display.getDisplay(null).vibrate(FEEDBACK_DURATION);
+		if (feedback) {
+			ContextHolder.vibrate(FEEDBACK_DURATION);
+		}
 	}
 
 	public void setHideDelay(int delay) {

@@ -318,7 +318,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 		for (Command cmd : commands) {
 			if (cmd.hashCode() == id) {
 				if (owner != null) {
-					owner.postEvent(CommandActionEvent.getInstance(listener, cmd, this));
+					Display.postEvent(CommandActionEvent.getInstance(listener, cmd, this));
 				}
 				return true;
 			}
@@ -328,7 +328,7 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 
 	public void fireDefaultCommandAction() {
 		if (defaultCommand != null) {
-			owner.postEvent(CommandActionEvent.getInstance(listener, defaultCommand, this));
+			Display.postEvent(CommandActionEvent.getInstance(listener, defaultCommand, this));
 		}
 	}
 }

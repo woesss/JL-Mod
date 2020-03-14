@@ -80,7 +80,7 @@ public class Font {
 
 	public Font(Typeface face, int style, float size, boolean underline) {
 		if (applyDimensions) {
-			size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, ContextHolder.getContext().getResources().getDisplayMetrics());
+			size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, ContextHolder.getAppContext().getResources().getDisplayMetrics());
 		}
 
 		paint = new Paint();
@@ -95,7 +95,7 @@ public class Font {
 	// Font for keyboard
 	public Font() {
 		paint = new Paint();
-		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, SIZE_KEYBOARD, ContextHolder.getContext().getResources().getDisplayMetrics());
+		float size = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, SIZE_KEYBOARD, ContextHolder.getAppContext().getResources().getDisplayMetrics());
 		paint.setTextSize(size);
 	}
 
