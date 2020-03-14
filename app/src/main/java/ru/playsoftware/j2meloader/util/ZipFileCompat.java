@@ -73,11 +73,14 @@ public class ZipFileCompat implements Closeable {
 	public ZipEntry getEntry(String name) throws IOException {
 		if (zipFile != null) {
 			return zipFile.getEntry(name);
-		} else {
-			ZipEntry zipEntry;
-			while ((zipEntry = zis.getNextEntry()) != null && !zipEntry.getName().equals(name)) ;
-			return zipEntry;
 		}
+		ZipEntry zipEntry;
+		while ((zipEntry = zis.getNextEntry()) != null) {
+			if (zipEntry.getName().equals(name)) {
+				return zipEntry;
+			}
+		}
+		return null;
 	}
 
 	@Override
