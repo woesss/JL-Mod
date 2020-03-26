@@ -37,8 +37,7 @@ public class Config {
 	public static final String CONFIGS_DIR = EMULATOR_DIR + "/configs/";
 	public static final String PROFILES_DIR = EMULATOR_DIR + "/profiles/";
 	public static final String APP_DIR = EMULATOR_DIR + MIDLET_DIR;
-	public static final String TEMP_DEX_DIR = "/tmp_dex";
-	public static final String TEMP_DEX_OPT_DIR = "/tmp_dexopt";
+	public static final String DEX_OPT_CACHE_DIR = "dex_opt";
 	public static final String MIDLET_RES_DIR = "/res";
 	public static final String MIDLET_DEX_FILE = "/converted.dex";
 	public static final String MIDLET_RES_FILE = "/res.jar";

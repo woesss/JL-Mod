@@ -57,6 +57,9 @@ import ru.playsoftware.j2meloader.settings.KeyMapper;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.woesss.j2me.jar.Descriptor;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+
 public class MicroLoader {
 	private static final String TAG = MicroLoader.class.getName();
 
@@ -101,33 +104,26 @@ public class MicroLoader {
 		return midlets;
 	}
 
-	MIDlet loadMIDlet(String mainClass)
-			throws IOException, ClassNotFoundException, InstantiationException,
-			IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+	MIDlet loadMIDlet(String mainClass) throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, NoSuchMethodException, InvocationTargetException, IOException {
 		File dexSource = new File(path, Config.MIDLET_DEX_FILE);
-		File dexTargetDir = new File(context.getApplicationInfo().dataDir, Config.TEMP_DEX_DIR);
-		if (dexTargetDir.exists()) {
-			FileUtils.deleteDirectory(dexTargetDir);
+		File codeCacheDir = SDK_INT >= LOLLIPOP ? context.getCodeCacheDir() : context.getCacheDir();
+		File dexOptDir = new File(codeCacheDir, Config.DEX_OPT_CACHE_DIR);
+		if (dexOptDir.exists()) {
+			FileUtils.clearDirectory(dexOptDir);
+		} else if (!dexOptDir.mkdir()) {
+			throw new IOException("Cant't create directory: [" + dexOptDir + ']');
 		}
-		dexTargetDir.mkdir();
-		File dexTargetOptDir = new File(context.getApplicationInfo().dataDir, Config.TEMP_DEX_OPT_DIR);
-		if (dexTargetOptDir.exists()) {
-			FileUtils.deleteDirectory(dexTargetOptDir);
-		}
-		dexTargetOptDir.mkdir();
-		File dexTarget = new File(dexTargetDir, Config.MIDLET_DEX_FILE);
-		FileUtils.copyFileUsingChannel(dexSource, dexTarget);
 		File resDir = new File(path, Config.MIDLET_RES_DIR);
-		ClassLoader loader = new AppClassLoader(dexTarget.getAbsolutePath(),
-				dexTargetOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
-		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexTarget.getPath());
+		ClassLoader loader = new AppClassLoader(dexSource.getAbsolutePath(),
+				dexOptDir.getAbsolutePath(), context.getClassLoader(), resDir);
+		Log.i(TAG, "loadMIDletList main: " + mainClass + " from dex:" + dexSource.getPath());
 		Log.i(TAG, "MIDlet-Name: " + AppClassLoader.getName());
 		//noinspection unchecked
 		Class<MIDlet> clazz = (Class<MIDlet>) loader.loadClass(mainClass);
 		Constructor<MIDlet> init = clazz.getDeclaredConstructor();
 		init.setAccessible(true);
-		MIDlet midlet = init.newInstance();
-		return midlet;
+		return init.newInstance();
 	}
 
 	private void setProperties() {
