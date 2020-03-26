@@ -34,7 +34,6 @@ import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 public abstract class Displayable {
-	private MicroActivity parent;
 	private String title;
 
 	private ArrayList<Command> commands;
@@ -80,22 +79,16 @@ public abstract class Displayable {
 		Displayable.virtualHeight = virtualHeight;
 	}
 
-	public void setParentActivity(MicroActivity activity) {
-		parent = activity;
-	}
-
 	public MicroActivity getParentActivity() {
-		if (parent == null) {
-			return ContextHolder.getActivity();
-		}
-		return parent;
+		return ContextHolder.getActivity();
 	}
 
 	public void setTitle(String title) {
 		this.title = title;
 
-		if (parent != null) {
-			parent.runOnUiThread(() -> parent.getSupportActionBar().setTitle(Displayable.this.title));
+		MicroActivity activity = ContextHolder.getActivity();
+		if (isShown()) {
+			activity.runOnUiThread(() -> activity.setTitle(title));
 		}
 	}
 
@@ -104,10 +97,10 @@ public abstract class Displayable {
 	}
 
 	public boolean isShown() {
-		if (parent != null) {
-			return parent.isVisible() && parent.getCurrent() == this;
+		MicroActivity activity = ContextHolder.getActivity();
+		if (activity != null) {
+			return activity.isVisible() && activity.getCurrent() == this;
 		}
-
 		return false;
 	}
 
