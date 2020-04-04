@@ -142,7 +142,7 @@
     <string name="pref_enable_statusbar_title">Включить строку состояния</string>
     <string name="default_label">%s (стандартный)</string>
     <string name="add">Создать</string>
-    <string name="add_profile_description">Создать новый шаблон</string>
+    <string name="add_profile_description">Создать новый профиль</string>
     <string name="enter_name">Введите название</string>
     <string name="enter_new_name">Введите новое название</string>
     <string name="toast_close_filepicker">Нажмите ещё раз, чтобы закрыть проводник</string>

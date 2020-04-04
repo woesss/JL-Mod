@@ -42,8 +42,10 @@ public class FileUtils {
 	public static void copyFiles(String src, String dest, FilenameFilter filter) {
 		File srcFile = new File(src);
 		File dstFile = new File(dest);
-		if (!dstFile.exists() && !dstFile.mkdirs())
+		if (!dstFile.exists() && !dstFile.mkdirs()) {
+			Log.e(TAG, "copyFiles failed create dir: " + dstFile);
 			return;
+		}
 		File[] list = srcFile.listFiles(filter);
 		if (list == null) {
 			return;
