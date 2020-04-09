@@ -32,6 +32,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import javax.microedition.util.ContextHolder;
+
 import ru.playsoftware.j2meloader.hockeyapp.HockeySenderFactory;
 
 @AcraCore(buildConfigClass = BuildConfig.class, reportSenderFactoryClasses = {HockeySenderFactory.class})
@@ -49,6 +51,7 @@ public class EmulatorApplication extends Application {
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
+		ContextHolder.setApplication(this);
 		if (isSignatureValid() && !BuildConfig.FLAVOR.equals("dev")) ACRA.init(this);
 	}
 

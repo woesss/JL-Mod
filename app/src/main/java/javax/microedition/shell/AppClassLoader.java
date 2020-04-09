@@ -53,7 +53,7 @@ public class AppClassLoader extends DexClassLoader {
 		name = appDir.getName();
 		ACRA.getErrorReporter().putCustomData("Running app", name);
 		instance = this;
-		File midletResFile = new File(Config.APP_DIR, name + Config.MIDLET_RES_FILE);
+		File midletResFile = new File(Config.getAppDir(), name + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) loadNamesFromJar(midletResFile);
 		else loadNamesFromDir(resDir);
 	}
@@ -140,7 +140,7 @@ public class AppClassLoader extends DexClassLoader {
 			Log.w(TAG, "getResourceBytes: not found res: " + name);
 			return null;
 		}
-		File midletResFile = new File(Config.APP_DIR, getName() + Config.MIDLET_RES_FILE);
+		File midletResFile = new File(Config.getAppDir(), getName() + Config.MIDLET_RES_FILE);
 		if (midletResFile.exists()) {
 			try {
 				return ZipUtils.unzipEntry(midletResFile, path);

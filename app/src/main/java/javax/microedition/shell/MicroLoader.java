@@ -71,7 +71,7 @@ public class MicroLoader {
 	MicroLoader(Context context, String appPath) {
 		this.context = context;
 		this.appPath = appPath;
-		this.path = Config.APP_DIR + appPath;
+		this.path = Config.getAppDir() + appPath;
 		this.params = new SharedPreferencesContainer(appPath);
 	}
 
@@ -133,7 +133,7 @@ public class MicroLoader {
 				+ (country.length() == 2 ? "-" + country : ""));
 		final String externalStoragePath = Environment.getExternalStorageDirectory().getPath();
 		System.setProperty("fileconn.dir.cache", "file:///c:"
-				+ Config.DATA_DIR.substring(externalStoragePath.length()) + appPath);
+				+ Config.getDataDir().substring(externalStoragePath.length()) + appPath);
 	}
 
 	public int getOrientation() {
@@ -233,7 +233,7 @@ public class MicroLoader {
 		vk.setHasHapticFeedback(vkFeedback);
 		vk.setButtonShape(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
 
-		File keylayoutFile = new File(Config.CONFIGS_DIR, appPath + Config.MIDLET_KEY_LAYOUT_FILE);
+		File keylayoutFile = new File(Config.getConfigsDir(), appPath + Config.MIDLET_KEY_LAYOUT_FILE);
 		if (keylayoutFile.exists()) {
 			try {
 				FileInputStream fis = new FileInputStream(keylayoutFile);

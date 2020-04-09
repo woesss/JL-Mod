@@ -35,10 +35,10 @@ public class AppUtils {
 
 	private static ArrayList<AppItem> getAppsList() {
 		ArrayList<AppItem> apps = new ArrayList<>();
-		String[] appFolders = new File(Config.APP_DIR).list();
+		String[] appFolders = new File(Config.getAppDir()).list();
 		if (appFolders != null) {
 			for (String appFolder : appFolders) {
-				File temp = new File(Config.APP_DIR, appFolder);
+				File temp = new File(Config.getAppDir(), appFolder);
 				if (!temp.isDirectory()) {
 					//noinspection ResultOfMethodCallIgnored
 					temp.delete();
@@ -62,7 +62,7 @@ public class AppUtils {
 	}
 
 	private static AppItem getApp(String path) throws IOException {
-		File appDir = new File(Config.APP_DIR, path);
+		File appDir = new File(Config.getAppDir(), path);
 		File file = new File(appDir, Config.MIDLET_MANIFEST_FILE);
 		Descriptor params = new Descriptor(file, false);
 		AppItem item = new AppItem(appDir.getName(), params.getName(),
@@ -84,14 +84,14 @@ public class AppUtils {
 	public static void deleteApp(AppItem item) {
 		File appDir = new File(item.getPathExt());
 		FileUtils.deleteDirectory(appDir);
-		File appSaveDir = new File(Config.DATA_DIR, item.getPath());
+		File appSaveDir = new File(Config.getDataDir(), item.getPath());
 		FileUtils.deleteDirectory(appSaveDir);
-		File appConfigsDir = new File(Config.CONFIGS_DIR, item.getPath());
+		File appConfigsDir = new File(Config.getConfigsDir(), item.getPath());
 		FileUtils.deleteDirectory(appConfigsDir);
 	}
 
 	public static void updateDb(AppRepository appRepository, List<AppItem> items) {
-		String[] appFolders = new File(Config.APP_DIR).list();
+		String[] appFolders = new File(Config.getAppDir()).list();
 		int itemsNum = items.size();
 		if (appFolders == null || appFolders.length == 0) {
 			// If db isn't empty

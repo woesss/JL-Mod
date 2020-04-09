@@ -165,19 +165,19 @@ public class AppInstaller {
 		if (oldApp != null) {
 			String path = oldApp.getPath();
 			if (!path.equals(appDirName)) {
-				File rms = new File(Config.DATA_DIR, path);
+				File rms = new File(Config.getDataDir(), path);
 				if (rms.exists()) {
-					File newRms = new File(Config.DATA_DIR, appDirName);
+					File newRms = new File(Config.getDataDir(), appDirName);
 					FileUtils.deleteDirectory(newRms);
 					rms.renameTo(newRms);
 				}
-				File config = new File(Config.CONFIGS_DIR, path);
+				File config = new File(Config.getConfigsDir(), path);
 				if (config.exists()) {
-					File newConfig = new File(Config.CONFIGS_DIR, appDirName);
+					File newConfig = new File(Config.getConfigsDir(), appDirName);
 					FileUtils.deleteDirectory(newConfig);
 					config.renameTo(newConfig);
 				}
-				File appDir = new File(Config.APP_DIR, path);
+				File appDir = new File(Config.getAppDir(), path);
 				FileUtils.deleteDirectory(appDir);
 			}
 		}
@@ -222,7 +222,7 @@ public class AppInstaller {
 		AppRepository appRepository = new AppRepository(context, true);
 		oldApp = appRepository.get(name, vendor);
 		appDirName = name.trim() + '_' + Integer.toHexString(vendor.hashCode());
-		targetDir = new File(Config.APP_DIR, appDirName);
+		targetDir = new File(Config.getAppDir(), appDirName);
 		if (oldApp == null) {
 			return STATUS_NEW;
 		}

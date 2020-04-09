@@ -106,7 +106,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void initFolders() {
-		File appsDir = new File(Config.EMULATOR_DIR);
+		File appsDir = new File(Config.getEmulatorDir());
 		if (!appsDir.exists()) {
 			try {
 				File nomedia = new File(appsDir, ".nomedia");
