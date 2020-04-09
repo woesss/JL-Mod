@@ -18,12 +18,14 @@
 package ru.playsoftware.j2meloader;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
@@ -38,6 +41,7 @@ import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.settings.SettingsActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.MigrationUtils;
 
@@ -49,6 +53,7 @@ public class MainActivity extends BaseActivity {
 
 	private SharedPreferences sp;
 	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
+	private String emulatorDir;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,7 @@ public class MainActivity extends BaseActivity {
 		if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
 			Toast.makeText(this, R.string.external_storage_not_mounted, Toast.LENGTH_SHORT).show();
 			finish();
+			return;
 		}
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -74,7 +80,18 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void setupActivity(boolean intentUri) {
-		initFolders();
+		if (!initFolders()) {
+			String msg = getString(R.string.create_apps_dir_failed, emulatorDir);
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.error)
+					.setCancelable(false)
+					.setMessage(msg)
+					.setNegativeButton(R.string.close, (d, w) -> finish())
+					.setPositiveButton(R.string.action_settings, (d, w) -> startActivity(
+							new Intent(getApplicationContext(), SettingsActivity.class)))
+					.show();
+			return;
+		}
 		checkActionBar();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		MigrationUtils.check();
@@ -105,20 +122,29 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-	private void initFolders() {
-		File appsDir = new File(Config.getEmulatorDir());
-		if (!appsDir.exists()) {
-			try {
-				File nomedia = new File(appsDir, ".nomedia");
-				if (appsDir.mkdirs() && nomedia.createNewFile()) {
-					return;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			Toast.makeText(this, getString(R.string.create_apps_dir_failed, appsDir), Toast.LENGTH_SHORT).show();
-			finish();
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (!Config.getEmulatorDir().equals(emulatorDir)) {
+			new Handler().post(this::recreate);
 		}
+	}
+
+	private boolean initFolders() {
+		emulatorDir = Config.getEmulatorDir();
+		File appsDir = new File(emulatorDir);
+		if (appsDir.exists()) {
+			return true;
+		}
+		try {
+			File nomedia = new File(appsDir, ".nomedia");
+			if (appsDir.mkdirs() && nomedia.createNewFile()) {
+				return true;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	private void checkActionBar() {

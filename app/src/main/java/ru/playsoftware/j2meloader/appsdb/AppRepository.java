@@ -30,6 +30,7 @@ public class AppRepository {
 
 	private AppItemDao appItemDao;
 	private boolean appDateSort;
+	private boolean isClose;
 
 	public AppRepository(Application application, boolean dateSort) {
 		AppDatabase db = AppDatabase.getDatabase(application);
@@ -75,6 +76,12 @@ public class AppRepository {
 
 	@Override
 	protected void finalize() throws Throwable {
+		if (!isClose)
+			AppDatabase.closeInstance();
+	}
+
+	public void close() {
 		AppDatabase.closeInstance();
+		isClose = true;
 	}
 }

@@ -175,7 +175,7 @@
     <string name="reinstall">\nApp already installed.\n\nDo you want to reinstall it?\nAll data will be saved.</string>
     <string name="reinstall_newest">\nUpdate this app to version %s?\n\nCurrently installed: %s\nAll data will be saved.</string>
     <string name="install_jar_non_matched_jad">This app differs from that described in JAD.\nIgnore JAD and install anyway?</string>
-    <string name="create_apps_dir_failed">Can\'t create directory \'%s\', emulator can\'t work without it.</string>
+    <string name="create_apps_dir_failed">Failed to create a folder in the path:\n\'%s\'\nselect another.</string>
     <string name="loading_info">loading info…</string>
     <string name="install_done">\n\nApplication successfully installed!</string>
     <string name="error_name">Enter name!</string>
@@ -189,4 +189,5 @@
     <string name="error_name_exists">Already exists, enter other name</string>
     <string name="disabled">disabled</string>
     <string name="unlimited">unlimited</string>
+    <string name="pref_emulator_dir">Working directory</string>
 </resources>

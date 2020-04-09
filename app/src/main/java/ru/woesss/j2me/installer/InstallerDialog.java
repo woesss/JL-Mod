@@ -102,17 +102,18 @@ public class InstallerDialog extends DialogFragment {
 	}
 
 	@Override
-	public void onDetach() {
-		super.onDetach();
-	}
-
-	@Override
 	public void onStart() {
 		super.onStart();
 		Bundle args = requireArguments();
 		String path = args.getString(ARG_PATH);
 		Uri uri = args.getParcelable(ARG_URI);
 		installApp(path, uri);
+	}
+
+	@Override
+	public void onDestroy() {
+		appRepository.close();
+		super.onDestroy();
 	}
 
 	private void installApp(String path, Uri uri) {

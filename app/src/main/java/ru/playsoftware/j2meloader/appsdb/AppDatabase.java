@@ -18,10 +18,13 @@ package ru.playsoftware.j2meloader.appsdb;
 
 import android.content.Context;
 
+import java.io.File;
+
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import ru.playsoftware.j2meloader.applist.AppItem;
+import ru.playsoftware.j2meloader.config.Config;
 
 @Database(entities = {AppItem.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
@@ -34,14 +37,23 @@ public abstract class AppDatabase extends RoomDatabase {
 		openCount++;
 		if (instance == null) {
 			instance = Room.databaseBuilder(context.getApplicationContext(),
-					AppDatabase.class, "apps-database.db").build();
+					AppDatabase.class, Config.getEmulatorDir() + "/J2ME-apps.db")
+					.build();
 		}
 		return instance;
 	}
 
-	public static synchronized void closeInstance() {
+	static synchronized void closeInstance() {
 		if (--openCount > 0) return;
 		instance.close();
 		instance = null;
+	}
+
+	public static synchronized void closeQuietly() {
+		openCount = 0;
+		if (instance != null) {
+			instance.close();
+			instance = null;
+		}
 	}
 }

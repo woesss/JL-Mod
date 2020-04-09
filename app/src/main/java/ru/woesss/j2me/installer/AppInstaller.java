@@ -221,6 +221,7 @@ public class AppInstaller {
 		String vendor = newDesc.getVendor();
 		AppRepository appRepository = new AppRepository(context, true);
 		oldApp = appRepository.get(name, vendor);
+		appRepository.close();
 		appDirName = name.trim() + '_' + Integer.toHexString(vendor.hashCode());
 		targetDir = new File(Config.getAppDir(), appDirName);
 		if (oldApp == null) {
