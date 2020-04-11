@@ -9,7 +9,7 @@
     <string name="licenses">License</string>
     <string name="profiles">Šablony</string>
     <string name="save_log">Uložit log soubor</string>
-    <string name="about_message">Tato aplikace vám umožní spouštět java hry na androidu podporuje většinu 2d i 3d her ve formátu jar.&lt;BR&gt;</string>
+    <string name="about_message">Tato aplikace vám umožní spouštět java hry na androidu podporuje většinu 2d i 3d her ve formátu jar.\n</string>
     <string name="help_message">&#8226; Povolení filtrování může v některých případech výrazně snížit výkon. Zakažte tuto možnost, pokud je hra příliš pomalá.&lt;BR&gt;&#8226; Problémy s blikáním obrazu lze opravit tak, že povolíte možnost \"Okamžitý režim zpracování\".</string>
     <string name="author">Autor: </string>
     <string name="version">Verze: </string>

@@ -28,6 +28,7 @@ import java.io.File;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import ru.playsoftware.j2meloader.R;
@@ -59,18 +60,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK && data != null) {
 			List<Uri> files = Utils.getSelectedFilesFromResult(data);
 			File file = Utils.getFileForUri(files.get(0));
-//			if (file.exists()) {
-//				String[] list = file.list();
-//				if (list != null && list.length > 0) {
-//					List<String> names = Arrays.asList(list);
-//					if (!names.contains("converted")
-//							&& (list.length > 1 || !list[0].equals(".nomedia"))) {
-//						file = new File(file, getString(R.string.app_name));
-//					}
-//				}
-//			}
+			if (file.getName().equals("J2ME-Loader")) {
+				alertDirectory(file);
+				return;
+			}
 			applyChangeFolder(file);
 		}
+	}
+
+	private void alertDirectory(File file) {
+		new AlertDialog.Builder(requireActivity())
+				.setIconAttribute(android.R.attr.alertDialogIcon)
+				.setMessage(R.string.warning_same_directory)
+				.setTitle(R.string.warning)
+				.setNegativeButton(android.R.string.no, null)
+				.setPositiveButton(android.R.string.yes, (dialog, which) -> applyChangeFolder(file))
+				.show();
 	}
 
 	private void applyChangeFolder(File file) {

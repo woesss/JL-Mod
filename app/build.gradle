@@ -4,12 +4,12 @@ android {
     compileSdkVersion compileSdk
 
     defaultConfig {
-        applicationId "ru.playsoftware.j2meloader"
+        applicationId "ru.woesss.j2meloader"
         minSdkVersion minSdk
         targetSdkVersion targetSdk
-        versionCode 72
-        versionName "1.5.5"
-        setProperty("archivesBaseName", "J2ME_Loader-$versionName")
+        versionCode 6
+        versionName "b068"
+        setProperty("archivesBaseName", "JL-Mod_$versionName")
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
         }
@@ -55,7 +55,6 @@ android {
         }
         dev {
             buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
-            versionNameSuffix "-dev-" + generateVersionCode()
         }
     }
 
@@ -76,11 +75,6 @@ android {
             path 'src/main/cpp/Android.mk'
         }
     }
-}
-
-static def generateVersionCode() {
-    def result = "git rev-list HEAD --count".execute().text.trim()
-    return result.toInteger()
 }
 
 dependencies {

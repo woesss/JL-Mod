@@ -9,7 +9,7 @@
     <string name="licenses">Lisensi</string>
     <string name="profiles">Kelola Template</string>
     <string name="save_log">Simpan log</string>
-    <string name="about_message">Aplikasi ini berguna untuk menjalankan permainan dan aplikasi J2ME di Android. Mendukung banyak permainan 2D dan juga beberapa permainan 3D dengan beberapa keterbatasan.&lt;BR&gt;</string>
+    <string name="about_message">Aplikasi ini berguna untuk menjalankan permainan dan aplikasi J2ME di Android. Mendukung banyak permainan 2D dan juga beberapa permainan 3D dengan beberapa keterbatasan.\n</string>
     <string name="help_message">&#8226; Mengaktifkan \"Menyaring\" dalam sebagaian kasus dapat mengurangi kinerja yang sangat besar. Menonaktifkan opsi ini jika permainan terlalu lambat.&lt;BR&gt;&#8226; Gambar yang berkedip dapat di atasi dengan mengaktifkan opsi \"Mode pengolahan dengan cepat\".</string>
     <string name="author">Vendor: </string>
     <string name="version">Versi: </string>

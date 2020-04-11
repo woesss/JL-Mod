@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" translatable="false">J2ME Loader</string>
+    <string name="app_name" translatable="false">JL-Mod</string>
 
     <string name="close">Close</string>
     <string name="exit">Exit</string>
@@ -12,14 +12,14 @@
     <string name="licenses">Licenses</string>
     <string name="profiles">Profiles</string>
     <string name="save_log">Save log</string>
-    <string name="about_message">This app allows you to launch J2ME apps and games on Android. It supports most 2D games and also 3D with some limitations.&lt;BR></string>
+    <string name="about_message">This app allows you to launch J2ME apps and games on Android. It supports most 2D games and also 3D with some limitations.\n</string>
     <string name="help_message">&#8226; Enabling filtering in some cases can greatly reduce performance. Disable this option if game is too slow.&lt;BR>&#8226; Image flickering issues can be fixed by enabling the "Immediate processing mode" option.</string>
-    <string name="about_email" translatable="false">&lt;BR>Email: &lt;a href="mailto:j2me.loader@mail.ru">j2me.loader@mail.ru&lt;/a></string>
-    <string name="about_github" translatable="false">&lt;BR>GitHub: &lt;a href="https://github.com/nikita36078/J2ME-Loader">github.com/nikita36078/J2ME-Loader&lt;/a></string>
+    <string name="about_email" translatable="false">\n\nEmail: <a href="mailto:j2me.forever@gmail.com">j2me.forever@gmail.com</a>\n</string>
+    <string name="about_github" translatable="false">\nGithub: <a href="https://github.com/woesss/JL-Mod">woesss/JL-Mod</a>\n</string>
     <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="http://4pda.ru/forum/index.php?showtopic=824201">4pda.ru/forum/index.php?showtopic=824201&lt;/a></string>
     <string name="about_xda" translatable="false">&lt;BR>XDA: &lt;a href="https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889">forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889&lt;/a></string>
     <string name="about_crowdin" translatable="false">&lt;BR>Crowdin(translation): &lt;a href="https://crowdin.com/project/j2me-loader">crowdin.com/project/j2me-loader&lt;/a></string>
-    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2017-2019 Nikita Shakarun</string>
+    <string name="about_copyright" translatable="false">\n\nCopyright 2020 Yury Kharchenko</string>
     <string name="author">Author: </string>
     <string name="version">Version: </string>
     <string name="no_data_for_display">No data</string>
@@ -165,12 +165,12 @@
     <string name="saved">Saved %s</string>
     <string name="not_saved_exists">Already exists</string>
     <string name="invalid_resolution_not_saved">Invalid resolutions: not saved!</string>
-    <string name="midlet_name"><b>Name:</b> </string>
-    <string name="midlet_vendor"><b>Vendor:</b> </string>
-    <string name="midlet_version"><b>Version:</b> </string>
-    <string name="midlet_size"><b>Size:</b> </string>
+    <string name="midlet_name"><b>Name: </b></string>
+    <string name="midlet_vendor"><b>Vendor: </b></string>
+    <string name="midlet_version"><b>Version: </b></string>
+    <string name="midlet_size"><b>Size: </b></string>
     <string name="install">install</string>
-    <string name="midlet_source"><b>Source:</b> </string>
+    <string name="midlet_source"><b>Source: </b></string>
     <string name="reinstall_oldest">\nReplace this app with version %s?\n\nCurrently installed: %s\nOldest version may not working correctly with recorded data.</string>
     <string name="reinstall">\nApp already installed.\n\nDo you want to reinstall it?\nAll data will be saved.</string>
     <string name="reinstall_newest">\nUpdate this app to version %s?\n\nCurrently installed: %s\nAll data will be saved.</string>
@@ -190,4 +190,7 @@
     <string name="disabled">disabled</string>
     <string name="unlimited">unlimited</string>
     <string name="pref_emulator_dir">Working directory</string>
+    <string name="warning_same_directory">Some settings have been changed in this mod.\nOriginal \"J2ME Loader\" may not work correctly with games, templates and settings installed or configured by the Mod.\nAre you sure you want to use the working folder \"J2ME Loader\"?</string>
+    <string name="warning">Warning!!!</string>
+    <string name="about_mod_message">Experimental mod of the emulator <a href="https://github.com/nikita36078/J2ME-Loader">"J2ME-Loader" (A J2ME emulator for Android)</a> with support for games developed for the 3D engine "Mascot Capsule v3"\n</string>
 </resources>

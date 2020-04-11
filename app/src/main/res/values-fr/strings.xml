@@ -9,7 +9,7 @@
     <string name="licenses">Licences</string>
     <string name="profiles">Modèles </string>
     <string name="save_log">Sauvegarder les logs</string>
-    <string name="about_message">Cette application vous permet de lancer des applications et des jeux J2ME ou Java sur votre Android. Il prend en charge la plupart des jeux 2D et 3D avec certaines limitations.&lt;BR&gt;</string>
+    <string name="about_message">Cette application vous permet de lancer des applications et des jeux J2ME ou Java sur votre Android. Il prend en charge la plupart des jeux 2D et 3D avec certaines limitations.\n</string>
     <string name="help_message">&#8226;Activer la case du filtrage peut réduire la performance. Désactiver cette option si le jeu est aussi lent. &lt;BR&gt;&#8226;Les problèmes d\'image vacillante peuvent être résolus en activant l\'option « mode de traitement immédiat ».</string>
     <string name="author">Auteur: </string>
     <string name="version">Version: </string>
