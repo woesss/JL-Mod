@@ -481,13 +481,19 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
 		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());
 		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
-		tfFpsLimit.setText(Integer.toString(params.getInt("FpsLimit", 0)));
+		int fpsLimit = params.getInt("FpsLimit", 0);
+		if (fpsLimit > 0) {
+			tfFpsLimit.setText(Integer.toString(fpsLimit));
+		}
 
 		spVKType.setSelection(params.getInt("VirtualKeyboardType", 0));
 		spLayout.setSelection(params.getInt("Layout", 0));
-		spButtonsShape.setSelection(params.getInt("ButtonShape", VirtualKeyboard.OVAL_SHAPE));
+		spButtonsShape.setSelection(params.getInt("ButtonShape", VirtualKeyboard.ROUND_RECT_SHAPE));
 		sbVKAlpha.setProgress(params.getInt("VirtualKeyboardAlpha", 64));
-		tfVKHideDelay.setText(Integer.toString(params.getInt("VirtualKeyboardDelay", -1)));
+		int vkHideDelay = params.getInt("VirtualKeyboardDelay", -1);
+		if (vkHideDelay > 0) {
+			tfVKHideDelay.setText(Integer.toString(vkHideDelay));
+		}
 
 		color = params.getInt("VirtualKeyboardColorBackground", 0xD0D0D0);
 		tfVKBack.setText(String.format("%06X", color));
