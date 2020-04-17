@@ -70,11 +70,7 @@ public class DirectUtils {
 	 * @return the created image
 	 */
 	public static Image createImage(int width, int height, int argb) {
-		Image img = Image.createImage(width, height);
-		Graphics g = img.getGraphics();
-		g.setColorAlpha(argb);
-		g.fillRect(0, 0, width, height);
-		return img;
+		return Image.createImage(width, height, argb);
 	}
 
 }
