@@ -92,7 +92,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'ch.acra:acra-dialog:5.4.0'
@@ -102,7 +102,7 @@ dependencies {
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
-    implementation 'org.ow2.asm:asm:8.0'
+    implementation 'org.ow2.asm:asm:8.0.1'
     implementation project(':dexlib')
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
