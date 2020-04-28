@@ -17,33 +17,25 @@
 package javax.microedition.lcdui.game;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import javax.microedition.lcdui.event.CanvasEvent;
 
 public class GameCanvas extends Canvas {
 
-	@SuppressWarnings("WeakerAccess")
 	public static final int UP_PRESSED = 1 << Canvas.UP;
-	@SuppressWarnings("WeakerAccess")
 	public static final int DOWN_PRESSED = 1 << Canvas.DOWN;
-	@SuppressWarnings("WeakerAccess")
 	public static final int LEFT_PRESSED = 1 << Canvas.LEFT;
-	@SuppressWarnings("WeakerAccess")
 	public static final int RIGHT_PRESSED = 1 << Canvas.RIGHT;
-	@SuppressWarnings("WeakerAccess")
 	public static final int FIRE_PRESSED = 1 << Canvas.FIRE;
-	@SuppressWarnings("WeakerAccess")
 	public static final int GAME_A_PRESSED = 1 << Canvas.GAME_A;
-	@SuppressWarnings("WeakerAccess")
 	public static final int GAME_B_PRESSED = 1 << Canvas.GAME_B;
-	@SuppressWarnings("WeakerAccess")
 	public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
-	@SuppressWarnings("WeakerAccess")
 	public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
 	private Image image;
-	private int key;
-	private int repeatedKey;
+	private int keyState;
 	private boolean suppressCommands;
 
 	public GameCanvas(boolean suppressCommands) {
@@ -89,45 +81,35 @@ public class GameCanvas extends Canvas {
 
 	@Override
 	public void postKeyPressed(int keyCode) {
-		key |= convertGameKeyCode(keyCode);
-		if (suppressCommands && isGameAction(keyCode)) {
+		int code = 1 << convertGameKeyCode(keyCode);
+		this.keyState |= code;
+		if (suppressCommands && code != 1) {
 			return;
 		}
-		super.postKeyPressed(keyCode);
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, convertKeyCode(keyCode)));
 	}
 
 	@Override
 	public void postKeyReleased(int keyCode) {
-		repeatedKey &= ~convertGameKeyCode(keyCode);
-		if (suppressCommands && isGameAction(keyCode)) {
+		int code = 1 << convertGameKeyCode(keyCode);
+		keyState &= ~code;
+		if (suppressCommands && code != 1) {
 			return;
 		}
-		super.postKeyReleased(keyCode);
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, convertKeyCode(keyCode)));
 	}
 
 	@Override
 	public void postKeyRepeated(int keyCode) {
-		repeatedKey |= convertGameKeyCode(keyCode);
-		if (suppressCommands && isGameAction(keyCode)) {
+		if (suppressCommands && convertGameKeyCode(keyCode) != 0) {
 			return;
 		}
-		super.postKeyRepeated(keyCode);
-	}
-
-	private boolean isGameAction(int keyCode) {
-		try {
-			return getGameAction(keyCode) != 0;
-		} catch (IllegalArgumentException iae) {
-			return false;
-		}
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, convertKeyCode(keyCode)));
 	}
 
 	@SuppressWarnings("unused")
 	public int getKeyStates() {
-		int temp = key;
-		temp |= repeatedKey;
-		key = repeatedKey;
-		return temp;
+		return keyState;
 	}
 
 	public Graphics getGraphics() {
@@ -142,5 +124,11 @@ public class GameCanvas extends Canvas {
 	@SuppressWarnings("WeakerAccess")
 	public void flushGraphics(int x, int y, int width, int height) {
 		flushBuffer(image, x, y, width, height);
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		keyState = 0;
 	}
 }
