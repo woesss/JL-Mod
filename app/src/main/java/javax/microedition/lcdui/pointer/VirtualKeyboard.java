@@ -18,8 +18,6 @@ package javax.microedition.lcdui.pointer;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.os.SystemClock;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
@@ -31,6 +29,8 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.util.ContextHolder;
+
+import androidx.annotation.NonNull;
 
 public class VirtualKeyboard implements Overlay, Runnable {
 
@@ -44,8 +44,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final String ARROW_DOWN_LEFT = "\u2199";
 	private static final String ARROW_DOWN_RIGHT = "\u2198";
 
-	private static final long KEY_REPEAT_INTERVAL = 150;
-
 	public interface LayoutListener {
 		void layoutChanged(VirtualKeyboard vk);
 	}
@@ -57,7 +55,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		private String label;
 		private boolean selected;
 		private boolean visible;
-		private long lastActionTime;
 		private boolean intersectScreen;
 		private int corners = 0;
 
@@ -83,7 +80,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 		void setSelected(boolean flag) {
 			selected = flag;
-			lastActionTime = SystemClock.uptimeMillis();
 		}
 
 		public void setVisible(boolean flag) {
@@ -307,6 +303,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected VirtualKey[] keypad;
 	private VirtualKey[] associatedKeys;
 
+	private KeyRepeater repeater;
 	protected LayoutListener listener;
 
 	public VirtualKeyboard() {
@@ -356,6 +353,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		visible = true;
 		hider = new Thread(this, "MIDletVirtualKeyboard");
 		hider.start();
+		repeater = new KeyRepeater();
 	}
 
 	protected void resetLayout(int variant) {
@@ -660,6 +658,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	@Override
 	public void setTarget(Canvas canvas) {
 		target = canvas;
+		repeater.setTarget(canvas);
 		highlightGroup(-1);
 	}
 
@@ -838,6 +837,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						if (aKeypad.getSecondKeyCode() != 0) {
 							target.postKeyPressed(aKeypad.getSecondKeyCode());
 						}
+						repeater.add(aKeypad);
 						repaint();
 						break;
 					}
@@ -888,24 +888,18 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				if (pointer > associatedKeys.length) {
 					return checkPointerHandled(x, y);
 				}
-				VirtualKey key = associatedKeys[pointer];
-				if (key == null) {
+				if (associatedKeys[pointer] == null) {
 					pointerPressed(pointer, x, y);
-				} else if (!key.contains(x, y)) {
-					target.postKeyReleased(key.getKeyCode());
-					if (key.getSecondKeyCode() != 0) {
-						target.postKeyReleased(key.getSecondKeyCode());
+				} else if (!associatedKeys[pointer].contains(x, y)) {
+					repeater.remove(associatedKeys[pointer]);
+					target.postKeyReleased(associatedKeys[pointer].getKeyCode());
+					if (associatedKeys[pointer].getSecondKeyCode() != 0) {
+						target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
 					}
-					key.setSelected(false);
+					associatedKeys[pointer].setSelected(false);
 					associatedKeys[pointer] = null;
 					repaint();
 					pointerPressed(pointer, x, y);
-				} else if (SystemClock.uptimeMillis() - key.lastActionTime >= KEY_REPEAT_INTERVAL) {
-					key.lastActionTime = SystemClock.uptimeMillis();
-					target.postKeyRepeated(key.getKeyCode());
-					if (key.getSecondKeyCode() != 0) {
-						target.postKeyRepeated(key.getSecondKeyCode());
-					}
 				}
 				break;
 			case LAYOUT_KEYS:
@@ -972,8 +966,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			if (pointer > associatedKeys.length) {
 				return checkPointerHandled(x, y);
 			}
-			VirtualKey key = associatedKeys[pointer];
-			if (key != null) {
+			if (associatedKeys[pointer] != null) {
+				repeater.remove(associatedKeys[pointer]);
 				target.postKeyReleased(associatedKeys[pointer].getKeyCode());
 				if (associatedKeys[pointer].getSecondKeyCode() != 0) {
 					target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
