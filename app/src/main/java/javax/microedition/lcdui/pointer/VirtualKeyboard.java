@@ -651,6 +651,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public void setKeyVisibility(int id, boolean hidden) {
 		keypad[id].setVisible(!hidden);
+		snapKeys();
 		repaint();
 		listener.layoutChanged(this);
 	}
