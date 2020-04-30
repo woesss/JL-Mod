@@ -153,4 +153,5 @@
     <string name="warning_same_directory">В этом моде изменены некоторые настройки.\nОригинальный \"J2ME Loader\" может работать неправильно с играми, шаблонами и настройками установленными или настроенными модом.\nВы уверены, что хотите использовать рабочую папку \"J2ME Loader\"?</string>
     <string name="warning">Предупреждение!!!</string>
     <string name="about_mod_message">Экпериментальный мод <a href="https://github.com/nikita36078/J2ME-Loader">"J2ME Loader" (J2ME эмулятор для Android)</a> с поддержкой игр, разработанных для 3D движка "Mascot Capsule v3"\n</string>
+    <string name="error_disk_io">Ошибка хранилища: проверьте свободное место на диске</string>
 </resources>
