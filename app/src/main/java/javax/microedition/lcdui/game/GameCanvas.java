@@ -81,9 +81,9 @@ public class GameCanvas extends Canvas {
 
 	@Override
 	public void postKeyPressed(int keyCode) {
-		int code = 1 << convertGameKeyCode(keyCode);
+		int code = convertGameKeyCode(keyCode);
 		this.keyState |= code;
-		if (suppressCommands && code != 1) {
+		if (suppressCommands && code != 0) {
 			return;
 		}
 		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, convertKeyCode(keyCode)));
@@ -91,9 +91,9 @@ public class GameCanvas extends Canvas {
 
 	@Override
 	public void postKeyReleased(int keyCode) {
-		int code = 1 << convertGameKeyCode(keyCode);
+		int code = convertGameKeyCode(keyCode);
 		keyState &= ~code;
-		if (suppressCommands && code != 1) {
+		if (suppressCommands && code != 0) {
 			return;
 		}
 		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, convertKeyCode(keyCode)));
