@@ -48,7 +48,7 @@ public class Image {
 	private Rect mBounds;
 	private boolean isBlackWhiteAlpha;
 
-	private Image(Bitmap bitmap) {
+	public Image(Bitmap bitmap) {
 		if (bitmap == null) {
 			throw new NullPointerException();
 		}
