@@ -19,6 +19,7 @@ package com.siemens.mp.game;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -52,13 +53,12 @@ public class TiledBackground extends GraphicObject {
 
 	public TiledBackground(ExtendedImage tilePixels, ExtendedImage tileMask, byte[] map,
 						   int widthInTiles, int heightInTiles) {
-		this(tilePixels.getImage(), tileMask.getImage(), map, widthInTiles, heightInTiles);
+		this(tilePixels.getImage(), tileMask == null ? null : tileMask.getImage(), map, widthInTiles, heightInTiles);
 	}
 
 	public TiledBackground(Image tilePixels, Image tileMask, byte[] map,
 						   int widthInTiles, int heightInTiles) {
 		paint.setStyle(Paint.Style.FILL);
-		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
 		this.map = new byte[heightInTiles][widthInTiles];
 		this.heightInTiles = heightInTiles;
 		this.widthInTiles = widthInTiles;
@@ -70,7 +70,24 @@ public class TiledBackground extends GraphicObject {
 				row[j] = map[idx++];
 			}
 		}
-		pixels = tilePixels.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+		Bitmap bitmap = tilePixels.getBitmap();
+		if (tileMask != null) {
+			pixels = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+			Canvas canvas = new Canvas(pixels);
+			canvas.drawBitmap(bitmap, 0, 0, null);
+			Paint paint = new Paint();
+			float[] src = {
+					0, 0, 0, 0, 0,
+					0, 0, 0, 0, 0,
+					0, 0, 0, 0, 0,
+					1f/3f, 1f/3f, 1f/3f, 0, -255,
+			};
+			paint.setColorFilter(new ColorMatrixColorFilter(src));
+			paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+			canvas.drawBitmap(tileMask.getBitmap(), 0, 0, paint);
+		} else {
+			pixels = bitmap.copy(Bitmap.Config.ARGB_8888, false);
+		}
 	}
 
 	public void setPositionInMap(int x, int y) {
@@ -91,11 +108,10 @@ public class TiledBackground extends GraphicObject {
 			for (int ty = posY / 8, tyLen = clip.height() / 8 + 1 + ty; ty < tyLen; ty++) {
 				byte[] row = this.map[ty % heightInTiles];
 				for (int tx = posX / 8, txLen = clip.width() / 8 + 1 + tx; tx < txLen; tx++) {
-					final byte tile = row[tx % widthInTiles];
+					final int tile = row[tx % widthInTiles] & 0xff;
 					switch (tile) {
 						case 0:
-							paint.setColor(0);
-							c.drawRect(dst, paint);
+							// transparent tile
 							break;
 						case 1:
 							paint.setColor(Color.WHITE);

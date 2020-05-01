@@ -51,7 +51,7 @@ public class Sprite extends GraphicObject {
 
 	public Sprite(ExtendedImage pixels, ExtendedImage mask, int numFrames) {
 		if (pixels == null) throw new NullPointerException();
-		init(pixels.getImage(), mask.getImage(), numFrames);
+		init(pixels.getImage(), mask == null ? null : mask.getImage(), numFrames);
 	}
 
 	public Sprite(Image pixels, Image mask, int numFrames) {
@@ -64,10 +64,10 @@ public class Sprite extends GraphicObject {
 		}
 		int width = pixels.getWidth();
 		int height = pixels.getHeight();
-		sprite = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(sprite);
-		canvas.drawBitmap(pixels.getBitmap(), 0, 0, null);
 		if (mask != null) {
+			sprite = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+			Canvas canvas = new Canvas(sprite);
+			canvas.drawBitmap(pixels.getBitmap(), 0, 0, null);
 			Paint paint = new Paint();
 			float[] src = {
 					0, 0, 0, 0, 0,
@@ -78,6 +78,8 @@ public class Sprite extends GraphicObject {
 			paint.setColorFilter(new ColorMatrixColorFilter(src));
 			paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
 			canvas.drawBitmap(mask.getBitmap(), 0, 0, paint);
+		} else {
+			sprite = pixels.getBitmap().copy(Bitmap.Config.ARGB_8888, false);
 		}
 		frameHeight = height / numFrames;
 		frameBounds = new Rect(0, 0, width, frameHeight);
