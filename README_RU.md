@@ -44,4 +44,8 @@
  **micro3d.v3.texture.filter: true**  
  без этого параметра качество текстур максимально приближено к оригиналу и выглядит более винтажно (квадратно-ступенчато))).  
  
+ В некоторых играх (замечено в "Medal of Honor") 3D-сцена может не отображаться из-за перекрытия 2D-фоном.  
+ Попробуйте добавить в поле "Системные параметры" строку:  
+ **micro3d.v3.render.no-mix2D3D: true**  
+ Если не поможет - сообщите об этой игре в [баг-репорт](https://github.com/woesss/JL-Mod/issues/new?assignees=&labels=bug&template=issue-template.md&title=) или другим способом.  
  [Скачать APK](https://github.com/woesss/J2ME-Loader-Mod/releases)

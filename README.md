@@ -46,4 +46,8 @@ Main problems:
  **micro3d.v3.texture.filter: true**  
  Without this parameter, the quality of the textures is as close as possible to the original and looks more vintage (square-step))).  
 
+ In some games (seen in "Medal of Honor") 3D-scene can not be displayed because of the 2D-background overlap.  
+ Try adding the line to the "System Properties" field:  
+ **micro3d.v3.render.no-mix2D3D: true**  
+ If it doesn’t help, report about this game in [bug report](https://github.com/woesss/JL-Mod/issues/new?assignees=&labels=bug&template=issue-template.md&title=).  
 [Download APK](https://github.com/woesss/J2ME-Loader-Mod/releases)  
