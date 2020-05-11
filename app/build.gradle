@@ -7,7 +7,7 @@ android {
         applicationId "ru.woesss.j2meloader"
         minSdkVersion minSdk
         targetSdkVersion targetSdk
-        versionCode 8
+        versionCode 9
         versionName "b069"
         setProperty("archivesBaseName", "JL-Mod_$versionName")
         ndk {
