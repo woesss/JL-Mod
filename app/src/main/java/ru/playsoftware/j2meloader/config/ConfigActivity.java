@@ -112,6 +112,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	private View vkContainer;
 	protected CheckBox cxVKFeedback;
+	protected CheckBox cxVKForceOpacity;
 	protected CheckBox cxTouchInput;
 
 	protected Spinner spVKType;
@@ -216,6 +217,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxShowKeyboard = findViewById(R.id.cxIsShowKeyboard);
 		vkContainer = findViewById(R.id.configVkContainer);
 		cxVKFeedback = findViewById(R.id.cxVKFeedback);
+		cxVKForceOpacity = findViewById(R.id.cxVKForceOpacity);
 		cxTouchInput = findViewById(R.id.cxTouchInput);
 
 		spVKType = findViewById(R.id.spVKType);
@@ -557,6 +559,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxShowKeyboard.setChecked(showVk);
 		vkContainer.setVisibility(showVk ? View.VISIBLE : View.GONE);
 		cxVKFeedback.setChecked(params.vkFeedback);
+		cxVKForceOpacity.setChecked(params.vkForceOpacity);
 		cxTouchInput.setChecked(params.touchInput);
 		int fpsLimit = params.fpsLimit;
 		if (fpsLimit > 0) {
@@ -644,6 +647,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			params.fontApplyDimensions = cxFontSizeInSP.isChecked();
 			params.showKeyboard = cxShowKeyboard.isChecked();
 			params.vkFeedback = cxVKFeedback.isChecked();
+			params.vkForceOpacity = cxVKForceOpacity.isChecked();
 			params.touchInput = cxTouchInput.isChecked();
 
 			params.vkType = spVKType.getSelectedItemPosition();

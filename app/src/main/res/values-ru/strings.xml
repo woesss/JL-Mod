@@ -158,4 +158,5 @@
     <string name="identity_filter">Быстрый (без фильтра)</string>
     <string name="shader_tuning">Настройка шейдера</string>
     <string name="reset">Сброс</string>
+    <string name="PREF_VK_FORCE_OPACITY">Не применять прозрачность вне экрана</string>
 </resources>

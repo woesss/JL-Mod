@@ -106,6 +106,9 @@ public class ProfileModel {
 	@SerializedName("VirtualKeyboardAlpha")
 	public int vkAlpha;
 
+	@SerializedName("VirtualKeyboardForceOpacity")
+	public boolean vkForceOpacity;
+
 	@SerializedName("VirtualKeyboardFeedback")
 	public boolean vkFeedback;
 

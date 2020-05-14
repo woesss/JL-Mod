@@ -216,11 +216,12 @@ public class MicroLoader {
 		vk.setHideDelay(vkDelay);
 		vk.setHasHapticFeedback(vkFeedback);
 		vk.setButtonShape(params.vkButtonShape);
+		vk.setForceOpacity(params.vkForceOpacity);
 
-		File keylayoutFile = new File(Config.getConfigsDir(), appPath + Config.MIDLET_KEY_LAYOUT_FILE);
-		if (keylayoutFile.exists()) {
+		File keyLayoutFile = new File(Config.getConfigsDir(), appPath + Config.MIDLET_KEY_LAYOUT_FILE);
+		if (keyLayoutFile.exists()) {
 			try {
-				FileInputStream fis = new FileInputStream(keylayoutFile);
+				FileInputStream fis = new FileInputStream(keyLayoutFile);
 				DataInputStream dis = new DataInputStream(fis);
 				vk.readLayout(dis);
 				fis.close();
@@ -239,7 +240,7 @@ public class MicroLoader {
 
 		VirtualKeyboard.LayoutListener listener = vk1 -> {
 			try {
-				FileOutputStream fos = new FileOutputStream(keylayoutFile);
+				FileOutputStream fos = new FileOutputStream(keyLayoutFile);
 				DataOutputStream dos = new DataOutputStream(fos);
 				vk1.writeLayout(dos);
 				fos.close();
