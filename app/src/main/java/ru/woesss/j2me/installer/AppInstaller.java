@@ -75,9 +75,6 @@ public class AppInstaller {
 		this.uri = originalUri;
 		this.context = context;
 		this.cacheDir = new File(context.getCacheDir(), "installer");
-		if (cacheDir.mkdirs()) {
-			Log.w(TAG, "AppInstaller: can't create cache dir");
-		}
 	}
 
 	Descriptor getNewDescriptor() {
@@ -121,6 +118,9 @@ public class AppInstaller {
 
 	/** Install app */
 	void install(SingleEmitter<AppItem> emitter) throws ConverterException, IOException {
+		if (!cacheDir.exists() && !cacheDir.mkdirs()) {
+			throw new ConverterException("Can't create cache dir");
+		}
 		tmpDir = new File(targetDir.getParent(), ".tmp");
 		if (!tmpDir.isDirectory() && !tmpDir.mkdirs())
 			throw new ConverterException("Can't create directory: '" + targetDir + "'");
@@ -132,11 +132,15 @@ public class AppInstaller {
 				throw new ConverterException("*Jad not matches with Jar");
 			}
 		}
-		File patchedJar = new File(cacheDir, srcJar.getName());
+		File patchedJar = new File(cacheDir, "patched.jar");
 		AndroidProducer.processJar(srcJar, patchedJar);
-		Main.main(new String[]{"--no-optimize",
-				"--output=" + tmpDir.getAbsolutePath() + Config.MIDLET_DEX_FILE,
-				patchedJar.getAbsolutePath()});
+		try {
+			Main.main(new String[]{"--no-optimize",
+					"--output=" + tmpDir.getAbsolutePath() + Config.MIDLET_DEX_FILE,
+					patchedJar.getAbsolutePath()});
+		} catch (Throwable e) {
+			throw new ConverterException("Dexing error", e);
+		}
 		if (manifest != null) {
 			manifest.merge(newDesc);
 			newDesc = manifest;
