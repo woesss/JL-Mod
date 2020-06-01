@@ -25,8 +25,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -47,10 +45,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,6 +58,7 @@ import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.param.SharedPreferencesContainer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
@@ -300,21 +297,19 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				}
 			});
 		}
-		vkContainer.setVisibility(cxShowKeyboard.isChecked() ? View.VISIBLE : View.GONE);
-		cxShowKeyboard.setOnCheckedChangeListener((b, checked) -> {
-			if (checked) {
-				vkContainer.setVisibility(View.VISIBLE);
-			} else {
-				vkContainer.setVisibility(View.GONE);
-			}
+
+		cxShowKeyboard.setOnClickListener((b) -> {
 			View.OnLayoutChangeListener onLayoutChangeListener = new View.OnLayoutChangeListener() {
 				@Override
 				public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-					v.scrollTo(0, ConfigActivity.this.findViewById(R.id.tvKeyboardHeader).getBottom());
+					View focus = rootContainer.findFocus();
+					if (focus != null) focus.clearFocus();
+					v.scrollTo(0, ConfigActivity.this.findViewById(R.id.tvKeyboardHeader).getTop());
 					v.removeOnLayoutChangeListener(this);
 				}
 			};
 			rootContainer.addOnLayoutChangeListener(onLayoutChangeListener);
+			vkContainer.setVisibility(cxShowKeyboard.isChecked() ? View.VISIBLE : View.GONE);
 		});
 		tfScreenBack.addTextChangedListener(new ColorTextWatcher(tfScreenBack));
 		tfVKFore.addTextChangedListener(new ColorTextWatcher(tfVKFore));
@@ -477,9 +472,10 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfFontSizeMedium.setText(Integer.toString(params.getInt("FontSizeMedium", 22)));
 		tfFontSizeLarge.setText(Integer.toString(params.getInt("FontSizeLarge", 26)));
 		cxFontSizeInSP.setChecked(params.getBoolean("FontApplyDimensions", false));
-		cxShowKeyboard.setChecked(params.getBoolean(("ShowKeyboard"), true));
+		boolean showVk = params.getBoolean(("ShowKeyboard"), true);
+		cxShowKeyboard.setChecked(showVk);
+		vkContainer.setVisibility(showVk ? View.VISIBLE : View.GONE);
 		cxVKFeedback.setChecked(params.getBoolean(("VirtualKeyboardFeedback"), false));
-		cxVKFeedback.setEnabled(cxShowKeyboard.isChecked());
 		cxTouchInput.setChecked(params.getBoolean(("TouchInput"), true));
 		int fpsLimit = params.getInt("FpsLimit", 0);
 		if (fpsLimit > 0) {
