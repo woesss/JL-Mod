@@ -46,7 +46,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final String ARROW_DOWN_LEFT = "\u2199";
 	private static final String ARROW_DOWN_RIGHT = "\u2198";
 	private static long[] REPEAT_INTERVALS = {200, 400, 128, 128, 128, 128, 128};
-	private final Handler repeatHandler;
+	private final Handler mHandler;
 
 	public interface LayoutListener {
 		void layoutChanged(VirtualKeyboard vk);
@@ -171,7 +171,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				if (getSecondKeyCode() != 0) {
 					target.postKeyRepeated(getSecondKeyCode());
 				}
-				repeatHandler.postDelayed(this, repeatCount > 6 ? 80 : REPEAT_INTERVALS[repeatCount++]);
+				mHandler.postDelayed(this, repeatCount > 6 ? 80 : REPEAT_INTERVALS[repeatCount++]);
 			} else {
 				repeatCount = 0;
 			}
@@ -301,9 +301,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private boolean feedback;
 	private static final int FEEDBACK_DURATION = 50;
 
-	private boolean visible, hiding, skip;
-	private final Object waiter = new Object();
-	private Thread hider;
+	private boolean visible;
 
 	private int[] snapOrigins;
 	private int[] snapModes;
@@ -333,9 +331,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	public VirtualKeyboard(int variant) {
-		HandlerThread thread = new HandlerThread("MIDletKeyRepeater");
+		HandlerThread thread = new HandlerThread("MIDletVirtualKeyboard");
 		thread.start();
-		repeatHandler = new Handler(thread.getLooper());
+		mHandler = new Handler(thread.getLooper());
 		layoutVariant = variant;
 		keypad = new VirtualKey[KEYBOARD_SIZE];
 		associatedKeys = new VirtualKey[10]; // the average user usually has no more than 10 fingers...
@@ -376,8 +374,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		resetLayout(layoutVariant);
 		layoutEditMode = LAYOUT_EOF;
 		visible = true;
-		hider = new Thread(this, "MIDletVirtualKeyboard");
-		hider.start();
 	}
 
 	protected void resetLayout(int variant) {
@@ -810,6 +806,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 		snapKeys();
 		repaint();
+		if (delay > 0 && obscuresVirtualScreen) {
+			for (VirtualKey key : associatedKeys) {
+				if (key != null) {
+					return;
+				}
+			}
+			mHandler.postDelayed(this, delay);
+		}
 	}
 
 	@Override
@@ -843,10 +847,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public boolean pointerPressed(int pointer, float x, float y) {
-		if (skip) {
-			return checkPointerHandled(x, y);
-		}
-
 		switch (layoutEditMode) {
 			case LAYOUT_EOF:
 				if (pointer > associatedKeys.length) {
@@ -861,7 +861,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						if (aKeypad.getSecondKeyCode() != 0) {
 							target.postKeyPressed(aKeypad.getSecondKeyCode());
 						}
-						repeatHandler.postDelayed(aKeypad, 400);
+						mHandler.postDelayed(aKeypad, 400);
 						repaint();
 						break;
 					}
@@ -904,9 +904,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public boolean pointerDragged(int pointer, float x, float y) {
-		if (skip) {
-			return checkPointerHandled(x, y);
-		}
 		switch (layoutEditMode) {
 			case LAYOUT_EOF:
 				if (pointer > associatedKeys.length) {
@@ -915,7 +912,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				if (associatedKeys[pointer] == null) {
 					pointerPressed(pointer, x, y);
 				} else if (!associatedKeys[pointer].contains(x, y)) {
-					repeatHandler.removeCallbacks(associatedKeys[pointer]);
+					mHandler.removeCallbacks(associatedKeys[pointer]);
 					target.postKeyReleased(associatedKeys[pointer].getKeyCode());
 					if (associatedKeys[pointer].getSecondKeyCode() != 0) {
 						target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
@@ -982,16 +979,12 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public boolean pointerReleased(int pointer, float x, float y) {
-		if (skip) {
-			skip = false;
-			return checkPointerHandled(x, y);
-		}
 		if (layoutEditMode == LAYOUT_EOF) {
 			if (pointer > associatedKeys.length) {
 				return checkPointerHandled(x, y);
 			}
 			if (associatedKeys[pointer] != null) {
-				repeatHandler.removeCallbacks(associatedKeys[pointer]);
+				mHandler.removeCallbacks(associatedKeys[pointer]);
 				target.postKeyReleased(associatedKeys[pointer].getKeyCode());
 				if (associatedKeys[pointer].getSecondKeyCode() != 0) {
 					target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
@@ -1031,21 +1024,17 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public void show() {
-		synchronized (waiter) {
-			if (hiding) {
-				hider.interrupt();
-			}
+		mHandler.removeCallbacks(this);
+		if (!visible) {
+			visible = true;
+			repaint();
 		}
-		visible = true;
-		repaint();
 	}
 
 	@Override
 	public void hide() {
 		if (delay > 0 && obscuresVirtualScreen) {
-			synchronized (waiter) {
-				waiter.notifyAll();
-			}
+			mHandler.postDelayed(this, delay);
 		}
 	}
 
@@ -1053,34 +1042,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public void cancel() {
 		for (VirtualKey key : keypad) {
 			key.selected = false;
-			repeatHandler.removeCallbacks(key);
+			mHandler.removeCallbacks(key);
 		}
 	}
 
 	@Override
 	public void run() {
-		try {
-			while (true) {
-				synchronized (waiter) {
-					hiding = false;
-					waiter.notifyAll();
-					waiter.wait();
-					hiding = true;
-				}
-				try {
-					if (delay > 0) {
-						Thread.sleep(delay);
-					}
-					visible = false;
-					skip = true;
-					repaint();
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-				}
-			}
-		} catch (InterruptedException ie) {
-			ie.printStackTrace();
-		}
+		visible = false;
+		repaint();
 	}
 
 	@Override
