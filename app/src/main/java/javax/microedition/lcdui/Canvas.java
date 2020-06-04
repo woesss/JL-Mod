@@ -373,6 +373,11 @@ public abstract class Canvas extends Displayable {
 								convertPointerX(event.getX()), convertPointerY(event.getY())));
 					}
 					break;
+				case MotionEvent.ACTION_CANCEL:
+					if (overlay != null) {
+						overlay.cancel();
+					}
+					break;
 				default:
 					return super.onTouchEvent(event);
 			}

@@ -18,6 +18,8 @@ package javax.microedition.lcdui.pointer;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 import android.view.View;
 
@@ -43,12 +45,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final String ARROW_UP_RIGHT = "\u2197";
 	private static final String ARROW_DOWN_LEFT = "\u2199";
 	private static final String ARROW_DOWN_RIGHT = "\u2198";
+	private static long[] REPEAT_INTERVALS = {200, 400, 128, 128, 128, 128, 128};
+	private final Handler repeatHandler;
 
 	public interface LayoutListener {
 		void layoutChanged(VirtualKeyboard vk);
 	}
 
-	protected class VirtualKey {
+	protected class VirtualKey implements Runnable {
 
 		private RectF rect;
 		private int keyCode, secondKeyCode;
@@ -57,6 +61,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		private boolean visible;
 		private boolean intersectScreen;
 		private int corners = 0;
+		private int repeatCount;
 
 		VirtualKey(int keyCode, String label) {
 			this.keyCode = keyCode;
@@ -152,6 +157,24 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			result = prime * result + keyCode;
 			result = prime * result + secondKeyCode;
 			return result;
+		}
+
+		@Override
+		public void run() {
+			if (target == null) {
+				selected = false;
+				repeatCount = 0;
+				return;
+			}
+			if (selected) {
+				target.postKeyRepeated(getKeyCode());
+				if (getSecondKeyCode() != 0) {
+					target.postKeyRepeated(getSecondKeyCode());
+				}
+				repeatHandler.postDelayed(this, repeatCount > 6 ? 80 : REPEAT_INTERVALS[repeatCount++]);
+			} else {
+				repeatCount = 0;
+			}
 		}
 	}
 
@@ -303,7 +326,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	protected VirtualKey[] keypad;
 	private VirtualKey[] associatedKeys;
 
-	private KeyRepeater repeater;
 	protected LayoutListener listener;
 
 	public VirtualKeyboard() {
@@ -311,6 +333,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	public VirtualKeyboard(int variant) {
+		HandlerThread thread = new HandlerThread("MIDletKeyRepeater");
+		thread.start();
+		repeatHandler = new Handler(thread.getLooper());
 		layoutVariant = variant;
 		keypad = new VirtualKey[KEYBOARD_SIZE];
 		associatedKeys = new VirtualKey[10]; // the average user usually has no more than 10 fingers...
@@ -353,7 +378,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		visible = true;
 		hider = new Thread(this, "MIDletVirtualKeyboard");
 		hider.start();
-		repeater = new KeyRepeater();
 	}
 
 	protected void resetLayout(int variant) {
@@ -659,7 +683,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	@Override
 	public void setTarget(Canvas canvas) {
 		target = canvas;
-		repeater.setTarget(canvas);
 		highlightGroup(-1);
 	}
 
@@ -838,7 +861,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						if (aKeypad.getSecondKeyCode() != 0) {
 							target.postKeyPressed(aKeypad.getSecondKeyCode());
 						}
-						repeater.add(aKeypad);
+						repeatHandler.postDelayed(aKeypad, 400);
 						repaint();
 						break;
 					}
@@ -892,7 +915,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				if (associatedKeys[pointer] == null) {
 					pointerPressed(pointer, x, y);
 				} else if (!associatedKeys[pointer].contains(x, y)) {
-					repeater.remove(associatedKeys[pointer]);
+					repeatHandler.removeCallbacks(associatedKeys[pointer]);
 					target.postKeyReleased(associatedKeys[pointer].getKeyCode());
 					if (associatedKeys[pointer].getSecondKeyCode() != 0) {
 						target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
@@ -968,7 +991,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				return checkPointerHandled(x, y);
 			}
 			if (associatedKeys[pointer] != null) {
-				repeater.remove(associatedKeys[pointer]);
+				repeatHandler.removeCallbacks(associatedKeys[pointer]);
 				target.postKeyReleased(associatedKeys[pointer].getKeyCode());
 				if (associatedKeys[pointer].getSecondKeyCode() != 0) {
 					target.postKeyReleased(associatedKeys[pointer].getSecondKeyCode());
@@ -1023,6 +1046,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			synchronized (waiter) {
 				waiter.notifyAll();
 			}
+		}
+	}
+
+	@Override
+	public void cancel() {
+		for (VirtualKey key : keypad) {
+			key.selected = false;
+			repeatHandler.removeCallbacks(key);
 		}
 	}
 

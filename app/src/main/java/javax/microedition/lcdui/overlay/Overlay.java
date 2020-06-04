@@ -104,4 +104,11 @@ public interface Overlay extends Layer {
 	 * Called by the Canvas when the last pointer is released from the screen.
 	 */
 	void hide();
+
+
+	/**
+	 * Cancel input events.
+	 * Called when the target has lost focus.
+	 */
+	void cancel();
 }
