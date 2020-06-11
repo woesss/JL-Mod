@@ -64,6 +64,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.util.LogUtils;
 
@@ -104,7 +105,11 @@ public class MicroActivity extends AppCompatActivity {
 		Intent intent = getIntent();
 		appName = intent.getStringExtra(ConfigActivity.MIDLET_NAME_KEY);
 		microLoader = new MicroLoader(this, intent.getDataString());
-		microLoader.init();
+		if (!microLoader.init()) {
+			Config.startApp(this, appName, intent.getDataString(), true);
+			finish();
+			return;
+		}
 		microLoader.applyConfiguration();
 		VirtualKeyboard vk = ContextHolder.getVk();
 		if (vk != null) {

@@ -253,7 +253,7 @@ public class InstallerDialog extends DialogFragment {
 			if (drawable != null) mDialog.setIcon(drawable);
 			btnOk.setText(R.string.START_CMD);
 			btnOk.setOnClickListener(v -> {
-				Config.startApp(getActivity(), app, false);
+				Config.startApp(getActivity(), app.getTitle(), app.getPath(), false);
 				dismiss();
 			});
 			btnClose.setText(R.string.close);

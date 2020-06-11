@@ -233,7 +233,7 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
 		AppItem item = adapter.getItem(position);
-		Config.startApp(getActivity(), item, false);
+		Config.startApp(getActivity(), item.getTitle(), item.getPath(), false);
 	}
 
 	@Override
@@ -273,7 +273,7 @@ public class AppsListFragment extends ListFragment {
 				alertRename(index);
 				break;
 			case R.id.action_context_settings:
-				Config.startApp(getActivity(), appItem, true);
+				Config.startApp(getActivity(), appItem.getTitle(), appItem.getPath(), true);
 				break;
 			case R.id.action_context_delete:
 				alertDelete(index);

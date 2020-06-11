@@ -50,7 +50,7 @@ public class Profile implements Comparable<Profile> {
 		return name;
 	}
 
-	private File getDir() {
+	public File getDir() {
 		return new File(Config.getProfilesDir(), name);
 	}
 
@@ -87,5 +87,9 @@ public class Profile implements Comparable<Profile> {
 			return false;
 		}
 		return name.equals(((Profile) obj).name);
+	}
+
+	public boolean hasOldConfig() {
+		return new File(Config.getProfilesDir(), name + "/config.xml").exists();
 	}
 }
