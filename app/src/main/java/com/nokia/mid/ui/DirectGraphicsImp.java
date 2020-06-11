@@ -276,11 +276,11 @@ public class DirectGraphicsImp implements DirectGraphics {
 			return;
 		}
 
-		int[] pixres = new int[offset + scanlen * height];
-		graphics.getPixels(pixres, offset, scanlen, x, y, width, height);
+		int[] pixres = new int[scanlen * height];
+		graphics.getPixels(pixres, 0, scanlen, x, y, width, height);
 		for (int iy = 0; iy < height; iy++) {
 			for (int ix = 0; ix < width; ix++) {
-				short c = toARGB16(pixres[offset + ix + iy * scanlen], format);
+				short c = toARGB16(pixres[ix + iy * scanlen], format);
 				if (format == TYPE_USHORT_444_RGB) {
 					c |= (0xF << 12);
 				}
