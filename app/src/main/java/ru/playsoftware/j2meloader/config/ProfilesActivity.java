@@ -38,7 +38,7 @@ import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 
-public class ProfilesActivity extends BaseActivity implements EditNameAlert.Callback {
+public class ProfilesActivity extends BaseActivity implements EditNameAlert.Callback, AdapterView.OnItemClickListener {
 
 	static final int REQUEST_CODE_EDIT = 5;
 	private ProfilesAdapter adapter;
@@ -56,12 +56,12 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		ArrayList<Profile> profiles = ProfilesManager.getProfiles();
-		ListView mListView = findViewById(R.id.list_view);
+		ListView listView = findViewById(R.id.list_view);
 		TextView emptyView = findViewById(R.id.empty_view);
-		mListView.setEmptyView(emptyView);
-		registerForContextMenu(mListView);
+		listView.setEmptyView(emptyView);
+		registerForContextMenu(listView);
 		adapter = new ProfilesAdapter(this, profiles);
-		mListView.setAdapter(adapter);
+		listView.setAdapter(adapter);
 		final String def = preferences.getString(Config.PREF_DEFAULT_PROFILE, null);
 		if (def != null) {
 			for (int i = profiles.size() - 1; i >= 0; i--) {
@@ -72,6 +72,7 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 				}
 			}
 		}
+		listView.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -96,9 +97,8 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.cm_profile, menu);
+		inflater.inflate(R.menu.profile, menu);
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		final Profile profile = adapter.getItem(info.position);
 		if (!profile.hasConfig() && !new File(profile.getDir(), "config.xml").exists()) {
@@ -162,5 +162,10 @@ public class ProfilesActivity extends BaseActivity implements EditNameAlert.Call
 		if (adapter.getDefault() == profile) {
 			preferences.edit().putString(Config.PREF_DEFAULT_PROFILE, newName).apply();
 		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		parent.showContextMenuForChild(view);
 	}
 }
