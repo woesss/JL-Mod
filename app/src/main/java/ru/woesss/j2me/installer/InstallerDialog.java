@@ -73,6 +73,7 @@ public class InstallerDialog extends DialogFragment {
 		args.putString(ARG_PATH, path);
 		args.putParcelable(ARG_URI, uri);
 		fragment.setArguments(args);
+		fragment.setCancelable(false);
 		return fragment;
 	}
 
