@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -273,19 +272,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-			cxHwAcceleration.setOnCheckedChangeListener((buttonView, isChecked) -> {
-				if (isChecked) {
-					cxParallel.setChecked(false);
-				}
-			});
-			cxParallel.setOnCheckedChangeListener((buttonView, isChecked) -> {
-				if (isChecked) {
-					cxHwAcceleration.setChecked(false);
-				}
-			});
-		}
-
+		cxHwAcceleration.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			if (isChecked) {
+				cxParallel.setVisibility(View.GONE);
+			} else {
+				cxParallel.setVisibility(View.VISIBLE);
+			}
+		});
 		cxShowKeyboard.setOnClickListener((b) -> {
 			View.OnLayoutChangeListener onLayoutChangeListener = new View.OnLayoutChangeListener() {
 				@Override
