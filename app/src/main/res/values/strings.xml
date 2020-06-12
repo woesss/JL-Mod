@@ -194,4 +194,9 @@
     <string name="warning">Warning!!!</string>
     <string name="about_mod_message">Experimental mod of the emulator <a href="https://github.com/nikita36078/J2ME-Loader">"J2ME-Loader" (A J2ME emulator for Android)</a> with support for games developed for the 3D engine "Mascot Capsule v3"\n</string>
     <string name="error_disk_io">Storage error: check disk space</string>
+    <string name="PREF_SHADER_FILTER">Shader:</string>
+    <string name="identity_filter">Fast (no filter)</string>
+    <string name="shader_tuning">Shader Tuning</string>
+    <string name="shader_setting">%s: %s</string>
+    <string name="reset">Reset</string>
 </resources>

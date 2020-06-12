@@ -53,6 +53,7 @@ import io.reactivex.Single;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
+import ru.playsoftware.j2meloader.config.ShaderInfo;
 import ru.playsoftware.j2meloader.settings.KeyMapper;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.woesss.j2me.jar.Descriptor;
@@ -184,6 +185,9 @@ public class MicroLoader {
 			Canvas.setForceFullscreen(params.forceFullscreen);
 			Canvas.setShowFps(params.showFps);
 			Canvas.setLimitFps(params.limitFps, params.fpsLimit);
+			ShaderInfo shader = params.shader;
+			if (shader == null) shader = new ShaderInfo();
+			Canvas.setShaderFilter(shader);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
