@@ -28,7 +28,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.graphics.CanvasWrapper;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.util.ContextHolder;
 
@@ -56,10 +56,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 		private RectF rect;
 		private int keyCode, secondKeyCode;
-		private String label;
+		private final String label;
 		private boolean selected;
 		private boolean visible;
-		private boolean intersectScreen;
+		private boolean opaque = true;
 		private int corners = 0;
 		private int repeatCount;
 
@@ -108,39 +108,41 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			return visible && rect.contains(x, y);
 		}
 
-		public void paint(Graphics g) {
-			if (label != null && visible) {
-				boolean opaque = forceOpacity ? intersectScreen : obscuresVirtualScreen;
-				int alpha = opaque ? overlayAlpha : 0xFF000000;
-				g.setColorAlpha(alpha | colors[selected ? BACKGROUND_SELECTED : BACKGROUND]);
-				switch (shape) {
-					case ROUND_RECT_SHAPE:
-						g.fillRoundRect(rect, corners, corners);
-						break;
-					case RECT_SHAPE:
-						g.fillRect(rect);
-						break;
-					case OVAL_SHAPE:
-						g.fillArc(rect, 0, 360);
-						break;
-				}
-
-				g.setColorAlpha(alpha | colors[selected ? FOREGROUND_SELECTED : FOREGROUND]);
-				g.drawString(label, (int) rect.centerX(), (int) rect.centerY(), Graphics.HCENTER | Graphics.VCENTER);
-
-				g.setColorAlpha(alpha | colors[OUTLINE]);
-				switch (shape) {
-					case ROUND_RECT_SHAPE:
-						g.drawRoundRect(rect, corners, corners);
-						break;
-					case RECT_SHAPE:
-						g.drawRect(rect);
-						break;
-					case OVAL_SHAPE:
-						g.drawArc(rect, 0, 360);
-						break;
-				}
+		public void paint(CanvasWrapper g) {
+			int bgColor;
+			int fgColor;
+			if (selected) {
+				bgColor = colors[BACKGROUND_SELECTED];
+				fgColor = colors[FOREGROUND_SELECTED];
+			} else {
+				bgColor = colors[BACKGROUND];
+				fgColor = colors[FOREGROUND];
 			}
+			int olColor = colors[OUTLINE];
+			if (opaque) {
+				bgColor |= 0xFF000000;
+				fgColor |= 0xFF000000;
+				olColor |= 0xFF000000;
+			}
+			g.setFillColor(bgColor);
+			g.setTextColor(fgColor);
+			g.setDrawColor(olColor);
+
+			switch (shape) {
+				case ROUND_RECT_SHAPE:
+					g.fillRoundRect(rect, corners, corners);
+					g.drawRoundRect(rect, corners, corners);
+					break;
+				case RECT_SHAPE:
+					g.fillRect(rect);
+					g.drawRect(rect);
+					break;
+				case OVAL_SHAPE:
+					g.fillArc(rect, 0, 360);
+					g.drawArc(rect, 0, 360);
+					break;
+			}
+			g.drawString(label, rect.centerX(), rect.centerY());
 		}
 
 		public String getLabel() {
@@ -220,7 +222,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public static final int LAYOUT_COLORS = 2;
 
 	private int delay = -1;
-	private int overlayAlpha = 64 << 24;
 	protected int shape;
 
 	public static final int CUSTOMIZABLE_TYPE = 0;
@@ -740,11 +741,14 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			VirtualKey key = keypad[i];
 			if (key.isVisible() && RectF.intersects(key.getRect(), virtualScreen)) {
 				obscuresVirtualScreen = true;
-				key.intersectScreen = true;
+				key.opaque = false;
 			} else {
-				key.intersectScreen = false;
+				key.opaque = true;
 			}
 			key.corners = (int) (Math.min(key.getRect().width(), key.getRect().height()) * 0.25F);
+		}
+		for (VirtualKey key : keypad) {
+			key.opaque &= !obscuresVirtualScreen || forceOpacity;
 		}
 	}
 
@@ -819,10 +823,12 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paint(CanvasWrapper g) {
 		if (visible) {
-			for (VirtualKey aKeypad : keypad) {
-				aKeypad.paint(g);
+			for (VirtualKey key : keypad) {
+				if (key.visible) {
+					key.paint(g);
+				}
 			}
 		}
 	}
@@ -1091,10 +1097,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public void setHideDelay(int delay) {
 		this.delay = delay;
-	}
-
-	public void setOverlayAlpha(int overlayAlpha) {
-		this.overlayAlpha = overlayAlpha << 24;
 	}
 
 	public void setColor(int color, int value) {
