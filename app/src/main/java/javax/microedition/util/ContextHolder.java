@@ -105,7 +105,10 @@ public class ContextHolder {
 	}
 
 	public static File getCacheDir() {
-		return getAppContext().getExternalCacheDir();
+		File dir = new File(Config.getEmulatorDir() + "/cache");
+		if (dir.exists() || dir.mkdirs())
+			return dir;
+		return getAppContext().getCacheDir();
 	}
 
 	public static boolean requestPermission(String permission) {

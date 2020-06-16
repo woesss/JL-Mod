@@ -17,7 +17,6 @@
 
 package javax.microedition.shell;
 
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.acra.ACRA;
@@ -58,8 +57,7 @@ public class AppClassLoader extends DexClassLoader {
 		else loadNamesFromDir(resDir);
 	}
 
-	@Nullable
-	public static InputStream getResourceAsStream(Class resClass, String resName) {
+	public static InputStream getResourceAsStream(Class<?> resClass, String resName) {
 		Log.d(TAG, "CUSTOM GET RES CALLED WITH PATH: " + resName);
 		if (resName == null || resName.equals("")) {
 			Log.w(TAG, "Can't load res on empty path");
@@ -153,7 +151,7 @@ public class AppClassLoader extends DexClassLoader {
 			try {
 				return FileUtils.getBytes(file);
 			} catch (Exception e) {
-				 Log.w(TAG, "getResourceBytes: from file=" + file, e);
+				Log.w(TAG, "getResourceBytes: from file=" + file, e);
 				return null;
 			}
 		}
