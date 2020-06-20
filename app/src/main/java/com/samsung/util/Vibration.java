@@ -22,6 +22,10 @@ public class Vibration {
 		ContextHolder.vibrate(duration * 1000);
 	}
 
+	public static void stop() {
+		ContextHolder.vibrate(0);
+	}
+
 	public static boolean isSupported() {
 		return true;
 	}

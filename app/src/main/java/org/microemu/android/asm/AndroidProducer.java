@@ -27,6 +27,8 @@
 
 package org.microemu.android.asm;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
 import android.util.Log;
 
 import org.objectweb.asm.ClassReader;
@@ -40,13 +42,13 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import ru.playsoftware.j2meloader.util.ZipFileCompat;
+import ru.playsoftware.j2meloader.util.IOUtils;
 
 public class AndroidProducer {
 	private static final String TAG = AndroidProducer.class.getName();
 
-	private static byte[] instrument(final InputStream classFile, String classFileName)
-			throws IllegalArgumentException, IOException {
+	private static byte[] instrument(final byte[] classFile, String classFileName)
+			throws IllegalArgumentException {
 		ClassReader cr = new ClassReader(classFile);
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		ClassVisitor cv = new AndroidClassVisitor(cw);
@@ -58,21 +60,27 @@ public class AndroidProducer {
 		return cw.toByteArray();
 	}
 
-	public static void processJar(File src, File dst) throws IOException {
-		try (ZipFileCompat zip = new ZipFileCompat(src);
-			 ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(dst))) {
-			ZipEntry zipEntry;
-			while ((zipEntry = zip.getNextEntry()) != null) {
-				String name = zipEntry.getName();
-				if (name == null || name.endsWith("/") || !name.toLowerCase().endsWith(".class")) {
+	public static void processJar(File srcJar, File dstJar) throws IOException {
+		ZipFile zip = new ZipFile(srcJar);
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(dstJar))) {
+			for (FileHeader header : zip.getFileHeaders()) {
+				// Some zip entries have zero length names
+				String name = header.getFileName();
+				if (header.getFileNameLength() <= 0 || header.isDirectory() || !name.toLowerCase().endsWith(".class")) {
 					continue;
 				}
-				try (InputStream zis = zip.getInputStream(zipEntry)) {
-					byte[] outBuffer = instrument(zis, name.substring(0, name.length() - 6));
-					zos.putNextEntry(new ZipEntry(name));
-					zos.write(outBuffer);
+				try (InputStream zis = zip.getInputStream(header)) {
+					try {
+						byte[] inBuffer = IOUtils.toByteArray(zis);
+						String className = name.substring(0, name.length() - 6);
+						byte[] outBuffer = instrument(inBuffer, className);
+						zos.putNextEntry(new ZipEntry(className + ".class"));
+						zos.write(outBuffer);
+					} catch (Exception e) {
+						Log.w(TAG, "Error patching class: " + name, e);
+					}
 				} catch (Exception e) {
-					Log.w(TAG, "Error patching class: " + name, e);
+					Log.e(TAG, "processJar: ", e);
 				}
 			}
 		}

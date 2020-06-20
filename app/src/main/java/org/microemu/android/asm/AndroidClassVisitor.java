@@ -34,7 +34,7 @@ import org.objectweb.asm.Opcodes;
 public class AndroidClassVisitor extends ClassVisitor {
 
 	AndroidClassVisitor(ClassVisitor cv) {
-		super(Opcodes.ASM7, cv);
+		super(Opcodes.ASM8, cv);
 	}
 
 	@Override

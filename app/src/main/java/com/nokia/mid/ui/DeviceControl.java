@@ -24,7 +24,6 @@
 
 package com.nokia.mid.ui;
 
-import javax.microedition.lcdui.Display;
 import javax.microedition.util.ContextHolder;
 
 public class DeviceControl {
@@ -33,14 +32,12 @@ public class DeviceControl {
 		if (frequency < 0 || frequency > 100) {
 			throw new IllegalArgumentException();
 		}
-		Display.getDisplay(null);
 		if (!ContextHolder.vibrate((int) duration)) {
 			throw new IllegalStateException();
 		}
 	}
 
 	public static void stopVibra() {
-		Display.getDisplay(null);
 		ContextHolder.vibrate(0);
 	}
 

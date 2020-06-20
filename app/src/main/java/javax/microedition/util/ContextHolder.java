@@ -19,6 +19,7 @@ package javax.microedition.util;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Process;
 import android.os.Vibrator;
@@ -32,6 +33,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.nio.charset.Charset;
@@ -46,12 +48,12 @@ import androidx.core.content.ContextCompat;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class ContextHolder {
-
 	private static Display display;
 	private static VirtualKeyboard vk;
 	private static WeakReference<MicroActivity> currentActivity;
 	private static Vibrator vibrator;
 	private static Context appContext;
+	private static ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
 
 	public static Context getAppContext() {
 		return appContext;
@@ -84,7 +86,23 @@ public class ContextHolder {
 		currentActivity = new WeakReference<>(activity);
 	}
 
-	public static InputStream getResourceAsStream(Class resClass, String resName) {
+	public static void addActivityResultListener(ActivityResultListener listener) {
+		if (!resultListeners.contains(listener)) {
+			resultListeners.add(listener);
+		}
+	}
+
+	public static void removeActivityResultListener(ActivityResultListener listener) {
+		resultListeners.remove(listener);
+	}
+
+	public static void notifyOnActivityResult(int requestCode, int resultCode, Intent data) {
+		for (ActivityResultListener listener : resultListeners) {
+			listener.onActivityResult(requestCode, resultCode, data);
+		}
+	}
+
+	public static InputStream getResourceAsStream(Class<?> resClass, String resName) {
 		return AppClassLoader.getResourceAsStream(resClass, resName);
 	}
 
@@ -112,8 +130,12 @@ public class ContextHolder {
 	}
 
 	public static boolean requestPermission(String permission) {
-		if (ContextCompat.checkSelfPermission(currentActivity.get(), permission) != PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(currentActivity.get(), new String[]{permission}, 0);
+		MicroActivity context = currentActivity.get();
+		if (context == null) {
+			return false;
+		}
+		if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(context, new String[]{permission}, 0);
 			return false;
 		} else {
 			return true;
@@ -123,6 +145,7 @@ public class ContextHolder {
 	public static String getAssetAsString(String fileName) {
 		StringBuilder sb = new StringBuilder();
 
+		//noinspection CharsetObjectCanBeUsed
 		try (InputStream is = getAppContext().getAssets().open(fileName);
 			 BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")))) {
 			String str;

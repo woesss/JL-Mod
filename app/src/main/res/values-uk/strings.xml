@@ -36,6 +36,7 @@
     <string name="PREF_FILTER">Фільтр</string>
     <string name="PREF_IMMEDIATE">Режим невідкладної обробки</string>
     <string name="PREF_SHOW_FPS">Показувати FPS</string>
+    <string name="PREF_FORCE_FULLSCREEN">Примусовий повний екран</string>
     <string name="PREF_LIMIT_FPS">Обмеження FPS</string>
     <string name="PREF_FONT_OPTIONS">Параметри шрифту</string>
     <string name="PREF_WIDTH">Ширина</string>
@@ -48,6 +49,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Віртуальна клавіатура</string>
     <string name="PREF_VK_SHOW">Показати клавіатуру</string>
     <string name="PREF_VK_FEEDBACK">Вібрація при натисканні</string>
+    <string name="PREF_VK_FORCE_OPACITY">Примусова прозорість для вимк. екрану</string>
     <string name="PREF_TOUCH_INPUT">Сенсорний ввід</string>
     <string name="PREF_HW_ACCELERATION">Апаратне прискорення (нестабільне)</string>
     <string name="PREF_VK_BACK">Клавіші</string>
@@ -78,6 +80,7 @@
     <string name="pref_vk_type_custom">Настроюваний</string>
     <string name="pref_vk_type_phone">Телефон</string>
     <string name="pref_vk_type_phone_arrows">Телефонна (стрілки)</string>
+    <string name="PREF_LAYOUT">Розкладка</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Примусове закривання додатку може призвести до втрати даних або навіть до повного виведення його з ладу! \nПродовжити?</string>
     <string name="CONFIRMATION_REQUIRED">Необхідне підтвердження</string>
     <string name="select_dialog_title">Обрати MIDlet</string>
@@ -100,6 +103,7 @@
     <string name="pref_requires_restart_summary">Необхідне перезавантаження</string>
     <string name="pref_enable_actionbar_title">Увімкнути ActionBar</string>
     <string name="pref_enable_actionbar_summary">У повноекранних додатках</string>
+    <string name="pref_enable_statusbar_title">Увімкнути рядок стану</string>
     <string name="pref_wakelock_title">Зберігати екран увімкненим</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
     <string name="pref_app_sort_title">Порядок сортування додатків</string>
@@ -112,4 +116,6 @@
     <string name="mapping_dialog_message">Поточне зіставлення: %1$s</string>
     <string name="reset_mapping">Скинути</string>
     <string name="parallel_screen_redrawing">Паралельне перемальовування екрану</string>
+    <string name="saved">Збережено %s</string>
+    <string name="not_saved_exists">Не збережено: вже існує</string>
 </resources>

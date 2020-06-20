@@ -25,7 +25,6 @@ import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,6 +53,7 @@ import javax.microedition.lcdui.pointer.FixedKeyboard;
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
 import javax.microedition.util.ContextHolder;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -126,7 +126,7 @@ public class MicroActivity extends AppCompatActivity {
 			loadMIDlet();
 		} catch (Exception e) {
 			e.printStackTrace();
-			showErrorDialog(e.getMessage());
+			showErrorDialog(e.toString());
 		}
 	}
 
@@ -398,8 +398,7 @@ public class MicroActivity extends AppCompatActivity {
 						Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.action_layout_switch:
-				int layout = vk.switchLayout();
-				Toast.makeText(this, String.valueOf(layout), Toast.LENGTH_SHORT).show();
+				showSetLayoutDialog();
 				break;
 			case R.id.action_hide_buttons:
 				showHideButtonDialog();
@@ -451,6 +450,16 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
+	private void showSetLayoutDialog() {
+		final VirtualKeyboard vk = ContextHolder.getVk();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this)
+				.setTitle(R.string.layout_switch)
+				.setSingleChoiceItems(vk.getLayoutNames(), -1,
+						(dialogInterface, i) -> vk.setLayout(i))
+				.setPositiveButton(android.R.string.ok, null);
+		builder.show();
+	}
+
 	@Override
 	public boolean onContextItemSelected(@NonNull MenuItem item) {
 		if (current instanceof Form) {
@@ -461,5 +470,10 @@ public class MicroActivity extends AppCompatActivity {
 		}
 
 		return super.onContextItemSelected(item);
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		ContextHolder.notifyOnActivityResult(requestCode, resultCode, data);
 	}
 }

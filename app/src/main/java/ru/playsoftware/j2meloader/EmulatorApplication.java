@@ -34,11 +34,12 @@ import java.util.Arrays;
 
 import javax.microedition.util.ContextHolder;
 
-import ru.playsoftware.j2meloader.hockeyapp.HockeySenderFactory;
+import ru.playsoftware.j2meloader.crashes.AppCenterSenderFactory;
 
-@AcraCore(buildConfigClass = BuildConfig.class, reportSenderFactoryClasses = {HockeySenderFactory.class})
+@AcraCore(buildConfigClass = BuildConfig.class, reportSenderFactoryClasses = {AppCenterSenderFactory.class},
+		parallel = false)
 @AcraDialog(resTitle = R.string.crash_dialog_title, resText = R.string.crash_dialog_message,
-		resPositiveButtonText = R.string.report_crash, resNegativeButtonText = android.R.string.cancel,
+		resPositiveButtonText = R.string.report_crash,
 		resTheme = R.style.Theme_AppCompat_Dialog)
 public class EmulatorApplication extends Application {
 	private static final String[] VALID_SIGNATURES = {

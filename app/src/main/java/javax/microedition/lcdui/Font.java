@@ -91,6 +91,10 @@ public class Font {
 		paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // and now we set the size equal to the given one (in pixels)
 	}
 
+	public static Font getFont(int fontSpecifier) {
+		return getDefaultFont();
+	}
+
 	public static Font getFont(int face, int style, int size) {
 		int index = getFontIndex(face, style, size);
 

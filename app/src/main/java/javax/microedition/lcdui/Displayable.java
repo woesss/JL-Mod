@@ -79,6 +79,14 @@ public abstract class Displayable {
 		Displayable.virtualHeight = virtualHeight;
 	}
 
+	public static int getVirtualWidth() {
+		return virtualWidth;
+	}
+
+	public static int getVirtualHeight() {
+		return virtualHeight;
+	}
+
 	public MicroActivity getParentActivity() {
 		return ContextHolder.getActivity();
 	}

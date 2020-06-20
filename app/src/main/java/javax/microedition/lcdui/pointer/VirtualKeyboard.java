@@ -119,7 +119,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				fgColor = colors[FOREGROUND];
 			}
 			int olColor = colors[OUTLINE];
-			if (opaque) {
+			if (opaque || layoutEditMode != LAYOUT_EOF) {
 				bgColor |= 0xFF000000;
 				fgColor |= 0xFF000000;
 				olColor |= 0xFF000000;
@@ -215,6 +215,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final int LAYOUT_VERSION_2 = 2;
 	private static final int LAYOUT_VERSION_3 = 3;
 	private static final int LAYOUT_VERSION = LAYOUT_VERSION_3;
+
+	private static final int NUM_VARIANTS = 4;
 
 	public static final int LAYOUT_EOF = -1;
 	public static final int LAYOUT_KEYS = 0;
@@ -537,11 +539,20 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
-	public int switchLayout() {
-		layoutVariant++;
-		if (layoutVariant > 3) {
-			layoutVariant = 0;
+	protected int getLayoutNum() {
+		return NUM_VARIANTS;
+	}
+
+	public String[] getLayoutNames() {
+		int num = getLayoutNum();
+		String[] names = new String[num];
+		for (int i = 0; i < num; i++) {
+			names[i] = String.valueOf(i + 1);
 		}
+		return names;
+	}
+
+	public void setLayout(int layoutVariant) {
 		resetLayout(layoutVariant);
 		for (int group = 0; group < keyScaleGroups.length; group++) {
 			resizeKeyGroup(group);
@@ -549,7 +560,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		snapKeys();
 		repaint();
 		listener.layoutChanged(this);
-		return layoutVariant;
 	}
 
 	public void writeLayout(DataOutputStream dos) throws IOException {
@@ -1090,9 +1100,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	}
 
 	private void vibrate() {
-		if (feedback) {
-			ContextHolder.vibrate(FEEDBACK_DURATION);
-		}
+		if (feedback) ContextHolder.vibrate(FEEDBACK_DURATION);
 	}
 
 	public void setHideDelay(int delay) {

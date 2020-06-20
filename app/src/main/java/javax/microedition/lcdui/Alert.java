@@ -183,6 +183,10 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		return alertDialog;
 	}
 
+	public void setNextDisplayable(Displayable nextDisplayable) {
+		this.nextDisplayable = nextDisplayable;
+	}
+
 	@Override
 	public void addCommand(Command cmd) {
 		if (cmd != DISMISS_COMMAND) {
@@ -236,9 +240,5 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 				fireCommandAction(commands[neutral], this);
 				break;
 		}
-	}
-
-	void setNextDisplayable(Displayable nextDisplayable) {
-		this.nextDisplayable = nextDisplayable;
 	}
 }

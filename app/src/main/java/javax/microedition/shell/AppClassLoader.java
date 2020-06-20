@@ -19,28 +19,28 @@ package javax.microedition.shell;
 
 import android.util.Log;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.FileHeader;
+
 import org.acra.ACRA;
 
 import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.zip.ZipEntry;
 
 import dalvik.system.DexClassLoader;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.FileUtils;
-import ru.playsoftware.j2meloader.util.ZipFileCompat;
-import ru.playsoftware.j2meloader.util.ZipUtils;
 
 public class AppClassLoader extends DexClassLoader {
 	private static final String TAG = AppClassLoader.getName();
 
 	private static AppClassLoader instance;
 	private static String name;
-
-	private final HashMap<String, String> resources = new HashMap<>();
+	private static ZipFile zipFile;
 	private String resFolderPath;
 
 	AppClassLoader(String paths, String tmpDir, ClassLoader parent, File resDir) {
@@ -52,9 +52,7 @@ public class AppClassLoader extends DexClassLoader {
 		name = appDir.getName();
 		ACRA.getErrorReporter().putCustomData("Running app", name);
 		instance = this;
-		File midletResFile = new File(Config.getAppDir(), name + Config.MIDLET_RES_FILE);
-		if (midletResFile.exists()) loadNamesFromJar(midletResFile);
-		else loadNamesFromDir(resDir);
+		prepareZipFile();
 	}
 
 	public static InputStream getResourceAsStream(Class<?> resClass, String resName) {
@@ -83,71 +81,38 @@ public class AppClassLoader extends DexClassLoader {
 		return new ByteArrayInputStream(data);
 	}
 
-	private void loadNamesFromJar(File jar) {
-		try (ZipFileCompat zip = new ZipFileCompat(jar)) {
-			while (true) {
-				try {
-					ZipEntry e = zip.getNextEntry();
-					if (e == null) break;
-					String name = e.getName();
-					if (name.endsWith("/")) {
-						continue;
-					}
-					String ln = name.toLowerCase();
-					if (ln.endsWith(".class")) {
-						continue;
-					}
-					resources.put(name, name);
-					if (!resources.containsKey(ln)) {
-						resources.put(ln, name);
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void prepareZipFile() {
+		File midletResFile = new File(Config.getAppDir(), name + Config.MIDLET_RES_FILE);
+		if (midletResFile.exists()) {
+			zipFile = new ZipFile(midletResFile);
 		}
 	}
 
-	private void loadNamesFromDir(File dir) {
-		File[] files = dir.listFiles();
-		if (files == null) return;
-		for (File file : files) {
-			if (file.isDirectory()) {
-				loadNamesFromDir(file);
-				continue;
-			}
-			if (file.getName().toLowerCase().endsWith(".class")) {
-				continue;
-			}
-			String name = file.getPath().substring(resFolderPath.length() + 1);
-			resources.put(name, name);
-			String low = name.toLowerCase();
-			if (!resources.containsKey(low)) {
-				resources.put(low, name);
-			}
+	public static byte[] getResourceAsBytes(String resName) {
+		if (resName == null || resName.equals("")) {
+			Log.w(TAG, "Can't load res on empty path");
+			return null;
 		}
+		// Add support for Siemens file path
+		String normName = resName.replace('\\', '/');
+		// Remove double slashes
+		normName = normName.replaceAll("//+", "/");
+		// Remove leading slash
+		if (normName.charAt(0) == '/') {
+			normName = normName.substring(1);
+		}
+		byte[] data = getResourceBytes(normName);
+		if (data == null) {
+			Log.w(TAG, "Can't load res: " + resName);
+			return null;
+		}
+		return data;
 	}
 
 	private static byte[] getResourceBytes(String name) {
-		HashMap<String, String> resources = instance.resources;
-		String path = resources.get(name);
-		if (path == null) path = resources.get(name.toLowerCase());
-		if (path == null) {
-			Log.w(TAG, "getResourceBytes: not found res: " + name);
-			return null;
-		}
 		File midletResFile = new File(Config.getAppDir(), getName() + Config.MIDLET_RES_FILE);
-		if (midletResFile.exists()) {
-			try {
-				return ZipUtils.unzipEntry(midletResFile, path);
-			} catch (IOException e) {
-				Log.w(TAG, "getResourceBytes: from jar [entry=" + name + "]", e);
-				return null;
-			}
-		} else {
-			final File file = new File(instance.resFolderPath, path);
+		if (!midletResFile.exists()) {
+			final File file = new File(instance.resFolderPath, name);
 			try {
 				return FileUtils.getBytes(file);
 			} catch (Exception e) {
@@ -155,6 +120,30 @@ public class AppClassLoader extends DexClassLoader {
 				return null;
 			}
 		}
+		DataInputStream dis = null;
+		try {
+			FileHeader header = zipFile.getFileHeader(name);
+			if (header == null) {
+				return null;
+			}
+			dis = new DataInputStream(zipFile.getInputStream(header));
+			byte[] data = new byte[(int) header.getUncompressedSize()];
+			dis.readFully(data);
+			return data;
+		} catch (ZipException e) {
+			Log.e(TAG, "getResourceBytes: ", e);
+		} catch (IOException e) {
+			Log.e(TAG, "getResourceBytes: ", e);
+		} finally {
+			if (dis != null) {
+				try {
+					dis.close();
+				} catch (IOException e) {
+					Log.e(TAG, "getResourceBytes: ", e);
+				}
+			}
+		}
+		return null;
 	}
 
 	public static String getName() {

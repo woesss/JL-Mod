@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2020 Nikita Shakarun
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package ru.playsoftware.j2meloader.hockeyapp;
+package javax.microedition.amms.control.audio3d;
 
-import android.content.Context;
+public interface DopplerControl extends javax.microedition.media.Control {
+	public void setEnabled(boolean dopplerEnabled);
 
-import org.acra.config.CoreConfiguration;
-import org.acra.sender.ReportSender;
-import org.acra.sender.ReportSenderFactory;
+	public boolean isEnabled();
 
-import androidx.annotation.NonNull;
+	public void setVelocityCartesian(int x, int y, int z);
 
-public class HockeySenderFactory implements ReportSenderFactory {
-	@NonNull
-	@Override
-	public ReportSender create(@NonNull Context context, @NonNull CoreConfiguration config) {
-		return new HockeySender();
-	}
+	public int[] getVelocityCartesian();
 
-	@Override
-	public boolean enabled(@NonNull CoreConfiguration config) {
-		return true;
-	}
+	public void setVelocitySpherical(int azimuth, int elevation, int radius);
 }

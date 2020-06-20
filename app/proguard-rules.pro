@@ -18,7 +18,10 @@
 -keep class javax.** { *; }
 -keep class com.siemens.mp.** { *; }
 -keep class com.samsung.util.** { *; }
+-keep class com.sonyericsson.accelerometer.** { *; }
+-keep class com.sprintpcs.media.** { *; }
 -keep class com.mascotcapsule.micro3d.v3.** { *; }
+-keep class com.motorola.funlight.** { *; }
 -keep class com.nokia.mid.** { *; }
 -keep class com.sun.midp.midlet.** { *; }
 -keep class com.vodafone.util.** { *; }
@@ -27,6 +30,8 @@
 -keep class ru.playsoftware.j2meloader.BuildConfig { *; }
 
 -keep class android.support.v7.widget.SearchView { *; }
+-keep class com.arthenica.mobileffmpeg.** { *; }
+-keep class ru.playsoftware.j2meloader.crashes.AppCenterAPI** { *; }
 
 -dontnote android.net.http.*
 -dontnote org.apache.commons.codec.**

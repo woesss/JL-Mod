@@ -16,7 +16,6 @@
 
 package ru.playsoftware.j2meloader.config;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -35,6 +34,7 @@ import java.util.HashMap;
 
 import javax.microedition.util.ContextHolder;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.XmlUtils;

@@ -12,7 +12,7 @@
     <color name="light_color_text_primary">#000000</color>
     <color name="light_color_text_secondary">#353535</color>
     <color name="light_color_btn_bg_normal">#2e2e2e</color>
-    <color name="light_color_btn_bg_pressed">#191919</color>
+    <color name="light_color_btn_bg_pressed">#707070</color>
     <color name="light_color_config_card">#ffffff</color>
 
     <!--dark theme color-->
@@ -20,11 +20,11 @@
     <color name="dark_color_primary_dark">#20272f</color>
     <color name="dark_color_accent">#0099ff</color>
     <color name="dark_color_background">#20272f</color>
-    <color name="dark_color_control_normal">#516985</color>
+    <color name="dark_color_control_normal">#516985</color>f
     <color name="dark_color_text_primary">#ffffff</color>
     <color name="dark_color_text_secondary">#dedede</color>
     <color name="dark_color_btn_bg_normal">#0099ff</color>
-    <color name="dark_color_btn_bg_pressed">#008bd1</color>
+    <color name="dark_color_btn_bg_pressed">#005D8C</color>
     <color name="dark_color_config_card">#262e37</color>
 
 </resources>

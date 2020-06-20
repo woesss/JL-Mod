@@ -28,8 +28,11 @@ public class FixedKeyboard extends VirtualKeyboard {
 	public final static float KEY_WIDTH_RATIO = 3;
 	public final static float KEY_HEIGHT_RATIO = 2.7f;
 
+	private static final int NUM_VARIANTS = 2;
+
 	public FixedKeyboard(int variant) {
 		super(variant);
+		shape = ROUND_RECT_SHAPE;
 	}
 
 	@Override
@@ -101,12 +104,15 @@ public class FixedKeyboard extends VirtualKeyboard {
 	}
 
 	@Override
-	public int switchLayout() {
-		layoutVariant ^= 1;
+	protected int getLayoutNum() {
+		return NUM_VARIANTS;
+	}
+
+	@Override
+	public void setLayout(int layoutVariant) {
 		resetLayout(layoutVariant);
 		snapKeys();
 		repaint();
-		return layoutVariant;
 	}
 
 	@Override

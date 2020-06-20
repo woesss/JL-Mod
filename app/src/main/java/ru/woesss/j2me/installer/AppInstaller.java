@@ -22,6 +22,10 @@ import android.util.Log;
 
 import com.android.dx.command.dexer.Main;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.io.inputstream.ZipInputStream;
+import net.lingala.zip4j.model.FileHeader;
+
 import org.microemu.android.asm.AndroidProducer;
 
 import java.io.ByteArrayOutputStream;
@@ -35,7 +39,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
 
 import io.reactivex.SingleEmitter;
 import ru.playsoftware.j2meloader.applist.AppItem;
@@ -43,7 +46,6 @@ import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.ConverterException;
 import ru.playsoftware.j2meloader.util.FileUtils;
-import ru.playsoftware.j2meloader.util.ZipFileCompat;
 import ru.playsoftware.j2meloader.util.ZipUtils;
 import ru.woesss.j2me.jar.Descriptor;
 
@@ -189,11 +191,12 @@ public class AppInstaller {
 	}
 
 	private Descriptor loadManifest(File jar) throws IOException {
-		try (ZipFileCompat zipFileCompat = new ZipFileCompat(jar)) {
-			ZipEntry entry = zipFileCompat.getEntry(JarFile.MANIFEST_NAME);
-			InputStream is = zipFileCompat.getInputStream(entry);
+		ZipFile zip = new ZipFile(jar);
+		FileHeader manifest = zip.getFileHeader(JarFile.MANIFEST_NAME);
+		if (manifest == null) throw new IOException("JAR not have " + JarFile.MANIFEST_NAME);
+		try (ZipInputStream is = zip.getInputStream(manifest)) {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream(20480);
-			byte[] buf = new byte[20480];
+			byte[] buf = new byte[4096];
 			int read;
 			while ((read = is.read(buf)) != -1) {
 				baos.write(buf, 0, read);

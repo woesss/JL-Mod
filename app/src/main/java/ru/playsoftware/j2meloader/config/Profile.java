@@ -16,10 +16,9 @@
 
 package ru.playsoftware.j2meloader.config;
 
-import android.support.annotation.NonNull;
-
 import java.io.File;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import ru.playsoftware.j2meloader.util.FileUtils;
 

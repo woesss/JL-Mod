@@ -24,7 +24,9 @@
     <string name="version">Version: </string>
     <string name="no_data_for_display">No data</string>
     <string name="message_delete">Do you really want to delete this app?</string>
-    <string name="converting_wait">Converting JAR…</string>
+    <string name="converting_wait">Converting JAR...</string>
+    <string name="convert_complete">Complete</string>
+    <string name="converting_message">Processing...</string>
     <string name="permission_request_failed">This app requires storage write permission</string>
     <string name="external_storage_not_mounted">This app requires external storage</string>
     <string name="action_context_shortcut">Add shortcut</string>
@@ -128,7 +130,7 @@
     <string name="pref_app_sort_title">App sort order</string>
     <string name="pref_app_sort_name">Name</string>
     <string name="pref_app_sort_date">Date</string>
-    <string name="pref_map_keys">Key mappings</string>
+    <string name="pref_map_keys">Key mappings (GamePad)</string>
     <string name="pref_encoding_title">Encoding</string>
     <string name="pref_default_settings">Default settings</string>
 
