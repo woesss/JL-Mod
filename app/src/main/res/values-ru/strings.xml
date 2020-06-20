@@ -52,6 +52,10 @@
     <string name="PREF_VK_FORCE_OPACITY">Не применять прозрачность вне экрана</string>
     <string name="PREF_TOUCH_INPUT">Сенсорный ввод</string>
     <string name="PREF_HW_ACCELERATION">Аппаратное ускорение (нестабильно)</string>
+    <string name="pref_graphics_software">Программный</string>
+    <string name="pref_graphics_hw_gles">Аппаратный (OpenGL ES)</string>
+    <string name="pref_graphics_hw_view">Аппаратный (window)</string>
+    <string name="pref_graphics_hw_surface">Аппаратный (surface)</string>
     <string name="PREF_VK_BACK">Кнопки</string>
     <string name="PREF_VK_FORE">Надписи</string>
     <string name="PREF_VK_OUTLINE">Обводка</string>
@@ -160,4 +164,5 @@
     <string name="shader_tuning">Настройка шейдера</string>
     <string name="reset">Сброс</string>
     <string name="pref_input_devices_title">Устройства ввода</string>
+    <string name="pref_graphics_mode_title">Режим графики:</string>
 </resources>

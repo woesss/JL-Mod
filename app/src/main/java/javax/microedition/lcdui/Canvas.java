@@ -282,9 +282,9 @@ public abstract class Canvas extends Displayable {
 
 		public InnerView(Context context) {
 			super(context);
-			setWillNotDraw(hwaEnabled);
+			setWillNotDraw(graphicsMode == 1);
 			getHolder().setFormat(PixelFormat.RGBA_8888);
-			if (hwaEnabled) {
+			if (graphicsMode == 1) {
 				setEGLContextClientVersion(2);
 				renderer = new GLRenderer();
 				setRenderer(renderer);
@@ -404,7 +404,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceChanged(SurfaceHolder holder, int format, int newWidth, int newHeight) {
-			if (hwaEnabled) {
+			if (graphicsMode == 1) {
 				super.surfaceChanged(holder, format, newWidth, newHeight);
 			}
 			Rect offsetViewBounds = new Rect(0, 0, newWidth, newHeight);
@@ -425,7 +425,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
-			if (hwaEnabled) {
+			if (graphicsMode == 1) {
 				super.surfaceCreated(holder);
 			}
 			synchronized (paintSync) {
@@ -442,7 +442,7 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
 			renderStarted = false;
-			if (hwaEnabled) {
+			if (graphicsMode == 1) {
 				super.surfaceDestroyed(holder);
 			}
 			synchronized (paintSync) {
@@ -462,6 +462,19 @@ public abstract class Canvas extends Displayable {
 				Bitmap bitmap = offscreenCopy.getBitmap();
 				renderer.program.loadVbo(VERTEX_BG, bitmap.getWidth(), bitmap.getHeight());
 			});
+		}
+
+		@Override
+		protected void onDraw(android.graphics.Canvas canvas) {
+			if (graphicsMode != 2) return; // Fix for Android Pie
+			CanvasWrapper g = canvasWrapper;
+			g.bind(canvas);
+			g.clear(backgroundColor);
+			offscreenCopy.getBitmap().prepareToDraw();
+			g.drawImage(offscreenCopy, virtualScreen);
+			if (fpsCounter != null) {
+				fpsCounter.increment();
+			}
 		}
 	}
 
@@ -533,9 +546,13 @@ public abstract class Canvas extends Displayable {
 					t.printStackTrace();
 				}
 				offscreen.copyTo(offscreenCopy);
-				if (hwaEnabled) {
-					if (innerView != null) {
+				if (graphicsMode == 1) {
+					if (renderStarted) {
 						innerView.requestRender();
+					}
+				} else if (graphicsMode == 2) {
+					if (innerView != null) {
+						innerView.postInvalidate();
 					}
 				} else if (!parallelRedraw) {
 					repaintScreen();
@@ -602,7 +619,7 @@ public abstract class Canvas extends Displayable {
 	private static boolean keepAspectRatio;
 	private static boolean filter;
 	private static boolean touchInput;
-	private static boolean hwaEnabled;
+	private static int graphicsMode;
 	private static ShaderInfo shaderFilter;
 	private static boolean parallelRedraw;
 	private static boolean forceFullscreen;
@@ -658,9 +675,9 @@ public abstract class Canvas extends Displayable {
 		Canvas.touchInput = touchInput;
 	}
 
-	public static void setHardwareAcceleration(boolean hwa, boolean parallel) {
-		Canvas.hwaEnabled = hwa;
-		Canvas.parallelRedraw = !hwa && parallel;
+	public static void setGraphicsMode(int mode, boolean parallel) {
+		Canvas.graphicsMode = mode;
+		Canvas.parallelRedraw =  (mode == 0 || mode == 3) && parallel;
 	}
 
 	public static void setForceFullscreen(boolean forceFullscreen) {
@@ -835,7 +852,7 @@ public abstract class Canvas extends Displayable {
 			overlay.resize(screen, virtualScreen);
 		}
 
-		if (hwaEnabled) {
+		if (graphicsMode == 1) {
 			float gl = 2.0f * virtualScreen.left / displayWidth - 1.0f;
 			float gt = 1.0f - 2.0f * virtualScreen.top / displayHeight;
 			float gr = 2.0f * virtualScreen.right / displayWidth - 1.0f;
@@ -951,9 +968,14 @@ public abstract class Canvas extends Displayable {
 		limitFps();
 		synchronized (paintSync) {
 			offscreenCopy.getSingleGraphics().flush(image, x, y, width, height);
-			if (hwaEnabled) {
-				if (innerView != null) {
+			if (graphicsMode == 1) {
+				if (renderStarted) {
 					innerView.requestRender();
+				}
+				return;
+			} else if (graphicsMode == 2) {
+				if (innerView != null) {
+					innerView.postInvalidate();
 				}
 				return;
 			}
@@ -970,9 +992,14 @@ public abstract class Canvas extends Displayable {
 		limitFps();
 		synchronized (paintSync) {
 			image.copyTo(offscreenCopy, x, y);
-			if (hwaEnabled) {
-				if (innerView != null) {
+			if (graphicsMode == 1) {
+				if (renderStarted) {
 					innerView.requestRender();
+				}
+				return;
+			} else if (graphicsMode == 2) {
+				if (innerView != null) {
+					innerView.postInvalidate();
 				}
 				return;
 			}
@@ -1005,7 +1032,8 @@ public abstract class Canvas extends Displayable {
 			return true;
 		}
 		try {
-			android.graphics.Canvas canvas = surface.lockCanvas(null);
+			android.graphics.Canvas canvas = graphicsMode == 3 ?
+					surface.lockHardwareCanvas() : surface.lockCanvas(null);
 			if (canvas == null) {
 				return true;
 			}

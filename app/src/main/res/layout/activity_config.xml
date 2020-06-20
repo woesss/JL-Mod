@@ -108,8 +108,9 @@
                 android:layout_height="38dp"
                 android:layout_margin="4dp"
                 android:text="@string/PREF_BACKGROUND"
+                app:layout_constraintBottom_toBottomOf="@+id/tfScreenBack"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tfScreenWidth" />
+                app:layout_constraintTop_toTopOf="@+id/tfScreenBack" />
 
             <EditText
                 android:id="@+id/tfScreenBack"
@@ -119,7 +120,7 @@
                 android:gravity="center"
                 android:hint="@string/PREF_COLOR_HINT"
                 android:importantForAutofill="no"
-                android:inputType="textCapCharacters"
+                android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cmdScreenBack"
@@ -143,10 +144,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:max="100"
-                app:layout_constraintBottom_toBottomOf="@+id/textView3"
+                app:layout_constraintBottom_toBottomOf="@+id/tfScaleRatioValue"
                 app:layout_constraintEnd_toStartOf="@+id/tfScaleRatioValue"
                 app:layout_constraintStart_toEndOf="@+id/textView3"
-                app:layout_constraintTop_toBottomOf="@+id/tfScreenBack" />
+                app:layout_constraintTop_toTopOf="@+id/tfScaleRatioValue" />
 
             <EditText
                 android:id="@+id/tfScaleRatioValue"
@@ -232,15 +233,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cxFilter" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cxHwAcceleration"
+            <TextView
+                android:id="@+id/tvGraphicsMode"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/height_config_row"
+                android:checked="false"
+                android:gravity="center_vertical"
+                android:text="@string/pref_graphics_mode_title"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?attr/textColorSecondary"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cxImmediate" />
+
+            <Spinner
+                android:id="@+id/spGraphicsMode"
                 style="@style/SwitchStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/height_config_row"
-                android:checked="false"
-                android:text="@string/PREF_HW_ACCELERATION"
+                android:entries="@array/pref_graphics_mode_entries"
+                android:textColor="?attr/textColorSecondary"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvGraphicsMode"
                 app:layout_constraintTop_toBottomOf="@+id/cxImmediate" />
 
             <LinearLayout
@@ -251,7 +266,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cxHwAcceleration"
+                app:layout_constraintTop_toBottomOf="@+id/tvGraphicsMode"
                 tools:visibility="visible">
 
                 <TextView
@@ -290,9 +305,11 @@
                 android:layout_height="@dimen/height_config_row"
                 android:checked="false"
                 android:text="@string/parallel_screen_redrawing"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/shaderContainer" />
+                app:layout_constraintTop_toBottomOf="@+id/shaderContainer"
+                tools:visibility="visible" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/cxForceFullscreen"
@@ -558,7 +575,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cmdKeyMappings"
-                app:layout_goneMarginBottom="5dp"
                 tools:visibility="visible" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -766,7 +782,7 @@
                 android:gravity="center"
                 android:hint="@string/PREF_COLOR_HINT"
                 android:importantForAutofill="no"
-                android:inputType="textCapCharacters"
+                android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/barrierConfig"
@@ -798,7 +814,7 @@
                 android:gravity="center"
                 android:hint="@string/PREF_COLOR_HINT"
                 android:importantForAutofill="no"
-                android:inputType="textCapCharacters"
+                android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/barrierConfig"
@@ -830,7 +846,7 @@
                 android:gravity="center"
                 android:hint="@string/PREF_COLOR_HINT"
                 android:importantForAutofill="no"
-                android:inputType="textCapCharacters"
+                android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/barrierConfig"
@@ -864,7 +880,7 @@
                 android:gravity="center"
                 android:hint="@string/PREF_COLOR_HINT"
                 android:importantForAutofill="no"
-                android:inputType="textCapCharacters"
+                android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/barrierConfig"
@@ -897,7 +913,7 @@
                 android:gravity="center"
                 android:hint="@string/PREF_COLOR_HINT"
                 android:importantForAutofill="no"
-                android:inputType="textCapCharacters"
+                android:inputType="text|textCapCharacters|textNoSuggestions"
                 android:textDirection="ltr"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/barrierConfig"
