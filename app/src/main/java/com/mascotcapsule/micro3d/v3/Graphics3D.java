@@ -16,7 +16,13 @@
 
 package com.mascotcapsule.micro3d.v3;
 
+import android.widget.Toast;
+
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.ViewHandler;
+import javax.microedition.util.ContextHolder;
+
+import androidx.preference.PreferenceManager;
 
 public class Graphics3D {
 	public static final int COMMAND_AFFINE_INDEX = -2030043136;
@@ -151,5 +157,14 @@ public class Graphics3D {
 	}
 
 	public final void dispose() {
+	}
+
+	static {
+		if (PreferenceManager.getDefaultSharedPreferences(ContextHolder.getAppContext()).getBoolean("micro3d_using_message", false)) {
+			ViewHandler.postEvent(
+					() -> Toast.makeText(ContextHolder.getActivity(),
+							"Mascot Capsule 3D!",
+							Toast.LENGTH_LONG).show());
+		}
 	}
 }
