@@ -21,16 +21,18 @@ Experimental mod of the emulator ["J2ME-Loader" (A J2ME emulator for Android)](h
 - 1 sec. limit for force close of the midlet.
 - Confirmation dialogs when reinstalling existing ones.
 - Choice of encoding is transferred to individual settings, a selection button from all supported by the system.
-- The ability to add screen resolution to the list of presets; the appearance of this setting has been changed.
 - Buttons shape setting has been moved to the individual, a variant with rounded corners has been added.
 - Changed keyboard editing:  
       fixed: drag and drop buttons;  
       added: separate scaling on horizontally and vertically (can be made rectangular or oval).  
-- Siemens B&W: a new implementation of Sprites.
-- Siemens B&W: a new implementation of TileвBackground.
 - The "System Properties" field has been moved to the end of the settings,  
       unlimit on the number of displayed lines,  
       display of all parameters added by the emulator.  
+- Add support of external filters (shaders).  
+  Only shaders for [PPSSPP](https://www.ppsspp.org) (same format) are supported  
+  To use, you need to put them in the `shaders` folder in the working folder of the emulator,  
+  further in the game settings, select the graphics output mode: "HW acceleration (OpenGL ES)" and select the shader of interest  
+  A small collection of compatible shaders can be taken in this repository: [ppsspp_shaders](https://github.com/woesss/ppsspp_shaders)  
 
 #### **Support for Mascot Capsule v3 (alpha build):**  
   the implementation is not complete, somewhere a curve, little tested  
