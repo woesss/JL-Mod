@@ -156,35 +156,24 @@ public class Image {
 	}
 
 	void copyTo(Image dst) {
-		dst.getCanvas().drawBitmap(mBitmap, mBounds, mBounds, null);
+		dst.getSingleGraphics().getCanvas().drawBitmap(mBitmap, mBounds, mBounds, null);
 	}
 
 	void copyTo(Image dst, int x, int y) {
 		Rect r = new Rect(x, y, x + mBounds.right, y + mBounds.bottom);
-		dst.getCanvas().drawBitmap(mBitmap, mBounds, r, null);
+		dst.getSingleGraphics().getCanvas().drawBitmap(mBitmap, mBounds, r, null);
 	}
 
-	Graphics getSingleGraphics() {
+	public Graphics getSingleGraphics() {
 		if (mGraphics == null) {
 			mGraphics = getGraphics();
 		}
 		return mGraphics;
 	}
 
-	void resetCanvas() {
-		getCanvas();
-		try {
-			canvas.restoreToCount(save);
-		} catch (Exception e) {
-			canvas.restoreToCount(1);
-		}
-		save = canvas.save();
-	}
-
 	void setSize(int width, int height) {
 		mBounds.right = width;
 		mBounds.bottom = height;
-		getCanvas().clipRect(mBounds);
 	}
 
 	public Rect getBounds() {

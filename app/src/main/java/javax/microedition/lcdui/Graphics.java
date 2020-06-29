@@ -45,6 +45,7 @@ public class Graphics {
 
 	private Canvas canvas;
 	private Bitmap canvasBitmap;
+	private final Image image;
 	private int canvasInitSave;
 
 	private Paint drawPaint = new Paint();
@@ -64,9 +65,10 @@ public class Graphics {
 
 	Graphics(Image image) {
 		canvasBitmap = image.getBitmap();
+		this.image = image;
 		canvas = new Canvas(canvasBitmap);
-		canvas.clipRect(image.getBounds());
 		canvasInitSave = canvas.save();
+		canvas.clipRect(image.getBounds());
 		drawPaint.setStyle(Paint.Style.STROKE);
 		fillPaint.setStyle(Paint.Style.FILL);
 		drawPaint.setAntiAlias(false);
@@ -79,7 +81,7 @@ public class Graphics {
 		setStrokeStyle(SOLID);
 		canvas.restoreToCount(canvasInitSave);
 		canvasInitSave = canvas.save();
-		setClip(0, 0, canvas.getWidth(), canvas.getHeight());
+		canvas.clipRect(image.getBounds());
 		translateX = 0;
 		translateY = 0;
 	}

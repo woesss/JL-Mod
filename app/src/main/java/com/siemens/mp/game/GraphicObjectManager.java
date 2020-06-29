@@ -80,7 +80,7 @@ public class GraphicObjectManager extends com.siemens.mp.misc.NativeMem {
 	}
 
 	public void paint(Image image, int x, int y) {
-		Canvas c = image.getCanvas();
+		Canvas c = image.getSingleGraphics().getCanvas();
 		for (GraphicObject go : v) {
 			if (go.getVisible()) {
 				go.paint(c, x, y);
