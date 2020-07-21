@@ -107,7 +107,12 @@ public class ContextHolder {
 	}
 
 	public static FileOutputStream openFileOutput(String name) throws FileNotFoundException {
-		return new FileOutputStream(getFileByName(name));
+		File dir = new File(Config.getDataDir(), AppClassLoader.getName());
+		File file = new File(dir, name);
+		if (!dir.isDirectory() && !dir.mkdirs()) {
+			throw new FileNotFoundException("Can't create directory: " + dir);
+		}
+		return new FileOutputStream(file);
 	}
 
 	public static FileInputStream openFileInput(String name) throws FileNotFoundException {
