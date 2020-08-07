@@ -7,8 +7,8 @@ android {
         applicationId "ru.woesss.j2meloader"
         minSdkVersion minSdk
         targetSdkVersion targetSdk
-        versionCode 12
-        versionName "b072"
+        versionCode 13
+        versionName "b073"
         setProperty("archivesBaseName", "JL-Mod_$versionName")
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
@@ -84,8 +84,8 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.0'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'ar.com.hjg:pngj:2.1.0'
