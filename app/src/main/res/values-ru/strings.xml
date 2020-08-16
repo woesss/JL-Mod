@@ -167,4 +167,7 @@
     <string name="pref_graphics_mode_title">Режим графики:</string>
     <string name="pref_mascot_title">Идентифицировать Mascot Capsule 3D</string>
     <string name="pref_mascot_summary">Показать сообщение когда используется</string>
+    <string name="alert_msg_workdir_not_exists">Рабочая папка не существует по пути:\n\"%s\".\nВы хотите создать её или выбрать другую?</string>
+    <string name="choose">выбрать</string>
+    <string name="create">создать</string>
 </resources>
