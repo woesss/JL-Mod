@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.LruCache;
 
@@ -116,11 +117,14 @@ public class Image {
 	}
 
 	public static Image createImage(Image image, int x, int y, int width, int height, int transform) {
-		return new Image(Bitmap.createBitmap(image.mBitmap, x, y, width, height, Sprite.transformMatrix(transform, width / 2f, height / 2f), false));
+		Matrix m = transform == 0 ? null : Sprite.transformMatrix(transform, width / 2.0f, height / 2.0f);
+		return new Image(Bitmap.createBitmap(image.mBitmap, x, y, width, height, m, false));
 	}
 
-	public static Image createImage(Image image) {
-		return new Image(Bitmap.createBitmap(image.mBitmap));
+	public static Image createImage(Image source) {
+		if (source.isMutable())
+			return new Image(Bitmap.createBitmap(source.mBitmap));
+		return source;
 	}
 
 	public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) {

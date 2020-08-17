@@ -20,7 +20,6 @@ package javax.microedition.lcdui;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -30,7 +29,7 @@ import android.os.Build;
 
 import com.mascotcapsule.micro3d.v3.Graphics3D;
 
-import javax.microedition.lcdui.game.Sprite;
+import static javax.microedition.lcdui.game.Sprite.*;
 
 public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.motorola.graphics.j3d.Graphics3D {
 	public static final int HCENTER = 1;
@@ -406,48 +405,61 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		fillPaint.setAntiAlias(false);
 	}
 
-	public void drawRegion(Image image, int srcx, int srcy, int width, int height,
-						   int transform, int dstx, int dsty, int anchor) {
+	public void drawRegion(Image image, int x_src, int y_src, int width, int height,
+						   int transform, int x_dest, int y_dest, int anchor) {
 		if (width <= 0 || height <= 0) return;
+		if (transform < TRANS_NONE || transform > TRANS_MIRROR_ROT90) {
+			throw new IllegalArgumentException("Illegal transform=" + transform);
+		}
 
-		if (transform != 0) {
-			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
-			RectF dstR = new RectF(0, 0, width, height);
-			RectF deviceR = new RectF();
-			Matrix matrix = Sprite.transformMatrix(transform, width / 2.0f, height / 2.0f);
-			matrix.mapRect(deviceR, dstR);
-
-			if ((anchor & Graphics.RIGHT) != 0) {
-				dstx -= deviceR.width();
-			} else if ((anchor & Graphics.HCENTER) != 0) {
-				dstx -= deviceR.width() / 2;
+		rect.set(x_src, y_src, x_src + width, y_src + height);
+		float dx = x_dest;
+		if ((anchor & HCENTER) == HCENTER) {
+			dx -= width / 2.0f;
+		} else if ((anchor & RIGHT) == RIGHT) {
+			dx -= width;
+		}
+		float dy = y_dest;
+		if ((anchor & VCENTER) == VCENTER) {
+			dy -= height / 2.0f;
+		} else if ((anchor & BOTTOM) == BOTTOM) {
+			dy -= height;
+		}
+		rectF.set(dx, dy, dx + width, dy + height);
+		Canvas canvas = this.canvas;
+		if (transform == 0) { // TRANS_NONE
+			canvas.drawBitmap(image.getBitmap(), rect, rectF, null);
+			return;
+		}
+		canvas.save();
+		try {
+			float px = rectF.centerX();
+			float py = rectF.centerY();
+			switch (transform) {
+				case TRANS_MIRROR_ROT180:
+					canvas.scale(-1, 1, px, py);
+				case TRANS_ROT180:
+					canvas.rotate(180, px, py);
+					break;
+				case TRANS_MIRROR:
+					canvas.scale(-1, 1, px, py);
+					break;
+				case TRANS_MIRROR_ROT270:
+					canvas.scale(-1, 1, px, py);
+				case TRANS_ROT270:
+					canvas.rotate(270, px, py);
+					break;
+				case TRANS_MIRROR_ROT90:
+					canvas.scale(-1, 1, px, py);
+				case TRANS_ROT90:
+					canvas.rotate(90, px, py);
+					break;
+				default:
+					throw new IllegalArgumentException();
 			}
-			if ((anchor & Graphics.BOTTOM) != 0) {
-				dsty -= deviceR.height();
-			} else if ((anchor & Graphics.VCENTER) != 0) {
-				dsty -= deviceR.height() / 2;
-			}
-
-			canvas.save();
-			canvas.translate(-deviceR.left + dstx, -deviceR.top + dsty);
-			canvas.concat(matrix);
-			canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
+			canvas.drawBitmap(image.getBitmap(), rect, rectF, null);
+		} finally {
 			canvas.restore();
-		} else {
-			if ((anchor & Graphics.RIGHT) != 0) {
-				dstx -= width;
-			} else if ((anchor & Graphics.HCENTER) != 0) {
-				dstx -= width / 2;
-			}
-			if ((anchor & Graphics.BOTTOM) != 0) {
-				dsty -= height;
-			} else if ((anchor & Graphics.VCENTER) != 0) {
-				dsty -= height / 2;
-			}
-
-			Rect srcR = new Rect(srcx, srcy, srcx + width, srcy + height);
-			RectF dstR = new RectF(dstx, dsty, dstx + width, dsty + height);
-			canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
 		}
 	}
 
@@ -461,7 +473,7 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		if (rows < height) {
 			height = rows;
 		}
-		// Use deprecated method due to perfomance issues
+		// Use deprecated method due to performance issues
 		canvas.drawBitmap(rgbData, offset, scanlength, x, y, width, height, processAlpha, null);
 	}
 
@@ -522,4 +534,5 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		g3d.drawFigure(figure, x, y, layout, effect);
 		g3d.release(this);
 	}
+
 }
