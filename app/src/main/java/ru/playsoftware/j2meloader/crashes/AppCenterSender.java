@@ -44,33 +44,28 @@ import androidx.annotation.NonNull;
 public class AppCenterSender implements ReportSender {
 	private static final String TAG = AppCenterSender.class.getName();
 	private static String BASE_URL = "https://in.appcenter.ms/logs?Api-Version=1.0.0";
-	private static String FORM_KEY = "a7a26221-df9a-4e50-87a0-f76856e6e71d";
+	private static String FORM_KEY = "eccaa4ce-92e9-46b2-8f40-89296b70a931";
 
 	@Override
 	public void send(@NonNull Context context, @NonNull final CrashReportData report) {
 		final String log = (String) report.get(AppCenterCollector.APPCENTER_LOG);
-
-		HurlStack hurlStack = new HurlStack() {
-			@Override
-			protected HttpURLConnection createConnection(URL url) throws IOException {
-				HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
-				try {
-					// Force TLSv1.2 for Android 4.1-4.4
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-							&& Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-						httpsURLConnection.setSSLSocketFactory(new TLSSocketFactory());
-					}
-				} catch (KeyManagementException e) {
-					e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) {
-					e.printStackTrace();
-				}
-				return httpsURLConnection;
+		TLSSocketFactory sf = null;
+		// Force TLSv1.2 for Android 4.1-4.4
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+				&& Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+			try {
+				sf = new TLSSocketFactory();
+			} catch (KeyManagementException e) {
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
 			}
-		};
+		}
+
+		HurlStack hurlStack = new HurlStack(null, sf);
 		RequestQueue queue = Volley.newRequestQueue(context, hurlStack);
 		StringRequest postRequest = new StringRequest(Request.Method.POST, BASE_URL, null,
-				error -> android.util.Log.e(TAG, "Response error")
+				error -> android.util.Log.e(TAG, "Response error", error)
 		) {
 			@Override
 			public Map<String, String> getHeaders() {

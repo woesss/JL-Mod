@@ -23,8 +23,6 @@ import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
 
-import org.acra.ACRA;
-
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -50,7 +48,6 @@ public class AppClassLoader extends DexClassLoader {
 		if (appDir == null)
 			throw new NullPointerException();
 		name = appDir.getName();
-		ACRA.getErrorReporter().putCustomData("Running app", name);
 		instance = this;
 		prepareZipFile();
 	}

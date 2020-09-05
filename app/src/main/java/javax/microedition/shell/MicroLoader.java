@@ -23,6 +23,9 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
 
+import org.acra.ACRA;
+import org.acra.ErrorReporter;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -102,6 +105,10 @@ public class MicroLoader {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
 		Descriptor descriptor = new Descriptor(new File(path, Config.MIDLET_MANIFEST_FILE), false);
 		Map<String, String> attr = descriptor.getAttrs();
+		ErrorReporter errorReporter = ACRA.getErrorReporter();
+		errorReporter.putCustomData(Descriptor.MIDLET_NAME, descriptor.getName());
+		errorReporter.putCustomData(Descriptor.MIDLET_VENDOR, descriptor.getVendor());
+		errorReporter.putCustomData(Descriptor.MIDLET_VERSION, descriptor.getVersion());
 		MIDlet.initProps(attr);
 		for (Map.Entry<String, String> entry : attr.entrySet()) {
 			if (entry.getKey().matches("MIDlet-[0-9]+")) {

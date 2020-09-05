@@ -41,9 +41,9 @@ public class Descriptor {
 	private static final char UNICODE_BOM = '\uFEFF';
 	private static final String MANIFEST_VERSION = "Manifest-Version";
 	// required in JAD and Manifest
-	private static final String MIDLET_NAME = "MIDlet-Name";
-	private static final String MIDLET_VERSION = "MIDlet-Version";
-	private static final String MIDLET_VENDOR = "MIDlet-Vendor";
+	public static final String MIDLET_NAME = "MIDlet-Name";
+	public static final String MIDLET_VERSION = "MIDlet-Version";
+	public static final String MIDLET_VENDOR = "MIDlet-Vendor";
 
 	// required in JAD
 	public static final String MIDLET_JAR_URL = "MIDlet-Jar-URL";

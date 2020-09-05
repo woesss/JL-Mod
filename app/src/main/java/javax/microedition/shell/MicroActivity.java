@@ -37,6 +37,9 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import org.acra.ACRA;
+import org.acra.ErrorReporter;
+
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -67,6 +70,7 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.util.LogUtils;
+import ru.woesss.j2me.jar.Descriptor;
 
 public class MicroActivity extends AppCompatActivity {
 	private static final int ORIENTATION_DEFAULT = 0;
@@ -192,10 +196,14 @@ public class MicroActivity extends AppCompatActivity {
 		}
 	}
 
-	private void showMidletDialog(String[] midletsNameArray, final String[] midletsClassArray) {
+	private void showMidletDialog(String[] names, final String[] classes) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this)
 				.setTitle(R.string.select_dialog_title)
-				.setItems(midletsNameArray, (d, n) -> MidletThread.create(microLoader, midletsClassArray[n]))
+				.setItems(names, (d, n) -> {
+					String clazz = classes[n];
+					ACRA.getErrorReporter().putCustomData("Begin app", names[n] + ", " + clazz);
+					MidletThread.create(microLoader, clazz);
+				})
 				.setOnCancelListener(dialogInterface -> finish());
 		builder.show();
 	}

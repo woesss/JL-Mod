@@ -37,23 +37,20 @@ import javax.microedition.util.ContextHolder;
 import ru.playsoftware.j2meloader.crashes.AppCenterSenderFactory;
 
 @AcraCore(buildConfigClass = BuildConfig.class, reportSenderFactoryClasses = {AppCenterSenderFactory.class},
-		parallel = false)
+		parallel = false, sendReportsInDevMode = false)
 @AcraDialog(resTitle = R.string.crash_dialog_title, resText = R.string.crash_dialog_message,
-		resPositiveButtonText = R.string.report_crash,
-		resTheme = R.style.Theme_AppCompat_Dialog)
+		resPositiveButtonText = R.string.report_crash, resTheme = R.style.Theme_AppCompat_Dialog)
 public class EmulatorApplication extends Application {
-	private static final String[] VALID_SIGNATURES = {
-			"78EF7758720A9902F731ED706F72C669C39B765C", // GPlay
-			"289F84A32207DF89BE749481ED4BD07E15FC268F", // F-Droid
-			"FA8AA497194847D5715BAA62C6344D75A936EBA6" // Private
+
+	private static final byte[] SIGNATURE_SHA = {
+			125, 47, 64, 33, 91, -86, -121, 89, 11, 24, -118, -93, 35, 53, -34, -114, -119, -60, -48, 55
 	};
 
-	@SuppressWarnings("ConstantConditions")
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
 		ContextHolder.setApplication(this);
-		if (isSignatureValid() && !BuildConfig.FLAVOR.equals("dev")) ACRA.init(this);
+		if (isSignatureValid()) ACRA.init(this);
 	}
 
 	@SuppressLint("PackageManagerGetSignatures")
@@ -73,8 +70,7 @@ public class EmulatorApplication extends Application {
 			for (Signature signature : signatures) {
 				MessageDigest md = MessageDigest.getInstance("SHA-1");
 				md.update(signature.toByteArray());
-				String sha1 = bytesToHex(md.digest());
-				if (!Arrays.asList(VALID_SIGNATURES).contains(sha1)) {
+				if (!Arrays.equals(SIGNATURE_SHA, md.digest())) {
 					result = false;
 				}
 			}
@@ -86,18 +82,5 @@ public class EmulatorApplication extends Application {
 			result = false;
 		}
 		return result;
-	}
-
-	private String bytesToHex(byte[] bytes) {
-		final char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8',
-				'9', 'A', 'B', 'C', 'D', 'E', 'F'};
-		char[] hexChars = new char[bytes.length * 2];
-		int v;
-		for (int i = 0; i < bytes.length; i++) {
-			v = bytes[i] & 0xFF;
-			hexChars[i * 2] = hexArray[v >>> 4];
-			hexChars[i * 2 + 1] = hexArray[v & 0x0F];
-		}
-		return new String(hexChars);
 	}
 }
