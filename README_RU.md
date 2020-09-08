@@ -1,4 +1,4 @@
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/woesss/JL-Mod?include_prereleases&style=plastic)](https://github.com/woesss/JL-Mod/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/woesss/JL-Mod?style=plastic)](https://github.com/woesss/JL-Mod/releases/latest)
 [![donate](https://img.shields.io/badge/donate-PayPal-%234D8A99?style=plastic)](https://www.paypal.me/j2meforever)  
 [Go to English](README.md)  
 
@@ -36,18 +36,17 @@
   реализация не полная, есть не решённые проблемы  
 
 Основные проблемы:  
-  спец-эффекты не реализованы никак (освещение, затенение, отражение) - поэтому цветопередача может отличаться от оригинала.  
-  есть проблемы с точечными спрайтами (обычно используются для вывода мелких объектов) - могут криво отображаться или производить артефакты,  
-  если будут раздражать - можно их отключить, добавив в настройках в поле "Системные параметры" строку:  
-  **micro3d.v3.skipSprites: true** 
+  спец-эффекты реализованы частично - поэтому цветопередача может отличаться от оригинала.  
+  Точечные спрайты (обычно используются для вывода простейших объектов) реализованы не полностью,  
+  если где-то отобразаются не так, как в оригинале - просьба сообщить.  
+  В некоторых играх (замечено в "Medal of Honor") 3D-сцена может не отображаться из-за перекрытия 2D-фоном.  
+  Попробуйте добавить в поле "Системные параметры" строку:  
+  **micro3d.v3.render.no-mix2D3D: true**  
+  Если не поможет - сообщите об этой игре в [баг-репорт](https://github.com/woesss/JL-Mod/issues/new?assignees=&labels=bug&template=issue-template.md&title=) или другим способом.  
+ 
 
- Ещё один параметр включает фильтр текстур (примитивный, встроенный в OpenGL), но это может порождать искажения в виде захвата лишних текселей по краям полигонов:  
+ Ещё один параметр включает фильтр текстур (встроенный в OpenGL), но это может порождать искажения в виде захвата лишних текселей по краям полигонов:  
  **micro3d.v3.texture.filter: true**  
  без этого параметра качество текстур максимально приближено к оригиналу и выглядит более винтажно (квадратно-ступенчато))).  
- 
- В некоторых играх (замечено в "Medal of Honor") 3D-сцена может не отображаться из-за перекрытия 2D-фоном.  
- Попробуйте добавить в поле "Системные параметры" строку:  
- **micro3d.v3.render.no-mix2D3D: true**  
- Если не поможет - сообщите об этой игре в [баг-репорт](https://github.com/woesss/JL-Mod/issues/new?assignees=&labels=bug&template=issue-template.md&title=) или другим способом.  
-     
- [Скачать APK](https://github.com/woesss/J2ME-Loader-Mod/releases)
+    
+ [Скачать APK](https://github.com/woesss/JL-Mod/releases/latest)

@@ -1,4 +1,4 @@
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/woesss/JL-Mod?include_prereleases&style=plastic)](https://github.com/woesss/JL-Mod/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/woesss/JL-Mod?style=plastic)](https://github.com/woesss/JL-Mod/releases/latest)
 [![donate](https://img.shields.io/badge/donate-PayPal-%234D8A99?style=plastic)](https://www.paypal.me/j2meforever)
 
 [Перейти на Русский](README_RU.md)  
@@ -38,18 +38,18 @@ Experimental mod of the emulator ["J2ME-Loader" (A J2ME emulator for Android)](h
   the implementation is not complete, somewhere a curve, little tested  
 
 Main problems:  
-  special effects are not implemented in any way (lighting, shading, reflection) - therefore, the color rendering may differ from the original  
-  has problem with point-sprites (usually used to display small objects) - they can be crookedly displayed or produce artifacts,  
-  if they are annoying, you can turn them off by adding the line in the settings in the "System Properties" field:  
-  **micro3d.v3.skipSprites: true**  
-
- Another parameter includes a texture filter (primitive, built-in OpenGL),  
- but this can cause distortion in the form of capturing extra texels along the edges of polygons:  
- **micro3d.v3.texture.filter: true**  
- Without this parameter, the quality of the textures is as close as possible to the original and looks more vintage (square-step))).  
-
- In some games (seen in "Medal of Honor") 3D-scene can not be displayed because of the 2D-background overlap.  
- Try adding the line to the "System Properties" field:  
- **micro3d.v3.render.no-mix2D3D: true**  
- If it doesn’t help, report about this game in [bug report](https://github.com/woesss/JL-Mod/issues/new?assignees=&labels=bug&template=issue-template.md&title=).  
-[Download APK](https://github.com/woesss/J2ME-Loader-Mod/releases)  
+  special effects are partially implemented - therefore, the color rendition may differ from the original.  
+  Point sprites (usually used to display the simplest objects) are not fully implemented,  
+  if somewhere they are displayed differently than in the original - please inform.  
+  In some games (seen in "Medal of Honor") the 3D scene may not be displayed due to overlapping 2D background.  
+  Try adding the following line to the System Parameters field:  
+  **micro3d.v3.render.no-mix2D3D: true**  
+  If it doesn't help, please report this game to [Issues](https://github.com/woesss/JL-Mod/issues/new?assignees=&labels=bug&template=issue-template.md&title=) or another way.  
+   
+  
+   Another one parameter turns on the texture filter (built into OpenGL),  
+   but this can generate distortion in the form of capturing extra texels at the edges of polygons:  
+   **micro3d.v3.texture.filter: true**  
+   without this parameter, the quality of textures is as close as possible to the original and looks more vintage.  
+  
+[Download APK](https://github.com/woesss/JL-Mod/releases/latest)  
