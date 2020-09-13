@@ -39,7 +39,7 @@ public class InternalDataSource extends DataSource {
 	private static final String TAG = InternalDataSource.class.getName();
 
 	private File mediaFile;
-	private String type;
+	private final String type;
 
 	public InternalDataSource(InputStream stream, String type) throws IllegalArgumentException, IOException {
 		super(null);
@@ -80,9 +80,8 @@ public class InternalDataSource extends DataSource {
 
 		try {
 			convert();
-		} catch (UnsatisfiedLinkError e) {
-			// Thrown on fake Oppo devices
-			e.printStackTrace();
+		} catch (Throwable t) {
+			Log.e(TAG, "FFmpeg error", t);
 		}
 	}
 
