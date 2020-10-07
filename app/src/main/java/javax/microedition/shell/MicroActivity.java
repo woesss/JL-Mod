@@ -105,6 +105,8 @@ public class MicroActivity extends AppCompatActivity {
 		if (wakelockEnabled) {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
+		boolean vibrationEnabled = sp.getBoolean("pref_vibration_switch", false);
+		ContextHolder.setVibration(vibrationEnabled);
 		Intent intent = getIntent();
 		appName = intent.getStringExtra(KEY_MIDLET_NAME);
 		microLoader = new MicroLoader(this, intent.getDataString());
