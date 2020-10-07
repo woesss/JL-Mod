@@ -204,7 +204,10 @@ public class MicroActivity extends AppCompatActivity {
 					ACRA.getErrorReporter().putCustomData("Begin app", names[n] + ", " + clazz);
 					MidletThread.create(microLoader, clazz);
 				})
-				.setOnCancelListener(dialogInterface -> finish());
+				.setOnCancelListener(d -> {
+					d.dismiss();
+					ContextHolder.notifyDestroyed();
+				});
 		builder.show();
 	}
 
