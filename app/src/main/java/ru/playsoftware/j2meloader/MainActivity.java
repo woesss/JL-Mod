@@ -48,7 +48,6 @@ import ru.playsoftware.j2meloader.util.MigrationUtils;
 public class MainActivity extends BaseActivity {
 
 	public static final String APP_SORT_KEY = "appSort";
-	public static final String APP_PATH_KEY = "appPath";
 	public static final String APP_URI_KEY = "appUri";
 	private static final int REQUEST_WORK_DIR = 1;
 	private static final int RESULT_NEED_RECREATE = 1;
@@ -101,7 +100,6 @@ public class MainActivity extends BaseActivity {
 		Bundle bundleLoad = new Bundle();
 		bundleLoad.putString(APP_SORT_KEY, appSort);
 		if (intentUri) {
-			bundleLoad.putString(APP_PATH_KEY, getAppPath(getIntent().getData()));
 			bundleLoad.putParcelable(APP_URI_KEY, getIntent().getData());
 		}
 		AppsListFragment appsListFragment = new AppsListFragment();
@@ -170,16 +168,6 @@ public class MainActivity extends BaseActivity {
 				sp.edit().putBoolean("pref_actionbar_switch", true).apply();
 			}
 			sp.edit().putBoolean("pref_first_start", false).apply();
-		}
-	}
-
-	private String getAppPath(Uri uri) {
-		try {
-			return FileUtils.getAppPath(this, uri);
-		} catch (IOException e) {
-			e.printStackTrace();
-			Toast.makeText(this, R.string.error, Toast.LENGTH_SHORT).show();
-			return null;
 		}
 	}
 

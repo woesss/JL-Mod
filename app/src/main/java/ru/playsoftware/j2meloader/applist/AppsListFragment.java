@@ -44,7 +44,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -85,7 +84,6 @@ public class AppsListFragment extends ListFragment {
 	private CompositeDisposable compositeDisposable;
 	private AppsListAdapter adapter;
 	private String appSort;
-	private String appPath;
 	private static final int FILE_CODE = 0;
 	private Uri appUri;
 
@@ -99,7 +97,6 @@ public class AppsListFragment extends ListFragment {
 			return;
 		}
 		appSort = args.getString(MainActivity.APP_SORT_KEY);
-		appPath = args.getString(MainActivity.APP_PATH_KEY);
 		appUri = args.getParcelable(MainActivity.APP_URI_KEY);
 	}
 
@@ -131,9 +128,9 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (appPath != null) {
-			installApp(appPath, appUri);
-			appPath = null;
+		if (appUri != null) {
+			installApp(appUri);
+			appUri = null;
 		}
 	}
 
@@ -179,14 +176,13 @@ public class AppsListFragment extends ListFragment {
 		if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
 			List<Uri> files = Utils.getSelectedFilesFromResult(data);
 			for (Uri uri : files) {
-				File file = Utils.getFileForUri(uri);
-				installApp(file.getAbsolutePath(), null);
+				installApp(uri);
 			}
 		}
 	}
 
-	private void installApp(String path, Uri uri) {
-		InstallerDialog.newInstance(path, uri).show(getParentFragmentManager(), "installer");
+	private void installApp(Uri uri) {
+		InstallerDialog.newInstance(uri).show(getParentFragmentManager(), "installer");
 	}
 
 	private void alertRename(final int id) {

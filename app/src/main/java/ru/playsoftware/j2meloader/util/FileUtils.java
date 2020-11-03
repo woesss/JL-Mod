@@ -90,9 +90,12 @@ public class FileUtils {
 				return path;
 			}
 		}
+		File folder = new File(context.getCacheDir(), "installer");
+		if (!folder.exists() && !folder.mkdirs()) {
+			throw new IOException("Can't create directory: " + folder);
+		}
 		InputStream in = context.getContentResolver().openInputStream(uri);
 		OutputStream out = null;
-		File folder = context.getCacheDir();
 		byte[] signature = new byte[2];
 		byte[] jarSignature = new byte[]{0x50, 0x4B};
 		if (in == null || in.read(signature) == -1)

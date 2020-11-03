@@ -47,7 +47,6 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.woesss.j2me.jar.Descriptor;
 
 public class InstallerDialog extends DialogFragment {
-	private static final String ARG_PATH = "param1";
 	private static final String ARG_URI = "param2";
 
 	private TextView tvMessage;
@@ -56,22 +55,20 @@ public class InstallerDialog extends DialogFragment {
 	private AppRepository appRepository;
 	private Button btnOk;
 	private Button btnClose;
+	private Button btnRun;
 	private AppInstaller installer;
 	private AlertDialog mDialog;
-	private Button btnRun;
 
 	public InstallerDialog() {
 	}
 
 	/**
-	 * @param path source path of app.
 	 * @param uri  original uri from intent.
 	 * @return A new instance of fragment InstallerDialog.
 	 */
-	public static InstallerDialog newInstance(String path, Uri uri) {
+	public static InstallerDialog newInstance(Uri uri) {
 		InstallerDialog fragment = new InstallerDialog();
 		Bundle args = new Bundle();
-		args.putString(ARG_PATH, path);
 		args.putParcelable(ARG_URI, uri);
 		fragment.setArguments(args);
 		fragment.setCancelable(false);
@@ -100,6 +97,7 @@ public class InstallerDialog extends DialogFragment {
 				.setIcon(R.mipmap.ic_launcher)
 				.setView(view)
 				.setTitle("MIDlet installer")
+				.setCancelable(false)
 				.create();
 		return mDialog;
 	}
@@ -108,9 +106,8 @@ public class InstallerDialog extends DialogFragment {
 	public void onStart() {
 		super.onStart();
 		Bundle args = requireArguments();
-		String path = args.getString(ARG_PATH);
 		Uri uri = args.getParcelable(ARG_URI);
-		installApp(path, uri);
+		installApp(null, uri);
 	}
 
 	@Override
@@ -188,23 +185,28 @@ public class InstallerDialog extends DialogFragment {
 		@Override
 		public void onSuccess(@NonNull Integer status) {
 			Descriptor nd = installer.getNewDescriptor();
-			mDialog.setTitle(nd.getName());
-			if (status == AppInstaller.STATUS_NEW) {
-				convert(installer);
-				return;
-			}
-			String message;
+			SpannableStringBuilder message;
 			switch (status) {
+				case AppInstaller.STATUS_NEW:
+					if (installer.getJar() != null) {
+						convert(installer);
+						return;
+					}
+					message = nd.getInfo(requireActivity());
+					break;
 				case AppInstaller.STATUS_OLDEST:
 					String currVersion = installer.getOldDescriptor().getVersion();
-					message = getString(R.string.reinstall_oldest, nd.getVersion(), currVersion);
+					message = new SpannableStringBuilder(
+							getString(R.string.reinstall_oldest, nd.getVersion(), currVersion));
 					break;
 				case AppInstaller.STATUS_EQUAL:
-					message = getString(R.string.reinstall);
+					message = new SpannableStringBuilder(getString(R.string.reinstall));
 					AppItem app = installer.getExistsApp();
 					if (app != null) {
 						btnRun.setVisibility(View.VISIBLE);
 						btnRun.setOnClickListener(v -> {
+							installer.clearCache();
+							installer.deleteTemp();
 							Config.startApp(getActivity(), app.getTitle(), app.getPathExt(), false);
 							dismiss();
 						});
@@ -212,7 +214,8 @@ public class InstallerDialog extends DialogFragment {
 					break;
 				case AppInstaller.STATUS_NEWEST:
 					currVersion = installer.getOldDescriptor().getVersion();
-					message = getString(R.string.reinstall_newest, nd.getVersion(), currVersion);
+					message = new SpannableStringBuilder(
+							getString(R.string.reinstall_newest, nd.getVersion(), currVersion));
 					break;
 				case AppInstaller.STATUS_UNMATCHED:
 					SpannableStringBuilder info = nd.getInfo(getActivity());
@@ -221,6 +224,9 @@ public class InstallerDialog extends DialogFragment {
 					return;
 				default:
 					throw new IllegalStateException("Unexpected value: " + status);
+			}
+			if (installer.getJar() == null) {
+				message.append('\n').append(getString(R.string.warn_install_from_net));
 			}
 			Drawable drawable = Drawable.createFromPath(installer.getIconPath());
 			if (drawable != null) mDialog.setIcon(drawable);
@@ -237,6 +243,8 @@ public class InstallerDialog extends DialogFragment {
 		public void onError(Throwable e) {
 			e.printStackTrace();
 			hideProgress();
+			installer.clearCache();
+			installer.deleteTemp();
 			if (!isAdded()) return;
 			Toast.makeText(getActivity(), getString(R.string.error) + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
 			dismiss();
@@ -277,9 +285,15 @@ public class InstallerDialog extends DialogFragment {
 		public void onError(Throwable e) {
 			e.printStackTrace();
 			hideProgress();
-			if (!isAdded()) return;
+			if (!isAdded()) {
+				installer.clearCache();
+				installer.deleteTemp();
+				return;
+			}
 			String message = e.getMessage();
 			if (message == null) {
+				installer.clearCache();
+				installer.deleteTemp();
 				return;
 			}
 			if (message.charAt(0) == '*') {
@@ -288,7 +302,10 @@ public class InstallerDialog extends DialogFragment {
 				info.append(getString(R.string.install_jar_non_matched_jad));
 				alertConfirm(info, v -> installApp(installer.getJar(), null));
 			} else {
+				installer.clearCache();
+				installer.deleteTemp();
 				Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+				dismiss();
 			}
 		}
 	}

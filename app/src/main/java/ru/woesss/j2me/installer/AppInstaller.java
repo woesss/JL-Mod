@@ -38,6 +38,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.jar.JarFile;
 
 import io.reactivex.SingleEmitter;
@@ -61,7 +62,6 @@ public class AppInstaller {
 
 	private final Application context;
 	private final Uri uri;
-	private final File srcFile;
 	private final File cacheDir;
 	private Descriptor manifest;
 	private Descriptor newDesc;
@@ -71,10 +71,11 @@ public class AppInstaller {
 	private File srcJar;
 	private File tmpDir;
 	private AppItem oldApp;
+	private File srcFile;
 
-	AppInstaller(String path, Uri originalUri, Application context) {
-		srcFile = new File(path);
-		this.uri = originalUri;
+	AppInstaller(String path, Uri uri, Application context) {
+		if (path != null) srcFile = new File(path);
+		this.uri = uri;
 		this.context = context;
 		this.cacheDir = new File(context.getCacheDir(), "installer");
 	}
@@ -92,8 +93,17 @@ public class AppInstaller {
 	}
 
 	/** Load and check app info from source */
-	void loadInfo(SingleEmitter<Integer> emitter)
-			throws IOException, ConverterException {
+	void loadInfo(SingleEmitter<Integer> emitter) throws IOException, ConverterException {
+		boolean isLocal;
+		if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme())) {
+			downloadJad();
+			isLocal = false;
+		} else {
+			String path = FileUtils.getAppPath(context, uri);
+			srcFile = new File(path);
+			isLocal = true;
+		}
+
 		String name = srcFile.getName();
 		if (name.toLowerCase().endsWith(".jad")) {
 			newDesc = new Descriptor(srcFile, true);
@@ -104,7 +114,7 @@ public class AppInstaller {
 			Uri uri = Uri.parse(url);
 			String scheme = uri.getScheme();
 			String host = uri.getHost();
-			if (scheme == null && host == null) {
+			if (isLocal && scheme == null && host == null) {
 				if (!checkJarFile(srcFile)) {
 					emitter.onSuccess(STATUS_UNMATCHED);
 					return;
@@ -118,6 +128,56 @@ public class AppInstaller {
 		emitter.onSuccess(result);
 	}
 
+	private void downloadJad() throws ConverterException {
+		if (!cacheDir.exists() && !cacheDir.mkdirs()) {
+			throw new ConverterException("Can't create cache dir");
+		}
+		srcFile = new File(cacheDir, "tmp.jad");
+		String url = uri.toString();
+		Log.d(TAG, "Downloading " + url);
+		Exception exception;
+		HttpURLConnection connection = null;
+		try {
+			connection = (HttpURLConnection) new URL(url).openConnection();
+			connection.setInstanceFollowRedirects(true);
+			connection.setReadTimeout(3 * 60 * 1000);
+			connection.setConnectTimeout(15000);
+			int code = connection.getResponseCode();
+			if (code == HttpURLConnection.HTTP_MOVED_PERM
+					|| code == HttpURLConnection.HTTP_MOVED_TEMP) {
+				String urlStr = connection.getHeaderField("Location");
+				connection.disconnect();
+				connection = (HttpURLConnection) new URL(urlStr).openConnection();
+				connection.setInstanceFollowRedirects(true);
+				connection.setReadTimeout(3 * 60 * 1000);
+				connection.setConnectTimeout(15000);
+			}
+			try (InputStream inputStream = connection.getInputStream();
+				 OutputStream outputStream = new FileOutputStream(srcFile)) {
+				byte[] buffer = new byte[2048];
+				int length;
+				while ((length = inputStream.read(buffer)) > 0) {
+					outputStream.write(buffer, 0, length);
+				}
+			}
+			connection.disconnect();
+			Log.d(TAG, "Download complete");
+			return;
+		} catch (MalformedURLException e) {
+			exception = e;
+		} catch (FileNotFoundException e) {
+			exception = e;
+		} catch (IOException e) {
+			exception = e;
+		} finally {
+			if (connection != null) {
+				connection.disconnect();
+			}
+		}
+		deleteTemp();
+		throw new ConverterException("Can't download jad", exception);
+	}
+
 	/** Install app */
 	void install(SingleEmitter<AppItem> emitter) throws ConverterException, IOException {
 		if (!cacheDir.exists() && !cacheDir.mkdirs()) {
@@ -128,7 +188,7 @@ public class AppInstaller {
 			throw new ConverterException("Can't create directory: '" + targetDir + "'");
 		if (srcJar == null) {
 			srcJar = new File(cacheDir, "tmp.jar");
-			download();
+			downloadJar();
 			manifest = loadManifest(srcJar);
 			if (!manifest.equals(newDesc)) {
 				throw new ConverterException("*Jad not matches with Jar");
@@ -240,12 +300,23 @@ public class AppInstaller {
 		return Integer.signum(newDesc.getVersion().compareTo(oldApp.getVersion()));
 	}
 
-	private void download() throws ConverterException {
-		Uri uri = Uri.parse(newDesc.getJarUrl());
-		if (uri.getScheme() == null) {
-			uri = uri.buildUpon().scheme("http").build();
+	private void downloadJar() throws ConverterException {
+		Uri jarUri = Uri.parse(newDesc.getJarUrl());
+		if (jarUri.getScheme() == null) {
+			String schemeOfJadSource = this.uri.getScheme();
+			if ("http".equals(schemeOfJadSource) || "https".equals(schemeOfJadSource)) {
+				List<String> pathSegments = uri.getPathSegments();
+				StringBuilder path = new StringBuilder(pathSegments.get(0));
+				for (int i = 1; i < pathSegments.size() - 1; i++) {
+					path.append('/').append(pathSegments.get(i));
+				}
+				path.append('/').append(jarUri.getPath());
+				jarUri = uri.buildUpon().path(path.toString()).build();
+			} else {
+				jarUri = jarUri.buildUpon().scheme("http").build();
+			}
 		}
-		String url = uri.toString();
+		String url = jarUri.toString();
 		Log.d(TAG, "Downloading " + url);
 		Exception exception;
 		HttpURLConnection connection = null;
@@ -297,7 +368,7 @@ public class AppInstaller {
 	}
 
 	public String getJar() {
-		return srcJar.getAbsolutePath();
+		return srcJar == null ? null : srcJar.getAbsolutePath();
 	}
 
 	void clearCache() {

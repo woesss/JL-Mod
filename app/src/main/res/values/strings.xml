@@ -214,4 +214,5 @@
     <string name="choose">choose</string>
     <string name="create">create</string>
     <string name="err_missing_app">Application not found.\nPlease check storage device %savailability or re-create shortcut.</string>
+    <string name="warn_install_from_net">File will be downloaded from Internet</string>
 </resources>

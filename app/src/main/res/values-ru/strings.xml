@@ -171,4 +171,5 @@
     <string name="choose">выбрать</string>
     <string name="create">создать</string>
     <string name="err_missing_app">Приложение не найдено.\nПроверьте доступность запоминающего устройства %sили создайте ярлык заново.</string>
+    <string name="warn_install_from_net">Файл будет загружен из сети Интернет</string>
 </resources>
