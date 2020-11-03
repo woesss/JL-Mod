@@ -38,29 +38,28 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	public static final int RIGHT = 8;
 	public static final int TOP = 16;
 	public static final int BOTTOM = 32;
-	@SuppressWarnings("unused")
 	public static final int BASELINE = 64;
 
 	public static final int SOLID = 0;
 	public static final int DOTTED = 1;
 
-	private Canvas canvas;
-	private Bitmap canvasBitmap;
+	private final Canvas canvas;
+	private final Bitmap canvasBitmap;
 	private final Image image;
 	private int canvasInitSave;
 
-	private Paint drawPaint = new Paint();
-	private Paint fillPaint = new Paint();
+	private final Paint drawPaint = new Paint();
+	private final Paint fillPaint = new Paint();
 
 	private int translateX;
 	private int translateY;
 
 	private final Rect clip = new Rect();
-	private Rect rect = new Rect();
-	private RectF rectF = new RectF();
-	private Path path = new Path();
+	private final Rect rect = new Rect();
+	private final RectF rectF = new RectF();
+	private final Path path = new Path();
 
-	private DashPathEffect dashPathEffect = new DashPathEffect(new float[]{5, 5}, 0);
+	private final DashPathEffect dashPathEffect = new DashPathEffect(new float[]{5, 5}, 0);
 	private int stroke = SOLID;
 
 	private Font font = Font.getDefaultFont();
@@ -133,12 +132,10 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		fillPaint.setARGB(255, r, g, b);
 	}
 
-	@SuppressWarnings("unused")
 	public void setGrayScale(int value) {
 		setColor(value, value, value);
 	}
 
-	@SuppressWarnings("unused")
 	public int getGrayScale() {
 		return (getRedComponent() + getGreenComponent() + getBlueComponent()) / 3;
 	}
@@ -159,7 +156,6 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		return drawPaint.getColor();
 	}
 
-	@SuppressWarnings("unused")
 	public int getDisplayColor(int color) {
 		return color;
 	}
@@ -174,7 +170,6 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		}
 	}
 
-	@SuppressWarnings("unused")
 	public int getStrokeStyle() {
 		return stroke;
 	}
@@ -184,7 +179,6 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 			font = Font.getDefaultFont();
 		}
 		this.font = font;
-		font.copyInto(fillPaint);
 	}
 
 	public Font getFont() {
@@ -234,12 +228,10 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		canvas.getClipBounds(clip);
 	}
 
-	@SuppressWarnings("unused")
 	public int getTranslateX() {
 		return translateX;
 	}
 
-	@SuppressWarnings("unused")
 	public int getTranslateY() {
 		return translateY;
 	}
@@ -260,21 +252,18 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		canvas.drawLine(x1, y1, x2, y2, drawPaint);
 	}
 
-	@SuppressWarnings("unused")
 	public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
 		if (width < 0 || height < 0) return;
 		rectF.set(x, y, x + width, y + height);
 		canvas.drawArc(rectF, -startAngle, -arcAngle, false, drawPaint);
 	}
 
-	@SuppressWarnings("unused")
 	public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
 		if (width <= 0 || height <= 0) return;
 		rectF.set(x, y, x + width, y + height);
 		canvas.drawArc(rectF, -startAngle, -arcAngle, true, fillPaint);
 	}
 
-	@SuppressWarnings("unused")
 	public void drawRect(int x, int y, int width, int height) {
 		if (width < 0 || height < 0) return;
 		canvas.drawRect(x, y, x + width, y + height, drawPaint);
@@ -285,26 +274,22 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		canvas.drawRect(x, y, x + width, y + height, fillPaint);
 	}
 
-	@SuppressWarnings("unused")
 	public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
 		if (width < 0 || height < 0) return;
 		rectF.set(x, y, x + width, y + height);
 		canvas.drawRoundRect(rectF, arcWidth, arcHeight, drawPaint);
 	}
 
-	@SuppressWarnings("unused")
 	public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
 		if (width < 0 || height < 0) return;
 		rectF.set(x, y, x + width, y + height);
 		canvas.drawRoundRect(rectF, arcWidth, arcHeight, fillPaint);
 	}
 
-	@SuppressWarnings("unused")
 	public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
 		fillPolygon(new int[]{x1, x2, x3}, 0, new int[]{y1, y2, y3}, 0, 3);
 	}
 
-	@SuppressWarnings("unused")
 	public void drawChar(char character, int x, int y, int anchor) {
 		drawChars(new char[]{character}, 0, 1, x, y, anchor);
 	}
@@ -314,52 +299,51 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 			anchor = LEFT | TOP;
 		}
 
+		Paint paint = font.paint;
 		if ((anchor & Graphics.LEFT) != 0) {
-			fillPaint.setTextAlign(Paint.Align.LEFT);
+			paint.setTextAlign(Paint.Align.LEFT);
 		} else if ((anchor & Graphics.RIGHT) != 0) {
-			fillPaint.setTextAlign(Paint.Align.RIGHT);
+			paint.setTextAlign(Paint.Align.RIGHT);
 		} else if ((anchor & Graphics.HCENTER) != 0) {
-			fillPaint.setTextAlign(Paint.Align.CENTER);
+			paint.setTextAlign(Paint.Align.CENTER);
 		}
 
 		if ((anchor & Graphics.TOP) != 0) {
-			y -= fillPaint.ascent();
+			y -= font.ascent;
 		} else if ((anchor & Graphics.BOTTOM) != 0) {
-			y -= fillPaint.descent();
+			y -= font.descent;
 		} else if ((anchor & Graphics.VCENTER) != 0) {
-			y -= (fillPaint.descent() + fillPaint.ascent()) / 2;
+			y -= (font.descent + font.ascent) / 2;
 		}
 
-		fillPaint.setAntiAlias(true);
-		canvas.drawText(data, offset, length, x, y, fillPaint);
-		fillPaint.setAntiAlias(false);
+		paint.setColor(fillPaint.getColor());
+		canvas.drawText(data, offset, length, x, y, paint);
 	}
 
-	@SuppressWarnings("unused")
 	public void drawString(String text, int x, int y, int anchor) {
 		if (anchor == 0) {
 			anchor = LEFT | TOP;
 		}
 
+		Paint paint = font.paint;
 		if ((anchor & Graphics.LEFT) != 0) {
-			fillPaint.setTextAlign(Paint.Align.LEFT);
+			paint.setTextAlign(Paint.Align.LEFT);
 		} else if ((anchor & Graphics.RIGHT) != 0) {
-			fillPaint.setTextAlign(Paint.Align.RIGHT);
+			paint.setTextAlign(Paint.Align.RIGHT);
 		} else if ((anchor & Graphics.HCENTER) != 0) {
-			fillPaint.setTextAlign(Paint.Align.CENTER);
+			paint.setTextAlign(Paint.Align.CENTER);
 		}
 
 		if ((anchor & Graphics.TOP) != 0) {
-			y -= fillPaint.ascent();
+			y -= font.ascent;
 		} else if ((anchor & Graphics.BOTTOM) != 0) {
-			y -= fillPaint.descent();
+			y -= font.descent;
 		} else if ((anchor & Graphics.VCENTER) != 0) {
-			y -= (fillPaint.descent() + fillPaint.ascent()) / 2;
+			y -= (font.descent + font.ascent) / 2;
 		}
 
-		fillPaint.setAntiAlias(true);
-		canvas.drawText(text, x, y, fillPaint);
-		fillPaint.setAntiAlias(false);
+		paint.setColor(fillPaint.getColor());
+		canvas.drawText(text, x, y, paint);
 	}
 
 	public void drawImage(Image image, int x, int y, int anchor) {
@@ -378,31 +362,30 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		canvas.drawBitmap(image.getBitmap(), x, y, null);
 	}
 
-	@SuppressWarnings("unused")
 	public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) {
 		if (anchor == 0) {
 			anchor = LEFT | TOP;
 		}
 
+		Paint paint = font.paint;
 		if ((anchor & Graphics.LEFT) != 0) {
-			fillPaint.setTextAlign(Paint.Align.LEFT);
+			paint.setTextAlign(Paint.Align.LEFT);
 		} else if ((anchor & Graphics.RIGHT) != 0) {
-			fillPaint.setTextAlign(Paint.Align.RIGHT);
+			paint.setTextAlign(Paint.Align.RIGHT);
 		} else if ((anchor & Graphics.HCENTER) != 0) {
-			fillPaint.setTextAlign(Paint.Align.CENTER);
+			paint.setTextAlign(Paint.Align.CENTER);
 		}
 
 		if ((anchor & Graphics.TOP) != 0) {
-			y -= fillPaint.ascent();
+			y -= font.ascent;
 		} else if ((anchor & Graphics.BOTTOM) != 0) {
-			y -= fillPaint.descent();
+			y -= font.descent;
 		} else if ((anchor & Graphics.VCENTER) != 0) {
-			y -= (fillPaint.descent() + fillPaint.ascent()) / 2;
+			y -= (font.descent + font.ascent) / 2;
 		}
 
-		fillPaint.setAntiAlias(true);
-		canvas.drawText(str, offset, offset + len, x, y, fillPaint);
-		fillPaint.setAntiAlias(false);
+		paint.setColor(fillPaint.getColor());
+		canvas.drawText(str, offset, offset + len, x, y, paint);
 	}
 
 	public void drawRegion(Image image, int x_src, int y_src, int width, int height,
@@ -477,7 +460,6 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		canvas.drawBitmap(rgbData, offset, scanlength, x, y, width, height, processAlpha, null);
 	}
 
-	@SuppressWarnings("unused")
 	public void copyArea(int x_src, int y_src, int width, int height,
 						 int x_dest, int y_dest, int anchor) {
 		if (width <= 0 || height <= 0) return;

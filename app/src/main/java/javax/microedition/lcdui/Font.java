@@ -17,6 +17,7 @@
 
 package javax.microedition.lcdui;
 
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
@@ -40,15 +41,30 @@ public class Font {
 	public static final int STYLE_PLAIN = 0;
 	public static final int STYLE_UNDERLINED = 4;
 
+	private static final int[] SCREEN_SIZES = {128, 176, 220, 320};
+	private static final int[] FONT_SIZES = {
+			9, 13, 15, // 128
+			13, 15, 20, // 176
+			15, 18, 22, // 220
+			18, 22, 26, // 320
+	};
+
 	private static final int FONT_COUNT = 3 * 3 * (1 << 3);
-	private static Font[] fonts = new Font[FONT_COUNT];
+	private static final Font[] fonts = new Font[FONT_COUNT];
+	private static final float[] sizes = new float[]{18, 22, 26};
 
 	private static boolean applyDimensions = true;
-	private static float[] sizes = new float[]{18, 22, 26};
+	private static boolean antiAlias;
+
+
+	final Paint paint;
+	final float ascent;
+	final float descent;
+	private final int height;
+	private int face, style, size;
 
 	public static void setApplyDimensions(boolean flag) {
 		applyDimensions = flag;
-
 		Arrays.fill(fonts, null);
 	}
 
@@ -73,9 +89,6 @@ public class Font {
 		Arrays.fill(fonts, null);
 	}
 
-	private Paint paint;
-	private int face, style, size;
-
 	public Font(Typeface face, int style, float size, boolean underline) {
 		if (applyDimensions) {
 			DisplayMetrics metrics = ContextHolder.getAppContext().getResources().getDisplayMetrics();
@@ -83,12 +96,23 @@ public class Font {
 		}
 
 		paint = new Paint();
+		paint.setAntiAlias(antiAlias);
+		paint.setColor(Color.BLACK);
+		paint.setStyle(Paint.Style.FILL);
 
 		paint.setTypeface(Typeface.create(face, style));
 		paint.setUnderlineText(underline);
 
-		paint.setTextSize(size);                                             // at first, just set the size (no matter what is put here)
-		paint.setTextSize(size * size / (paint.descent() - paint.ascent())); // and now we set the size equal to the given one (in pixels)
+		// at first, just set the size (no matter what is put here)
+		paint.setTextSize(size);
+		// and now we set the size equal to the given one (in pixels)
+		paint.setTextSize(size * size / paint.getFontSpacing());
+		if (size >= 13)
+			paint.setTextScaleX(0.8f);
+		Paint.FontMetrics fm = paint.getFontMetrics();
+		height = (int) Math.ceil(fm.leading + fm.bottom - fm.top);
+		ascent = fm.ascent;
+		descent = fm.descent;
 	}
 
 	public static Font getFont(int fontSpecifier) {
@@ -158,18 +182,22 @@ public class Font {
 		return getFont(FACE_SYSTEM, STYLE_PLAIN, SIZE_MEDIUM);
 	}
 
-	public void copyInto(Paint target) {
-		target.setTypeface(paint.getTypeface());
-		target.setUnderlineText(paint.isUnderlineText());
-		target.setTextSize(paint.getTextSize());
+	public static void setAntiAlias(boolean enable) {
+		antiAlias = enable;
+		Arrays.fill(fonts, null);
 	}
 
-	public Typeface getTypeface() {
-		return paint.getTypeface();
-	}
-
-	public float getTextSize() {
-		return paint.getTextSize();
+	// non api
+	public static int getFontSizeForResolution(int sizeType, int width, int height) {
+		int size = Math.max(width, height);
+		if (size > 0) {
+			for (int i = 0; i < SCREEN_SIZES.length; i++) {
+				if (SCREEN_SIZES[i] >= size) {
+					return FONT_SIZES[i * 3 + sizeType];
+				}
+			}
+		}
+		return FONT_SIZES[FONT_SIZES.length - 3 + sizeType];
 	}
 
 	public int getFace() {
@@ -189,7 +217,7 @@ public class Font {
 	}
 
 	public int getHeight() {
-		return (int) Math.ceil(paint.descent() - paint.ascent());
+		return height;
 	}
 
 	public int getBaselinePosition() {
@@ -242,42 +270,6 @@ public class Font {
 		}
 
 		return ((face * 3 + size) << 3) + style;
-	}
-
-	public static int getFontFace(int index) {
-		index = (index >>> 3) / 3;
-
-		switch (index) {
-			case 0:
-				return FACE_MONOSPACE;
-
-			case 1:
-				return FACE_PROPORTIONAL;
-
-			case 2:
-			default:
-				return FACE_SYSTEM;
-		}
-	}
-
-	public static int getFontSize(int index) {
-		index = (index >>> 3) % 3;
-
-		switch (index) {
-			case 0:
-				return SIZE_SMALL;
-
-			case 1:
-			default:
-				return SIZE_MEDIUM;
-
-			case 2:
-				return SIZE_LARGE;
-		}
-	}
-
-	public static int getFontStyle(int index) {
-		return index & 7;
 	}
 
 	public boolean isBold() {
