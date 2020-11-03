@@ -169,6 +169,7 @@ public class AppInstaller {
 			app.setImagePathExt(Config.MIDLET_ICON_FILE);
 		}
 		if (oldApp != null) {
+			app.setId(oldApp.getId());
 			String path = oldApp.getPath();
 			if (!path.equals(appDirName)) {
 				File rms = new File(Config.getDataDir(), path);
@@ -305,5 +306,9 @@ public class AppInstaller {
 
 	String getIconPath() {
 		return targetDir.getAbsolutePath() + Config.MIDLET_ICON_FILE;
+	}
+
+	public AppItem getExistsApp() {
+		return oldApp;
 	}
 }

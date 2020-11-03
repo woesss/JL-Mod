@@ -58,6 +58,7 @@ public class InstallerDialog extends DialogFragment {
 	private Button btnClose;
 	private AppInstaller installer;
 	private AlertDialog mDialog;
+	private Button btnRun;
 
 	public InstallerDialog() {
 	}
@@ -94,6 +95,7 @@ public class InstallerDialog extends DialogFragment {
 		progress = view.findViewById(R.id.progress);
 		btnOk = view.findViewById(R.id.btnOk);
 		btnClose = view.findViewById(R.id.btnClose);
+		btnRun = view.findViewById(R.id.btnRun);
 		mDialog = new AlertDialog.Builder(requireActivity(), getTheme())
 				.setIcon(R.mipmap.ic_launcher)
 				.setView(view)
@@ -133,6 +135,7 @@ public class InstallerDialog extends DialogFragment {
 
 	private void hideProgress() {
 		progress.setVisibility(View.INVISIBLE);
+		tvStatus.setText("");
 		tvStatus.setVisibility(View.INVISIBLE);
 	}
 
@@ -144,6 +147,7 @@ public class InstallerDialog extends DialogFragment {
 	private void hideButtons() {
 		btnOk.setVisibility(View.GONE);
 		btnClose.setVisibility(View.GONE);
+		btnRun.setVisibility(View.GONE);
 	}
 
 	private void showButtons() {
@@ -197,6 +201,14 @@ public class InstallerDialog extends DialogFragment {
 					break;
 				case AppInstaller.STATUS_EQUAL:
 					message = getString(R.string.reinstall);
+					AppItem app = installer.getExistsApp();
+					if (app != null) {
+						btnRun.setVisibility(View.VISIBLE);
+						btnRun.setOnClickListener(v -> {
+							Config.startApp(getActivity(), app.getTitle(), app.getPath(), false);
+							dismiss();
+						});
+					}
 					break;
 				case AppInstaller.STATUS_NEWEST:
 					currVersion = installer.getOldDescriptor().getVersion();
