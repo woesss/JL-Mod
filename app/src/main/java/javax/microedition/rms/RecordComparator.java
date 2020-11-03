@@ -21,17 +21,12 @@
  *  See the LGPL or the AL for the specific language governing permissions and
  *  limitations.
  */
-
 package javax.microedition.rms;
 
-
 public interface RecordComparator {
-
 	int EQUIVALENT = 0;
 	int FOLLOWS = 1;
 	int PRECEDES = -1;
 
 	int compare(byte[] rec1, byte[] rec2);
-
 }
-
