@@ -34,22 +34,22 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class AppClassLoader extends DexClassLoader {
-	private static final String TAG = AppClassLoader.getName();
+	private static final String TAG = AppClassLoader.class.getName();
 
 	private static AppClassLoader instance;
-	private static String name;
 	private static ZipFile zipFile;
-	private String resFolderPath;
+	private static String sDataDir;
+	private static File sOldResDir;
 
-	AppClassLoader(String paths, String tmpDir, ClassLoader parent, File resDir) {
+	AppClassLoader(String paths, String tmpDir, ClassLoader parent, File appDir) {
 		super(paths, tmpDir, null, new CoreClassLoader(parent));
-		resFolderPath = resDir.getPath();
-		File appDir = resDir.getParentFile();
 		if (appDir == null)
-			throw new NullPointerException();
-		name = appDir.getName();
+			throw new NullPointerException("App path is null");
+		sOldResDir = new File(appDir, Config.MIDLET_RES_DIR);
 		instance = this;
-		prepareZipFile();
+		sDataDir = appDir.getParentFile().getParent() + Config.MIDLET_DATA_DIR + appDir.getName();
+		File jar = new File(appDir, Config.MIDLET_RES_FILE);
+		zipFile = jar.exists() ? new ZipFile(jar) : null;
 	}
 
 	public static InputStream getResourceAsStream(Class<?> resClass, String resName) {
@@ -78,11 +78,8 @@ public class AppClassLoader extends DexClassLoader {
 		return new ByteArrayInputStream(data);
 	}
 
-	public void prepareZipFile() {
-		File midletResFile = new File(Config.getAppDir(), name + Config.MIDLET_RES_FILE);
-		if (midletResFile.exists()) {
-			zipFile = new ZipFile(midletResFile);
-		}
+	public static String getDataDir() {
+		return sDataDir;
 	}
 
 	public static byte[] getResourceAsBytes(String resName) {
@@ -107,9 +104,8 @@ public class AppClassLoader extends DexClassLoader {
 	}
 
 	private static byte[] getResourceBytes(String name) {
-		File midletResFile = new File(Config.getAppDir(), getName() + Config.MIDLET_RES_FILE);
-		if (!midletResFile.exists()) {
-			final File file = new File(instance.resFolderPath, name);
+		if (zipFile == null) {
+			final File file = new File(sOldResDir, name);
 			try {
 				return FileUtils.getBytes(file);
 			} catch (Exception e) {
@@ -141,10 +137,6 @@ public class AppClassLoader extends DexClassLoader {
 			}
 		}
 		return null;
-	}
-
-	public static String getName() {
-		return name;
 	}
 
 	public static AppClassLoader getInstance() {

@@ -49,11 +49,6 @@ public class ProfilesManager {
 		return getList(root);
 	}
 
-	static ArrayList<Profile> getConfigs() {
-		File root = new File(Config.getConfigsDir());
-		return getList(root);
-	}
-
 	@NonNull
 	private static ArrayList<Profile> getList(File root) {
 		File[] dirs = root.listFiles();
@@ -84,7 +79,6 @@ public class ProfilesManager {
 					ProfileModel params = loadConfig(from.getDir());
 					if (params != null) {
 						params.dir = dstConfig.getParentFile();
-						if (params.version < 1) updateSystemProperties(params);
 						saveConfig(params);
 					}
 				}
@@ -114,28 +108,36 @@ public class ProfilesManager {
 	@Nullable
 	public static ProfileModel loadConfig(File dir) {
 		File file = new File(dir, Config.MIDLET_CONFIG_FILE);
+		ProfileModel params = null;
 		if (file.exists()) {
 			try (FileReader reader = new FileReader(file)) {
-				ProfileModel params = gson.fromJson(reader, ProfileModel.class);
+				params = gson.fromJson(reader, ProfileModel.class);
 				params.dir = dir;
-				return params;
 			} catch (Exception e) {
 				Log.e(TAG, "loadConfig: ", e);
 			}
 		}
-		File oldFile = new File(dir, "config.xml");
-		if (oldFile.exists()) {
-			try (FileInputStream in = new FileInputStream(oldFile)) {
-				HashMap<String, Object> map = XmlUtils.readMapXml(in);
-				JsonElement json = gson.toJsonTree(map);
-				ProfileModel params = gson.fromJson(json, ProfileModel.class);
-				params.dir = dir;
-				return params;
-			} catch (Exception e) {
-				Log.e(TAG, "loadConfig: ", e);
+		if (params == null) {
+			File oldFile = new File(dir, "config.xml");
+			if (oldFile.exists()) {
+				try (FileInputStream in = new FileInputStream(oldFile)) {
+					HashMap<String, Object> map = XmlUtils.readMapXml(in);
+					JsonElement json = gson.toJsonTree(map);
+					params = gson.fromJson(json, ProfileModel.class);
+					params.dir = dir;
+				} catch (Exception e) {
+					Log.e(TAG, "loadConfig: ", e);
+				}
 			}
 		}
-		return null;
+		if (params != null) {
+			if (params.version < 1) {
+				ProfilesManager.updateSystemProperties(params);
+				params.version = 1;
+				ProfilesManager.saveConfig(params);
+			}
+		}
+		return params;
 	}
 
 	public static void saveConfig(ProfileModel p) {

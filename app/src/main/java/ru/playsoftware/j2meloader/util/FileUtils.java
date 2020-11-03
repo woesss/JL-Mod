@@ -34,7 +34,7 @@ import java.util.Arrays;
 
 public class FileUtils {
 
-	private static String TAG = FileUtils.class.getName();
+	private static final String TAG = FileUtils.class.getName();
 	private static final String TEMP_JAR_NAME = "tmp.jar";
 	private static final String TEMP_JAD_NAME = "tmp.jad";
 	private static final int BUFFER_SIZE = 1024;
@@ -78,7 +78,7 @@ public class FileUtils {
 				}
 			}
 		}
-		if (!dir.delete()) {
+		if (!dir.delete() && dir.exists()) {
 			Log.w(TAG, "Can't delete file: " + dir);
 		}
 	}

@@ -38,7 +38,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.acra.ACRA;
-import org.acra.ErrorReporter;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -70,7 +69,6 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.util.LogUtils;
-import ru.woesss.j2me.jar.Descriptor;
 
 public class MicroActivity extends AppCompatActivity {
 	private static final int ORIENTATION_DEFAULT = 0;

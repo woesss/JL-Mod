@@ -33,10 +33,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import javax.microedition.lcdui.pointer.VirtualKeyboard;
@@ -53,7 +53,7 @@ public class ContextHolder {
 	private static WeakReference<MicroActivity> currentActivity;
 	private static Vibrator vibrator;
 	private static Context appContext;
-	private static ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
+	private static final ArrayList<ActivityResultListener> resultListeners = new ArrayList<>();
 
 	public static Context getAppContext() {
 		return appContext;
@@ -107,7 +107,7 @@ public class ContextHolder {
 	}
 
 	public static FileOutputStream openFileOutput(String name) throws FileNotFoundException {
-		File dir = new File(Config.getDataDir(), AppClassLoader.getName());
+		File dir = new File(AppClassLoader.getDataDir());
 		File file = new File(dir, name);
 		if (!dir.isDirectory() && !dir.mkdirs()) {
 			throw new FileNotFoundException("Can't create directory: " + dir);
@@ -124,7 +124,7 @@ public class ContextHolder {
 	}
 
 	public static File getFileByName(String name) {
-		return new File(Config.getDataDir() + AppClassLoader.getName(), name);
+		return new File(AppClassLoader.getDataDir(), name);
 	}
 
 	public static File getCacheDir() {

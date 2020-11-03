@@ -170,4 +170,5 @@
     <string name="alert_msg_workdir_not_exists">Рабочая папка не существует по пути:\n\"%s\".\nВы хотите создать её или выбрать другую?</string>
     <string name="choose">выбрать</string>
     <string name="create">создать</string>
+    <string name="err_missing_app">Приложение не найдено.\nПроверьте доступность запоминающего устройства %sили создайте ярлык заново.</string>
 </resources>

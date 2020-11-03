@@ -235,7 +235,7 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
 		AppItem item = adapter.getItem(position);
-		Config.startApp(getActivity(), item.getTitle(), item.getPath(), false);
+		Config.startApp(getActivity(), item.getTitle(), item.getPathExt(), false);
 	}
 
 	@Override
@@ -255,7 +255,7 @@ public class AppsListFragment extends ListFragment {
 			case R.id.action_context_shortcut:
 				Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
 				Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
-						Uri.parse(appItem.getPath()), getActivity(), ConfigActivity.class);
+						Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
 				launchIntent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
 				ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
 						new ShortcutInfoCompat.Builder(requireActivity(), appItem.getTitle())
@@ -288,7 +288,7 @@ public class AppsListFragment extends ListFragment {
 				alertRename(index);
 				break;
 			case R.id.action_context_settings:
-				Config.startApp(getActivity(), appItem.getTitle(), appItem.getPath(), true);
+				Config.startApp(getActivity(), appItem.getTitle(), appItem.getPathExt(), true);
 				break;
 			case R.id.action_context_delete:
 				alertDelete(index);

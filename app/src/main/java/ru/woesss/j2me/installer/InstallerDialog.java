@@ -182,11 +182,11 @@ public class InstallerDialog extends DialogFragment {
 	private class MidletInfoObserver implements SingleObserver<Integer> {
 
 		@Override
-		public void onSubscribe(Disposable d) {
+		public void onSubscribe(@NonNull Disposable d) {
 		}
 
 		@Override
-		public void onSuccess(Integer status) {
+		public void onSuccess(@NonNull Integer status) {
 			Descriptor nd = installer.getNewDescriptor();
 			mDialog.setTitle(nd.getName());
 			if (status == AppInstaller.STATUS_NEW) {
@@ -205,7 +205,7 @@ public class InstallerDialog extends DialogFragment {
 					if (app != null) {
 						btnRun.setVisibility(View.VISIBLE);
 						btnRun.setOnClickListener(v -> {
-							Config.startApp(getActivity(), app.getTitle(), app.getPath(), false);
+							Config.startApp(getActivity(), app.getTitle(), app.getPathExt(), false);
 							dismiss();
 						});
 					}
@@ -251,11 +251,11 @@ public class InstallerDialog extends DialogFragment {
 		}
 
 		@Override
-		public void onSubscribe(Disposable d) {
+		public void onSubscribe(@NonNull Disposable d) {
 		}
 
 		@Override
-		public void onSuccess(AppItem app) {
+		public void onSuccess(@NonNull AppItem app) {
 			appRepository.insert(app);
 			installer.clearCache();
 			installer.deleteTemp();
@@ -266,7 +266,7 @@ public class InstallerDialog extends DialogFragment {
 			if (drawable != null) mDialog.setIcon(drawable);
 			btnOk.setText(R.string.START_CMD);
 			btnOk.setOnClickListener(v -> {
-				Config.startApp(getActivity(), app.getTitle(), app.getPath(), false);
+				Config.startApp(getActivity(), app.getTitle(), app.getPathExt(), false);
 				dismiss();
 			});
 			btnClose.setText(R.string.close);
