@@ -24,7 +24,10 @@
 
 package com.siemens.mp.ui;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+
+import java.nio.IntBuffer;
 
 public class Image extends com.siemens.mp.misc.NativeMem {
 
@@ -95,4 +98,19 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 		return p | a;
 	}
 
+	public static void mirrorImageHorizontally(javax.microedition.lcdui.Image image){
+		Bitmap bitmap = image.getBitmap();
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
+		int[] tmp = new int[width * height];
+		bitmap.getPixels(tmp, 0, width, 0, 0, width, height);
+		for (int i = 0; i < height; ) {
+			for (int f = i * width, s = ++i * width; f < s; f++, s--) {
+				int c = tmp[f];
+				tmp[f] = tmp[s];
+				tmp[s] = c;
+			}
+		}
+		bitmap.copyPixelsFromBuffer(IntBuffer.wrap(tmp));
+	}
 }
