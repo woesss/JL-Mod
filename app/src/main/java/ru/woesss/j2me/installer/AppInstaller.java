@@ -198,7 +198,7 @@ public class AppInstaller {
 		AndroidProducer.processJar(srcJar, patchedJar);
 		try {
 			Main.main(new String[]{"--no-optimize",
-					"--output=" + tmpDir.getAbsolutePath() + Config.MIDLET_DEX_FILE,
+					"--output=" + tmpDir.getAbsolutePath() + Config.MIDLET_DEX_ARCH,
 					patchedJar.getAbsolutePath()});
 		} catch (Throwable e) {
 			throw new ConverterException("Dexing error", e);

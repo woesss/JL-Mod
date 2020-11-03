@@ -124,7 +124,10 @@ public class MicroLoader {
 
 	MIDlet loadMIDlet(String mainClass) throws ClassNotFoundException, InstantiationException,
 			IllegalAccessException, NoSuchMethodException, InvocationTargetException, IOException {
-		File dexSource = new File(appDir, Config.MIDLET_DEX_FILE);
+		File dexSource = new File(appDir, Config.MIDLET_DEX_ARCH);
+		if (!dexSource.exists()) {
+			dexSource = new File(appDir, Config.MIDLET_DEX_FILE);
+		}
 		File codeCacheDir = SDK_INT >= LOLLIPOP ? context.getCodeCacheDir() : context.getCacheDir();
 		File dexOptDir = new File(codeCacheDir, Config.DEX_OPT_CACHE_DIR);
 		if (dexOptDir.exists()) {

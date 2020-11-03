@@ -36,6 +36,7 @@ public class Config {
 	public static final String MIDLET_CONFIG_FILE = "/config.json";
 	public static final String MIDLET_CONFIGS_DIR = "/configs/";
 	public static final String MIDLET_DATA_DIR = "/data/";
+	public static final String MIDLET_DEX_ARCH = "/converted.zip";
 	public static final String MIDLET_DEX_FILE = "/converted.dex";
 	public static final String MIDLET_ICON_FILE = "/icon.png";
 	public static final String MIDLET_KEY_LAYOUT_FILE = "/VirtualKeyboardLayout";
