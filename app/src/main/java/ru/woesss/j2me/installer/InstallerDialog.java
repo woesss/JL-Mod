@@ -78,7 +78,7 @@ public class InstallerDialog extends DialogFragment {
 	@Override
 	public void onAttach(@NonNull Context context) {
 		super.onAttach(context);
-		appRepository = new AppRepository(requireActivity().getApplication(), true);
+		appRepository = new AppRepository(context);
 	}
 
 	@NonNull

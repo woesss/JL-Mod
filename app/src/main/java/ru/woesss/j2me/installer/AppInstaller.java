@@ -287,7 +287,7 @@ public class AppInstaller {
 		// Remove invalid characters from app path
 		String name = newDesc.getName();
 		String vendor = newDesc.getVendor();
-		AppRepository appRepository = new AppRepository(context, true);
+		AppRepository appRepository = new AppRepository(context);
 		currentApp = appRepository.get(name, vendor);
 		appRepository.close();
 		String id = Integer.toHexString((name + vendor).hashCode());
