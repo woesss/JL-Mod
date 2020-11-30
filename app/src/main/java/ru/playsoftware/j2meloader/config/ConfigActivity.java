@@ -923,10 +923,11 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	private void showColorPicker(EditText et) {
 		AmbilWarnaDialog.OnAmbilWarnaListener colorListener = new AmbilWarnaDialog.OnAmbilWarnaListener() {
+			@SuppressLint("NewApi")
 			@Override
 			public void onOk(AmbilWarnaDialog dialog, int color) {
 				et.setText(String.format("%06X", color & 0xFFFFFF));
-				ColorDrawable drawable = (ColorDrawable) et.getCompoundDrawables()[2];
+				ColorDrawable drawable = (ColorDrawable) et.getCompoundDrawablesRelative()[2];
 				drawable.setColor(color);
 			}
 
@@ -992,13 +993,14 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		private final EditText editText;
 		private final ColorDrawable drawable;
 
+		@SuppressLint("NewApi")
 		ColorTextWatcher(EditText editText) {
 			this.editText = editText;
 			int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32,
 					editText.getResources().getDisplayMetrics());
 			ColorDrawable colorDrawable = new ColorDrawable();
 			colorDrawable.setBounds(0, 0, size, size);
-			editText.setCompoundDrawables(null, null, colorDrawable, null);
+			editText.setCompoundDrawablesRelative(null, null, colorDrawable, null);
 			drawable = colorDrawable;
 			editText.setFilters(new InputFilter[]{this::filter});
 		}
