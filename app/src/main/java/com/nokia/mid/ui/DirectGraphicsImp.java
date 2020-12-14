@@ -70,7 +70,7 @@ public class DirectGraphicsImp implements DirectGraphics {
 
 	@Override
 	public int getNativePixelFormat() {
-		return TYPE_INT_8888_ARGB;
+		return TYPE_USHORT_565_RGB;
 	}
 
 	@Override
