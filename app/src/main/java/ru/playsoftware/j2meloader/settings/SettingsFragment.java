@@ -36,7 +36,8 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
 
-import static ru.playsoftware.j2meloader.util.Constants.*;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+import static ru.playsoftware.j2meloader.util.Constants.REQUEST_FILE;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 	private Preference prefFolder;
@@ -44,11 +45,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
-		findPreference("pref_default_settings").setOnPreferenceClickListener(preference -> {
-			Intent intent = new Intent(getActivity(), ProfilesActivity.class);
-			startActivity(intent);
-			return true;
-		});
+		findPreference("pref_default_settings").setIntent(new Intent(getActivity(), ProfilesActivity.class));
 		prefFolder = findPreference(PREF_EMULATOR_DIR);
 		prefFolder.setSummary(Config.getEmulatorDir());
 		prefFolder.setOnPreferenceClickListener(this::pickFolder);

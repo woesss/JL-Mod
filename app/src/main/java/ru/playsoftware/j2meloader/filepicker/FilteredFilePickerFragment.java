@@ -61,7 +61,7 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 
 	private String getExtension(@NonNull File file) {
 		String path = file.getPath();
-		int i = path.lastIndexOf(".");
+		int i = path.lastIndexOf('.');
 		if (i < 0) {
 			return null;
 		} else {
@@ -71,11 +71,14 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 
 	@Override
 	protected boolean isItemVisible(final File file) {
-		if (!isDir(file) && (mode == MODE_FILE || mode == MODE_FILE_AND_DIR)) {
-			String ext = getExtension(file);
-			return ext != null && extList.contains(ext.toLowerCase());
+		if (isDir(file)) {
+			return true;
 		}
-		return isDir(file);
+		if (mode != MODE_FILE && mode != MODE_FILE_AND_DIR) {
+			return false;
+		}
+		String ext = getExtension(file);
+		return ext != null && extList.contains(ext.toLowerCase());
 	}
 
 	@Override
@@ -101,11 +104,12 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 
 	@Override
 	public void onBindHeaderViewHolder(@NonNull HeaderViewHolder viewHolder) {
-		if (compareFiles(currentDir, getRoot()) != 0) {
-			viewHolder.itemView.setEnabled(true);
-			super.onBindHeaderViewHolder(viewHolder);
-		} else {
-			viewHolder.itemView.setEnabled(false);
-		}
+		viewHolder.itemView.setEnabled(compareFiles(currentDir, getRoot()) != 0);
+		super.onBindHeaderViewHolder(viewHolder);
+	}
+
+	@Override
+	public void onClickOk(@NonNull View view) {
+		super.onClickOk(view);
 	}
 }

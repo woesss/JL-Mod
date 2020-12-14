@@ -129,7 +129,7 @@ public class ContextHolder {
 
 	public static File getCacheDir() {
 		File dir = new File(Config.getEmulatorDir() + "/cache");
-		if (dir.exists() || dir.mkdirs())
+		if (dir.isDirectory() || dir.mkdirs())
 			return dir;
 		return getAppContext().getCacheDir();
 	}

@@ -99,8 +99,7 @@ public class AppInstaller {
 			downloadJad();
 			isLocal = false;
 		} else {
-			String path = FileUtils.getAppPath(context, uri);
-			srcFile = new File(path);
+			srcFile = FileUtils.getFileForUri(context, uri);
 			isLocal = true;
 		}
 

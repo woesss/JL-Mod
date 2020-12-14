@@ -21,6 +21,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import com.nononsenseapps.filepicker.Utils;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +32,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
-import java.util.Arrays;
 
 public class FileUtils {
 
@@ -83,50 +84,49 @@ public class FileUtils {
 		}
 	}
 
-	public static String getAppPath(Context context, Uri uri) throws IOException {
+	public static File getFileForUri(Context context, Uri uri) throws IOException {
 		if ("file".equals(uri.getScheme())) {
 			String path = uri.getPath();
-			if (path != null && new File(path).exists()) {
-				return path;
-			}
-		}
-		File folder = new File(context.getCacheDir(), "installer");
-		if (!folder.exists() && !folder.mkdirs()) {
-			throw new IOException("Can't create directory: " + folder);
-		}
-		InputStream in = context.getContentResolver().openInputStream(uri);
-		OutputStream out = null;
-		byte[] signature = new byte[2];
-		byte[] jarSignature = new byte[]{0x50, 0x4B};
-		if (in == null || in.read(signature) == -1)
-			throw new IOException("Can't read data from uri: " + uri);
-		File file;
-		if (Arrays.equals(signature, jarSignature)) {
-			file = new File(folder, TEMP_JAR_NAME);
-		} else {
-			file = new File(folder, TEMP_JAD_NAME);
-		}
-		try {
-			out = new FileOutputStream(file);
-			byte[] buf = new byte[BUFFER_SIZE];
-			int len;
-			out.write(signature);
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (out != null) {
-					out.close();
+			if (path != null) {
+				File file = new File(path);
+				if (file.exists()) {
+					return file;
 				}
-				in.close();
-			} catch (IOException e) {
+			}
+		}
+		if ((context.getPackageName() + ".provider").equals(uri.getAuthority())) {
+			try {
+				File file = Utils.getFileForUri(uri);
+				if (file.isFile()) {
+					return file;
+				}
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return file.getPath();
+		File tmpDir = new File(context.getCacheDir(), "installer");
+		if (!tmpDir.exists() && !tmpDir.mkdirs()) {
+			throw new IOException("Can't create directory: " + tmpDir);
+		}
+		File file;
+		try (InputStream in = context.getContentResolver().openInputStream(uri)) {
+			byte[] buf = new byte[BUFFER_SIZE];
+			int len;
+			if (in == null || (len = in.read(buf)) == -1)
+				throw new IOException("Can't read data from uri: " + uri);
+			if (buf[0] == 0x50 && buf[1] == 0x4B) {
+				file = new File(tmpDir, TEMP_JAR_NAME);
+			} else {
+				file = new File(tmpDir, TEMP_JAD_NAME);
+			}
+			try (OutputStream out = new FileOutputStream(file)) {
+				out.write(buf, 0, len);
+				while ((len = in.read(buf)) > 0) {
+					out.write(buf, 0, len);
+				}
+			}
+		}
+		return file;
 	}
 
 	public static byte[] getBytes(File file) throws IOException {

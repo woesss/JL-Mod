@@ -42,7 +42,6 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nononsenseapps.filepicker.FilePickerActivity;
-import com.nononsenseapps.filepicker.Utils;
 
 import java.io.IOException;
 import java.util.List;
@@ -174,8 +173,8 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_FILE && resultCode == Activity.RESULT_OK) {
-			List<Uri> files = Utils.getSelectedFilesFromResult(data);
-			for (Uri uri : files) {
+			Uri uri = data.getData();
+			if (uri != null) {
 				installApp(uri);
 			}
 		}
