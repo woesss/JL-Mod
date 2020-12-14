@@ -51,40 +51,29 @@ public class Descriptor {
 
 	// required in JAD and/or Manifest
 	private static final String MIDLET_N = "MIDlet-";
-	@SuppressWarnings("unused")
 	private static final String MICROEDITION_PROFILE = "MicroEdition-Profile";
-	@SuppressWarnings("unused")
 	private static final String MICROEDITION_CONFIGURATION = "MicroEdition-Configuration";
 
 	// optional
-	@SuppressWarnings("unused")
 	public static final String MIDLET_CERTIFICATE_N_S = "MIDlet-Certificate-";
-	@SuppressWarnings("unused")
 	public static final String MIDLET_DATA_SIZE = "MIDlet-Data-Size";
-	@SuppressWarnings("unused")
 	public static final String MIDLET_DELETE_CONFIRM = "MIDlet-Delete-Confirm ";
-	@SuppressWarnings("unused")
 	public static final String MIDLET_DELETE_NOTIFY = "MIDlet-Delete-Notify";
-	@SuppressWarnings("unused")
 	private static final String MIDLET_DESCRIPTION = "MIDlet-Description";
 	private static final String MIDLET_ICON = "MIDlet-Icon";
-	@SuppressWarnings("unused")
 	public static final String MIDLET_INFO_URL = "MIDlet-Info-URL";
-	@SuppressWarnings("unused")
 	public static final String MIDLET_INSTALL_NOTIFY = "MIDlet-Install-Notify";
-	@SuppressWarnings("unused")
 	public static final String MIDLET_JAR_RSA_SHA1 = "MIDlet-Jar-RSA-SHA1";
-	@SuppressWarnings("unused")
 	public static final String MIDLET_PERMISSIONS = "MIDlet-Permissions";
-	@SuppressWarnings("unused")
 	public static final String MIDLET_PERMISSIONS_OPT = "MIDlet-Permissions-Opt";
-	@SuppressWarnings("unused")
 	public static final String MIDLET_PUSH_N = "MIDlet-Push-";
 
 	private static final String FAIL_ATTRIBUTE = "Fail attribute '%s: %s'";
-	private Map<String, String> attributes = new HashMap<>();
+	private final boolean isJad;
+	private final Map<String, String> attributes = new HashMap<>();
 
 	public Descriptor(String source, boolean isJad) throws IOException {
+		this.isJad = isJad;
 		init(source);
 		if (isJad) {
 			verifyJadAttrs();
@@ -94,6 +83,7 @@ public class Descriptor {
 	}
 
 	public Descriptor(File file, boolean isJad) throws IOException {
+		this.isJad = isJad;
 		byte[] buf;
 		try (InputStream inputStream = new FileInputStream(file)) {
 			int count = inputStream.available();
@@ -207,8 +197,8 @@ public class Descriptor {
 		return attributes.get(MIDLET_NAME);
 	}
 
-	private String getSizePretty() {
-		long size = Long.parseLong(getJarSize());
+	private static String getSizePretty(String number) {
+		long size = Long.parseLong(number.trim());
 		DecimalFormat decimalformat = new DecimalFormat("########.00");
 		String formatted;
 		if (size >= 1024L) {
@@ -228,20 +218,6 @@ public class Descriptor {
 			formatted = size + " B";
 		}
 		return formatted;
-	}
-
-	public String toString(String jarURL) {
-		String str = String.format("%s: %s\n"
-						+ "%s: %s\n"
-						+ "%s: %s\n"
-						+ "%s: %s\n",
-				MIDLET_VENDOR, getVendor(),
-				MIDLET_VERSION, getVersion(),
-				"Size", getSizePretty(),
-				"Origin", getFileLocation(jarURL));
-		String desc = getDescription();
-		if (desc != null) str = desc + "\n\n" + str;
-		return str;
 	}
 
 	public String getVendor() {
@@ -300,15 +276,16 @@ public class Descriptor {
 		info.append(c.getText(R.string.midlet_name)).append(getName()).append('\n');
 		info.append(c.getText(R.string.midlet_vendor)).append(getVendor()).append('\n');
 		info.append(c.getText(R.string.midlet_version)).append(getVersion()).append('\n');
-		if (getJarSize() != null) {
-			info.append(c.getText(R.string.midlet_size)).append(getSizePretty()).append('\n');
+		String jarSize = getJarSize();
+		if (jarSize != null) {
+			info.append(c.getText(R.string.midlet_size)).append(getSizePretty(jarSize)).append('\n');
 		}
 		info.append('\n');
 		return info;
 	}
 
 	private String getJarSize() {
-		return attributes.get(MIDLET_JAR_SIZE);
+		return isJad ? attributes.get(MIDLET_JAR_SIZE) : null;
 	}
 
 	public void merge(Descriptor newDescriptor) {
