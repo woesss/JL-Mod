@@ -29,7 +29,6 @@ import android.view.ViewConfiguration;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,18 +41,12 @@ import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
-import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.MigrationUtils;
 
+import static ru.playsoftware.j2meloader.util.Constants.*;
+
 public class MainActivity extends BaseActivity {
-
-	public static final String APP_SORT_KEY = "appSort";
-	public static final String APP_URI_KEY = "appUri";
-	private static final int REQUEST_WORK_DIR = 1;
-	private static final int RESULT_NEED_RECREATE = 1;
-
 	private SharedPreferences sp;
-	private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 0;
 	private String emulatorDir;
 	private boolean needRecreate;
 
@@ -71,7 +64,7 @@ public class MainActivity extends BaseActivity {
 		if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 				!= PackageManager.PERMISSION_GRANTED) {
 			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-					MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+					REQUEST_PERMISSIONS);
 		} else {
 			if (checkDirExists()) {
 				setupActivity((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0
@@ -96,11 +89,11 @@ public class MainActivity extends BaseActivity {
 		checkActionBar();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		MigrationUtils.check();
-		String appSort = sp.getString("pref_app_sort", "name");
+		String appSort = sp.getString(PREF_APP_SORT, "name");
 		Bundle bundleLoad = new Bundle();
-		bundleLoad.putString(APP_SORT_KEY, appSort);
+		bundleLoad.putString(KEY_APP_SORT, appSort);
 		if (intentUri) {
-			bundleLoad.putParcelable(APP_URI_KEY, getIntent().getData());
+			bundleLoad.putParcelable(KEY_APP_URI, getIntent().getData());
 		}
 		AppsListFragment appsListFragment = new AppsListFragment();
 		appsListFragment.setArguments(bundleLoad);
@@ -131,7 +124,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
 										   @NonNull int[] grantResults) {
-		if (requestCode == MY_PERMISSIONS_REQUEST_WRITE_STORAGE) {
+		if (requestCode == REQUEST_PERMISSIONS) {
 			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				if (checkDirExists()) {
 					setupActivity(getIntent().getData() != null);
@@ -162,12 +155,12 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private void checkActionBar() {
-		boolean firstStart = sp.getBoolean("pref_first_start", true);
+		boolean firstStart = sp.getBoolean(PREF_FIRST_START, true);
 		if (firstStart) {
 			if (!ViewConfiguration.get(this).hasPermanentMenuKey()) {
-				sp.edit().putBoolean("pref_actionbar_switch", true).apply();
+				sp.edit().putBoolean(PREF_TOOLBAR, true).apply();
 			}
-			sp.edit().putBoolean("pref_first_start", false).apply();
+			sp.edit().putBoolean(PREF_FIRST_START, false).apply();
 		}
 	}
 

@@ -63,7 +63,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.flowables.ConnectableFlowable;
 import io.reactivex.schedulers.Schedulers;
-import ru.playsoftware.j2meloader.MainActivity;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
@@ -79,12 +78,13 @@ import ru.playsoftware.j2meloader.util.AppUtils;
 import ru.playsoftware.j2meloader.util.LogUtils;
 import ru.woesss.j2me.installer.InstallerDialog;
 
+import static ru.playsoftware.j2meloader.util.Constants.*;
+
 public class AppsListFragment extends ListFragment {
 	private AppRepository appRepository;
 	private CompositeDisposable compositeDisposable;
 	private AppsListAdapter adapter;
 	private String appSort;
-	private static final int FILE_CODE = 0;
 	private Uri appUri;
 
 	@Override
@@ -96,8 +96,8 @@ public class AppsListFragment extends ListFragment {
 		if (args == null) {
 			return;
 		}
-		appSort = args.getString(MainActivity.APP_SORT_KEY);
-		appUri = args.getParcelable(MainActivity.APP_URI_KEY);
+		appSort = args.getString(KEY_APP_SORT);
+		appUri = args.getParcelable(KEY_APP_URI);
 	}
 
 
@@ -121,7 +121,7 @@ public class AppsListFragment extends ListFragment {
 			i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
 			i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE);
 			i.putExtra(FilePickerActivity.EXTRA_START_PATH, FilteredFilePickerFragment.getLastPath());
-			startActivityForResult(i, FILE_CODE);
+			startActivityForResult(i, REQUEST_FILE);
 		});
 	}
 
@@ -173,7 +173,7 @@ public class AppsListFragment extends ListFragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
+		if (requestCode == REQUEST_FILE && resultCode == Activity.RESULT_OK) {
 			List<Uri> files = Utils.getSelectedFilesFromResult(data);
 			for (Uri uri : files) {
 				installApp(uri);
@@ -252,7 +252,7 @@ public class AppsListFragment extends ListFragment {
 			Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
 			Intent launchIntent = new Intent(Intent.ACTION_DEFAULT,
 					Uri.parse(appItem.getPathExt()), getActivity(), ConfigActivity.class);
-			launchIntent.putExtra(ConfigActivity.MIDLET_NAME_KEY, appItem.getTitle());
+			launchIntent.putExtra(KEY_MIDLET_NAME, appItem.getTitle());
 			ShortcutInfoCompat.Builder shortcutInfoCompatBuilder =
 					new ShortcutInfoCompat.Builder(requireActivity(), appItem.getTitle())
 							.setIntent(launchIntent)
@@ -324,7 +324,7 @@ public class AppsListFragment extends ListFragment {
 			aboutDialogFragment.show(getChildFragmentManager(), "about");
 		} else if (itemId == R.id.action_settings) {
 			Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
-			requireActivity().startActivityForResult(settingsIntent, 0);
+			requireActivity().startActivityForResult(settingsIntent, REQUEST_SETTINGS);
 		} else if (itemId == R.id.action_profiles) {
 			Intent intentProfiles = new Intent(getActivity(), ProfilesActivity.class);
 			startActivity(intentProfiles);

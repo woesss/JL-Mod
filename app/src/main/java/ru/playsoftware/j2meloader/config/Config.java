@@ -30,8 +30,9 @@ import javax.microedition.util.ContextHolder;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 
-public class Config {
+import static ru.playsoftware.j2meloader.util.Constants.*;
 
+public class Config {
 	public static final String DEX_OPT_CACHE_DIR = "dex_opt";
 	public static final String MIDLET_CONFIG_FILE = "/config.json";
 	public static final String MIDLET_CONFIGS_DIR = "/configs/";
@@ -43,11 +44,8 @@ public class Config {
 	public static final String MIDLET_MANIFEST_FILE = MIDLET_DEX_FILE + ".conf";
 	public static final String MIDLET_RES_DIR = "/res";
 	public static final String MIDLET_RES_FILE = "/res.jar";
-	public static final String PREF_EMULATOR_DIR = "emulator_dir";
 	public static final String SCREENSHOTS_DIR;
 	public static final String SHADERS_DIR = "/shaders/";
-	static final String PREF_DEFAULT_PROFILE = "default_profile";
-	private static final String MIDLET_DIR = "/converted/";
 
 	private static String emulatorDir;
 	private static String dataDir;
@@ -103,14 +101,14 @@ public class Config {
 		String workDir = appDir.getParentFile().getParent();
 		File file = new File(workDir + Config.MIDLET_CONFIGS_DIR + appDir.getName());
 		if (showSettings || !file.exists()) {
-			Intent intent = new Intent(ConfigActivity.ACTION_EDIT, Uri.parse(path),
+			Intent intent = new Intent(ACTION_EDIT, Uri.parse(path),
 					context, ConfigActivity.class);
-			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, name);
+			intent.putExtra(KEY_MIDLET_NAME, name);
 			context.startActivity(intent);
 		} else {
 			Intent intent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(path),
 					context, MicroActivity.class);
-			intent.putExtra(ConfigActivity.MIDLET_NAME_KEY, name);
+			intent.putExtra(KEY_MIDLET_NAME, name);
 			context.startActivity(intent);
 		}
 	}
@@ -120,6 +118,6 @@ public class Config {
 		dataDir = emulatorDir + MIDLET_DATA_DIR;
 		configsDir = emulatorDir + MIDLET_CONFIGS_DIR;
 		profilesDir = emulatorDir + "/templates/";
-		appDir = emulatorDir + MIDLET_DIR;
+		appDir = emulatorDir + "/converted/";
 	}
 }

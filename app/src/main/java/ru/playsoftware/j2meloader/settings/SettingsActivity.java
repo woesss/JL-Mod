@@ -28,7 +28,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
-import ru.playsoftware.j2meloader.config.Config;
+
+import static ru.playsoftware.j2meloader.util.Constants.*;
 
 public class SettingsActivity extends BaseActivity {
 	private Map<String, ?> oldParams;
@@ -49,23 +50,21 @@ public class SettingsActivity extends BaseActivity {
 	@Override
 	public void finish() {
 		String defPath = Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name);
-		//noinspection ConstantConditions
-		if (preferences.getString("pref_theme", "light").equals(oldParams.get("pref_theme"))
-		&& preferences.getString("pref_app_sort", "name").equals(oldParams.get("pref_app_sort"))
-		&& preferences.getString(Config.PREF_EMULATOR_DIR, defPath).equals(oldParams.get(Config.PREF_EMULATOR_DIR))) {
+		if (preferences.getString(PREF_THEME, "light").equals(oldParams.get(PREF_THEME))
+				&& preferences.getString(PREF_APP_SORT, "name").equals(oldParams.get(PREF_APP_SORT))
+				&& preferences.getString(PREF_EMULATOR_DIR, defPath).equals(oldParams.get(PREF_EMULATOR_DIR))) {
 			setResult(RESULT_OK);
 		} else {
-			setResult(1);
+			setResult(RESULT_NEED_RECREATE);
 		}
 		super.finish();
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				break;
+		if (item.getItemId() == android.R.id.home) {
+			finish();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
