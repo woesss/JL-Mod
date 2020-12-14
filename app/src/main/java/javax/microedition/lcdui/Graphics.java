@@ -20,6 +20,7 @@ package javax.microedition.lcdui;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -389,58 +390,90 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 	}
 
 	public void drawRegion(Image image, int x_src, int y_src, int width, int height,
-						   int transform, int x_dest, int y_dest, int anchor) {
+						   int transform, int x_dst, int y_dst, int anchor) {
 		if (width <= 0 || height <= 0) return;
-		if (transform < TRANS_NONE || transform > TRANS_MIRROR_ROT90) {
-			throw new IllegalArgumentException("Illegal transform=" + transform);
+
+		Rect srcR = rect;
+		RectF dstR = rectF;
+		float dx;
+		float dy;
+		srcR.set(x_src, y_src, x_src + width, y_src + height);
+
+		Matrix matrix = new Matrix();
+		switch (transform) {
+			case TRANS_NONE: {
+				if ((anchor & Graphics.RIGHT) != 0) {
+					dx = x_dst - width;
+				} else if ((anchor & Graphics.HCENTER) != 0) {
+					dx = x_dst - width / 2.0f;
+				} else {
+					dx = x_dst;
+				}
+				if ((anchor & Graphics.BOTTOM) != 0) {
+					dy = y_dst - height;
+				} else if ((anchor & Graphics.VCENTER) != 0) {
+					dy = y_dst - height / 2.0f;
+				} else {
+					dy = y_dst;
+				}
+
+				dstR.set(dx, dy, dx + width, dy + height);
+				canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
+				return;
+			}
+			case TRANS_ROT90:
+				matrix.preRotate(90);
+				break;
+			case TRANS_ROT180:
+				matrix.preRotate(180);
+				break;
+			case TRANS_ROT270:
+				matrix.preRotate(270);
+				break;
+			case TRANS_MIRROR:
+				matrix.preScale(-1, 1);
+				break;
+			case TRANS_MIRROR_ROT90:
+				matrix.preRotate(90);
+				matrix.preScale(-1, 1);
+				break;
+			case TRANS_MIRROR_ROT180:
+				matrix.preRotate(180);
+				matrix.preScale(-1, 1);
+				break;
+			case TRANS_MIRROR_ROT270:
+				matrix.preRotate(270);
+				matrix.preScale(-1, 1);
+				break;
+			default:
+				throw new IllegalArgumentException("Illegal transform=" + transform);
 		}
 
-		rect.set(x_src, y_src, x_src + width, y_src + height);
-		float dx = x_dest;
-		if ((anchor & HCENTER) == HCENTER) {
-			dx -= width / 2.0f;
-		} else if ((anchor & RIGHT) == RIGHT) {
-			dx -= width;
+		dstR.set(0, 0, width, height);
+		matrix.mapRect(dstR);
+
+		if ((anchor & Graphics.RIGHT) != 0) {
+			dx = x_dst - dstR.width();
+		} else if ((anchor & Graphics.HCENTER) != 0) {
+			dx = x_dst - dstR.width() / 2.0f;
+		} else {
+			dx = x_dst;
 		}
-		float dy = y_dest;
-		if ((anchor & VCENTER) == VCENTER) {
-			dy -= height / 2.0f;
-		} else if ((anchor & BOTTOM) == BOTTOM) {
-			dy -= height;
+		if ((anchor & Graphics.BOTTOM) != 0) {
+			dy = y_dst - dstR.height();
+		} else if ((anchor & Graphics.VCENTER) != 0) {
+			dy = y_dst - dstR.height() / 2.0f;
+		} else {
+			dy = y_dst;
 		}
-		rectF.set(dx, dy, dx + width, dy + height);
-		Canvas canvas = this.canvas;
-		if (transform == 0) { // TRANS_NONE
-			canvas.drawBitmap(image.getBitmap(), rect, rectF, null);
-			return;
-		}
+
+		matrix.postTranslate(Math.round(dx - dstR.left), Math.round(dy - dstR.top));
+		dstR.set(0, 0, width, height);
+
 		canvas.save();
+		canvas.concat(matrix);
 		try {
-			float px = rectF.centerX();
-			float py = rectF.centerY();
-			switch (transform) {
-				case TRANS_MIRROR_ROT180:
-					canvas.scale(-1, 1, px, py);
-				case TRANS_ROT180:
-					canvas.rotate(180, px, py);
-					break;
-				case TRANS_MIRROR:
-					canvas.scale(-1, 1, px, py);
-					break;
-				case TRANS_MIRROR_ROT270:
-					canvas.scale(-1, 1, px, py);
-				case TRANS_ROT270:
-					canvas.rotate(270, px, py);
-					break;
-				case TRANS_MIRROR_ROT90:
-					canvas.scale(-1, 1, px, py);
-				case TRANS_ROT90:
-					canvas.rotate(90, px, py);
-					break;
-				default:
-					throw new IllegalArgumentException();
-			}
-			canvas.drawBitmap(image.getBitmap(), rect, rectF, null);
+			canvas.drawBitmap(image.getBitmap(), srcR, dstR, null);
 		} finally {
 			canvas.restore();
 		}
@@ -516,5 +549,4 @@ public class Graphics implements com.vodafone.v10.graphics.j3d.Graphics3D, com.m
 		g3d.drawFigure(figure, x, y, layout, effect);
 		g3d.release(this);
 	}
-
 }
