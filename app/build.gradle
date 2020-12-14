@@ -83,7 +83,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
@@ -101,7 +101,7 @@ dependencies {
     annotationProcessor "com.google.auto.service:auto-service:1.0-rc7"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
-    implementation 'net.lingala.zip4j:zip4j:2.6.3'
+    implementation 'net.lingala.zip4j:zip4j:2.6.4'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
     implementation 'org.ow2.asm:asm:9.0'
     implementation project(':dexlib')

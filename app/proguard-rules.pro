@@ -15,25 +15,20 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--keep class javax.** { *; }
--keep class com.siemens.mp.** { *; }
--keep class com.samsung.util.** { *; }
--keep class com.sonyericsson.accelerometer.** { *; }
--keep class com.sprintpcs.media.** { *; }
--keep class com.mascotcapsule.micro3d.v3.** { *; }
--keep class com.motorola.** { *; }
--keep class com.nokia.mid.** { *; }
--keep class com.sun.midp.midlet.** { *; }
--keep class com.vodafone.** { *; }
--keep class mmpp.media.** { *; }
--keep class org.microemu.** { *; }
+-keep public class javax.** { public *; }
+-keep public class com.siemens.mp.** { public *; }
+-keep public class com.samsung.util.** { public *; }
+-keep public class com.sonyericsson.accelerometer.** { public *; }
+-keep public class com.sprintpcs.media.** { public *; }
+-keep public class com.mascotcapsule.micro3d.v3.* { public *; }
+-keep public class com.motorola.** { public *; }
+-keep public class com.nokia.mid.** { public *; }
+-keep public class com.sun.midp.midlet.** { public *; }
+-keep public class com.vodafone.** { public *; }
+-keep public class mmpp.media.** { public *; }
+-keep public class org.microemu.** { public *; }
 # Keep the BuildConfig
 -keep class ru.playsoftware.j2meloader.BuildConfig { *; }
 
--keep class android.support.v7.widget.SearchView { *; }
 -keep class com.arthenica.mobileffmpeg.** { *; }
 -keep class ru.playsoftware.j2meloader.crashes.AppCenterAPI** { *; }
-
--dontnote android.net.http.*
--dontnote org.apache.commons.codec.**
--dontnote org.apache.http.**
