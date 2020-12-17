@@ -7,8 +7,8 @@ android {
         applicationId "ru.woesss.j2meloader"
         minSdkVersion rootProject.ext.minSdk
         targetSdkVersion rootProject.ext.targetSdk
-        versionCode 17
-        versionName "0.75"
+        versionCode 18
+        versionName "0.76"
         archivesBaseName = "JL-Mod_$versionName"
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
