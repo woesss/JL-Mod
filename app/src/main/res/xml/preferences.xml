@@ -43,19 +43,23 @@
     <Preference
         android:key="pref_default_settings"
         android:icon="@drawable/ic_setting_default"
-        android:title="@string/pref_default_settings">
-    </Preference>
+        android:title="@string/profiles" />
     <Preference
         android:key="emulator_dir"
         android:icon="@drawable/ic_setting_folder"
         android:title="@string/pref_emulator_dir"
-        tools:summary="/sdcard/J2ME-Loader">
-    </Preference>
-    <SwitchPreferenceCompat
-        android:key="micro3d_using_message"
-        app:defaultValue="false"
-        android:icon="@drawable/ic_setting_message"
-        android:title="@string/pref_mascot_title"
-        android:summary="@string/pref_mascot_summary">
-    </SwitchPreferenceCompat>
+        tools:summary="/sdcard/J2ME-Loader" />
+    <PreferenceCategory android:title="@string/pref_category_experimental">
+        <SwitchPreferenceCompat
+            android:key="micro3d_using_message"
+            app:defaultValue="false"
+            android:icon="@drawable/ic_setting_message"
+            android:title="@string/pref_mascot_title"
+            android:summary="@string/pref_mascot_summary" />
+        <SwitchPreferenceCompat
+            android:key="pref_dex_compression"
+            app:defaultValue="false"
+            android:title="@string/pref_compress_title"
+            android:summary="@string/pref_compress_summary" />
+    </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

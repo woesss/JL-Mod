@@ -173,4 +173,7 @@
     <string name="err_missing_app">Приложение не найдено.\nПроверьте доступность запоминающего устройства %sили создайте ярлык заново.</string>
     <string name="warn_install_from_net">Файл будет загружен из сети Интернет</string>
     <string name="PREF_FONT_ANTI_ALIASING">Сглаживание</string>
+    <string name="pref_compress_title">Сжимать код приложений при установке</string>
+    <string name="pref_compress_summary">Не совместимо с предыдущими версиями</string>
+    <string name="pref_category_experimental">Экспериментальные/временные опции</string>
 </resources>

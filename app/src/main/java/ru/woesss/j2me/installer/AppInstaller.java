@@ -41,10 +41,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.jar.JarFile;
 
+import androidx.preference.PreferenceManager;
 import io.reactivex.SingleEmitter;
 import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.ConverterException;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.ZipUtils;
@@ -195,9 +197,11 @@ public class AppInstaller {
 		}
 		File patchedJar = new File(cacheDir, "patched.jar");
 		AndroidProducer.processJar(srcJar, patchedJar);
+		boolean compress = PreferenceManager.getDefaultSharedPreferences(context)
+				.getBoolean(Constants.PREF_DEX_COMPRESSION, false);
 		try {
 			Main.main(new String[]{"--no-optimize",
-					"--output=" + tmpDir.getAbsolutePath() + Config.MIDLET_DEX_ARCH,
+					"--output=" + tmpDir + (compress ? Config.MIDLET_DEX_ARCH : Config.MIDLET_DEX_FILE),
 					patchedJar.getAbsolutePath()});
 		} catch (Throwable e) {
 			throw new ConverterException("Dexing error", e);

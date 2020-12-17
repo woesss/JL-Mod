@@ -217,4 +217,7 @@
     <string name="err_missing_app">Application not found.\nPlease check storage device %savailability or re-create shortcut.</string>
     <string name="warn_install_from_net">File will be downloaded from Internet</string>
     <string name="PREF_FONT_ANTI_ALIASING">Anti-Aliasing</string>
+    <string name="pref_compress_title">Compress app code on installation</string>
+    <string name="pref_compress_summary">Not compatible with previous versions</string>
+    <string name="pref_category_experimental">Experimental/temporary options</string>
 </resources>
