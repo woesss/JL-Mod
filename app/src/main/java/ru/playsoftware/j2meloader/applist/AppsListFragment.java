@@ -239,6 +239,9 @@ public class AppsListFragment extends ListFragment {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = requireActivity().getMenuInflater();
 		inflater.inflate(R.menu.context_main, menu);
+		if (!ShortcutManagerCompat.isRequestPinShortcutSupported(requireContext())) {
+			menu.findItem(R.id.action_context_shortcut).setVisible(false);
+		}
 	}
 
 	@Override
