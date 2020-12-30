@@ -247,7 +247,7 @@ public class InstallerDialog extends DialogFragment {
 			installer.deleteTemp();
 			if (!isAdded()) return;
 			Toast.makeText(getActivity(), getString(R.string.error) + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
-			dismiss();
+			dismissAllowingStateLoss();
 		}
 	}
 
@@ -305,7 +305,7 @@ public class InstallerDialog extends DialogFragment {
 				installer.clearCache();
 				installer.deleteTemp();
 				Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-				dismiss();
+				dismissAllowingStateLoss();
 			}
 		}
 	}
