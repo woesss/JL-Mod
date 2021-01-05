@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="close">Stäng</string>
-    <string name="exit">Avsluta</string>
     <string name="about">Om</string>
-    <string name="help">Hjälp</string>
-    <string name="more">Mer</string>
-    <string name="search">Sök</string>
-    <string name="licenses">Licenser</string>
-    <string name="profiles">Mallar</string>
-    <string name="version">Version: </string>
-    <string name="action_settings">Inställningar</string>
     <string name="action_context_delete">Radera</string>
+    <string name="action_settings">Inställningar</string>
+    <string name="close">Stäng</string>
     <string name="donate">Donera</string>
-    <string name="PREF_SHOW_FPS">Visa FPS</string>
-    <string name="PREF_BACKGROUND">Bakgrund</string>
-    <string name="pref_orientation_default">Standard</string>
-    <string name="pref_orientation_auto">Auto</string>
-    <string name="pref_orientation_port">Portrait</string>
-    <string name="pref_orientation_land">Landscape</string>
-    <string name="report_crash">Skicka</string>
-    <string name="pref_theme_title">Tema</string>
-    <string name="pref_app_sort_name">Namn</string>
+    <string name="exit">Avsluta</string>
+    <string name="help">Hjälp</string>
+    <string name="licenses">Licenser</string>
+    <string name="more">Mer</string>
     <string name="pref_app_sort_date">Datum</string>
+    <string name="pref_app_sort_name">Namn</string>
+    <string name="PREF_BACKGROUND">Bakgrund</string>
+    <string name="pref_orientation_auto">Auto</string>
+    <string name="pref_orientation_default">Standard</string>
+    <string name="pref_orientation_land">Landscape</string>
+    <string name="pref_orientation_port">Portrait</string>
+    <string name="PREF_SHOW_FPS">Visa FPS</string>
+    <string name="pref_theme_title">Tema</string>
+    <string name="profiles">Mallar</string>
+    <string name="report_crash">Skicka</string>
+    <string name="search">Sök</string>
+    <string name="version">Version: </string>
 </resources>
