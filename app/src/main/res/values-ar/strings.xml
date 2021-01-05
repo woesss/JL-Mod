@@ -14,6 +14,7 @@
     <string name="converting_wait">جار تحويل ملف تطبيق جافا…</string>
     <string name="crash_dialog_message">هل تريد إرسال تقرير عن الخطأ إلى المطور؟</string>
     <string name="crash_dialog_title">تم الكشف عن خطأ</string>
+    <string name="default_label">"3 ث (افتراضي)"</string>
     <string name="donate">تبرع</string>
     <string name="error">خطأ</string>
     <string name="exit">خروج</string>
@@ -28,7 +29,7 @@
     <string name="layout_scale_mode">وضع تحرير حجم تخطيط الازرار</string>
     <string name="layout_switch">تبديل تخطيط الازرار</string>
     <string name="licenses">التراخيص</string>
-    <string name="load_profile">تحميل نموذج</string>
+    <string name="load_profile">تحميل الملف الشخصي</string>
     <string name="log_saved">تم حفظ السجل</string>
     <string name="mapping_dialog_message">التوجيه الحالي: %s</string>
     <string name="mapping_dialog_title">اضغط على أي مفتاح</string>
@@ -42,6 +43,9 @@
     <string name="pref_app_sort_name">الإسم</string>
     <string name="pref_app_sort_title">الفرز بحسب</string>
     <string name="PREF_BACKGROUND">الخلفية</string>
+    <string name="pref_button_shape_oval">شكل بيضاوي</string>
+    <string name="pref_button_shape_rect">مستطيل</string>
+    <string name="pref_button_shape_round">مستطيل دائري</string>
     <string name="pref_button_shape_title">شكل الزر</string>
     <string name="pref_default_settings">الإعدادات الإفتراضية</string>
     <string name="pref_enable_actionbar_summary">في تطبيقات ملء الشاشة</string>
@@ -55,10 +59,15 @@
     <string name="PREF_FONT_SIZE_IN_SP">القيم مقاسةً بكل بكسل</string>
     <string name="PREF_FONT_SMALL">صغير</string>
     <string name="PREF_FORCE_FULLSCREEN">إجبار ملء الشاشة</string>
+    <string name="pref_graphics_hw_gles">تسارع HW (OpenGL ES)</string>
+    <string name="pref_graphics_hw_surface">تسارع HW (السطح)</string>
+    <string name="pref_graphics_hw_view">تسارع HW (HWUI)</string>
+    <string name="pref_graphics_software">البرمجيات</string>
     <string name="PREF_HEIGHT">الارتفاع</string>
     <string name="PREF_HW_ACCELERATION">تسريع المعدات(غير مستقر)</string>
     <string name="PREF_IMMEDIATE">وضع المعالجة الفورية</string>
     <string name="PREF_KEEP_ASPECT_RATIO">الاحتفاظ بنسبة العرض إلى الارتفاع</string>
+    <string name="PREF_LAYOUT">التنسيق</string>
     <string name="PREF_LIMIT_FPS">أكبر حد من اللقطات في كل ثانية</string>
     <string name="pref_map_keys">توجيهات المفتاح</string>
     <string name="PREF_ORIENTATION">اتجاه الشاشة</string>
@@ -82,6 +91,7 @@
     <string name="PREF_VK_BACK">الأزرار</string>
     <string name="PREF_VK_FEEDBACK">اهتزاز عند النقر</string>
     <string name="PREF_VK_FIRE_KEY">مفتاح (الاطلاق/البدء/الضرب): </string>
+    <string name="PREF_VK_FORCE_OPACITY">فرض التعتيم للمفاتيح المقفلة</string>
     <string name="PREF_VK_FORE">العناوين</string>
     <string name="PREF_VK_HIDE_DELAY">تاخير الاخفاء: </string>
     <string name="PREF_VK_KEY_SIZES">أحجام المفاتيح</string>
@@ -99,13 +109,13 @@
     <string name="pref_vk_type_phone_arrows">مفاتيح الأسهم في الهاتف</string>
     <string name="pref_wakelock_title">أبقي الشاشة فعالة</string>
     <string name="PREF_WIDTH">العرض</string>
-    <string name="profiles">النماذج</string>
+    <string name="profiles">حقوق المستخدم</string>
     <string name="report_crash">إرسال</string>
     <string name="RESET_LAYOUT_CMD">إعادة تعيين ترتيب لوحة المفاتيح</string>
     <string name="reset_mapping">إعادة تعيين</string>
     <string name="RESET_SETTINGS_CMD">إعادة تعيين الإعدادات</string>
     <string name="save_log">سجلات الحفظ</string>
-    <string name="save_profile">حفظ النموذج</string>
+    <string name="save_profile">حفظ الوضع</string>
     <string name="screenshot_saved">تم حفظ لقطة الشاشة إلى</string>
     <string name="search">ابـحثblogまタラタラ</string>
     <string name="select_dialog_title">حدد MIDlet</string>

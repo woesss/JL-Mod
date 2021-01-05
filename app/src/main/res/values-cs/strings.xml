@@ -6,12 +6,11 @@
     <string name="action_context_rename">Přejmenovat</string>
     <string name="action_context_shortcut">Přidat zkratku</string>
     <string name="action_settings">Nastavení</string>
-    <string name="author">Autor: </string>
     <string name="CLEAR_DATA_CMD">Vymazat data</string>
     <string name="close">Zavřít</string>
     <string name="common_settings">[SPOLEČNÁ NASTAVENÍ]</string>
     <string name="CONFIRMATION_REQUIRED">Vyžadováno potvrzení</string>
-    <string name="converting_wait">Převádím JAR...</string>
+    <string name="converting_wait">Převádím JAR…</string>
     <string name="crash_dialog_message">Chcete odeslat hlášení o chybě vývojáři?</string>
     <string name="crash_dialog_title">Byla zjištěna chyba</string>
     <string name="donate">Podpořit</string>

@@ -30,7 +30,7 @@
     <string name="licenses">Licencje</string>
     <string name="load_profile">Wczytaj szablon</string>
     <string name="log_saved">Log został zapisany</string>
-    <string name="mapping_dialog_message">Bieżące mapowanie: %1$s</string>
+    <string name="mapping_dialog_message">Bieżące mapowanie: %s</string>
     <string name="mapping_dialog_title">Naciśnij przycisk</string>
     <string name="message_clear_data">Czy na pewno chcesz wyczyścić dane aplikacji?</string>
     <string name="message_delete">Czy na pewno chcesz usunąć tę aplikację?</string>
@@ -108,6 +108,7 @@
     <string name="RESET_SETTINGS_CMD">Zresetuj ustawienia</string>
     <string name="save_log">Zapisz log</string>
     <string name="save_profile">Zapisz szablon</string>
+    <string name="saved">Zapisano %s</string>
     <string name="screenshot_saved">Zrzut ekranu został zapisany w</string>
     <string name="search">Szukaj</string>
     <string name="select_dialog_title">Wybierz MIDlet</string>

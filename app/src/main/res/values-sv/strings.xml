@@ -12,14 +12,10 @@
     <string name="pref_app_sort_date">Datum</string>
     <string name="pref_app_sort_name">Namn</string>
     <string name="PREF_BACKGROUND">Bakgrund</string>
-    <string name="pref_orientation_auto">Auto</string>
     <string name="pref_orientation_default">Standard</string>
-    <string name="pref_orientation_land">Landscape</string>
-    <string name="pref_orientation_port">Portrait</string>
     <string name="PREF_SHOW_FPS">Visa FPS</string>
     <string name="pref_theme_title">Tema</string>
     <string name="profiles">Mallar</string>
     <string name="report_crash">Skicka</string>
     <string name="search">Sök</string>
-    <string name="version">Version: </string>
 </resources>

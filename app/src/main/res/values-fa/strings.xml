@@ -11,9 +11,7 @@
     <string name="close">بستن</string>
     <string name="common_settings">[تنظیمات مشترک]</string>
     <string name="CONFIRMATION_REQUIRED">به تایید نیاز دارد</string>
-    <string name="convert_complete">انجام شد</string>
-    <string name="converting_message">در حال پردازش...</string>
-    <string name="converting_wait">در حال تبدیل فایل جاوا ...</string>
+    <string name="converting_wait">در حال تبدیل فایل جاوا …</string>
     <string name="crash_dialog_message">آیا می خواهید گزارش خطا را به توسعه دهنده ارسال کنید؟</string>
     <string name="crash_dialog_title">خطا شناسایی شده</string>
     <string name="donate">حمایت مالی</string>

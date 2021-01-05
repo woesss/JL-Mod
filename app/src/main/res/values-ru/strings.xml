@@ -124,6 +124,7 @@
     <string name="pref_theme_title">Тема</string>
     <string name="PREF_TOUCH_INPUT">Сенсорный ввод</string>
     <string name="PREF_UNIT_MS">мс</string>
+    <string name="pref_vibration_title">Включить вибрацию</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Виртуальная клавиатура</string>
     <string name="PREF_VK_ALPHA">Непрозрачность: </string>
     <string name="PREF_VK_BACK">Кнопки</string>

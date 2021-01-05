@@ -11,8 +11,6 @@
     <string name="close">Sulje</string>
     <string name="common_settings">[YLEISET ASETUKSET]</string>
     <string name="CONFIRMATION_REQUIRED">Vahvistus vaaditaan</string>
-    <string name="convert_complete">Valmis</string>
-    <string name="converting_message">Käsitellään…</string>
     <string name="converting_wait">Muunnetaan JARia…</string>
     <string name="crash_dialog_message">Haluatko lähettää virheilmoituksen kehittäjälle?</string>
     <string name="crash_dialog_title">Havaittiin virhe</string>

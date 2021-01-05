@@ -18,7 +18,7 @@
     <string name="error">Fehler</string>
     <string name="exit">Beenden</string>
     <string name="external_storage_not_mounted">Diese App benötigt externen Speicher</string>
-    <string name="FORCE_CLOSE_CONFIRMATION">Erzwungenes Schliessen der Anwendung kann zu Datenverlust führen oder die Anwendung beschädigen!\nFortfahren?</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">Erzwungenes Schließen der Anwendung kann zu Datenverlust führen oder die Anwendung beschädigen!\nFortfahren?</string>
     <string name="help">Hilfe</string>
     <string name="help_message">&#8226; Das Aktivieren der Filterung kann in einigen Fällen die Leistung erheblich beeinträchtigen. Deaktivieren Sie diese Option, wenn das Spiel zu langsam ist.&lt;BR&gt;&#8226; Bildflimmerprobleme können behoben werden, indem die Option \"Sofortiger Verarbeitungsmodus\" aktiviert wird.</string>
     <string name="hide_buttons">Tasten ausblenden</string>
@@ -62,10 +62,8 @@
     <string name="PREF_LIMIT_FPS">FPS begrenzen</string>
     <string name="pref_map_keys">Tastenzuordnung</string>
     <string name="PREF_ORIENTATION">Bildschirmausrichtung</string>
-    <string name="pref_orientation_auto">Auto</string>
     <string name="pref_orientation_default">Standard</string>
     <string name="pref_orientation_land">Landschaft</string>
-    <string name="pref_orientation_port">Portrait</string>
     <string name="pref_requires_restart_summary">Erfordert Neustart</string>
     <string name="PREF_SCALE_RATIO">Skalierung (%)</string>
     <string name="PREF_SCALE_TO_FIT">Passend skalieren</string>
@@ -85,13 +83,12 @@
     <string name="PREF_VK_FORE">Beschriftungen</string>
     <string name="PREF_VK_HIDE_DELAY">Verzögerung beim Verstecken: </string>
     <string name="PREF_VK_KEY_SIZES">Tastengrössen</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_NUM_KEYS">Ziffern: </string>
     <string name="PREF_VK_OUTLINE">Umrandung</string>
     <string name="PREF_VK_SEL_BACK">Schaltfächen (P)</string>
     <string name="PREF_VK_SEL_FORE">Beschriftungen (P)</string>
     <string name="PREF_VK_SHOW">Tastatur anzeigen</string>
-    <string name="PREF_VK_SIZE_HINT">Grösse</string>
+    <string name="PREF_VK_SIZE_HINT">Größe</string>
     <string name="PREF_VK_SOFT_KEYS">Virtuelle Tasten: </string>
     <string name="PREF_VK_TYPE">Tastaturtyp</string>
     <string name="pref_vk_type_custom">Anpassbar</string>
@@ -113,5 +110,4 @@
     <string name="START_CMD">Starten</string>
     <string name="SWAP_SIZES">Grössen tauschen</string>
     <string name="take_screenshot">Screenshot aufnehmen</string>
-    <string name="version">Version: </string>
 </resources>

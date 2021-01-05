@@ -30,7 +30,7 @@
     <string name="licenses">Licences</string>
     <string name="load_profile">Charger un modèle</string>
     <string name="log_saved">Logs a été sauvegardé</string>
-    <string name="mapping_dialog_message">Mappage actuel : %1$s</string>
+    <string name="mapping_dialog_message">Mappage actuel : %s</string>
     <string name="mapping_dialog_title">Appuyez sur une touche</string>
     <string name="message_clear_data">Voulez-vous vraiment effacer les données des applications ?</string>
     <string name="message_delete">Voulez-vous vraiment supprimer cette application?</string>
@@ -111,5 +111,4 @@
     <string name="START_CMD">Commencer</string>
     <string name="SWAP_SIZES">La taille du Swap ou changer la taille du Swap</string>
     <string name="take_screenshot">Faire une capture d\'écran</string>
-    <string name="version">Version: </string>
 </resources>

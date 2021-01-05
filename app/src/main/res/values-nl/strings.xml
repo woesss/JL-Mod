@@ -45,7 +45,6 @@
     <string name="PREF_VK_FORE">Etiketten</string>
     <string name="PREF_VK_HIDE_DELAY">Vertraging verbergen: </string>
     <string name="PREF_VK_KEY_SIZES">Sleutel grootte</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_NUM_KEYS">Cijfers: </string>
     <string name="PREF_VK_OUTLINE">Outline</string>
     <string name="PREF_VK_SEL_BACK">Knoppen (P)</string>
