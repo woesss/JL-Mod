@@ -115,7 +115,17 @@
     <string name="pref_requires_restart_summary">Требуется перезапуск</string>
     <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
     <string name="PREF_SCALE_TO_FIT">Масштабировать</string>
+    <string name="pref_screen_gravity">Расположение</string>
+    <string name="pref_screen_gravity_bottom">Снизу</string>
+    <string name="pref_screen_gravity_center">По центру</string>
+    <string name="pref_screen_gravity_left">Слева</string>
+    <string name="pref_screen_gravity_right">Справа</string>
+    <string name="pref_screen_gravity_top">Сверху</string>
     <string name="PREF_SCREEN_OPTIONS">Параметры экрана</string>
+    <string name="pref_screen_scale_type">Масштабирование</string>
+    <string name="pref_screen_scale_type_fill">Заполнить (без учёта пропорций)</string>
+    <string name="pref_screen_scale_type_fit">Вписать</string>
+    <string name="pref_screen_scale_type_none">Как есть</string>
     <string name="PREF_SHADER_FILTER">Шейдер:</string>
     <string name="PREF_SHOW_FPS">Показать FPS</string>
     <string name="PREF_SYS_PROPS">Системные параметры</string>
