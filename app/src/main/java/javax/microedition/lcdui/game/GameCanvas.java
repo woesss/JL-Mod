@@ -20,6 +20,7 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import javax.microedition.lcdui.KeyMapper;
 import javax.microedition.lcdui.event.CanvasEvent;
 
 public class GameCanvas extends Canvas {
@@ -86,7 +87,7 @@ public class GameCanvas extends Canvas {
 		if (suppressCommands && code != 0) {
 			return;
 		}
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_PRESSED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class GameCanvas extends Canvas {
 		if (suppressCommands && code != 0) {
 			return;
 		}
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_RELEASED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	@Override
@@ -104,7 +105,7 @@ public class GameCanvas extends Canvas {
 		if (suppressCommands && convertGameKeyCode(keyCode) != 0) {
 			return;
 		}
-		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, convertKeyCode(keyCode)));
+		Display.postEvent(CanvasEvent.getInstance(this, CanvasEvent.KEY_REPEATED, KeyMapper.convertKeyCode(keyCode)));
 	}
 
 	@SuppressWarnings("unused")
