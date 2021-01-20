@@ -25,7 +25,6 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
@@ -36,7 +35,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
@@ -174,16 +172,7 @@ public class MainActivity extends BaseActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-		if (resultCode == RESULT_NEED_RECREATE) {
-			if (!TextUtils.equals(emulatorDir, Config.getEmulatorDir())) {
-				Fragment frg = getSupportFragmentManager().findFragmentById(R.id.container);
-				if (frg != null) {
-					getSupportFragmentManager().beginTransaction().detach(frg).attach(frg).commitAllowingStateLoss();
-				} else {
-					needRecreate = true;
-				}
-				return;
-			}
+		if (resultCode == RESULT_NEED_RECREATE || requestCode == REQUEST_WORK_DIR) {
 			needRecreate = true;
 			return;
 		}
