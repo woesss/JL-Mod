@@ -17,8 +17,17 @@
 package javax.microedition.amms.control;
 
 import javax.microedition.media.Control;
+import javax.microedition.media.MediaException;
 
 public interface EffectControl extends Control {
+	int SCOPE_LIVE_ONLY = 1;
+	int SCOPE_RECORD_ONLY = 2;
+	int SCOPE_LIVE_AND_RECORD = 3;
+
+	void setScope(int scope) throws MediaException;
+
+	int getScope();
+
 	String[] getPresetNames();
 
 	void setPreset(String preset);
@@ -28,4 +37,8 @@ public interface EffectControl extends Control {
 	void setEnabled(boolean enable);
 
 	boolean isEnabled();
+
+	void setEnforced(boolean enforced);
+
+	boolean isEnforced();
 }
