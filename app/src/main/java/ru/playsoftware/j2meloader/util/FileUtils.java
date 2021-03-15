@@ -39,6 +39,7 @@ public class FileUtils {
 	private static final String TEMP_JAR_NAME = "tmp.jar";
 	private static final String TEMP_JAD_NAME = "tmp.jad";
 	private static final int BUFFER_SIZE = 1024;
+	public static final String ILLEGAL_FILENAME_CHARS = "[/\\\\:*?\"<>|]";
 
 	public static void copyFiles(File src, File dst, FilenameFilter filter) {
 		if (!dst.exists() && !dst.mkdirs()) {

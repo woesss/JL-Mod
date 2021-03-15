@@ -60,8 +60,6 @@ public class AppInstaller {
 	static final int STATUS_NEW = 2;
 	static final int STATUS_UNMATCHED = 3;
 
-	private static final String ILLEGAL_FILENAME_CHARS = "[/\\\\:*?\"<>|]";
-
 	private final Application context;
 	private final Uri uri;
 	private final File cacheDir;
@@ -288,7 +286,7 @@ public class AppInstaller {
 
 	private int checkDescriptor() throws IOException {
 		// Remove invalid characters from app path
-		String name = newDesc.getName().replaceAll(ILLEGAL_FILENAME_CHARS, "");
+		String name = newDesc.getName().replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "");
 		String vendor = newDesc.getVendor();
 		AppRepository appRepository = new AppRepository(context, true);
 		oldApp = appRepository.get(name, vendor);
