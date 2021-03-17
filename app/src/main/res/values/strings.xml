@@ -4,7 +4,7 @@
     <string name="_MINUS_ONE" translatable="false">-1</string>
     <string name="about">About</string>
     <string name="about_4pda" translatable="false">&lt;BR>4PDA: &lt;a href="http://4pda.ru/forum/index.php?showtopic=824201">4pda.ru/forum/index.php?showtopic=824201&lt;/a></string>
-    <string name="about_copyright" translatable="false">\n\nCopyright 2020 Yury Kharchenko</string>
+    <string name="about_copyright" translatable="false">\n\nCopyright 2020-2021 Yury Kharchenko</string>
     <string name="about_crowdin" translatable="false">&lt;BR>Crowdin(translation): &lt;a href="https://crowdin.com/project/j2me-loader">crowdin.com/project/j2me-loader&lt;/a></string>
     <string name="about_email" translatable="false">\n\nEmail: <a href="mailto:j2me.forever@gmail.com">j2me.forever@gmail.com</a>\n</string>
     <string name="about_github" translatable="false">\nGithub: <a href="https://github.com/woesss/JL-Mod">woesss/JL-Mod</a>\n</string>

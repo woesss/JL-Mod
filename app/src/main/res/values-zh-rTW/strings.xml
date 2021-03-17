@@ -51,6 +51,7 @@
     <string name="PREF_FONT_OPTIONS">字體選項</string>
     <string name="PREF_FONT_SIZE_IN_SP">以屏幕分辨率為單位縮放</string>
     <string name="PREF_FONT_SMALL">小</string>
+    <string name="PREF_FORCE_FULLSCREEN">Force fullsreen</string>
     <string name="PREF_HEIGHT">高度</string>
     <string name="PREF_HW_ACCELERATION">硬件加速 (不穩定)</string>
     <string name="PREF_IMMEDIATE">即時處理模式(如果遊戲圖像運行閃爍，可以通過啟用此項解決)</string>
@@ -95,10 +96,12 @@
     <string name="pref_vk_type_phone_arrows">手機(arrows)</string>
     <string name="pref_wakelock_title">保持屏幕常亮</string>
     <string name="PREF_WIDTH">寬度</string>
+    <string name="profiles">設定檔</string>
     <string name="report_crash">發送</string>
     <string name="RESET_LAYOUT_CMD">重置按鍵佈挶</string>
     <string name="reset_mapping">重設</string>
     <string name="RESET_SETTINGS_CMD">恢復默認設置</string>
+    <string name="save_log">儲存紀錄</string>
     <string name="saved">已儲存 %s</string>
     <string name="screenshot_saved">屏幕截圖已保存到</string>
     <string name="search">搜尋</string>

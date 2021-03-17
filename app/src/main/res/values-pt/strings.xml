@@ -22,7 +22,9 @@
     <string name="edit">Editar</string>
     <string name="enter_name">Digite o nome</string>
     <string name="enter_new_name">Digite o novo nome</string>
+    <string name="err_missing_app">Aplicativo não encontrado. \nVerifique a% de disponibilidade do dispositivo de armazenamento ou recrie o atalho.</string>
     <string name="error">Erro</string>
+    <string name="error_disk_io">Erro de armazenamento: verifique o espaço em disco</string>
     <string name="error_name">Digite o nome!</string>
     <string name="error_name_exists">Já existe, digite outro nome</string>
     <string name="exit">Sair</string>
@@ -53,6 +55,7 @@
     <string name="pref_app_sort_name">Nome</string>
     <string name="pref_app_sort_title">Ordem de Apps</string>
     <string name="PREF_BACKGROUND">Plano de Fundo</string>
+    <string name="pref_button_shape_oval">Oval</string>
     <string name="pref_button_shape_rect">Retângulo</string>
     <string name="pref_button_shape_round">Retângulo arredondado</string>
     <string name="pref_button_shape_title">Formato dos botões</string>
@@ -63,6 +66,7 @@
     <string name="pref_enable_statusbar_title">Ativar barra de estado</string>
     <string name="pref_encoding_title">Codificação</string>
     <string name="PREF_FILTER">Filtro</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Anti-Aliasing</string>
     <string name="PREF_FONT_LARGE">Largo</string>
     <string name="PREF_FONT_MEDIUM">Médio</string>
     <string name="PREF_FONT_OPTIONS">Opções de fonte</string>
@@ -90,7 +94,17 @@
     <string name="pref_requires_restart_summary">Requer reinicialização</string>
     <string name="PREF_SCALE_RATIO">Escala(%)</string>
     <string name="PREF_SCALE_TO_FIT">Ajuste para encaixar</string>
+    <string name="pref_screen_gravity">Gravidade da tela</string>
+    <string name="pref_screen_gravity_bottom">Botão</string>
+    <string name="pref_screen_gravity_center">Centro</string>
+    <string name="pref_screen_gravity_left">Esquerda</string>
+    <string name="pref_screen_gravity_right">Direita</string>
+    <string name="pref_screen_gravity_top">Topo</string>
     <string name="PREF_SCREEN_OPTIONS">Ajustes de Tela</string>
+    <string name="pref_screen_scale_type">Tipo de escala</string>
+    <string name="pref_screen_scale_type_fill">Preencher a janela (ignorar a proporção)</string>
+    <string name="pref_screen_scale_type_fit">Ajustar à janela</string>
+    <string name="pref_screen_scale_type_none">Como é</string>
     <string name="PREF_SHADER_FILTER">Sombras:</string>
     <string name="PREF_SHOW_FPS">Mostrar FPS</string>
     <string name="PREF_SYS_PROPS">Propriedades do sistema</string>
@@ -99,6 +113,7 @@
     <string name="pref_theme_title">Tema</string>
     <string name="PREF_TOUCH_INPUT">Entrada por toque</string>
     <string name="PREF_UNIT_MS">ms</string>
+    <string name="pref_vibration_title">Activar a vibração</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
     <string name="PREF_VK_ALPHA">Transparência: </string>
     <string name="PREF_VK_BACK">Botões</string>

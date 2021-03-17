@@ -53,6 +53,7 @@
     <string name="pref_app_sort_name">İsme göre</string>
     <string name="pref_app_sort_title">Uygulamaları sırala</string>
     <string name="PREF_BACKGROUND">Arka plan</string>
+    <string name="pref_button_shape_oval">Oval</string>
     <string name="pref_button_shape_rect">Dikdörtgen</string>
     <string name="pref_button_shape_round">Yuvarlatılmış dikdörtgen</string>
     <string name="pref_button_shape_title">Tuş şekli</string>

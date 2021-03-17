@@ -22,7 +22,9 @@
     <string name="edit">Редагувати</string>
     <string name="enter_name">Введіть ім\'я</string>
     <string name="enter_new_name">Введіть нове ім\'я</string>
+    <string name="err_missing_app">Додаток не знайдено.\nПеревірте файли на пристрої %s або заново створіть ярлик.</string>
     <string name="error">Помилка</string>
+    <string name="error_disk_io">Помилка сховища: перевірте вільне місце на диску</string>
     <string name="error_name">Введіть ім\'я!</string>
     <string name="error_name_exists">Уже існує, введіть інше ім\'я</string>
     <string name="exit">Вихід</string>
@@ -64,6 +66,7 @@
     <string name="pref_enable_statusbar_title">Увімкнути рядок стану</string>
     <string name="pref_encoding_title">Кодування</string>
     <string name="PREF_FILTER">Фільтр</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Згладжування</string>
     <string name="PREF_FONT_LARGE">Великий</string>
     <string name="PREF_FONT_MEDIUM">Середній</string>
     <string name="PREF_FONT_OPTIONS">Параметри шрифту</string>
@@ -91,7 +94,17 @@
     <string name="pref_requires_restart_summary">Необхідне перезавантаження</string>
     <string name="PREF_SCALE_RATIO">Масштаб(%)</string>
     <string name="PREF_SCALE_TO_FIT">Підганяти розмір</string>
+    <string name="pref_screen_gravity">Розміщення</string>
+    <string name="pref_screen_gravity_bottom">Знизу</string>
+    <string name="pref_screen_gravity_center">По центру</string>
+    <string name="pref_screen_gravity_left">Ліворуч</string>
+    <string name="pref_screen_gravity_right">Праворуч</string>
+    <string name="pref_screen_gravity_top">Вгорі</string>
     <string name="PREF_SCREEN_OPTIONS">Налаштування екрану</string>
+    <string name="pref_screen_scale_type">Масштабування</string>
+    <string name="pref_screen_scale_type_fill">Заповнити вікно (ігнорувати пропорції)</string>
+    <string name="pref_screen_scale_type_fit">За розмірами вікна</string>
+    <string name="pref_screen_scale_type_none">Як є</string>
     <string name="PREF_SHADER_FILTER">Шейдер:</string>
     <string name="PREF_SHOW_FPS">Показувати FPS</string>
     <string name="PREF_SYS_PROPS">Властивості системи</string>
@@ -100,6 +113,7 @@
     <string name="pref_theme_title">Тема</string>
     <string name="PREF_TOUCH_INPUT">Сенсорний ввід</string>
     <string name="PREF_UNIT_MS">мс</string>
+    <string name="pref_vibration_title">Увімкнути вібрацію</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Віртуальна клавіатура</string>
     <string name="PREF_VK_ALPHA">Прозорість: </string>
     <string name="PREF_VK_BACK">Клавіші</string>

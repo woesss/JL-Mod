@@ -20,7 +20,9 @@
     <string name="edit">Editar</string>
     <string name="enter_name">Escribir nombre</string>
     <string name="enter_new_name">Escribir nuevo nombre</string>
+    <string name="err_missing_app">No se encontró la aplicación.\nCompruebe ficheros en el dispositivo %so vuelva a crear un acceso directo.</string>
     <string name="error">Error</string>
+    <string name="error_disk_io">Error de almacenamiento: compruebe espacio en memoria</string>
     <string name="error_name">¡Escribir nombre!</string>
     <string name="error_name_exists">Nombre existente, elegir otro</string>
     <string name="exit">Salir</string>
@@ -60,6 +62,7 @@
     <string name="pref_enable_statusbar_title">Mostrar la barra de estado</string>
     <string name="pref_encoding_title">Codificación</string>
     <string name="PREF_FILTER">Filtro</string>
+    <string name="PREF_FONT_ANTI_ALIASING">Antialiasing</string>
     <string name="PREF_FONT_LARGE">Grande</string>
     <string name="PREF_FONT_MEDIUM">Mediano</string>
     <string name="PREF_FONT_OPTIONS">Opciones de fuente</string>
@@ -85,7 +88,17 @@
     <string name="pref_requires_restart_summary">Requiere reinicio</string>
     <string name="PREF_SCALE_RATIO">Escala(%)</string>
     <string name="PREF_SCALE_TO_FIT">Escalar para adaptarse</string>
+    <string name="pref_screen_gravity">Gravedad de la pantalla</string>
+    <string name="pref_screen_gravity_bottom">Parte inferior</string>
+    <string name="pref_screen_gravity_center">Centro</string>
+    <string name="pref_screen_gravity_left">Izquierda</string>
+    <string name="pref_screen_gravity_right">Derecha</string>
+    <string name="pref_screen_gravity_top">Parte superior</string>
     <string name="PREF_SCREEN_OPTIONS">Opciones de pantalla</string>
+    <string name="pref_screen_scale_type">Tipo de escala</string>
+    <string name="pref_screen_scale_type_fill">Ajustar ventana (ignorar relación de aspecto)</string>
+    <string name="pref_screen_scale_type_fit">Ajustar a ventana</string>
+    <string name="pref_screen_scale_type_none">Como es</string>
     <string name="PREF_SHOW_FPS">Mostrar FPS</string>
     <string name="PREF_SYS_PROPS">Propiedades del sistema</string>
     <string name="pref_theme_light">Claro</string>
