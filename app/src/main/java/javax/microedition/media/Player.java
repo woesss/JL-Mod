@@ -42,6 +42,10 @@ public interface Player extends Controllable {
 
 	long getMediaTime();
 
+	TimeBase getTimeBase();
+
+	void setTimeBase(TimeBase master) throws MediaException;
+
 	long getDuration();
 
 	void setLoopCount(int count);
