@@ -28,6 +28,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
@@ -78,4 +80,22 @@ public class DirectUtils {
 		return Image.createImage(width, height, argb);
 	}
 
+	public static Font getFont(int identifier) {
+		// TODO: 12.04.2021  unknown how to interpret 'identifier'
+		return Font.getFont(identifier);
+	}
+
+	public static javax.microedition.lcdui.Font getFont(int face, int style, int height) {
+		return new Font(face, style, -1, height);
+	}
+
+	public static boolean setHeader(Displayable displayable,
+									String headerText,
+									Image headerImage,
+									int headerTextColor,
+									int headerBgColor,
+									int headerDividerColor) {
+		// TODO: 12.04.2021 stub
+		return false;
+	}
 }
