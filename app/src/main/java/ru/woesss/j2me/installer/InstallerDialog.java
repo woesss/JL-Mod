@@ -63,7 +63,7 @@ public class InstallerDialog extends DialogFragment {
 	}
 
 	/**
-	 * @param uri  original uri from intent.
+	 * @param uri original uri from intent.
 	 * @return A new instance of fragment InstallerDialog.
 	 */
 	public static InstallerDialog newInstance(Uri uri) {
@@ -195,9 +195,10 @@ public class InstallerDialog extends DialogFragment {
 					message = nd.getInfo(requireActivity());
 					break;
 				case AppInstaller.STATUS_OLDEST:
-					String currVersion = installer.getOldDescriptor().getVersion();
-					message = new SpannableStringBuilder(
-							getString(R.string.reinstall_oldest, nd.getVersion(), currVersion));
+					message = new SpannableStringBuilder(getString(
+							R.string.reinstall_oldest,
+							nd.getVersion(),
+							installer.getCurrentVersion()));
 					break;
 				case AppInstaller.STATUS_EQUAL:
 					message = new SpannableStringBuilder(getString(R.string.reinstall));
@@ -213,9 +214,10 @@ public class InstallerDialog extends DialogFragment {
 					}
 					break;
 				case AppInstaller.STATUS_NEWEST:
-					currVersion = installer.getOldDescriptor().getVersion();
-					message = new SpannableStringBuilder(
-							getString(R.string.reinstall_newest, nd.getVersion(), currVersion));
+					message = new SpannableStringBuilder(getString(
+							R.string.reinstall_newest,
+							nd.getVersion(),
+							installer.getCurrentVersion()));
 					break;
 				case AppInstaller.STATUS_UNMATCHED:
 					SpannableStringBuilder info = nd.getInfo(getActivity());

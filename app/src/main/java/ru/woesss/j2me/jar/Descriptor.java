@@ -105,6 +105,32 @@ public class Descriptor {
 
 	}
 
+	public int compareVersion(String version) {
+		if (version == null) return 1;
+		String[] mv = getVersion().split("\\.");
+		String[] ov = version.split("\\.");
+		int len = Math.max(mv.length, ov.length);
+		for (int i = 0; i < len; i++) {
+			int m = 0;
+			if (i < mv.length) {
+				try {
+					m = Integer.parseInt(mv[i].trim());
+				} catch (NumberFormatException ignored) { }
+			}
+			int o = 0;
+			if (i < ov.length) {
+				try {
+					o = Integer.parseInt(ov[i].trim());
+				} catch (NumberFormatException ignored) { }
+			}
+			if (m != o) {
+				return Integer.signum(m - o);
+			}
+		}
+
+		return 0;
+	}
+
 	private void verifyJadAttrs() throws DescriptorException {
 		String jarSize = getJarSize();
 		if (jarSize == null)

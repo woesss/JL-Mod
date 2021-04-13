@@ -65,12 +65,11 @@ public class AppInstaller {
 	private final File cacheDir;
 	private Descriptor manifest;
 	private Descriptor newDesc;
-	private Descriptor oldDesc;
 	private String appDirName;
 	private File targetDir;
 	private File srcJar;
 	private File tmpDir;
-	private AppItem oldApp;
+	private AppItem currentApp;
 	private File srcFile;
 
 	AppInstaller(String path, Uri uri, Application context) {
@@ -84,8 +83,8 @@ public class AppInstaller {
 		return newDesc;
 	}
 
-	Descriptor getOldDescriptor() {
-		return oldDesc;
+	String getCurrentVersion() {
+		return currentApp.getVersion();
 	}
 
 	Descriptor getManifest() {
@@ -229,9 +228,9 @@ public class AppInstaller {
 		if (icon != null) {
 			app.setImagePathExt(Config.MIDLET_ICON_FILE);
 		}
-		if (oldApp != null) {
-			app.setId(oldApp.getId());
-			String path = oldApp.getPath();
+		if (currentApp != null) {
+			app.setId(currentApp.getId());
+			String path = currentApp.getPath();
 			if (!path.equals(appDirName)) {
 				File rms = new File(Config.getDataDir(), path);
 				if (rms.exists()) {
@@ -284,21 +283,19 @@ public class AppInstaller {
 		return manifest.equals(newDesc);
 	}
 
-	private int checkDescriptor() throws IOException {
+	private int checkDescriptor() {
 		// Remove invalid characters from app path
 		String name = newDesc.getName().replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "");
 		String vendor = newDesc.getVendor();
 		AppRepository appRepository = new AppRepository(context, true);
-		oldApp = appRepository.get(name, vendor);
+		currentApp = appRepository.get(name, vendor);
 		appRepository.close();
 		appDirName = name.trim() + '_' + Integer.toHexString((name + vendor).hashCode());
 		targetDir = new File(Config.getAppDir(), appDirName);
-		if (oldApp == null) {
+		if (currentApp == null) {
 			return STATUS_NEW;
 		}
-		File file = new File(oldApp.getPathExt(), Config.MIDLET_MANIFEST_FILE);
-		oldDesc = new Descriptor(file, false);
-		return Integer.signum(newDesc.getVersion().compareTo(oldApp.getVersion()));
+		return newDesc.compareVersion(currentApp.getVersion());
 	}
 
 	private void downloadJar() throws ConverterException {
@@ -381,6 +378,6 @@ public class AppInstaller {
 	}
 
 	public AppItem getExistsApp() {
-		return oldApp;
+		return currentApp;
 	}
 }
