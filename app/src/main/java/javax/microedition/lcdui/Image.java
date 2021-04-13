@@ -18,35 +18,22 @@
 package javax.microedition.lcdui;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.util.LruCache;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.lcdui.game.Sprite;
-import javax.microedition.util.ContextHolder;
+import javax.microedition.shell.AppClassLoader;
 
 import ru.playsoftware.j2meloader.util.PNGUtils;
 
 public class Image {
-
-	private static final int CACHE_SIZE = (int) (Runtime.getRuntime().maxMemory() >> 2); // 1/4 heap max
-	private static final LruCache<String, Bitmap> CACHE = new LruCache<String, Bitmap>(CACHE_SIZE) {
-		@Override
-		protected int sizeOf(String key, Bitmap value) {
-			return value.getByteCount();
-		}
-	};
-
-	private Bitmap mBitmap;
-	private Canvas canvas;
+	private final Bitmap mBitmap;
 	private Graphics mGraphics;
-	private int save;
-	private Rect mBounds;
+	private final Rect mBounds;
 	private boolean isBlackWhiteAlpha;
 
 	public Image(Bitmap bitmap) {
@@ -61,15 +48,6 @@ public class Image {
 		return mBitmap;
 	}
 
-	public Canvas getCanvas() {
-		if (canvas == null) {
-			canvas = new Canvas(mBitmap);
-			save = canvas.save();
-		}
-
-		return canvas;
-	}
-
 	public static Image createImage(int width, int height) {
 		return createImage(width, height, Color.WHITE);
 	}
@@ -81,23 +59,17 @@ public class Image {
 	}
 
 	public static Image createImage(String resname) throws IOException {
-		synchronized (CACHE) {
-			Bitmap b = CACHE.get(resname);
-			if (b != null) {
-				return new Image(b);
-			}
-			InputStream stream = ContextHolder.getResourceAsStream(null, resname);
+		Bitmap b;
+		try (InputStream stream = AppClassLoader.getResourceAsStream(null, resname)) {
 			if (stream == null) {
 				throw new IOException("Can't read image: " + resname);
 			}
 			b = PNGUtils.getFixedBitmap(stream);
-			stream.close();
-			if (b == null) {
-				throw new IOException("Can't decode image: " + resname);
-			}
-			CACHE.put(resname, b);
-			return new Image(b);
 		}
+		if (b == null) {
+			throw new IOException("Can't decode image: " + resname);
+		}
+		return new Image(b);
 	}
 
 	public static Image createImage(InputStream stream) throws IOException {
