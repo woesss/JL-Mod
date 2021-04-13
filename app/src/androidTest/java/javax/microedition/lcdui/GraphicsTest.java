@@ -16,6 +16,8 @@
 
 package javax.microedition.lcdui;
 
+import android.graphics.Color;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,15 +31,16 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class GraphicsTest {
 
-	private final int WHITE = 0x00ffffff;
-	private final int BLACK = 0x00000000;
-	private final int RED = 0x00ff0000;
-	private final int GREEN = 0x0000ff00;
-	private final int BLUE = 0x000000ff;
-	private final int RGB_MASK = 0x00ffffff;
+	private static final int WHITE = 0x00ffffff;
+	private static final int BLACK = 0x00000000;
+	private static final int RED = 0x00ff0000;
+	private static final int GREEN = 0x0000ff00;
+	private static final int BLUE = 0x000000ff;
+	private static final int RGB_MASK = 0x00FFFFFF;
+	private static final int ALPHA_MASK = 0xFF000000;
 
-	private final int testWidth = 20;
-	private final int testHeight = 20;
+	private static final int testWidth = 20;
+	private static final int testHeight = 20;
 
 	@Before
 	public void setUp() throws Exception {
@@ -141,6 +144,37 @@ public class GraphicsTest {
 				9, 10, WHITE
 		};
 		assertTrue(validate(image, spotsToValidate));
+
+		// check correctness of colors
+		int[] in = new int[]{
+				0xFF000000, 0xFFFFFFFF, 0xFF888888, 0xFF111111, 0xFFEEEEEE,
+				0x88000000, 0x88FFFFFF, 0x88888888, 0x88111111, 0x88EEEEEE,
+				0x00000000, 0x00FFFFFF, 0x00888888, 0x00111111, 0x00EEEEEE
+		};
+		image = Image.createImage(1, in.length);
+		graphics = image.getGraphics();
+		graphics.drawRGB(in, 0, 1, 0, 0, 1, in.length, false);
+		int[] out = new int[in.length];
+		image.getRGB(out, 0, 1, 0, 0, 1, in.length);
+		for (int i = 0; i < in.length; i++) {
+			int e = in[i] |= ALPHA_MASK;
+			int a = out[i];
+			if (e != a) {
+				String msg = String.format("Illegal value at index=%d, expected=%6X, actual=%6X", i, e, a);
+				throw new AssertionError(msg);
+			}
+		}
+		image.getBitmap().eraseColor(Color.WHITE);
+		graphics.drawRGB(in, 0, 1, 0, 0, 1, in.length, true);
+		image.getRGB(out, 0, 1, 0, 0, 1, in.length);
+		for (int i = 0; i < in.length; i++) {
+			int a = out[i];
+			int e = blendPixel(in[i]);
+			if (e != a) {
+				String msg = String.format("Illegal value at index=%d, expected=%6X, actual=%6X", i, e, a);
+				throw new AssertionError(msg);
+			}
+		}
 	}
 
 	@Test
@@ -233,5 +267,14 @@ public class GraphicsTest {
 
 	private int getPixel(Image image, int x, int y) {
 		return image.getBitmap().getPixel(x, y) & RGB_MASK;
+	}
+
+	public static int blendPixel(int src) {
+		float alpha = Color.alpha(src) / 255.0f;
+		final float beta = 1 - alpha;
+		int r = Math.round(alpha * Color.red(src) + beta * 255.0f);
+		int g = Math.round(alpha * Color.green(src) + beta * 255.0f);
+		int b = Math.round(alpha * Color.blue(src) + beta * 255.0f);
+		return ALPHA_MASK | r << 16 | g << 8 | b;
 	}
 }
