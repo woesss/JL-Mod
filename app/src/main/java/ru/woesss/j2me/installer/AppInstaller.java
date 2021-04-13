@@ -285,12 +285,13 @@ public class AppInstaller {
 
 	private int checkDescriptor() {
 		// Remove invalid characters from app path
-		String name = newDesc.getName().replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "");
+		String name = newDesc.getName();
 		String vendor = newDesc.getVendor();
 		AppRepository appRepository = new AppRepository(context, true);
 		currentApp = appRepository.get(name, vendor);
 		appRepository.close();
-		appDirName = name.trim() + '_' + Integer.toHexString((name + vendor).hashCode());
+		String id = Integer.toHexString((name + vendor).hashCode());
+		appDirName = name.replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "").trim() + '_' + id;
 		targetDir = new File(Config.getAppDir(), appDirName);
 		if (currentApp == null) {
 			return STATUS_NEW;
