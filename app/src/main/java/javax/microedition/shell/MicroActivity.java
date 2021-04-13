@@ -209,10 +209,11 @@ public class MicroActivity extends AppCompatActivity {
 					String clazz = classes[n];
 					ACRA.getErrorReporter().putCustomData("Begin app", names[n] + ", " + clazz);
 					MidletThread.create(microLoader, clazz);
+					MidletThread.resumeApp();
 				})
 				.setOnCancelListener(d -> {
 					d.dismiss();
-					ContextHolder.notifyDestroyed();
+					MidletThread.notifyDestroyed();
 				});
 		builder.show();
 	}
@@ -222,8 +223,8 @@ public class MicroActivity extends AppCompatActivity {
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error)
 				.setMessage(message)
-				.setPositiveButton(android.R.string.ok, (d, w) -> ContextHolder.notifyDestroyed());
-		builder.setOnCancelListener(dialogInterface -> ContextHolder.notifyDestroyed());
+				.setPositiveButton(android.R.string.ok, (d, w) -> MidletThread.notifyDestroyed());
+		builder.setOnCancelListener(dialogInterface -> MidletThread.notifyDestroyed());
 		builder.show();
 	}
 

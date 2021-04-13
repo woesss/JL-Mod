@@ -164,17 +164,6 @@ public class ContextHolder {
 		return sb.toString();
 	}
 
-	/**
-	 * Kill midlet process.
-	 */
-	public static void notifyDestroyed() {
-		MicroActivity activity = currentActivity.get();
-		if (activity != null) {
-			activity.finish();
-		}
-		Process.killProcess(Process.myPid());
-	}
-
 	public static MicroActivity getActivity() {
 		return currentActivity.get();
 	}
