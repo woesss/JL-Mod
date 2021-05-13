@@ -126,6 +126,9 @@ public class ProfilesManager {
 					JsonElement json = gson.toJsonTree(map);
 					params = gson.fromJson(json, ProfileModel.class);
 					params.dir = dir;
+					if (saveConfig(params) && oldFile.delete()) {
+						Log.d(TAG, "loadConfig: old config file deleted");
+					}
 				} catch (Exception e) {
 					Log.e(TAG, "loadConfig: ", e);
 				}
@@ -171,12 +174,15 @@ public class ProfilesManager {
 		return params;
 	}
 
-	public static void saveConfig(ProfileModel p) {
+	public static boolean saveConfig(ProfileModel p) {
 		try (FileWriter writer = new FileWriter(new File(p.dir, Config.MIDLET_CONFIG_FILE))) {
 			gson.toJson(p, writer);
+			writer.close();
+			return true;
 		} catch (Exception e) {
 			Log.e(TAG, "saveConfig: ", e);
 		}
+		return false;
 	}
 
 	public static void updateSystemProperties(ProfileModel params) {
