@@ -16,6 +16,7 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -130,39 +131,42 @@ public class ProfilesManager {
 				}
 			}
 		}
-		if (params != null) {
-			switch (params.version) {
-				case 0:
-					updateSystemProperties(params);
-				case 1:
-					int w = params.screenWidth;
-					int h = params.screenHeight;
-					if (w > 0) {
-						if (h > 0) {
-							params.fontAA = Math.min(w, h) >= 240;
-						} else {
-							params.fontAA = w >= 240;
-						}
+		if (params == null) {
+			return null;
+		}
+		switch (params.version) {
+			case 0:
+				if (params.hwAcceleration) {
+					params.graphicsMode = Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? 2 : 3;
+				}
+				updateSystemProperties(params);
+			case 1:
+				int w = params.screenWidth;
+				int h = params.screenHeight;
+				if (w > 0) {
+					if (h > 0) {
+						params.fontAA = Math.min(w, h) >= 240;
 					} else {
-						params.fontAA = (h <= 0) || (h >= 240);
+						params.fontAA = w >= 240;
 					}
-
-				case 2:
-					if (params.screenScaleToFit) {
-						if (params.screenKeepAspectRatio) {
-							params.screenScaleType = 1;
-						} else {
-							params.screenScaleType = 2;
-						}
+				} else {
+					params.fontAA = (h <= 0) || (h >= 240);
+				}
+			case 2:
+				if (params.screenScaleToFit) {
+					if (params.screenKeepAspectRatio) {
+						params.screenScaleType = 1;
 					} else {
-						params.screenScaleType = 0;
+						params.screenScaleType = 2;
 					}
-					params.screenGravity = 1;
+				} else {
+					params.screenScaleType = 0;
+				}
+				params.screenGravity = 1;
 
-					params.version = 3;
-					ProfilesManager.saveConfig(params);
-					break;
-			}
+				params.version = ProfileModel.VERSION;
+				ProfilesManager.saveConfig(params);
+				break;
 		}
 		return params;
 	}
