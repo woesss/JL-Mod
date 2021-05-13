@@ -222,6 +222,8 @@
     <string name="virtual_key_right_soft" translatable="false">R</string>
     <string name="virtual_key_star" translatable="false">*</string>
     <string name="virtual_key_up" translatable="false">↑</string>
+    <string translatable="false" name="virtual_key_a">A</string>
+    <string translatable="false" name="virtual_key_b">B</string>
     <string name="warn_install_from_net">File will be downloaded from Internet</string>
     <string name="warning">Warning!!!</string>
     <string name="warning_same_directory">Some settings have been changed in this mod.\nOriginal \"J2ME Loader\" may not work correctly with games, templates and settings installed or configured by the Mod.\nAre you sure you want to use the working folder \"J2ME Loader\"?</string>
