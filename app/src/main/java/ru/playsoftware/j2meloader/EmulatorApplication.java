@@ -24,6 +24,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 
+import androidx.multidex.MultiDex;
+
 import org.acra.ACRA;
 import org.acra.annotation.AcraCore;
 import org.acra.annotation.AcraDialog;
@@ -49,6 +51,9 @@ public class EmulatorApplication extends Application {
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
+		if (BuildConfig.DEBUG) {
+			MultiDex.install(this);
+		}
 		ContextHolder.setApplication(this);
 		if (isSignatureValid()) ACRA.init(this);
 	}
