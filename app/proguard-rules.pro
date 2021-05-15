@@ -15,18 +15,19 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--keep public class javax.** { public *; }
--keep public class com.siemens.mp.** { public *; }
--keep public class com.samsung.util.** { public *; }
--keep public class com.sonyericsson.accelerometer.** { public *; }
--keep public class com.sprintpcs.media.** { public *; }
--keep public class com.mascotcapsule.micro3d.v3.* { public *; }
--keep public class com.motorola.** { public *; }
--keep public class com.nokia.mid.** { public *; }
--keep public class com.sun.midp.midlet.** { public *; }
--keep public class com.vodafone.** { public *; }
--keep public class mmpp.media.** { public *; }
--keep public class org.microemu.** { public *; }
+-keep public class javax.** { public protected *; }
+-keep public class com.siemens.mp.** { public protected *; }
+-keep public class com.samsung.util.** { public protected *; }
+-keep public class com.sonyericsson.accelerometer.** { public protected *; }
+-keep public class com.sprintpcs.media.** { public protected *; }
+-keep public class com.mascotcapsule.micro3d.v3.* { public protected *; }
+-keep public class com.motorola.** { public protected *; }
+-keep public class com.nokia.mid.** { public protected *; }
+-keep public class com.sun.midp.midlet.** { public protected *; }
+-keep public class com.vodafone.** { public protected *; }
+-keep public class mmpp.media.** { public protected *; }
+-keep public class org.microemu.** { public protected *; }
+-keep class ru.playsoftware.j2meloader.util.SparseIntArrayAdapter { *; }
 # Keep the BuildConfig
 -keep class ru.playsoftware.j2meloader.BuildConfig { *; }
 
