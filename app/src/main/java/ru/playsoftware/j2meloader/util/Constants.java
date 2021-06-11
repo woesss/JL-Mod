@@ -20,7 +20,6 @@ public class Constants {
 	public static final String ACTION_EDIT = "config.edit";
 	public static final String ACTION_EDIT_PROFILE = "config.edit.profile";
 
-	public static final String KEY_APP_SORT = "appSort";
 	public static final String KEY_APP_URI = "appUri";
 	public static final String KEY_CONFIG_PATH = "configPath";
 	public static final String KEY_MIDLET_NAME = "midletName";
@@ -29,7 +28,6 @@ public class Constants {
 	public static final String PREF_DEFAULT_PROFILE = "default_profile";
 	public static final String PREF_DEX_COMPRESSION = "pref_dex_compression";
 	public static final String PREF_EMULATOR_DIR = "emulator_dir";
-	public static final String PREF_FIRST_START = "pref_first_start";
 	public static final String PREF_KEEP_SCREEN = "pref_wakelock_switch";
 	public static final String PREF_LAST_PATH = "pref_last_path";
 	public static final String PREF_STATUSBAR = "pref_statusbar_switch";

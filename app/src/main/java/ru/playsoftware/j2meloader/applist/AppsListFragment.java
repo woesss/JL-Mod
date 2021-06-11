@@ -136,10 +136,9 @@ public class AppsListFragment extends ListFragment {
 				installApp(uri);
 			});
 
-	public static AppsListFragment newInstance(String appSort, Uri data) {
+	public static AppsListFragment newInstance(Uri data) {
 		AppsListFragment fragment = new AppsListFragment();
 		Bundle args = new Bundle();
-		args.putString(KEY_APP_SORT, appSort);
 		args.putParcelable(KEY_APP_URI, data);
 		fragment.setArguments(args);
 		return fragment;
@@ -150,9 +149,8 @@ public class AppsListFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 		compositeDisposable = new CompositeDisposable();
 		preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity());
-		Bundle args = requireArguments();
-		appSort = args.getString(KEY_APP_SORT);
-		appUri = args.getParcelable(KEY_APP_URI);
+		appSort = preferences.getString(PREF_APP_SORT, "name");
+		appUri = requireArguments().getParcelable(KEY_APP_URI);
 	}
 
 
