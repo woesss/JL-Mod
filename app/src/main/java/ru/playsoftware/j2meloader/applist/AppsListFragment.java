@@ -86,7 +86,7 @@ import static ru.playsoftware.j2meloader.util.Constants.*;
 public class AppsListFragment extends ListFragment {
 	private AppRepository appRepository;
 	private CompositeDisposable compositeDisposable;
-	private AppsListAdapter adapter;
+	private final AppsListAdapter adapter = new AppsListAdapter();
 	private String appSort;
 	private Uri appUri;
 
@@ -103,7 +103,6 @@ public class AppsListFragment extends ListFragment {
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		compositeDisposable = new CompositeDisposable();
-		adapter = new AppsListAdapter(getActivity());
 		Bundle args = getArguments();
 		if (args == null) {
 			return;
@@ -169,7 +168,7 @@ public class AppsListFragment extends ListFragment {
 				.subscribe(list -> AppUtils.updateDb(appRepository, list), this::alertDbError);
 		listConnectableFlowable
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(list -> adapter.setItems(list), this::alertDbError);
+				.subscribe(adapter::setItems, this::alertDbError);
 		compositeDisposable.add(listConnectableFlowable.connect());
 	}
 
