@@ -90,6 +90,15 @@ public class AppsListFragment extends ListFragment {
 	private String appSort;
 	private Uri appUri;
 
+	public static AppsListFragment newInstance(String appSort, Uri data) {
+		AppsListFragment fragment = new AppsListFragment();
+		Bundle args = new Bundle();
+		args.putString(KEY_APP_SORT, appSort);
+		args.putParcelable(KEY_APP_URI, data);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

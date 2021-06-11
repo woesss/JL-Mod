@@ -34,7 +34,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
@@ -87,17 +86,11 @@ public class MainActivity extends BaseActivity {
 		checkActionBar();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		MigrationUtils.check();
+		Uri data = intentUri ? getIntent().getData() : null;
 		String appSort = sp.getString(PREF_APP_SORT, "name");
-		Bundle bundleLoad = new Bundle();
-		bundleLoad.putString(KEY_APP_SORT, appSort);
-		if (intentUri) {
-			bundleLoad.putParcelable(KEY_APP_URI, getIntent().getData());
-		}
-		AppsListFragment appsListFragment = new AppsListFragment();
-		appsListFragment.setArguments(bundleLoad);
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		fragmentManager.beginTransaction()
-				.replace(R.id.container, appsListFragment).commitNowAllowingStateLoss();
+		AppsListFragment fragment = AppsListFragment.newInstance(appSort, data);
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.container, fragment).commitNowAllowingStateLoss();
 	}
 
 	private boolean checkDirExists() {
