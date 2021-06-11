@@ -24,7 +24,6 @@ import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 
@@ -48,7 +47,6 @@ import static ru.playsoftware.j2meloader.util.Constants.*;
 public class MainActivity extends BaseActivity {
 	private SharedPreferences sp;
 	private String emulatorDir;
-	private boolean needRecreate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +132,7 @@ public class MainActivity extends BaseActivity {
 				finish();
 			}
 		}
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 
 	private boolean initFolders() {
@@ -165,15 +164,9 @@ public class MainActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onPostResume() {
-		super.onPostResume();
-		if (needRecreate) new Handler().post(this::recreate);
-	}
-
-	@Override
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		if (resultCode == RESULT_NEED_RECREATE || requestCode == REQUEST_WORK_DIR) {
-			needRecreate = true;
+			ActivityCompat.recreate(this);
 			return;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
