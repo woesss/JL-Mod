@@ -160,17 +160,18 @@
     <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_NUM_KEYS">Digits: </string>
     <string name="PREF_VK_OUTLINE">Outline</string>
+    <string name="pref_vk_save_alert">Custom keyboard will be replaced by current\nSave?</string>
     <string name="PREF_VK_SEL_BACK">Buttons (P)</string>
     <string name="PREF_VK_SEL_FORE">Labels (P)</string>
     <string name="PREF_VK_SHOW">Show keyboard</string>
     <string name="PREF_VK_SIZE_HINT">Size</string>
     <string name="PREF_VK_SOFT_KEYS">Soft keys: </string>
     <string name="PREF_VK_TYPE">Keyboard type</string>
-    <string name="pref_vk_type_arrows">Arrays</string>
-    <string name="pref_vk_type_arrows_numbers">Arrays &amp; numbers</string>
+    <string name="pref_vk_type_arrows">Arrows</string>
+    <string name="pref_vk_type_arrows_numbers">Arrows &amp; numbers</string>
     <string name="pref_vk_type_custom">Custom</string>
     <string name="pref_vk_type_numbers">Numbers</string>
-    <string name="pref_vk_type_numbers_arrows">Numbers &amp; arrays</string>
+    <string name="pref_vk_type_numbers_arrows">Numbers &amp; arrows</string>
     <string name="pref_vk_type_phone">Phone</string>
     <string name="pref_vk_type_phone_arrows">Phone (arrows)</string>
     <string name="pref_wakelock_title">Keep screen on</string>
@@ -184,6 +185,7 @@
     <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
     <string name="reset_mapping">Reset</string>
     <string name="RESET_SETTINGS_CMD">Reset settings</string>
+    <string name="retry">retry</string>
     <string name="save_log">Save log</string>
     <string name="save_profile">Save profile</string>
     <string name="saved">Saved %s</string>
@@ -211,6 +213,8 @@
     <string name="virtual_key_7" translatable="false">7</string>
     <string name="virtual_key_8" translatable="false">8</string>
     <string name="virtual_key_9" translatable="false">9</string>
+    <string name="virtual_key_a" translatable="false">A</string>
+    <string name="virtual_key_b" translatable="false">B</string>
     <string name="virtual_key_c" translatable="false">C</string>
     <string name="virtual_key_d" translatable="false">D</string>
     <string name="virtual_key_down" translatable="false">↓</string>
@@ -222,11 +226,7 @@
     <string name="virtual_key_right_soft" translatable="false">R</string>
     <string name="virtual_key_star" translatable="false">*</string>
     <string name="virtual_key_up" translatable="false">↑</string>
-    <string translatable="false" name="virtual_key_a">A</string>
-    <string translatable="false" name="virtual_key_b">B</string>
     <string name="warn_install_from_net">File will be downloaded from Internet</string>
     <string name="warning">Warning!!!</string>
     <string name="warning_same_directory">Some settings have been changed in this mod.\nOriginal \"J2ME Loader\" may not work correctly with games, templates and settings installed or configured by the Mod.\nAre you sure you want to use the working folder \"J2ME Loader\"?</string>
-    <string name="pref_vk_save_alert">Custom keyboard will be replaced by current\nSave?</string>
-    <string name="retry">retry</string>
 </resources>

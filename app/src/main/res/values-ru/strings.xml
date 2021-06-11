@@ -148,6 +148,7 @@
     <string name="PREF_VK_NAV_KEYS">Джойстик: </string>
     <string name="PREF_VK_NUM_KEYS">Цифры: </string>
     <string name="PREF_VK_OUTLINE">Обводка</string>
+    <string name="pref_vk_save_alert">Пользовательская клавиатура будет заменена на текущую\nСохранить?</string>
     <string name="PREF_VK_SEL_BACK">Кнопки (Н)</string>
     <string name="PREF_VK_SEL_FORE">Надписи (Н)</string>
     <string name="PREF_VK_SHOW">Показывать клавиатуру</string>
@@ -191,5 +192,4 @@
     <string name="warn_install_from_net">Файл будет загружен из сети Интернет</string>
     <string name="warning">Предупреждение!!!</string>
     <string name="warning_same_directory">В этом моде изменены некоторые настройки.\nОригинальный \"J2ME Loader\" может работать неправильно с играми, шаблонами и настройками установленными или настроенными модом.\nВы уверены, что хотите использовать рабочую папку \"J2ME Loader\"?</string>
-    <string name="pref_vk_save_alert">Пользовательская клавиатура будет заменена на текущую\nСохранить?</string>
 </resources>
