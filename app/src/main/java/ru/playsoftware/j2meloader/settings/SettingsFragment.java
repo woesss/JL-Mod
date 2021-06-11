@@ -16,31 +16,30 @@
 
 package ru.playsoftware.j2meloader.settings;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
-import java.util.List;
 
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
-import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
+import ru.playsoftware.j2meloader.util.PickDirResultContract;
 
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
-import static ru.playsoftware.j2meloader.util.Constants.REQUEST_FILE;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 	private Preference prefFolder;
+	private final ActivityResultLauncher<String> openDirLauncher = registerForActivityResult(
+			new PickDirResultContract(),
+			this::onPickDirResult);
 
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
@@ -48,20 +47,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		findPreference("pref_default_settings").setIntent(new Intent(getActivity(), ProfilesActivity.class));
 		prefFolder = findPreference(PREF_EMULATOR_DIR);
 		prefFolder.setSummary(Config.getEmulatorDir());
-		prefFolder.setOnPreferenceClickListener(this::pickFolder);
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-		if (requestCode == REQUEST_FILE && resultCode == Activity.RESULT_OK && data != null) {
-			List<Uri> files = Utils.getSelectedFilesFromResult(data);
-			File file = Utils.getFileForUri(files.get(0));
-			if (file.getName().equals("J2ME-Loader")) {
-				alertDirectory(file);
-				return;
-			}
-			applyChangeFolder(file);
-		}
+		prefFolder.setOnPreferenceClickListener(preference -> {
+			openDirLauncher.launch(null);
+			return true;
+		});
 	}
 
 	private void alertDirectory(File file) {
@@ -69,7 +58,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 				.setIconAttribute(android.R.attr.alertDialogIcon)
 				.setMessage(R.string.warning_same_directory)
 				.setTitle(R.string.warning)
-				.setNegativeButton(android.R.string.no, null)
+				.setNegativeButton(android.R.string.no, (dialog, which) -> openDirLauncher.launch(file.getAbsolutePath()))
 				.setPositiveButton(android.R.string.yes, (dialog, which) -> applyChangeFolder(file))
 				.show();
 	}
@@ -82,14 +71,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		prefFolder.setSummary(path);
 	}
 
-	private boolean pickFolder(Preference preference) {
-		Intent i = new Intent(getActivity(), FilteredFilePickerActivity.class);
-		i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-		i.putExtra(FilePickerActivity.EXTRA_SINGLE_CLICK, false);
-		i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
-		i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
-		i.putExtra(FilePickerActivity.EXTRA_START_PATH, Config.getEmulatorDir());
-		startActivityForResult(i, REQUEST_FILE);
-		return true;
+	private void onPickDirResult(Uri uri) {
+		if (uri == null) {
+			return;
+		}
+		File file = Utils.getFileForUri(uri);
+		if (file.getName().equals("J2ME-Loader")) {
+			alertDirectory(file);
+		} else {
+			applyChangeFolder(file);
+		}
 	}
 }
