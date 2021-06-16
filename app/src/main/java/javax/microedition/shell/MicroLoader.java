@@ -174,6 +174,11 @@ public class MicroLoader {
 		return params.orientation;
 	}
 
+	void setLimitFps(int fps) {
+		if (fps == -1) Canvas.setLimitFps(params.fpsLimit);
+		else Canvas.setLimitFps(fps);
+	}
+
 	void applyConfiguration() {
 		try {
 			// Apply configuration to the launching MIDlet

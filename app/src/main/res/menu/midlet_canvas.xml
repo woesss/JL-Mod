@@ -15,5 +15,10 @@
             android:title="@string/take_screenshot"
             android:orderInCategory="2"
             app:showAsAction="always"/>
+
+        <item
+            android:id="@+id/action_limit_fps"
+            android:title="@string/PREF_LIMIT_FPS"
+            />
     </group>
 </menu>
