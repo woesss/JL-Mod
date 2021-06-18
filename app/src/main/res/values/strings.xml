@@ -241,5 +241,4 @@
     <string name="warn_install_from_net">File will be downloaded from Internet</string>
     <string name="warning">Warning!!!</string>
     <string name="warning_same_directory">Some settings have been changed in this mod.\nOriginal \"J2ME Loader\" may not work correctly with games, templates and settings installed or configured by the Mod.\nAre you sure you want to use the working folder \"J2ME Loader\"?</string>
-    <string name="limit_fps_dialog_hint">0: Unlimited, Default is 0 if don\'t fill</string>
 </resources>
