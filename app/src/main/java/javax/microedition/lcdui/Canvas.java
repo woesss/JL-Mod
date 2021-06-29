@@ -926,8 +926,9 @@ public abstract class Canvas extends Displayable {
 							postKeyPressed(cp);
 							postKeyReleased(cp);
 						}
+						return true;
 					} else {
-						onKeyDown(keyCode, event);
+						return onKeyDown(keyCode, event);
 					}
 			}
 			return false;
