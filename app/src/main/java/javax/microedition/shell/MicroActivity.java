@@ -152,12 +152,16 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public void onPause() {
 		visible = false;
+		hideSoftInput();
+		MidletThread.pauseApp();
+		super.onPause();
+	}
+
+	private void hideSoftInput() {
 		if (inputMethodManager != null) {
 			IBinder windowToken = layout.getWindowToken();
 			inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
 		}
-		MidletThread.pauseApp();
-		super.onPause();
 	}
 
 	@Override
@@ -311,8 +315,12 @@ public class MicroActivity extends AppCompatActivity {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 		alertBuilder.setTitle(R.string.CONFIRMATION_REQUIRED)
 				.setMessage(R.string.FORCE_CLOSE_CONFIRMATION)
-				.setPositiveButton(android.R.string.ok, (d, w) -> MidletThread.destroyApp())
+				.setPositiveButton(android.R.string.ok, (d, w) -> {
+					hideSoftInput();
+					MidletThread.destroyApp();
+				})
 				.setNeutralButton(R.string.action_settings, (d, w) -> {
+					hideSoftInput();
 					Intent intent = getIntent();
 					Config.startApp(this, intent.getStringExtra(KEY_MIDLET_NAME),
 							intent.getDataString(), true);
