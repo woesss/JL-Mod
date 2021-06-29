@@ -952,12 +952,21 @@ public abstract class Canvas extends Displayable {
 		}
 
 		public boolean onKeyUp(int keyCode, KeyEvent event) {
-			keyCode = KeyMapper.convertAndroidKeyCode(keyCode, event);
-			if (keyCode == 0) {
+			int midpKeyCode = KeyMapper.convertAndroidKeyCode(keyCode, event);
+			if (midpKeyCode == 0) {
 				return false;
 			}
-			if (overlay == null || !overlay.keyReleased(keyCode)) {
-				postKeyReleased(keyCode);
+			long pressedTime = event.getEventTime() - event.getDownTime();
+			if (pressedTime < 100) {
+				mView.postDelayed(() -> {
+					if (overlay == null || !overlay.keyReleased(midpKeyCode)) {
+						postKeyReleased(midpKeyCode);
+					}
+				}, 100 - pressedTime);
+			} else {
+				if (overlay == null || !overlay.keyReleased(midpKeyCode)) {
+					postKeyReleased(midpKeyCode);
+				}
 			}
 			return true;
 		}
