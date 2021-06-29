@@ -472,6 +472,7 @@ public abstract class Canvas extends Displayable {
 			innerView.setOnKeyListener(callback);
 			innerView.setFocusableInTouchMode(true);
 			layout.addView(innerView);
+			innerView.requestFocus();
 		}
 		return layout;
 	}
@@ -917,13 +918,24 @@ public abstract class Canvas extends Displayable {
 					return onKeyDown(keyCode, event);
 				case KeyEvent.ACTION_UP:
 					return onKeyUp(keyCode, event);
+				case KeyEvent.ACTION_MULTIPLE:
+					if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
+						String characters = event.getCharacters();
+						for (int i = 0; i < characters.length(); i++) {
+							int cp = characters.codePointAt(i);
+							postKeyPressed(cp);
+							postKeyReleased(cp);
+						}
+					} else {
+						onKeyDown(keyCode, event);
+					}
 			}
 			return false;
 		}
 
 		public boolean onKeyDown(int keyCode, KeyEvent event) {
-			keyCode = KeyMapper.convertAndroidKeyCode(keyCode);
-			if (keyCode == Integer.MAX_VALUE) {
+			keyCode = KeyMapper.convertAndroidKeyCode(keyCode, event);
+			if (keyCode == 0) {
 				return false;
 			}
 			if (event.getRepeatCount() == 0) {
@@ -939,8 +951,8 @@ public abstract class Canvas extends Displayable {
 		}
 
 		public boolean onKeyUp(int keyCode, KeyEvent event) {
-			keyCode = KeyMapper.convertAndroidKeyCode(keyCode);
-			if (keyCode == Integer.MAX_VALUE) {
+			keyCode = KeyMapper.convertAndroidKeyCode(keyCode, event);
+			if (keyCode == 0) {
 				return false;
 			}
 			if (overlay == null || !overlay.keyReleased(keyCode)) {

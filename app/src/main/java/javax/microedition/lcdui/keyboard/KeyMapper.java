@@ -18,6 +18,7 @@
 package javax.microedition.lcdui.keyboard;
 
 import android.util.SparseIntArray;
+import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 
 import androidx.collection.SparseArrayCompat;
@@ -145,8 +146,15 @@ public class KeyMapper {
 		gameActionToKeyCode.put(gameAction, keyCode);
 	}
 
-	public static int convertAndroidKeyCode(int keyCode) {
-		return androidToMIDP.get(keyCode, Integer.MAX_VALUE);
+	public static int convertAndroidKeyCode(int keyCode, KeyEvent event) {
+		if (!event.isShiftPressed()) {
+			int map = androidToMIDP.get(keyCode, 0);
+			if (map != 0) {
+				return map;
+			}
+		}
+		// TODO: 27.06.2021 ignored ascent char combination
+		return event.getUnicodeChar() & KeyCharacterMap.COMBINING_ACCENT_MASK;
 	}
 
 	public static int convertKeyCode(int keyCode) {
@@ -158,10 +166,14 @@ public class KeyMapper {
 
 	public static void setKeyMapping(ProfileModel params) {
 		layoutType = params.keyCodesLayout;
-		androidToMIDP = params.keyMappings;
-		if (androidToMIDP == null) {
-			androidToMIDP = getDefaultKeyMap();
+		SparseIntArray map = getDefaultKeyMap();
+		SparseIntArray customKeyMap = params.keyMappings;
+		if (customKeyMap != null) {
+			for (int i = 0, size = customKeyMap.size(); i < size; i++) {
+				map.put(customKeyMap.keyAt(i), customKeyMap.valueAt(i));
+			}
 		}
+		androidToMIDP = map;
 		remapKeys();
 	}
 
@@ -200,6 +212,7 @@ public class KeyMapper {
 		map.put(KeyEvent.KEYCODE_SOFT_RIGHT, KEY_SOFT_RIGHT);
 		map.put(KeyEvent.KEYCODE_CALL, KEY_SEND);
 		map.put(KeyEvent.KEYCODE_ENDCALL, KEY_END);
+		map.put(KeyEvent.KEYCODE_DEL, KEY_CLEAR);
 		return map;
 	}
 }
