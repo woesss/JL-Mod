@@ -58,18 +58,18 @@ public class KeyMapper {
 	private static int layoutType;
 
 	static {
-		mapKeyCode(KEY_NUM0, 0, "0");
-		mapKeyCode(KEY_NUM1, 0, "1");
-		mapKeyCode(KEY_NUM2, UP, "2");
-		mapKeyCode(KEY_NUM3, 0, "3");
-		mapKeyCode(KEY_NUM4, LEFT, "4");
-		mapKeyCode(KEY_NUM5, FIRE, "5");
-		mapKeyCode(KEY_NUM6, RIGHT, "6");
-		mapKeyCode(KEY_NUM7, GAME_A, "7");
-		mapKeyCode(KEY_NUM8, DOWN, "8");
-		mapKeyCode(KEY_NUM9, GAME_B, "9");
-		mapKeyCode(KEY_STAR, GAME_C, "ASTERISK");
-		mapKeyCode(KEY_POUND, GAME_D, "POUND");
+		keyCodeToGameAction.put(KEY_NUM0, 0);
+		keyCodeToGameAction.put(KEY_NUM1, 0);
+		keyCodeToGameAction.put(KEY_NUM2, UP);
+		keyCodeToGameAction.put(KEY_NUM3, 0);
+		keyCodeToGameAction.put(KEY_NUM4, LEFT);
+		keyCodeToGameAction.put(KEY_NUM5, FIRE);
+		keyCodeToGameAction.put(KEY_NUM6, RIGHT);
+		keyCodeToGameAction.put(KEY_NUM7, GAME_A);
+		keyCodeToGameAction.put(KEY_NUM8, DOWN);
+		keyCodeToGameAction.put(KEY_NUM9, GAME_B);
+		keyCodeToGameAction.put(KEY_STAR, GAME_C);
+		keyCodeToGameAction.put(KEY_POUND, GAME_D);
 		mapKeyCode(KEY_UP, UP, "UP");
 		mapKeyCode(KEY_DOWN, DOWN, "DOWN");
 		mapKeyCode(KEY_LEFT, LEFT, "LEFT");
@@ -186,7 +186,13 @@ public class KeyMapper {
 	}
 
 	public static String getKeyName(int keyCode) {
-		return keyCodeToKeyName.get(keyCode);
+		String name = keyCodeToKeyName.get(keyCode);
+		if (name == null) {
+			if (Character.isValidCodePoint(keyCode)) {
+				name = new String(Character.toChars(keyCode));
+			}
+		}
+		return name;
 	}
 
 	public static SparseIntArray getDefaultKeyMap() {
