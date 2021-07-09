@@ -6,6 +6,7 @@
     <string name="action_context_delete">Удалить</string>
     <string name="action_context_rename">Переименовать</string>
     <string name="action_context_shortcut">Добавить ярлык</string>
+    <string name="action_keyboard_ime">Клавиатура (IME)</string>
     <string name="action_settings">Настройки</string>
     <string name="add">Создать</string>
     <string name="add_profile_description">Создать новый профиль</string>
