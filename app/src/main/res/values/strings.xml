@@ -19,6 +19,7 @@
     <string name="add">Add</string>
     <string name="add_profile_description">Create new profile</string>
     <string name="add_resolution_preset">Add resolution to presets</string>
+    <string name="alert_map_menu">You MUST map \"menu\" key!</string>
     <string name="alert_msg_workdir_not_exists">Working directory does not exist at path:\n\'%s\'.\nDo you want to create it or choose another one?</string>
     <string name="app_name" translatable="false">JL-Mod</string>
     <string name="author">Author: </string>
@@ -222,6 +223,7 @@
     <string name="virtual_key_f" translatable="false">F</string>
     <string name="virtual_key_left" translatable="false">←</string>
     <string name="virtual_key_left_soft" translatable="false">L</string>
+    <string name="virtual_key_menu">menu</string>
     <string name="virtual_key_pound" translatable="false">#</string>
     <string name="virtual_key_right" translatable="false">→</string>
     <string name="virtual_key_right_soft" translatable="false">R</string>
