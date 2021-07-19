@@ -14,7 +14,7 @@
     <string name="converting_wait">جار تحويل ملف تطبيق جافا…</string>
     <string name="crash_dialog_message">هل تريد إرسال تقرير عن الخطأ إلى المطور؟</string>
     <string name="crash_dialog_title">تم الكشف عن خطأ</string>
-    <string name="default_label">"3 ث (افتراضي)"</string>
+    <string name="default_label">%1$s (افتراضي)</string>
     <string name="donate">تبرع</string>
     <string name="error">خطأ</string>
     <string name="exit">خروج</string>
@@ -31,7 +31,7 @@
     <string name="licenses">التراخيص</string>
     <string name="load_profile">تحميل الملف الشخصي</string>
     <string name="log_saved">تم حفظ السجل</string>
-    <string name="mapping_dialog_message">التوجيه الحالي: %s</string>
+    <string name="mapping_dialog_message">التوجيه الحالي: %1$s</string>
     <string name="mapping_dialog_title">اضغط على أي مفتاح</string>
     <string name="message_clear_data">هل تريد حقاً أن تحذف بيانات التطبيق؟</string>
     <string name="message_delete">هل تريد حذف هذا التطبيق حقاً؟</string>

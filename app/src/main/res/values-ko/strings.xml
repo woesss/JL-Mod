@@ -16,8 +16,8 @@
     <string name="converting_wait">설치 중…</string>
     <string name="crash_dialog_message">개발자에게 오류 보고서를 발송합니까?</string>
     <string name="crash_dialog_title">오류가 감지됨</string>
-    <string name="create_apps_dir_failed">경로에 폴더를 만들지 못함:\n\'%s\'\n다른 사람을 고르다.</string>
-    <string name="default_label">"%s (체납)"</string>
+    <string name="create_apps_dir_failed">경로에 폴더를 만들지 못함:\n%1$s\n다른 사람을 고르다.</string>
+    <string name="default_label">%1$s (체납)</string>
     <string name="donate">기부하다</string>
     <string name="edit">편집</string>
     <string name="enter_name">이름 입력</string>
@@ -54,7 +54,7 @@
     <string name="licenses">허가</string>
     <string name="load_profile">프로필 로드</string>
     <string name="log_saved">Log 저장됨</string>
-    <string name="mapping_dialog_message">현재 맵핑: %s</string>
+    <string name="mapping_dialog_message">현재 맵핑: %1$s</string>
     <string name="mapping_dialog_title">버튼 하나를 누르다</string>
     <string name="message_clear_data">앱 데이터를 지우시겠습니까?</string>
     <string name="message_delete">이 애플리케이션을 삭제하시겠습니까?</string>
@@ -147,7 +147,7 @@
     <string name="RESET_SETTINGS_CMD">묵시적 설정 복원</string>
     <string name="save_log">Log 저장</string>
     <string name="save_profile">프로필 저장</string>
-    <string name="saved">저장됨 %s</string>
+    <string name="saved">저장됨 %1$s</string>
     <string name="screenshot_saved">스크린샷이 저장되었습니다</string>
     <string name="search">검색하다</string>
     <string name="select_dialog_title">프로그램 구성 선택</string>

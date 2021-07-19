@@ -30,7 +30,7 @@
     <string name="licenses">Licențe</string>
     <string name="load_profile">Încarcă șablonul</string>
     <string name="log_saved">Jurnalul a fost salvat</string>
-    <string name="mapping_dialog_message">Mapari curente: %s</string>
+    <string name="mapping_dialog_message">Mapari curente: %1$s</string>
     <string name="mapping_dialog_title">Apasă o tastă</string>
     <string name="message_clear_data">Ești sigur că vrei să ștergi datele aplicației?</string>
     <string name="message_delete">Chiar vrei sa ștergi această aplicație?</string>

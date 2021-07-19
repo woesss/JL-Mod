@@ -20,7 +20,7 @@
     <string name="edit">Editar</string>
     <string name="enter_name">Escribir nombre</string>
     <string name="enter_new_name">Escribir nuevo nombre</string>
-    <string name="err_missing_app">No se encontró la aplicación.\nCompruebe ficheros en el dispositivo %so vuelva a crear un acceso directo.</string>
+    <string name="err_missing_app">No se encontró la aplicación.\nCompruebe ficheros en el dispositivo %1$so vuelva a crear un acceso directo.</string>
     <string name="error">Error</string>
     <string name="error_disk_io">Error de almacenamiento: compruebe espacio en memoria</string>
     <string name="error_name">¡Escribir nombre!</string>
@@ -39,7 +39,7 @@
     <string name="licenses">Licencias</string>
     <string name="load_profile">Cargar perfil</string>
     <string name="log_saved">El registro ha sido guardado</string>
-    <string name="mapping_dialog_message">Mapeo actual: %s</string>
+    <string name="mapping_dialog_message">Mapeo actual: %1$s</string>
     <string name="mapping_dialog_title">Presiona una tecla</string>
     <string name="message_clear_data">¿Realmente quieres borrar los datos de la aplicación?</string>
     <string name="message_delete">¿Realmente desea eliminar esta aplicación?</string>
@@ -136,7 +136,7 @@
     <string name="RESET_SETTINGS_CMD">Restablecer la configuración</string>
     <string name="save_log">Guardar registro</string>
     <string name="save_profile">Guardar perfil</string>
-    <string name="saved">Guardado %s</string>
+    <string name="saved">Guardado %1$s</string>
     <string name="screenshot_saved">La captura de pantalla se ha guardado en</string>
     <string name="search">Buscar</string>
     <string name="select_dialog_title">Seleccionar MIDlet</string>

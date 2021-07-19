@@ -16,13 +16,13 @@
     <string name="converting_wait">Converteren JAR…</string>
     <string name="crash_dialog_message">Wilt u een foutrapport verzenden naar de ontwikkelaar?</string>
     <string name="crash_dialog_title">Fout gedetecteerd</string>
-    <string name="create_apps_dir_failed">Het aanmaken van een map in het pad is mislukt:\n\'%s\'\nselecteer een andere.</string>
-    <string name="default_label">"%s (standaard)"</string>
+    <string name="create_apps_dir_failed">Het aanmaken van een map in het pad is mislukt:\n%1$s\nselecteer een andere.</string>
+    <string name="default_label">%1$s (standaard)</string>
     <string name="donate">Doneer</string>
     <string name="edit">Bewerken</string>
     <string name="enter_name">Naam invoeren</string>
     <string name="enter_new_name">Voer nieuwe naam in</string>
-    <string name="err_missing_app">Applicatie niet gevonden.\nControleer beschikbaarheid van opslagapparaat %sof maak de snelkoppeling opnieuw aan.</string>
+    <string name="err_missing_app">Applicatie niet gevonden.\nControleer beschikbaarheid van opslagapparaat %1$sof maak de snelkoppeling opnieuw aan.</string>
     <string name="error">Fout</string>
     <string name="error_disk_io">Opslagfout: controleer schijfruimte</string>
     <string name="error_name">Naam invoeren!</string>
@@ -42,7 +42,7 @@
     <string name="licenses">Licenties</string>
     <string name="load_profile">Profiel laden</string>
     <string name="log_saved">Logboek is opgeslagen</string>
-    <string name="mapping_dialog_message" formatted="false">Huidige toewijzing: %1$s</string>
+    <string name="mapping_dialog_message">Huidige toewijzing: %1$s</string>
     <string name="mapping_dialog_title">Druk op een toets</string>
     <string name="message_clear_data">Weet u zeker dat u de app data wilt wissen?</string>
     <string name="message_delete">Weet u zeker dat u deze app wilt verwijderen?</string>
@@ -146,7 +146,7 @@
     <string name="RESET_SETTINGS_CMD">Instellingen resetten</string>
     <string name="save_log">Logboek opslaan</string>
     <string name="save_profile">Profiel opslaan</string>
-    <string name="saved">Opgeslagen %s</string>
+    <string name="saved">Opgeslagen %1$s</string>
     <string name="screenshot_saved">Schermafbeelding is opgeslagen in</string>
     <string name="search">Zoeken</string>
     <string name="select_dialog_title">Selecteer MIDled</string>

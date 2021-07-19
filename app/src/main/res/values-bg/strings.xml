@@ -14,7 +14,7 @@
     <string name="converting_wait">Конвертиране на JAR…</string>
     <string name="crash_dialog_message">Искате ли да изпратите отчет за грешки на разработчика?</string>
     <string name="crash_dialog_title">Открита е грешка</string>
-    <string name="default_label">"%s (по подразбиране)"</string>
+    <string name="default_label">%1$s (по подразбиране)</string>
     <string name="donate">Даряване</string>
     <string name="error">Грешка</string>
     <string name="exit">Изход</string>
@@ -31,7 +31,7 @@
     <string name="licenses">Лицензи</string>
     <string name="load_profile">Зареждане на профил</string>
     <string name="log_saved">Регистрационния файл е записан</string>
-    <string name="mapping_dialog_message">Текущи настройки: %s</string>
+    <string name="mapping_dialog_message">Текущи настройки: %1$s</string>
     <string name="mapping_dialog_title">Натиснете клавиш</string>
     <string name="message_clear_data">Наистина ли искате да изтриете всички данни на приложението?</string>
     <string name="message_delete">Наистина ли искате да изтриете това приложение?</string>

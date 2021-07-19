@@ -16,13 +16,13 @@
     <string name="converting_wait">Convertendo JAR…</string>
     <string name="crash_dialog_message">Deseja enviar um relatório de erro ao desenvolvedor?</string>
     <string name="crash_dialog_title">Erro detectado</string>
-    <string name="create_apps_dir_failed">Falha ao criar uma pasta no caminho:\n\'%s\'\nselecione outra.</string>
-    <string name="default_label">"%s (padrão)"</string>
+    <string name="create_apps_dir_failed">Falha ao criar uma pasta no caminho:\n%1$s\nselecione outra.</string>
+    <string name="default_label">%1$s (padrão)</string>
     <string name="donate">Doar</string>
     <string name="edit">Editar</string>
     <string name="enter_name">Inserir nome</string>
     <string name="enter_new_name">Inserir novo nome</string>
-    <string name="err_missing_app">Aplicativo não encontrado.\nPor favor, verifique se o armazenamento %sesta disponível ou recrie o atalho.</string>
+    <string name="err_missing_app">Aplicativo não encontrado.\nPor favor, verifique se o armazenamento %1$sesta disponível ou recrie o atalho.</string>
     <string name="error">Erro</string>
     <string name="error_disk_io">Erro de armazenamento: verifique o espaço no disco</string>
     <string name="error_name">Digitar nome!</string>
@@ -42,7 +42,7 @@
     <string name="licenses">Licenças</string>
     <string name="load_profile">Carregar perfil</string>
     <string name="log_saved">Log foi salvo</string>
-    <string name="mapping_dialog_message">Mapeamento atual: %s</string>
+    <string name="mapping_dialog_message">Mapeamento atual: %1$s</string>
     <string name="mapping_dialog_title">Pressione um botão</string>
     <string name="message_clear_data">Deseja realmente apagar os dados do aplicativo?</string>
     <string name="message_delete">Tem certeza de que deseja excluir este aplicativo?</string>
@@ -146,7 +146,7 @@
     <string name="RESET_SETTINGS_CMD">Redefinir configurações</string>
     <string name="save_log">Salvar log</string>
     <string name="save_profile">Salvar perfil</string>
-    <string name="saved">Salvo %s</string>
+    <string name="saved">Salvo %1$s</string>
     <string name="screenshot_saved">Captura de tela salva em</string>
     <string name="search">Pesquisar</string>
     <string name="select_dialog_title">Selecionar MIDlet</string>

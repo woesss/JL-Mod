@@ -16,13 +16,13 @@
     <string name="converting_wait">Conversion JAR…</string>
     <string name="crash_dialog_message">Vous voulez envoyer le rapport d’erreur au développeur?</string>
     <string name="crash_dialog_title">Erreur détectée</string>
-    <string name="create_apps_dir_failed">Impossible de créer un dossier dans le chemin :\n\'%s\'\nsélectionnez un autre.</string>
-    <string name="default_label">"1 sec (Par défaut)"</string>
+    <string name="create_apps_dir_failed">Impossible de créer un dossier dans le chemin :\n%1$s\nsélectionnez un autre.</string>
+    <string name="default_label">%1$s (Par défaut)</string>
     <string name="donate">Donner</string>
     <string name="edit">Paramètres</string>
     <string name="enter_name">Entrer le nom :</string>
     <string name="enter_new_name">Entrez un nouveau nom de dossier</string>
-    <string name="err_missing_app">Application introuvable.\nVeuillez vérifier la disponibilité de l\'appareil de stockage %sou recréer le raccourci.</string>
+    <string name="err_missing_app">Application introuvable.\nVeuillez vérifier la disponibilité de l\'appareil de stockage %1$sou recréer le raccourci.</string>
     <string name="error">Erreur</string>
     <string name="error_disk_io">Erreur de stockage : vérifiez l\'espace disque</string>
     <string name="error_name">Entrer le nom :</string>
@@ -42,7 +42,7 @@
     <string name="licenses">Licences</string>
     <string name="load_profile">Charger le profil</string>
     <string name="log_saved">Logs a été sauvegardé</string>
-    <string name="mapping_dialog_message">Mappage actuel : %s</string>
+    <string name="mapping_dialog_message">Mappage actuel : %1$s</string>
     <string name="mapping_dialog_title">Appuyez sur une touche</string>
     <string name="message_clear_data">Voulez-vous vraiment effacer les données des applications ?</string>
     <string name="message_delete">Voulez-vous vraiment supprimer cette application?</string>
@@ -143,7 +143,7 @@
     <string name="RESET_SETTINGS_CMD">Réinitialiser les paramètres</string>
     <string name="save_log">Sauvegarder les logs</string>
     <string name="save_profile">Enregistrer le profil</string>
-    <string name="saved">Sauvegarder %s</string>
+    <string name="saved">Sauvegarder %1$s</string>
     <string name="screenshot_saved">La capture d\'écran a été enregistrée dans</string>
     <string name="search">Recherche</string>
     <string name="select_dialog_title">Sélectionnez la taille moyenne</string>

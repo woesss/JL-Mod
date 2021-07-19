@@ -16,13 +16,13 @@
     <string name="converting_wait">Перетворення JAR…</string>
     <string name="crash_dialog_message">Чи ви хочете, надіслати розробнику звіт про помилку?</string>
     <string name="crash_dialog_title">Виявлена помилка</string>
-    <string name="create_apps_dir_failed">Не вдалося створити папку за вказаним шляхом:\n\'%s\nвиберіть іншу.</string>
-    <string name="default_label">"%s (за замовчуванням)"</string>
+    <string name="create_apps_dir_failed">Не вдалося створити папку за вказаним шляхом:\n%1$s\nвиберіть іншу.</string>
+    <string name="default_label">%1$s (за замовчуванням)</string>
     <string name="donate">Пожертвувати</string>
     <string name="edit">Редагувати</string>
     <string name="enter_name">Введіть ім\'я</string>
     <string name="enter_new_name">Введіть нове ім\'я</string>
-    <string name="err_missing_app">Додаток не знайдено.\nПеревірте файли на пристрої %s або заново створіть ярлик.</string>
+    <string name="err_missing_app">Додаток не знайдено.\nПеревірте файли на пристрої %1$sабо заново створіть ярлик.</string>
     <string name="error">Помилка</string>
     <string name="error_disk_io">Помилка сховища: перевірте вільне місце на диску</string>
     <string name="error_name">Введіть ім\'я!</string>
@@ -42,7 +42,7 @@
     <string name="licenses">Ліцензії</string>
     <string name="load_profile">Завантажити профіль</string>
     <string name="log_saved">Журнал помилок збережено</string>
-    <string name="mapping_dialog_message">Поточне зіставлення: %s</string>
+    <string name="mapping_dialog_message">Поточне зіставлення: %1$s</string>
     <string name="mapping_dialog_title">Натисніть клавішу</string>
     <string name="message_clear_data">Ви дійсно хочете очистити програмні дані?</string>
     <string name="message_delete">Ви дійсно хочете видалити данний додаток?</string>
@@ -146,7 +146,7 @@
     <string name="RESET_SETTINGS_CMD">Скидання налаштувань</string>
     <string name="save_log">Зберегти у журнал</string>
     <string name="save_profile">Зберегти профіль</string>
-    <string name="saved">Збережено %s</string>
+    <string name="saved">Збережено %1$s</string>
     <string name="screenshot_saved">Скріншот було збережено до</string>
     <string name="search">Пошук</string>
     <string name="select_dialog_title">Обрати MIDlet</string>

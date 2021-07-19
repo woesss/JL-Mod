@@ -28,7 +28,6 @@
     <string name="layout_switch">สลับ keylayout</string>
     <string name="licenses">ใบอนุญาต</string>
     <string name="load_profile">โหลดแม่แบบ</string>
-    <string name="mapping_dialog_message">Current mapping: %s</string>
     <string name="mapping_dialog_title">กดปุ่ม</string>
     <string name="message_delete">ท่านต้องการลบแอปฯนี้หรือไม่?</string>
     <string name="more">อื่น ๆ</string>

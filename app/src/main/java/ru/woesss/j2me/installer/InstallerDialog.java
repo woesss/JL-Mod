@@ -271,6 +271,7 @@ public class InstallerDialog extends DialogFragment {
 			installer.deleteTemp();
 			hideProgress();
 			if (!isAdded()) return;
+			tvMessage.append("\n\n");
 			tvMessage.append(getString(R.string.install_done));
 			Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
 			if (drawable != null) mDialog.setIcon(drawable);

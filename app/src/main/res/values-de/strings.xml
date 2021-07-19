@@ -30,7 +30,7 @@
     <string name="licenses">Lizenzen</string>
     <string name="load_profile">Vorlage laden</string>
     <string name="log_saved">Protokoll wurde gespeichert</string>
-    <string name="mapping_dialog_message" formatted="false">Aktuelle Zuordnung: %1$s</string>
+    <string name="mapping_dialog_message">Aktuelle Zuordnung: %1$s</string>
     <string name="mapping_dialog_title">Taste drücken</string>
     <string name="message_clear_data">Möchten Sie wirklich die App-Daten löschen?</string>
     <string name="message_delete">Möchten Sie diese App wirklich löschen?</string>

@@ -16,8 +16,8 @@
     <string name="converting_wait">Conversione del file JAR…</string>
     <string name="crash_dialog_message">Vuoi inviare il report dell\'errore allo sviluppatore?</string>
     <string name="crash_dialog_title">Errore rilevato</string>
-    <string name="create_apps_dir_failed">Impossibile creare una cartella nel percorso:\n\'%s\'\n selezionarne un\'altra.</string>
-    <string name="default_label">"%s (Predefinito)"</string>
+    <string name="create_apps_dir_failed">Impossibile creare una cartella nel percorso:\n%1$s\nselezionarne un\'altra.</string>
+    <string name="default_label">%1$s (Predefinito)</string>
     <string name="donate">Dona</string>
     <string name="edit">Modifica</string>
     <string name="enter_name">Inserisci il nome</string>
@@ -40,7 +40,7 @@
     <string name="licenses">Licenze</string>
     <string name="load_profile">Carica Profilo</string>
     <string name="log_saved">Il log è stato salvato</string>
-    <string name="mapping_dialog_message">Mappatura corrente: %s</string>
+    <string name="mapping_dialog_message">Mappatura corrente: %1$s</string>
     <string name="mapping_dialog_title">Premi un tasto</string>
     <string name="message_clear_data">Vuoi davvero cancellare i dati dell\'applicazione?</string>
     <string name="message_delete">Vuoi davvero eliminare questa applicazione?</string>
@@ -132,7 +132,7 @@
     <string name="RESET_SETTINGS_CMD">Resetta impostazioni</string>
     <string name="save_log">Salva log</string>
     <string name="save_profile">Salva Profilo</string>
-    <string name="saved">Salvato %s</string>
+    <string name="saved">Salvato %1$s</string>
     <string name="screenshot_saved">La schermata è stata salvata in</string>
     <string name="search">Cerca</string>
     <string name="select_dialog_title">Scegli MIDlet</string>

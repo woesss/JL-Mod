@@ -30,7 +30,7 @@
     <string name="licenses">License</string>
     <string name="load_profile">Načíst šablonu</string>
     <string name="log_saved">Soubor log byl uložen</string>
-    <string name="mapping_dialog_message">Aktuální mapování: %s</string>
+    <string name="mapping_dialog_message">Aktuální mapování: %1$s</string>
     <string name="mapping_dialog_title">Zmáčkni tlačítko</string>
     <string name="message_clear_data">Opravdu chcete vymazat data aplikace?</string>
     <string name="message_delete">Opravdu chcete tuto aplikaci smazat?</string>

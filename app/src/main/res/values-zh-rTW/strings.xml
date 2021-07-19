@@ -28,7 +28,7 @@
     <string name="layout_scale_mode">調整按鍵大小</string>
     <string name="layout_switch">切換按鍵佈挶</string>
     <string name="licenses">授權</string>
-    <string name="mapping_dialog_message">當前映射: %s</string>
+    <string name="mapping_dialog_message">當前映射: %1$s</string>
     <string name="mapping_dialog_title">按任意按鍵</string>
     <string name="message_clear_data">你確定要刪除所有的資料嗎？</string>
     <string name="message_delete">確定要刪除此應用？</string>
@@ -102,7 +102,7 @@
     <string name="reset_mapping">重設</string>
     <string name="RESET_SETTINGS_CMD">恢復默認設置</string>
     <string name="save_log">儲存紀錄</string>
-    <string name="saved">已儲存 %s</string>
+    <string name="saved">已儲存 %1$s</string>
     <string name="screenshot_saved">屏幕截圖已保存到</string>
     <string name="search">搜尋</string>
     <string name="select_dialog_title">選擇程序結搆</string>

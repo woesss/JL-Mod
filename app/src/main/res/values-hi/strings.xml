@@ -16,13 +16,13 @@
     <string name="converting_wait">जार में परिवर्तित …</string>
     <string name="crash_dialog_message">क्या आप डेवलपर को त्रुटि रिपोर्ट भेजना चाहते हैं?</string>
     <string name="crash_dialog_title">त्रुटि का पता चला</string>
-    <string name="create_apps_dir_failed">पथ में एक फ़ोल्डर बनाने में विफल:\n%s\nदूसरे का चयन करें।</string>
-    <string name="default_label">"%s (डिफ़ॉल्ट)"</string>
+    <string name="create_apps_dir_failed">पथ में एक फ़ोल्डर बनाने में विफल:\n%1$s\nदूसरे का चयन करें।</string>
+    <string name="default_label">%1$s (डिफ़ॉल्ट)</string>
     <string name="donate">दान करें</string>
     <string name="edit">संपादित करें</string>
     <string name="enter_name">नाम दर्ज</string>
     <string name="enter_new_name">नया नाम दर्ज करें</string>
-    <string name="err_missing_app">आवेदन नहीं मिला।\nकृपया संग्रहण डिवाइस %s उपलब्धता या फिर से शॉर्टकट बनाने की जाँच करें।</string>
+    <string name="err_missing_app">आवेदन नहीं मिला।\nकृपया संग्रहण डिवाइस %1$sउपलब्धता या फिर से शॉर्टकट बनाने की जाँच करें।</string>
     <string name="error">गलती  </string>
     <string name="error_disk_io">संग्रहण त्रुटि: डिस्क स्थान की जाँच करें</string>
     <string name="error_name">नाम दर्ज!</string>
@@ -42,7 +42,7 @@
     <string name="licenses">लाइसेंस</string>
     <string name="load_profile">प्रोफाइल लोड करें</string>
     <string name="log_saved">लॉग सहेजा गया है</string>
-    <string name="mapping_dialog_message" formatted="false">वर्तमान मानचित्रण: %1$s</string>
+    <string name="mapping_dialog_message">वर्तमान मानचित्रण: %1$s</string>
     <string name="mapping_dialog_title">कोई कि दबाएं</string>
     <string name="message_clear_data">क्या आप वास्तव में ऐप डेटा साफ़ करना चाहते हैं?</string>
     <string name="message_delete">क्या आप वास्तव में इस ऐप को हटाना चाहते हैं?</string>
@@ -146,7 +146,7 @@
     <string name="RESET_SETTINGS_CMD">सेटिंग्स रीसेट करें</string>
     <string name="save_log">लॉग सहेजें</string>
     <string name="save_profile">प्रोफ़ाइल सहेजें</string>
-    <string name="saved">सहेजा गया %s</string>
+    <string name="saved">सहेजा गया %1$s</string>
     <string name="screenshot_saved">स्क्रीनशॉट को सहेज लिया गया है</string>
     <string name="search">खोजें</string>
     <string name="select_dialog_title">MIDlet का चयन करें</string>

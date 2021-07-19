@@ -20,7 +20,7 @@
     <string name="add_profile_description">Create new profile</string>
     <string name="add_resolution_preset">Add resolution to presets</string>
     <string name="alert_map_menu">You MUST map \"menu\" key!</string>
-    <string name="alert_msg_workdir_not_exists">Working directory does not exist at path:\n\'%s\'.\nDo you want to create it or choose another one?</string>
+    <string name="alert_msg_workdir_not_exists">Working directory does not exist at path:\n\'%1$s\'.\nDo you want to create it or choose another one?</string>
     <string name="app_name" translatable="false">JL-Mod</string>
     <string name="author">Author: </string>
     <string name="choose">choose</string>
@@ -33,14 +33,14 @@
     <string name="crash_dialog_message">Do you want to send error report to the developer?</string>
     <string name="crash_dialog_title">Error detected</string>
     <string name="create">create</string>
-    <string name="create_apps_dir_failed">Failed to create a folder in the path:\n\'%s\'\nselect another.</string>
-    <string name="default_label">"%s (default)"</string>
+    <string name="create_apps_dir_failed">Failed to create a folder in the path:\n%1$s\nselect another.</string>
+    <string name="default_label">"%1$s (default)"</string>
     <string name="donate">Donate</string>
     <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>
     <string name="edit">Edit</string>
     <string name="enter_name">Enter name</string>
     <string name="enter_new_name">Enter new name</string>
-    <string name="err_missing_app">Application not found.\nPlease check storage device %savailability or re-create shortcut.</string>
+    <string name="err_missing_app">Application not found.\nPlease check storage device %1$savailability or re-create shortcut.</string>
     <string name="error">Error</string>
     <string name="error_disk_io">Storage error: check disk space</string>
     <string name="error_name">Enter name!</string>
@@ -53,7 +53,7 @@
     <string name="hide_buttons">Hide buttons</string>
     <string name="identity_filter">Fast (no filter)</string>
     <string name="install">install</string>
-    <string name="install_done">\n\nApplication successfully installed!</string>
+    <string name="install_done">Application successfully installed!</string>
     <string name="install_jar_non_matched_jad">This app differs from that described in JAD.\nIgnore JAD and install anyway?</string>
     <string name="invalid_resolution_not_saved">Invalid resolutions: not saved!</string>
     <string name="layout_edit_finish">Finish edit mode</string>
@@ -65,7 +65,7 @@
     <string name="load_profile">Load profile</string>
     <string name="loading_info">loading info…</string>
     <string name="log_saved">Log has been saved</string>
-    <string name="mapping_dialog_message">Current mapping: %s</string>
+    <string name="mapping_dialog_message">Current mapping: %1$s</string>
     <string name="mapping_dialog_title">Press a key</string>
     <string name="message_clear_data">Do you really want to clear app data?</string>
     <string name="message_delete">Do you really want to delete this app?</string>
@@ -179,9 +179,9 @@
     <string name="pref_wakelock_title">Keep screen on</string>
     <string name="PREF_WIDTH">Width</string>
     <string name="profiles">Profiles</string>
-    <string name="reinstall">\nApp already installed.\n\nDo you want to reinstall it?\nAll data will be saved.</string>
-    <string name="reinstall_newest">\nUpdate this app to version %s?\n\nCurrently installed: %s\nAll data will be saved.</string>
-    <string name="reinstall_oldest">\nReplace this app with version %s?\n\nCurrently installed: %s\nOldest version may not working correctly with recorded data.</string>
+    <string name="reinstall">App already installed.\n\nDo you want to reinstall it?\nAll data will be saved.</string>
+    <string name="reinstall_newest">Update this app to version %1$s?\n\nCurrently installed: %2$s\nAll data will be saved.</string>
+    <string name="reinstall_oldest">Replace this app with version %1$s?\n\nCurrently installed: %2$s\nOldest version may not working correctly with recorded data.</string>
     <string name="report_crash">Send</string>
     <string name="reset">Reset</string>
     <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
@@ -190,13 +190,13 @@
     <string name="retry">retry</string>
     <string name="save_log">Save log</string>
     <string name="save_profile">Save profile</string>
-    <string name="saved">Saved %s</string>
+    <string name="saved">Saved %1$s</string>
     <string name="screenshot_saved">Screenshot has been saved to</string>
     <string name="search">Search</string>
     <string name="select_dialog_title">Select MIDlet</string>
     <string name="set_as_default">Set as default</string>
     <string name="set_default_profile_description">Select this profile as a standard settings for all apps that will be installed later</string>
-    <string name="shader_setting" translatable="false">%s: %s</string>
+    <string name="shader_setting" translatable="false">%1$s: %2$s</string>
     <string name="shader_tuning">Shader Tuning</string>
     <string name="SIZE_PRESETS">Presets</string>
     <string name="START_CMD">Start</string>

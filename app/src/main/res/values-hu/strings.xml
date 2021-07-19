@@ -16,8 +16,8 @@
     <string name="converting_wait">JAR konvertálása…</string>
     <string name="crash_dialog_message">Szeretné elküldeni a hibajelentést a fejlesztőknek?</string>
     <string name="crash_dialog_title">Hiba észlelhető</string>
-    <string name="create_apps_dir_failed">Könyvtár létrehozása sikertelen a következő útvonalon:\n\'%s\'\nVálasszon másikat.</string>
-    <string name="default_label">"%s (alapértelmezett)"</string>
+    <string name="create_apps_dir_failed">Könyvtár létrehozása sikertelen a következő útvonalon:\n%1$s\nVálasszon másikat.</string>
+    <string name="default_label">%1$s (alapértelmezett)</string>
     <string name="donate">Támogatás</string>
     <string name="edit">Szerkesztés</string>
     <string name="enter_name">Név megadása</string>
@@ -40,7 +40,7 @@
     <string name="licenses">Licencek</string>
     <string name="load_profile">Profil betöltése</string>
     <string name="log_saved">A naplófájl mentésre került</string>
-    <string name="mapping_dialog_message">Jelenlegi hozzárendelés: %s</string>
+    <string name="mapping_dialog_message">Jelenlegi hozzárendelés: %1$s</string>
     <string name="mapping_dialog_title">Nyomjon meg egy billentyűt</string>
     <string name="message_clear_data">Tényleg törölni szeretné az alkalmazás adatait?</string>
     <string name="message_delete">Biztosan törli ezt az alkalmazást?</string>
@@ -131,7 +131,7 @@
     <string name="RESET_SETTINGS_CMD">Beállítások visszaállítása</string>
     <string name="save_log">Napló mentése</string>
     <string name="save_profile">Profil mentése</string>
-    <string name="saved">Mentve %s</string>
+    <string name="saved">Mentve %1$s</string>
     <string name="screenshot_saved">A kép mentési helye:</string>
     <string name="search">Keresés</string>
     <string name="select_dialog_title">Válassza ki a MIDlet</string>

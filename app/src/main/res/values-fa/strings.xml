@@ -31,7 +31,7 @@
     <string name="licenses">مجوزها</string>
     <string name="load_profile">وارد کردن قالب </string>
     <string name="log_saved">گزارش ذخیره شده است</string>
-    <string name="mapping_dialog_message" formatted="false">نقشه برداری فعلی : %1$s</string>
+    <string name="mapping_dialog_message">نقشه برداری فعلی : %1$s</string>
     <string name="mapping_dialog_title">یک کلید را انتخاب کنید</string>
     <string name="message_clear_data">آیا واقعا می خواهید اطلاعات برنامه را پاک کنید؟</string>
     <string name="message_delete">آیا واقعا می خواهید این برنامه یا بازی را حذف کنید؟</string>
