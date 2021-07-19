@@ -250,12 +250,6 @@ public class Descriptor {
 		return attributes.get(MIDLET_VENDOR);
 	}
 
-	public String getDescription() {
-		String value = attributes.get(MIDLET_DESCRIPTION);
-		if (value == null) return "";
-		return value;
-	}
-
 	public String getIcon() throws DescriptorException {
 		String icon = attributes.get(MIDLET_ICON);
 		if (icon == null || icon.trim().isEmpty()) {
@@ -295,7 +289,7 @@ public class Descriptor {
 
 	public SpannableStringBuilder getInfo(Context c) {
 		SpannableStringBuilder info = new SpannableStringBuilder();
-		String description = getDescription();
+		String description = attributes.get(MIDLET_DESCRIPTION);
 		if (description != null) {
 			info.append(description).append("\n\n");
 		}

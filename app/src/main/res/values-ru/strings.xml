@@ -61,7 +61,7 @@
     <string name="midlet_name"><b>Название:</b> </string>
     <string name="midlet_size"><b>Размер:</b> </string>
     <string name="midlet_source"><b>Источник:</b> </string>
-    <string name="midlet_vendor"><b>Разработчик:</b> </string>
+    <string name="midlet_vendor"><b>Поставщик:</b> </string>
     <string name="midlet_version"><b>Версия:</b> </string>
     <string name="more">Подробнее</string>
     <string name="no_data_for_display">Нет данных</string>
