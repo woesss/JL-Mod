@@ -67,6 +67,7 @@
     <string name="loading_info">loading info…</string>
     <string name="log_saved">Log has been saved</string>
     <string name="mapping_dialog_message">Current mapping: %1$s</string>
+    <string name="mapping_dialog_key_not_specified">not specified</string>
     <string name="mapping_dialog_title">Press a key</string>
     <string name="message_clear_data">Do you really want to clear app data?</string>
     <string name="message_delete">Do you really want to delete this app?</string>
