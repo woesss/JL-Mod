@@ -166,7 +166,7 @@ public class AppsListFragment extends ListFragment {
 		setHasOptionsMenu(true);
 		setListAdapter(adapter);
 		initDb();
-		FloatingActionButton fab = requireActivity().findViewById(R.id.fab);
+		FloatingActionButton fab = view.findViewById(R.id.fab);
 		fab.setOnClickListener(v -> openFileLauncher.launch(null));
 	}
 
