@@ -93,8 +93,8 @@
     <string name="pref_button_shape_title">Button shape</string>
     <string name="pref_category_experimental">Experimental/temporary options</string>
     <string name="PREF_COLOR_HINT" translatable="false">RRGGBB (hex color)</string>
-    <string name="pref_compress_summary">Not compatible with previous versions</string>
-    <string name="pref_compress_title">Compress app code on installation</string>
+    <string name="pref_compress_summary">Reduces apps size when installed</string>
+    <string name="pref_compress_title">Compress code</string>
     <string name="pref_default_settings">Default settings</string>
     <string name="pref_emulator_dir">Working directory</string>
     <string name="pref_enable_actionbar_summary">In fullscreen applications</string>

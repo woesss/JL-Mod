@@ -40,7 +40,7 @@
     <string name="licenses">Lisanslar</string>
     <string name="load_profile">Profil yükle</string>
     <string name="log_saved">Günlük kaydedildi</string>
-    <string name="mapping_dialog_message">Mevcut atama: %1$s</string>
+    <string name="mapping_dialog_message">Mevcut atama:\n%1$s</string>
     <string name="mapping_dialog_title">Herhangi bir tuşa bas</string>
     <string name="message_clear_data">Gerçekten uygulama önbelleğini temizlemek istiyor musunuz?</string>
     <string name="message_delete">Bu uygulamayı gerçekten silmek istiyor musunuz?</string>
@@ -53,7 +53,6 @@
     <string name="pref_app_sort_name">İsme göre</string>
     <string name="pref_app_sort_title">Uygulamaları sırala</string>
     <string name="PREF_BACKGROUND">Arka plan</string>
-    <string name="pref_button_shape_oval">Oval</string>
     <string name="pref_button_shape_rect">Dikdörtgen</string>
     <string name="pref_button_shape_round">Yuvarlatılmış dikdörtgen</string>
     <string name="pref_button_shape_title">Tuş şekli</string>
@@ -99,7 +98,6 @@
     <string name="pref_theme_night">Koyu</string>
     <string name="pref_theme_title">Tema</string>
     <string name="PREF_TOUCH_INPUT">Dokunma girişi</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="pref_vibration_title">Titreşimi etkinleştir</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Sanal klavye</string>
     <string name="PREF_VK_ALPHA">Opaklık: </string>

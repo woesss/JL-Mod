@@ -40,7 +40,7 @@
     <string name="licenses">Licencek</string>
     <string name="load_profile">Profil betöltése</string>
     <string name="log_saved">A naplófájl mentésre került</string>
-    <string name="mapping_dialog_message">Jelenlegi hozzárendelés: %1$s</string>
+    <string name="mapping_dialog_message">Jelenlegi hozzárendelés:\n%1$s</string>
     <string name="mapping_dialog_title">Nyomjon meg egy billentyűt</string>
     <string name="message_clear_data">Tényleg törölni szeretné az alkalmazás adatait?</string>
     <string name="message_delete">Biztosan törli ezt az alkalmazást?</string>
@@ -99,7 +99,6 @@
     <string name="pref_theme_night">Sötét</string>
     <string name="pref_theme_title">Téma</string>
     <string name="PREF_TOUCH_INPUT">Érintéses bevitel</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtuális billentyűzet</string>
     <string name="PREF_VK_ALPHA">Áttetszőség: </string>
     <string name="PREF_VK_BACK">Gombok</string>

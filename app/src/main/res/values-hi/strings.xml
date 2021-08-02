@@ -42,7 +42,7 @@
     <string name="licenses">लाइसेंस</string>
     <string name="load_profile">प्रोफाइल लोड करें</string>
     <string name="log_saved">लॉग सहेजा गया है</string>
-    <string name="mapping_dialog_message">वर्तमान मानचित्रण: %1$s</string>
+    <string name="mapping_dialog_message">वर्तमान मानचित्रण:\n%1$s</string>
     <string name="mapping_dialog_title">कोई कि दबाएं</string>
     <string name="message_clear_data">क्या आप वास्तव में ऐप डेटा साफ़ करना चाहते हैं?</string>
     <string name="message_delete">क्या आप वास्तव में इस ऐप को हटाना चाहते हैं?</string>
@@ -112,7 +112,6 @@
     <string name="pref_theme_night">अँधेरा</string>
     <string name="pref_theme_title">थीम</string>
     <string name="PREF_TOUCH_INPUT">स्पर्श निवेश</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="pref_vibration_title">कंपन को सक्षम करें</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">वर्चुअल कीबोर्ड</string>
     <string name="PREF_VK_ALPHA">अपारदर्शिता: </string>

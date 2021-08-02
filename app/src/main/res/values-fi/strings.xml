@@ -52,7 +52,6 @@
     <string name="PREF_SCALE_TO_FIT">Skaalaus sopivaksi</string>
     <string name="PREF_SCREEN_OPTIONS">Näytön asetukset</string>
     <string name="PREF_SHOW_FPS">Näytä FPS</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtuaalinen näppäimistö</string>
     <string name="PREF_VK_ALPHA">Sameus: </string>
     <string name="PREF_VK_BACK">Painikkeet</string>

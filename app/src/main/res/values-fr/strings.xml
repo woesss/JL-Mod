@@ -27,7 +27,6 @@
     <string name="error_disk_io">Erreur de stockage : vérifiez l\'espace disque</string>
     <string name="error_name">Entrer le nom :</string>
     <string name="error_name_exists">Existe déjà, entrez un autre nom</string>
-    <string name="exit">Exit</string>
     <string name="external_storage_not_mounted">Cette application exige d\'être stocké sur la carte Sd ou externe</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Forcer la fermeture de l\'application peut entraîner une perte de données ou même la stopper complètement!\nProcédure?</string>
     <string name="help">Guide utilisateur</string>
@@ -42,7 +41,7 @@
     <string name="licenses">Licences</string>
     <string name="load_profile">Charger le profil</string>
     <string name="log_saved">Logs a été sauvegardé</string>
-    <string name="mapping_dialog_message">Mappage actuel : %1$s</string>
+    <string name="mapping_dialog_message">Mappage actuel:\n%1$s</string>
     <string name="mapping_dialog_title">Appuyez sur une touche</string>
     <string name="message_clear_data">Voulez-vous vraiment effacer les données des applications ?</string>
     <string name="message_delete">Voulez-vous vraiment supprimer cette application?</string>
@@ -51,12 +50,10 @@
     <string name="not_saved_exists">Existe déjà</string>
     <string name="parallel_screen_redrawing">Redessin de l\'écran parallèle</string>
     <string name="permission_request_failed">Cette application exige l’autorisation de sauvegarde de données et caché sur la carte Sd</string>
-    <string name="pref_app_sort_date">Date</string>
     <string name="pref_app_sort_name">Nom</string>
     <string name="pref_app_sort_title">Trier les applications par ordre alphabétique</string>
     <string name="PREF_BACKGROUND">Fond</string>
-    <string name="pref_button_shape_oval">Ovale</string>
-    <string name="pref_button_shape_rect">Rectangle</string>
+    <string name="pref_button_shape_oval">ovale</string>
     <string name="pref_button_shape_round">Rectangle à coins arrondis</string>
     <string name="pref_button_shape_title">Forme des boutons ou apparence des boutons</string>
     <string name="pref_default_settings">Réglages par défaut</string>
@@ -74,8 +71,9 @@
     <string name="PREF_FONT_SMALL">Petit</string>
     <string name="PREF_FORCE_FULLSCREEN">Plein écran</string>
     <string name="pref_graphics_hw_gles">Accélération HW (OpenGL ES)</string>
+    <string name="pref_graphics_hw_surface">Accélération matérielle (surface)</string>
+    <string name="pref_graphics_hw_view">Accélération matérielle (fenêtre)</string>
     <string name="pref_graphics_mode_title">Mode graphique</string>
-    <string name="pref_graphics_software">Software</string>
     <string name="PREF_HEIGHT">Hauteur</string>
     <string name="PREF_HW_ACCELERATION">Accélération Matérielle (instable)</string>
     <string name="PREF_IMMEDIATE">Mode de traitement des données immédiat</string>
@@ -109,7 +107,6 @@
     <string name="pref_theme_night">Mode Nuit</string>
     <string name="pref_theme_title">Thème</string>
     <string name="PREF_TOUCH_INPUT">Saisie tactile</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="pref_vibration_title">Activer les vibrations</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Clavier virtuel</string>
     <string name="PREF_VK_ALPHA">Opacité: </string>
@@ -135,7 +132,6 @@
     <string name="pref_vk_type_phone_arrows">Téléphone (flèches)</string>
     <string name="pref_wakelock_title">Gardez l\'écran allumé</string>
     <string name="PREF_WIDTH">Largeur</string>
-    <string name="profiles">Profiles</string>
     <string name="report_crash">Envoyer</string>
     <string name="reset">Réinitialiser</string>
     <string name="RESET_LAYOUT_CMD">Réinitialiser la disposition du clavier</string>

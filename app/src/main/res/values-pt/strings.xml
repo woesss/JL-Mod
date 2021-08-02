@@ -42,7 +42,7 @@
     <string name="licenses">Licenças</string>
     <string name="load_profile">Carregar perfil</string>
     <string name="log_saved">O registro foi salvo</string>
-    <string name="mapping_dialog_message">Mapeamento atual: %1$s</string>
+    <string name="mapping_dialog_message">Mapeamento atual:\n%1$s</string>
     <string name="mapping_dialog_title">Pressione uma tecla</string>
     <string name="message_clear_data">Você tem certeza que deseja limpar os dados do aplicativo?</string>
     <string name="message_delete">Você quer mesmo excluir este app?</string>
@@ -55,7 +55,6 @@
     <string name="pref_app_sort_name">Nome</string>
     <string name="pref_app_sort_title">Ordem de Apps</string>
     <string name="PREF_BACKGROUND">Plano de Fundo</string>
-    <string name="pref_button_shape_oval">Oval</string>
     <string name="pref_button_shape_rect">Retângulo</string>
     <string name="pref_button_shape_round">Retângulo arredondado</string>
     <string name="pref_button_shape_title">Formato dos botões</string>
@@ -66,7 +65,6 @@
     <string name="pref_enable_statusbar_title">Ativar barra de estado</string>
     <string name="pref_encoding_title">Codificação</string>
     <string name="PREF_FILTER">Filtro</string>
-    <string name="PREF_FONT_ANTI_ALIASING">Anti-Aliasing</string>
     <string name="PREF_FONT_LARGE">Largo</string>
     <string name="PREF_FONT_MEDIUM">Médio</string>
     <string name="PREF_FONT_OPTIONS">Opções de fonte</string>
@@ -77,7 +75,6 @@
     <string name="pref_graphics_hw_surface">Aceleração de HW (superfície)</string>
     <string name="pref_graphics_hw_view">Aceleração HW (janela)</string>
     <string name="pref_graphics_mode_title">Modo gráfico:</string>
-    <string name="pref_graphics_software">Software</string>
     <string name="PREF_HEIGHT">Altura</string>
     <string name="PREF_HW_ACCELERATION">Aceleração de HW (instável)</string>
     <string name="PREF_IMMEDIATE">Modo de processamento imediato</string>
@@ -112,7 +109,6 @@
     <string name="pref_theme_night">Escuro</string>
     <string name="pref_theme_title">Tema</string>
     <string name="PREF_TOUCH_INPUT">Entrada por toque</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="pref_vibration_title">Activar a vibração</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Teclado virtual</string>
     <string name="PREF_VK_ALPHA">Transparência: </string>
@@ -139,7 +135,6 @@
     <string name="PREF_WIDTH">Largura</string>
     <string name="profiles">Perfis</string>
     <string name="report_crash">Enviar</string>
-    <string name="reset">Reset</string>
     <string name="RESET_LAYOUT_CMD">Resetar Layout de teclas</string>
     <string name="reset_mapping">Redefinir</string>
     <string name="RESET_SETTINGS_CMD">Redefinir as configurações</string>

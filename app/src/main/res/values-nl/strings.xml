@@ -30,7 +30,6 @@
     <string name="exit">Verlaten</string>
     <string name="external_storage_not_mounted">Deze app vereist externe opslag</string>
     <string name="FORCE_CLOSE_CONFIRMATION">Als u de toepassing forceert om de toepassing te sluiten, kan dit leiden tot gegevensverlies of zelfs helemaal breken! \nVerder?</string>
-    <string name="help">Help</string>
     <string name="help_message">&#8226; Het inschakelen van filteren kan in sommige gevallen de prestaties aanzienlijk verminderen. Schakel deze optie uit als het spel te traag is.&lt;BR&gt;&#8226; Problemen met het flikken van afbeeldingen kunnen worden opgelost door de optie \"Directe verwerking modus\" in te schakelen.</string>
     <string name="hide_buttons">Verberg knoppen</string>
     <string name="identity_filter">Snel (geen filter)</string>
@@ -42,7 +41,7 @@
     <string name="licenses">Licenties</string>
     <string name="load_profile">Profiel laden</string>
     <string name="log_saved">Logboek is opgeslagen</string>
-    <string name="mapping_dialog_message">Huidige toewijzing: %1$s</string>
+    <string name="mapping_dialog_message">Huidige toewijzing:\n%1$s</string>
     <string name="mapping_dialog_title">Druk op een toets</string>
     <string name="message_clear_data">Weet u zeker dat u de app data wilt wissen?</string>
     <string name="message_delete">Weet u zeker dat u deze app wilt verwijderen?</string>
@@ -65,10 +64,8 @@
     <string name="pref_enable_actionbar_title">ActionBar inschakelen</string>
     <string name="pref_enable_statusbar_title">Statusbalk inschakelen</string>
     <string name="pref_encoding_title">Versleutelen</string>
-    <string name="PREF_FILTER">Filter</string>
     <string name="PREF_FONT_ANTI_ALIASING">Anti-aliasing</string>
     <string name="PREF_FONT_LARGE">Groot</string>
-    <string name="PREF_FONT_MEDIUM">Medium</string>
     <string name="PREF_FONT_OPTIONS">Lettertypeopties</string>
     <string name="PREF_FONT_SIZE_IN_SP">Waarden staan in geschaalde pixels</string>
     <string name="PREF_FONT_SMALL">Klein</string>
@@ -77,7 +74,6 @@
     <string name="pref_graphics_hw_surface">HW acceleratie (oppervlakte)</string>
     <string name="pref_graphics_hw_view">HW acceleratie (venster)</string>
     <string name="pref_graphics_mode_title">Grafische modus:</string>
-    <string name="pref_graphics_software">Software</string>
     <string name="PREF_HEIGHT">Hoogte</string>
     <string name="PREF_HW_ACCELERATION">HW acceleratie (onstabiel)</string>
     <string name="PREF_IMMEDIATE">Onmiddellijke verwerkingsmodus</string>
@@ -98,21 +94,17 @@
     <string name="pref_screen_gravity_bottom">Onderaan</string>
     <string name="pref_screen_gravity_center">Midden</string>
     <string name="pref_screen_gravity_left">Links</string>
-    <string name="pref_screen_gravity_right">Right</string>
     <string name="pref_screen_gravity_top">Bovenaan</string>
     <string name="PREF_SCREEN_OPTIONS">Schermopties</string>
     <string name="pref_screen_scale_type">Schaaltype</string>
     <string name="pref_screen_scale_type_fill">Vul venster (negeer aspectverhouding)</string>
     <string name="pref_screen_scale_type_fit">Aanpassen aan venster</string>
     <string name="pref_screen_scale_type_none">Zoals het is</string>
-    <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="PREF_SHOW_FPS">Toon FPS</string>
     <string name="PREF_SYS_PROPS">Systeemeigenschappen</string>
     <string name="pref_theme_light">Licht</string>
     <string name="pref_theme_night">Donker</string>
     <string name="pref_theme_title">Thema</string>
-    <string name="PREF_TOUCH_INPUT">Touch input</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="pref_vibration_title">Trillen inschakelen</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtueel toetsenbord</string>
     <string name="PREF_VK_ALPHA">Ondoorzichtigheid: </string>
@@ -124,9 +116,7 @@
     <string name="PREF_VK_HIDE_DELAY">Vertraging verbergen: </string>
     <string name="pref_vk_hide_hint">uitgeschakeld</string>
     <string name="PREF_VK_KEY_SIZES">Sleutel grootte</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_NUM_KEYS">Cijfers: </string>
-    <string name="PREF_VK_OUTLINE">Outline</string>
     <string name="PREF_VK_SEL_BACK">Knoppen (P)</string>
     <string name="PREF_VK_SEL_FORE">Etiketten (P)</string>
     <string name="PREF_VK_SHOW">Toon toetsenbord</string>
@@ -140,9 +130,6 @@
     <string name="PREF_WIDTH">Breedte</string>
     <string name="profiles">Profielen</string>
     <string name="report_crash">Verzenden</string>
-    <string name="reset">Reset</string>
-    <string name="RESET_LAYOUT_CMD">Reset keylayout</string>
-    <string name="reset_mapping">Reset</string>
     <string name="RESET_SETTINGS_CMD">Instellingen resetten</string>
     <string name="save_log">Logboek opslaan</string>
     <string name="save_profile">Profiel opslaan</string>
@@ -154,7 +141,6 @@
     <string name="set_default_profile_description">Selecteer dit profiel als standaard instelling voor alle apps die later zullen worden geïnstalleerd</string>
     <string name="shader_tuning">Shader Afstelling</string>
     <string name="SIZE_PRESETS">Voorinstellingen</string>
-    <string name="START_CMD">Start</string>
     <string name="SWAP_SIZES">Swap grootte</string>
     <string name="take_screenshot">Maak schermafbeelding</string>
     <string name="unlimited">ongelimiteerd</string>

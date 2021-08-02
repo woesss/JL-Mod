@@ -27,7 +27,7 @@
     <string name="layout_switch">キー配列を切り替える</string>
     <string name="licenses">ライセンス</string>
     <string name="load_profile">テンプレートを読み込む</string>
-    <string name="mapping_dialog_message">現在のマッピング: %1$s</string>
+    <string name="mapping_dialog_message">現在のマッピング:\n%1$s</string>
     <string name="mapping_dialog_title">キーを押してください</string>
     <string name="message_delete">本当にこのアプリを削除しますか？</string>
     <string name="more">さらに表示</string>
@@ -62,7 +62,6 @@
     <string name="pref_theme_night">ダーク</string>
     <string name="pref_theme_title">テーマ</string>
     <string name="PREF_TOUCH_INPUT">タッチ入力</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">仮想キーボード</string>
     <string name="PREF_VK_ALPHA">不透明度: </string>
     <string name="PREF_VK_BACK">ボタン</string>

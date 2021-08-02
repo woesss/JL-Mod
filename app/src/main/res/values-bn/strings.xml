@@ -31,7 +31,7 @@
     <string name="licenses">লাইসেন্স</string>
     <string name="load_profile">টেমপ্লেড লোড</string>
     <string name="log_saved">লগ সংরক্ষণ করা হয়েছে</string>
-    <string name="mapping_dialog_message">বর্তমান মানচিত্র: %1$s</string>
+    <string name="mapping_dialog_message">বর্তমান মানচিত্র:\n%1$s</string>
     <string name="mapping_dialog_title">কী চাপুন</string>
     <string name="message_clear_data">আপনি কি সত্যিই ক্যাশে মুছে ফেলতে চান?</string>
     <string name="message_delete">আপনি কি সত্যিই এই অ্যাপটি মুছে ফেলতে চান?</string>
@@ -75,7 +75,6 @@
     <string name="pref_theme_night">গাঢ়</string>
     <string name="pref_theme_title">থিম</string>
     <string name="PREF_TOUCH_INPUT">টার্চ ইনপুট</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">ভার্চুয়াল কীবোর্ড</string>
     <string name="PREF_VK_ALPHA">স্বচ্ছতা: </string>
     <string name="PREF_VK_BACK">বাটন</string>

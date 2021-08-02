@@ -30,7 +30,7 @@
     <string name="licenses">License</string>
     <string name="load_profile">Načíst šablonu</string>
     <string name="log_saved">Soubor log byl uložen</string>
-    <string name="mapping_dialog_message">Aktuální mapování: %1$s</string>
+    <string name="mapping_dialog_message">Aktuální mapování:\n%1$s</string>
     <string name="mapping_dialog_title">Zmáčkni tlačítko</string>
     <string name="message_clear_data">Opravdu chcete vymazat data aplikace?</string>
     <string name="message_delete">Opravdu chcete tuto aplikaci smazat?</string>
@@ -76,7 +76,6 @@
     <string name="pref_theme_night">Tmavý</string>
     <string name="pref_theme_title">Motiv</string>
     <string name="PREF_TOUCH_INPUT">Dotykové ovládání</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtuální klávesnice</string>
     <string name="PREF_VK_ALPHA">Neprůhlednost: </string>
     <string name="PREF_VK_BACK">Tlačítka</string>
@@ -85,7 +84,6 @@
     <string name="PREF_VK_FORE">Štítky</string>
     <string name="PREF_VK_HIDE_DELAY">Skrýt zpoždění: </string>
     <string name="PREF_VK_KEY_SIZES">Klíčové velikosti</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_NUM_KEYS">Číslice: </string>
     <string name="PREF_VK_OUTLINE">Obrys</string>
     <string name="PREF_VK_SEL_BACK">Tlačítka (P)</string>

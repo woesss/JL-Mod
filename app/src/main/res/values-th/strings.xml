@@ -38,7 +38,6 @@
     <string name="pref_app_sort_title">ลำดับการจัดเรียง app</string>
     <string name="PREF_BACKGROUND">พื้นหลัง</string>
     <string name="pref_button_shape_title">รูปร่างปุ่ม</string>
-    <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
     <string name="pref_enable_actionbar_title">เปิดใช้ ActionBar</string>
     <string name="PREF_FILTER">ฟิลเตอร์</string>
     <string name="PREF_FONT_LARGE">ใหญ่</string>
@@ -64,17 +63,11 @@
     <string name="pref_theme_light">สว่าง</string>
     <string name="pref_theme_night">มืด</string>
     <string name="pref_theme_title">ธีม</string>
-    <string name="PREF_TOUCH_INPUT">Touch input</string>
-    <string name="PREF_UNIT_MS">ms</string>
-    <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keyboard</string>
     <string name="PREF_VK_ALPHA">ความทึบ: </string>
     <string name="PREF_VK_BACK">ปุ่ม</string>
     <string name="PREF_VK_FEEDBACK">สั่นเมื่อแตะ</string>
-    <string name="PREF_VK_FIRE_KEY">Fire: </string>
     <string name="PREF_VK_FORE">ป้ายชื่อ</string>
-    <string name="PREF_VK_HIDE_DELAY">Hide delay: </string>
     <string name="PREF_VK_KEY_SIZES">ขนาดปุ่ม</string>
-    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_NUM_KEYS">ตัวเลข: </string>
     <string name="PREF_VK_OUTLINE">เค้าร่าง</string>
     <string name="PREF_VK_SEL_BACK">ปุ่ม (P)</string>

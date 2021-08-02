@@ -5,6 +5,7 @@
     <string name="action_context_delete">ᱜᱮᱫ ᱜᱤᱰᱤ</string>
     <string name="action_context_rename">ᱫᱚᱦᱲᱟ ᱧᱩᱛᱩᱢ</string>
     <string name="action_context_shortcut">ᱥᱚᱴᱠᱚᱴ ᱥᱮᱞᱮᱫᱽ ᱢᱮ</string>
+    <string name="action_keyboard_ime">ᱠᱮᱭᱵᱚᱰ (IME)</string>
     <string name="action_settings">ᱥᱟᱡᱟᱣᱠᱚ</string>
     <string name="add">ᱥᱮᱞᱮᱫᱽ ᱢᱮ</string>
     <string name="add_profile_description">ᱱᱟᱶᱟ ᱢᱚᱦᱲᱟ ᱛᱮᱭᱟᱨ ᱢᱮ</string>
@@ -42,7 +43,7 @@
     <string name="licenses">ᱞᱟᱭᱥᱮᱱᱥᱠᱚ</string>
     <string name="load_profile">ᱯᱨᱚᱯᱷᱟᱭᱤᱞ ᱞᱟᱫᱮ ᱢᱮ</string>
     <string name="log_saved">ᱞᱚᱜ ᱫᱚ ᱥᱟᱸᱪᱟᱣ ᱮᱱᱟ</string>
-    <string name="mapping_dialog_message">ᱱᱤᱛᱚᱜᱼᱟᱜ ᱢᱮᱯᱤᱝ: %1$s</string>
+    <string name="mapping_dialog_message">ᱱᱤᱛᱚᱜᱼᱟᱜ ᱢᱮᱯᱤᱝ:\n%1$s</string>
     <string name="mapping_dialog_title">ᱠᱭ ᱚᱛᱟᱭ ᱢᱮ</string>
     <string name="message_clear_data">ᱟᱢ ᱥᱟᱹᱨᱤ ᱛᱮ ᱮᱯ ᱰᱟᱴᱟ ᱢᱮᱴᱟᱣ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
     <string name="message_delete">ᱟᱢ ᱥᱟᱹᱨᱤ ᱛᱮ ᱱᱚᱶᱟ ᱮᱯ ᱢᱮᱴᱟᱣ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
@@ -112,7 +113,6 @@
     <string name="pref_theme_night">ᱧᱩᱛ</string>
     <string name="pref_theme_title">ᱛᱷᱤᱢ</string>
     <string name="PREF_TOUCH_INPUT">ᱚᱛᱟ ᱟᱫᱮᱨ</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="pref_vibration_title">ᱣᱟᱭᱵᱨᱮᱥᱚᱱ ᱮᱢ ᱪᱷᱚᱭ ᱢᱮ</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">ᱣᱟᱹᱨᱪᱩᱟᱹᱞ ᱠᱤᱭᱵᱚᱰ</string>
     <string name="PREF_VK_ALPHA">ᱚᱯᱟᱥᱤᱴᱭ: </string>
@@ -127,13 +127,18 @@
     <string name="PREF_VK_NAV_KEYS">ᱡᱚᱭᱥᱴᱤᱠ: </string>
     <string name="PREF_VK_NUM_KEYS">ᱟᱸᱠᱠᱚ: </string>
     <string name="PREF_VK_OUTLINE">ᱟᱩᱴᱞᱟᱭᱤᱱ</string>
+    <string name="pref_vk_save_alert">ᱠᱚᱥᱴᱚᱢ ᱠᱤᱵᱚᱰ ᱫᱚ ᱱᱤᱛᱚᱜᱟᱜ ᱥᱟᱞᱟᱜ ᱵᱚᱫᱚᱞᱚᱼᱟ\nᱥᱟᱸᱪᱟᱣᱼᱟ ᱥᱮ?</string>
     <string name="PREF_VK_SEL_BACK">ᱵᱩᱛᱟᱹᱢᱠᱚ (P)</string>
     <string name="PREF_VK_SEL_FORE">ᱞᱮᱣᱮᱞᱠᱚ (P)</string>
     <string name="PREF_VK_SHOW">ᱠᱤᱭᱵᱚᱰ ᱫᱮᱠᱷᱟᱣᱢᱮ</string>
     <string name="PREF_VK_SIZE_HINT">ᱢᱟᱯ</string>
     <string name="PREF_VK_SOFT_KEYS">ᱥᱚᱯᱷᱴ ᱪᱟᱹᱵᱤ: </string>
     <string name="PREF_VK_TYPE">ᱠᱤᱭᱵᱚᱰ ᱯᱨᱚᱠᱟᱨ</string>
-    <string name="pref_vk_type_custom">ᱠᱚᱥᱴᱚᱢᱟᱭᱡᱮᱵᱟᱹᱞ</string>
+    <string name="pref_vk_type_arrows">ᱥᱟᱨ</string>
+    <string name="pref_vk_type_arrows_numbers">ᱥᱟᱨ &amp; ᱮᱞ</string>
+    <string name="pref_vk_type_custom">ᱠᱚᱥᱴᱚᱢ</string>
+    <string name="pref_vk_type_numbers">ᱮᱞ</string>
+    <string name="pref_vk_type_numbers_arrows">ᱮᱞ &amp; ᱥᱟᱨ</string>
     <string name="pref_vk_type_phone">ᱯᱷᱚᱱ</string>
     <string name="pref_vk_type_phone_arrows">ᱯᱷᱚᱱ (ᱥᱟᱨᱠᱚ)</string>
     <string name="pref_wakelock_title">ᱥᱠᱨᱤᱱ ᱚᱱ ᱠᱟᱜ ᱢᱮ</string>
@@ -144,6 +149,7 @@
     <string name="RESET_LAYOUT_CMD">ᱪᱟᱹᱵᱤᱞᱮᱭᱟᱩᱴ ᱨᱤᱥᱮᱴ ᱢᱮ</string>
     <string name="reset_mapping">ᱨᱤᱥᱮᱴ</string>
     <string name="RESET_SETTINGS_CMD">ᱥᱟᱡᱟᱣ ᱠᱚ ᱫᱚᱦᱲᱟ ᱥᱟᱡᱟᱣ ᱢᱮ</string>
+    <string name="retry">ᱨᱤᱴᱨᱭ</string>
     <string name="save_log">ᱥᱟᱸᱪᱟᱣ ᱞᱚᱜᱽ</string>
     <string name="save_profile">ᱯᱨᱚᱯᱷᱟᱭᱤᱞ ᱥᱟᱸᱪᱟᱣ ᱢᱮ</string>
     <string name="saved">ᱥᱟᱸᱪᱟᱣᱮᱱᱟ %1$s</string>

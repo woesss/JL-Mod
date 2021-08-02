@@ -40,7 +40,7 @@
     <string name="licenses">Licenze</string>
     <string name="load_profile">Carica Profilo</string>
     <string name="log_saved">Il log è stato salvato</string>
-    <string name="mapping_dialog_message">Mappatura corrente: %1$s</string>
+    <string name="mapping_dialog_message">Mappatura corrente:\n%1$s</string>
     <string name="mapping_dialog_title">Premi un tasto</string>
     <string name="message_clear_data">Vuoi davvero cancellare i dati dell\'applicazione?</string>
     <string name="message_delete">Vuoi davvero eliminare questa applicazione?</string>
@@ -74,7 +74,6 @@
     <string name="pref_graphics_hw_surface">Accelerazione HW (Superficie)</string>
     <string name="pref_graphics_hw_view">Accelerazione HW (Finestra)</string>
     <string name="pref_graphics_mode_title">Modalità grafica:</string>
-    <string name="pref_graphics_software">Software</string>
     <string name="PREF_HEIGHT">Altezza</string>
     <string name="PREF_HW_ACCELERATION">Accelerazione hardware (instabile)</string>
     <string name="PREF_IMMEDIATE">Modalità di elaborazione immediata</string>
@@ -92,14 +91,12 @@
     <string name="PREF_SCALE_RATIO">Scala(%)</string>
     <string name="PREF_SCALE_TO_FIT">Allarga fino a riempire</string>
     <string name="PREF_SCREEN_OPTIONS">Opzioni schermo</string>
-    <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="PREF_SHOW_FPS">Mostra FPS</string>
     <string name="PREF_SYS_PROPS">Proprietà di sistema</string>
     <string name="pref_theme_light">Chiaro</string>
     <string name="pref_theme_night">Scuro</string>
     <string name="pref_theme_title">Tema</string>
     <string name="PREF_TOUCH_INPUT">Input tocco</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="pref_vibration_title">Abilita vibrazione</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Tastiera virtuale</string>
     <string name="PREF_VK_ALPHA">Opacità: </string>

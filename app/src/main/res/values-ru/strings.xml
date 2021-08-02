@@ -12,7 +12,7 @@
     <string name="add">Создать</string>
     <string name="add_profile_description">Создать новый профиль</string>
     <string name="add_resolution_preset">Добавить в предустановки</string>
-    <string name="alert_map_menu">ТРЕБУЕТСЯ назначить кнопку \"МЕНЮ\"</string>
+    <string name="alert_map_menu">ТРЕБУЕТСЯ назначить кнопку \"МЕНЮ\"!</string>
     <string name="alert_msg_workdir_not_exists">Рабочая папка эмулятора будет создана по пути:\n\"%1$s\".\nВы можете выбрать другую сейчас, нажав кнопку %2$s, и в любое время через настройки</string>
     <string name="author">Автор: </string>
     <string name="change">Изменить</string>
@@ -58,7 +58,7 @@
     <string name="loading_info">загрузка информации…</string>
     <string name="log_saved">Лог сохранен</string>
     <string name="mapping_dialog_key_not_specified">не задано</string>
-    <string name="mapping_dialog_message">Текущий маппинг: %1$s</string>
+    <string name="mapping_dialog_message">Текущий маппинг:\n%1$s</string>
     <string name="mapping_dialog_title">Нажмите кнопку</string>
     <string name="message_clear_data">Вы действительно хотите очистить данные приложения?</string>
     <string name="message_delete">Вы действительно хотите удалить это приложение?</string>
@@ -82,8 +82,8 @@
     <string name="pref_button_shape_round">Закруглённые</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
     <string name="pref_category_experimental">Экспериментальные/временные опции</string>
-    <string name="pref_compress_summary">Не совместимо с предыдущими версиями</string>
-    <string name="pref_compress_title">Сжимать код приложений при установке</string>
+    <string name="pref_compress_summary">Уменьшает размер приложений при установке</string>
+    <string name="pref_compress_title">Сжимать код</string>
     <string name="pref_default_settings">Стандартные настройки</string>
     <string name="pref_emulator_dir">Рабочая папка</string>
     <string name="pref_enable_actionbar_summary">В полноэкранных приложениях</string>
@@ -110,7 +110,7 @@
     <string name="PREF_KEEP_ASPECT_RATIO">Сохранять пропорции</string>
     <string name="PREF_LAYOUT">Раскладка</string>
     <string name="PREF_LIMIT_FPS">Ограничить FPS</string>
-    <string name="pref_map_keys">Назначение кнопок (геймпад)</string>
+    <string name="pref_map_keys">Назначение кнопок</string>
     <string name="pref_mascot_summary">Показать сообщение когда используется</string>
     <string name="pref_mascot_title">Идентифицировать Mascot Capsule 3D</string>
     <string name="PREF_ORIENTATION">Ориентация экрана</string>
@@ -196,11 +196,9 @@
     <string name="START_CMD">Пуск</string>
     <string name="SWAP_SIZES">Поменять местами</string>
     <string name="take_screenshot">Сделать скриншот</string>
-    <string name="toast_close_filepicker">Нажмите ещё раз, чтобы закрыть проводник</string>
     <string name="unlimited">без ограничений</string>
     <string name="version">Версия: </string>
     <string name="virtual_key_menu">меню</string>
     <string name="warn_install_from_net">Файл будет загружен из сети Интернет</string>
     <string name="warning">Предупреждение!!!</string>
-    <string name="warning_same_directory">В этом моде изменены некоторые настройки.\nОригинальный \"J2ME Loader\" может работать неправильно с играми, шаблонами и настройками установленными или настроенными модом.\nВы уверены, что хотите использовать рабочую папку \"J2ME Loader\"?</string>
 </resources>

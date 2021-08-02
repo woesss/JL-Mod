@@ -22,6 +22,7 @@
     <string name="edit">Ubah</string>
     <string name="enter_name">Masukkan nama</string>
     <string name="enter_new_name">Masukkan nama baru</string>
+    <string name="err_missing_app">Aplikasi tidak ditemukan. \nSilahkan periksa ketersediaan penyimpanan perangkat atau membuat-ulang pintasan.</string>
     <string name="error">Kesalahan</string>
     <string name="error_disk_io">Kesalahan penyimpanan: periksa ruang disk</string>
     <string name="error_name">Masukkan nama!</string>
@@ -41,7 +42,7 @@
     <string name="licenses">Lisensi</string>
     <string name="load_profile">Muat profil</string>
     <string name="log_saved">Log telah disimpan</string>
-    <string name="mapping_dialog_message">Pemetaan saat ini:%1$s</string>
+    <string name="mapping_dialog_message">Pemetaan saat ini:\n%1$s</string>
     <string name="mapping_dialog_title">Tekan tombol</string>
     <string name="message_clear_data">Apakah Anda yakin ingin menghapus data aplikasi?</string>
     <string name="message_delete">Apakah Anda yakin ingin menghapus aplikasi ini?</string>
@@ -75,7 +76,6 @@
     <string name="pref_graphics_hw_surface">Akselerasi HW (permukaan)</string>
     <string name="pref_graphics_hw_view">Akselerasi HW (jendela)</string>
     <string name="pref_graphics_mode_title">Mode grafik:</string>
-    <string name="pref_graphics_software">Software</string>
     <string name="PREF_HEIGHT">Tinggi</string>
     <string name="PREF_HW_ACCELERATION">Akselerasi HW (tidak stabil)</string>
     <string name="PREF_IMMEDIATE">Mode pengolahan dengan cepat</string>
@@ -100,17 +100,15 @@
     <string name="pref_screen_gravity_top">Atas</string>
     <string name="PREF_SCREEN_OPTIONS">Opsi layar</string>
     <string name="pref_screen_scale_type">Tipe skala</string>
-    <string name="pref_screen_scale_type_fill">Isi jendela (abaikan aspek rasio)</string>
-    <string name="pref_screen_scale_type_fit">Paskan ke jendela</string>
+    <string name="pref_screen_scale_type_fill">Layar penuh (abaikan aspek rasio)</string>
+    <string name="pref_screen_scale_type_fit">Sesuaikan ke layar</string>
     <string name="pref_screen_scale_type_none">Dengan adanya (ukuran asli)</string>
-    <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="PREF_SHOW_FPS">Tampilkan FPS</string>
     <string name="PREF_SYS_PROPS">Properti sistem</string>
     <string name="pref_theme_light">Terang</string>
     <string name="pref_theme_night">Gelap</string>
     <string name="pref_theme_title">Tema</string>
     <string name="PREF_TOUCH_INPUT">Pakai layar sentuh</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="pref_vibration_title">Hidupkan getar</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual tombol keypad</string>
     <string name="PREF_VK_ALPHA">Keburaman: </string>
@@ -128,7 +126,6 @@
     <string name="PREF_VK_SEL_FORE">Label (ditekan)</string>
     <string name="PREF_VK_SHOW">Tampilkan tombol keypad</string>
     <string name="PREF_VK_SIZE_HINT">Ukuran</string>
-    <string name="PREF_VK_SOFT_KEYS">Soft keys: </string>
     <string name="PREF_VK_TYPE">Jenis keypad</string>
     <string name="pref_vk_type_custom">Disesuaikan</string>
     <string name="pref_vk_type_phone">Ponsel (Numerik)</string>

@@ -30,7 +30,7 @@
     <string name="licenses">Licențe</string>
     <string name="load_profile">Încarcă șablonul</string>
     <string name="log_saved">Jurnalul a fost salvat</string>
-    <string name="mapping_dialog_message">Mapari curente: %1$s</string>
+    <string name="mapping_dialog_message">Mapari curente:\n%1$s</string>
     <string name="mapping_dialog_title">Apasă o tastă</string>
     <string name="message_clear_data">Ești sigur că vrei să ștergi datele aplicației?</string>
     <string name="message_delete">Chiar vrei sa ștergi această aplicație?</string>
@@ -76,7 +76,6 @@
     <string name="pref_theme_night">Intunecata</string>
     <string name="pref_theme_title">Tema</string>
     <string name="PREF_TOUCH_INPUT">Intrare atingere</string>
-    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Tastatură virtuală</string>
     <string name="PREF_VK_ALPHA">Opacitate: </string>
     <string name="PREF_VK_BACK">Butoane</string>
@@ -109,7 +108,6 @@
     <string name="search">Căutare</string>
     <string name="select_dialog_title">Selecteaza MIDlet</string>
     <string name="SIZE_PRESETS">Presetări</string>
-    <string name="START_CMD">Start</string>
     <string name="SWAP_SIZES">Schimbă dimensiunea</string>
     <string name="take_screenshot">Creează o captură de ecran</string>
     <string name="version">Versiune: </string>
