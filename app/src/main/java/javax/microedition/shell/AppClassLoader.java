@@ -104,6 +104,10 @@ public class AppClassLoader extends DexClassLoader {
 	}
 
 	private static byte[] getResourceBytes(String name) {
+		if (name.equals("")) {
+			Log.w(TAG, "Can't load res on empty path");
+			return null;
+		}
 		if (zipFile == null) {
 			final File file = new File(sOldResDir, name);
 			try {
