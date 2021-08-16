@@ -31,6 +31,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
+import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
 
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
@@ -53,33 +54,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		});
 	}
 
-	private void alertDirectory(File file) {
-		new AlertDialog.Builder(requireActivity())
-				.setIconAttribute(android.R.attr.alertDialogIcon)
-				.setMessage(R.string.warning_same_directory)
-				.setTitle(R.string.warning)
-				.setNegativeButton(android.R.string.no, (dialog, which) -> openDirLauncher.launch(file.getAbsolutePath()))
-				.setPositiveButton(android.R.string.yes, (dialog, which) -> applyChangeFolder(file))
-				.show();
-	}
-
-	private void applyChangeFolder(File file) {
-		String path = file.getAbsolutePath();
-		getPreferenceManager().getSharedPreferences().edit()
-				.putString(PREF_EMULATOR_DIR, path)
-				.apply();
-		prefFolder.setSummary(path);
-	}
-
 	private void onPickDirResult(Uri uri) {
 		if (uri == null) {
 			return;
 		}
 		File file = Utils.getFileForUri(uri);
-		if (file.getName().equals("J2ME-Loader")) {
-			alertDirectory(file);
-		} else {
-			applyChangeFolder(file);
+		String path = file.getAbsolutePath();
+		if (!FileUtils.initWorkDir(file)) {
+			new AlertDialog.Builder(requireActivity())
+					.setTitle(R.string.error)
+					.setCancelable(false)
+					.setMessage(getString(R.string.create_apps_dir_failed, path))
+					.setNegativeButton(android.R.string.cancel, null)
+					.setPositiveButton(R.string.choose, (d, w) -> openDirLauncher.launch(null))
+					.show();
+			return;
 		}
+		getPreferenceManager().getSharedPreferences().edit()
+				.putString(PREF_EMULATOR_DIR, path)
+				.apply();
+		prefFolder.setSummary(path);
 	}
 }

@@ -21,10 +21,11 @@
     <string name="add_profile_description">Create new profile</string>
     <string name="add_resolution_preset">Add resolution to presets</string>
     <string name="alert_map_menu">You MUST map \"menu\" key!</string>
-    <string name="alert_msg_workdir_not_exists">Working directory does not exist at path:\n\'%1$s\'.\nDo you want to create it or choose another one?</string>
+    <string name="alert_msg_workdir_not_exists">Working directory will be created under the path:\n\'%1$s\'.\nYou can choose another one now by clicking the "%2$s" button or at any time through the settings</string>
     <string name="app_name" translatable="false">JL-Mod</string>
     <string name="author">Author: </string>
-    <string name="choose">choose</string>
+    <string name="change">Change</string>
+    <string name="choose">Choose</string>
     <string name="CLEAR_DATA_CMD">Clear data</string>
     <string name="close">Close</string>
     <string name="common_settings">[COMMON SETTINGS]</string>
@@ -34,7 +35,7 @@
     <string name="crash_dialog_message">Do you want to send error report to the developer?</string>
     <string name="crash_dialog_title">Error detected</string>
     <string name="create">create</string>
-    <string name="create_apps_dir_failed">Failed to create a folder in the path:\n%1$s\nselect another.</string>
+    <string name="create_apps_dir_failed">%1$s\nThis folder is not writable:\nChoose a different one.</string>
     <string name="default_label">"%1$s (default)"</string>
     <string name="donate">Donate</string>
     <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>
@@ -66,8 +67,8 @@
     <string name="load_profile">Load profile</string>
     <string name="loading_info">loading info…</string>
     <string name="log_saved">Log has been saved</string>
-    <string name="mapping_dialog_message">Current mapping: %1$s</string>
     <string name="mapping_dialog_key_not_specified">not specified</string>
+    <string name="mapping_dialog_message">Current mapping:\n%1$s</string>
     <string name="mapping_dialog_title">Press a key</string>
     <string name="message_clear_data">Do you really want to clear app data?</string>
     <string name="message_delete">Do you really want to delete this app?</string>
@@ -84,6 +85,7 @@
     <string name="pref_app_sort_date">Date</string>
     <string name="pref_app_sort_name">Name</string>
     <string name="pref_app_sort_title">App sort order</string>
+    <string name="pref_app_sort_vendor">Vendor</string>
     <string name="PREF_BACKGROUND">Background</string>
     <string name="pref_button_shape_oval">Oval</string>
     <string name="pref_button_shape_rect">Rectangle</string>
@@ -234,5 +236,4 @@
     <string name="warn_install_from_net">File will be downloaded from Internet</string>
     <string name="warning">Warning!!!</string>
     <string name="warning_same_directory">Some settings have been changed in this mod.\nOriginal \"J2ME Loader\" may not work correctly with games, templates and settings installed or configured by the Mod.\nAre you sure you want to use the working folder \"J2ME Loader\"?</string>
-    <string name="pref_app_sort_vendor">Vendor</string>
 </resources>
