@@ -213,11 +213,15 @@ public class AppInstaller {
 		File resJar = new File(tmpDir, Config.MIDLET_RES_FILE);
 		FileUtils.copyFileUsingChannel(srcJar, resJar);
 		String icon = newDesc.getIcon();
+		File iconFile = new File(tmpDir, Config.MIDLET_ICON_FILE);
 		if (icon != null) {
 			try {
-				ZipUtils.unzipEntry(resJar, icon, new File(tmpDir, Config.MIDLET_ICON_FILE));
+				ZipUtils.unzipEntry(resJar, icon, iconFile);
 			} catch (IOException e) {
 				Log.w(TAG, "Can't unzip icon: " + icon, e);
+				icon = null;
+				//noinspection ResultOfMethodCallIgnored
+				iconFile.delete();
 			}
 		}
 		newDesc.writeTo(new File(tmpDir, Config.MIDLET_MANIFEST_FILE));
