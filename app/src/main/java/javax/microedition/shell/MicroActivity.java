@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -45,6 +46,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 
@@ -94,7 +96,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		setTheme(R.style.AppTheme_NoActionBar);
+		setTheme();
 		super.onCreate(savedInstanceState);
 		ContextHolder.setCurrentActivity(this);
 		setContentView(R.layout.activity_micro);
@@ -143,6 +145,17 @@ public class MicroActivity extends AppCompatActivity {
 			e.printStackTrace();
 			showErrorDialog(e.toString());
 		}
+	}
+
+	public void setTheme() {
+		int current = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+		if (current == Configuration.UI_MODE_NIGHT_YES) {
+			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+		} else {
+			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+		}
+		setTheme(R.style.AppTheme_NoActionBar);
+
 	}
 
 	@Override
