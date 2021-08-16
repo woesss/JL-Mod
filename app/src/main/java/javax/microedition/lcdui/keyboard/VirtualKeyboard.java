@@ -64,6 +64,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	public static final int LAYOUT_EOF = -1;
 	public static final int LAYOUT_KEYS = 0;
 	public static final int LAYOUT_SCALES = 1;
+	@SuppressWarnings("unused")
 	public static final int LAYOUT_COLORS = 2;
 	public static final int LAYOUT_TYPE = 3;
 
@@ -77,7 +78,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 	private static final int TYPE_NUM_ARR = 3;
 	private static final int TYPE_ARR_NUM = 4;
 	private static final int TYPE_NUMBERS = 5;
-	private static final int TYPE_ARRAYS = 6;
+	private static final int TYPE_ARROWS = 6;
 
 	private static final float PHONE_KEY_ROWS = 5;
 	private static final float PHONE_KEY_SCALE_X = 2.0f;
@@ -226,6 +227,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 		if (layoutVariant == -1) {
 			layoutVariant = settings.vkType;
+			if (layoutVariant == TYPE_CUSTOM) {
+				layoutVariant = TYPE_NUM_ARR;
+			}
 		}
 		resetLayout(layoutVariant);
 		if (layoutVariant == TYPE_CUSTOM) {
@@ -234,7 +238,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			} catch (IOException e) {
 				e.printStackTrace();
 				resetLayout(TYPE_NUM_ARR);
-				onLayoutChanged(TYPE_NUM_ARR);
+				layoutVariant = TYPE_NUM_ARR;
+				saveLayout();
 			}
 		}
 		HandlerThread thread = new HandlerThread("MidletVirtualKeyboard");
@@ -260,11 +265,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			}
 		}
 		layoutVariant = variant;
-		try {
-			saveLayout();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		saveLayout();
 		if (target != null && target.isShown()) {
 			target.updateSize();
 		}
@@ -444,7 +445,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				setSnap(KEY_D, KEY_NUM9, RectSnap.EXT_EAST, false);
 				setSnap(KEY_MENU, SCREEN, RectSnap.INT_NORTHEAST, false);
 				break;
-			case TYPE_ARRAYS:
+			case TYPE_ARROWS:
 				Arrays.fill(keyScales, 1);
 
 				setSnap(KEY_DOWN, SCREEN, RectSnap.INT_SOUTH, true);
@@ -499,6 +500,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				return;
 			}
 		}
+		layoutVariant = variant;
 		onLayoutChanged(variant);
 		for (int group = 0; group < keyScaleGroups.length; group++) {
 			resizeKeyGroup(group);
@@ -510,7 +512,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 	}
 
-	private void saveLayout() throws IOException {
+	private void saveLayout() {
 		try (RandomAccessFile raf = new RandomAccessFile(saveFile, "rw")) {
 			int variant = layoutVariant;
 			if (variant != TYPE_CUSTOM && raf.length() > 16) {
@@ -537,6 +539,11 @@ public class VirtualKeyboard implements Overlay, Runnable {
 							case LAYOUT_TYPE:
 								raf.write(variant);
 								return;
+							case LAYOUT_KEYS:
+								if (version >= 2) {
+									int count = raf.readInt();
+									length = count * 21;
+								}
 							default:
 								if (raf.skipBytes(length) != length) {
 									break loop;
@@ -581,6 +588,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			raf.writeInt(LAYOUT_EOF);
 			raf.writeInt(0);
 			raf.setLength(raf.getFilePointer());
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -593,14 +602,31 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			if (version < 1 || version > LAYOUT_VERSION) {
 				throw new IOException("incompatible file version");
 			}
+			int custom = 0;
 			while (true) {
 				int block = dis.readInt();
 				int length = dis.readInt();
 				switch (block) {
 					case LAYOUT_EOF:
-						return -1;
+						return custom == 3 ? 0 : -1;
 					case LAYOUT_TYPE:
 						return dis.read();
+					case LAYOUT_KEYS:
+						if (version >= 2) {
+							int count = dis.readInt();
+							length = count * 21;
+						}
+						if (dis.skipBytes(length) != length) {
+							return -1;
+						}
+						custom |= 1;
+						break;
+					case LAYOUT_SCALES:
+						if (dis.skipBytes(length) != length) {
+							return -1;
+						}
+						custom |= 2;
+						break;
 					default:
 						if (dis.skipBytes(length) != length) {
 							return -1;
@@ -659,10 +685,10 @@ public class VirtualKeyboard implements Overlay, Runnable {
 								keyScales[i] = dis.readFloat();
 							}
 						} else if (count * 2 <= keyScales.length) {
-							for (int i = 0; i < keyScales.length; i++) {
+							for (int i = 0, len = count * 2; i < len;) {
 								float v = dis.readFloat();
 								keyScales[i++] = v;
-								keyScales[i] = v;
+								keyScales[i++] = v;
 							}
 						} else {
 							dis.skipBytes(count * 4);
@@ -807,9 +833,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		visible = true;
 		overlayView.postInvalidate();
 		hide();
-		if (target != null && target.isShown()) {
-			target.updateSize();
-		}
 	}
 
 	private void resizeKey(int key, float w, float h) {
