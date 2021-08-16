@@ -70,6 +70,7 @@
     <string name="more">Подробнее</string>
     <string name="no_data_for_display">Нет данных</string>
     <string name="not_saved_exists">Уже существует</string>
+    <string name="opt_save_screen_params">сохранить параметры экрана</string>
     <string name="parallel_screen_redrawing">Параллельное обновление экрана</string>
     <string name="permission_request_failed">Для работы приложения требуется разрешение на запись файлов</string>
     <string name="pref_app_sort_date">Дата</string>
