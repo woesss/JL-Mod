@@ -35,6 +35,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,6 +44,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppItem;
+import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.woesss.j2me.jar.Descriptor;
@@ -78,7 +81,8 @@ public class InstallerDialog extends DialogFragment {
 	@Override
 	public void onAttach(@NonNull Context context) {
 		super.onAttach(context);
-		appRepository = new AppRepository(context);
+		AppListModel appListModel = new ViewModelProvider(requireActivity()).get(AppListModel.class);
+		appRepository = appListModel.getAppRepository();
 	}
 
 	@NonNull
@@ -110,15 +114,9 @@ public class InstallerDialog extends DialogFragment {
 		installApp(null, uri);
 	}
 
-	@Override
-	public void onDestroy() {
-		appRepository.close();
-		super.onDestroy();
-	}
-
 	private void installApp(String path, Uri uri) {
 		final FragmentActivity activity = requireActivity();
-		installer = new AppInstaller(path, uri, activity.getApplication());
+		installer = new AppInstaller(path, uri, activity.getApplication(), appRepository);
 		btnClose.setOnClickListener(v -> {
 			installer.deleteTemp();
 			installer.clearCache();

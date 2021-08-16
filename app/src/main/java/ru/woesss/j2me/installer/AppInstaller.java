@@ -20,6 +20,8 @@ import android.app.Application;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.preference.PreferenceManager;
+
 import com.android.dx.command.dexer.Main;
 
 import net.lingala.zip4j.ZipFile;
@@ -41,7 +43,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.jar.JarFile;
 
-import androidx.preference.PreferenceManager;
 import io.reactivex.SingleEmitter;
 import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
@@ -61,6 +62,7 @@ public class AppInstaller {
 	static final int STATUS_UNMATCHED = 3;
 
 	private final Application context;
+	private final AppRepository appRepository;
 	private final Uri uri;
 	private final File cacheDir;
 	private Descriptor manifest;
@@ -72,7 +74,8 @@ public class AppInstaller {
 	private AppItem currentApp;
 	private File srcFile;
 
-	AppInstaller(String path, Uri uri, Application context) {
+	AppInstaller(String path, Uri uri, Application context, AppRepository appRepository) {
+		this.appRepository = appRepository;
 		if (path != null) srcFile = new File(path);
 		this.uri = uri;
 		this.context = context;
@@ -287,9 +290,7 @@ public class AppInstaller {
 		// Remove invalid characters from app path
 		String name = newDesc.getName();
 		String vendor = newDesc.getVendor();
-		AppRepository appRepository = new AppRepository(context);
 		currentApp = appRepository.get(name, vendor);
-		appRepository.close();
 		String id = Integer.toHexString((name + vendor).hashCode());
 		appDirName = name.replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "").trim() + '_' + id;
 		targetDir = new File(Config.getAppDir(), appDirName);
