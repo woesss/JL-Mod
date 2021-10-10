@@ -177,7 +177,7 @@
     <string name="profiles">Профили</string>
     <string name="reinstall">Приложение уже установлено.\n\nВы хотите его переустановить?\nВсе данные будут сохранены.</string>
     <string name="reinstall_newest">Обновить это приложение?\n\nНовая версия: %1$s?\nУстановлено: %2$s\nВсе данные будут сохранены.</string>
-    <string name="reinstall_oldest">Версия %1$s старше уже установленной %2$s. Приложение может работать не правильно с существующими сохранениями.\n\nВсё равно установить?</string>
+    <string name="reinstall_older">Версия %1$s старше уже установленной %2$s. Приложение может работать не правильно с существующими сохранениями.\n\nВсё равно установить?</string>
     <string name="report_crash">Отправить</string>
     <string name="reset">Сброс</string>
     <string name="RESET_LAYOUT_CMD">Сброс раскладки</string>
