@@ -200,7 +200,7 @@ public class Descriptor {
 				if (line.charAt(0) == ' ') sb.append(line, 1, line.length());
 				else sb.append(line);
 			} else {
-				attrs.put(key, sb.toString());
+				attrs.put(key, sb.toString().trim());
 				sb.setLength(0);
 				key = line.substring(0, colon++).trim();
 				if (line.charAt(colon) == ' ')
@@ -208,7 +208,7 @@ public class Descriptor {
 				sb.append(line, colon, line.length());
 			}
 		}
-		attrs.put(key, sb.toString());
+		attrs.put(key, sb.toString().trim());
 	}
 
 	private String getFileLocation(String jarURL) {
