@@ -789,7 +789,9 @@ public abstract class Canvas extends Displayable {
 			if (isStarted) {
 				mView.queueEvent(() -> {
 					Bitmap bitmap = offscreenCopy.getBitmap();
-					program.loadVbo(vbo, bitmap.getWidth(), bitmap.getHeight());
+					synchronized (vbo) {
+						program.loadVbo(vbo, bitmap.getWidth(), bitmap.getHeight());
+					}
 				});
 			}
 		}
