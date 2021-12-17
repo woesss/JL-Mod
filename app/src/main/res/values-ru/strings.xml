@@ -132,6 +132,8 @@
     <string name="pref_screen_scale_type_fill">Заполнить (без учёта пропорций)</string>
     <string name="pref_screen_scale_type_fit">Вписать</string>
     <string name="pref_screen_scale_type_none">Как есть</string>
+    <string name="pref_screenshot_summary">Отключить масштабирование и фильтрацию скриншотов</string>
+    <string name="pref_screenshot_title">Необработанный скриншот</string>
     <string name="PREF_SHADER_FILTER">Шейдер:</string>
     <string name="PREF_SHOW_FPS">Показать FPS</string>
     <string name="PREF_SYS_PROPS">Системные параметры</string>

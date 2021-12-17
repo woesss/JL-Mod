@@ -120,6 +120,7 @@ public class MicroActivity extends AppCompatActivity {
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 		ContextHolder.setVibration(sp.getBoolean(PREF_VIBRATION, true));
+		Canvas.setScreenshotRawMode(sp.getBoolean(PREF_SCREENSHOT_SWITCH, false));
 		Intent intent = getIntent();
 		appName = intent.getStringExtra(KEY_MIDLET_NAME);
 		Uri data = intent.getData();
@@ -147,6 +148,7 @@ public class MicroActivity extends AppCompatActivity {
 		setOrientation(orientation);
 		menuKey = microLoader.getMenuKeyCode();
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
 		try {
 			loadMIDlet();
 		} catch (Exception e) {
