@@ -656,4 +656,8 @@ public class MicroActivity extends AppCompatActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		ContextHolder.notifyOnActivityResult(requestCode, resultCode, data);
 	}
+
+	public String getAppName() {
+		return appName;
+	}
 }
