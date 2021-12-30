@@ -37,6 +37,7 @@
     <string name="create">create</string>
     <string name="create_apps_dir_failed">%1$s\nThis folder is not writable:\nChoose a different one.</string>
     <string name="default_label">"%1$s (default)"</string>
+    <string name="dismiss">Dismiss</string>
     <string name="donate">Donate</string>
     <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>
     <string name="edit">Edit</string>
