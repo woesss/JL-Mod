@@ -20,15 +20,11 @@ import android.app.Application;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.preference.PreferenceManager;
-
 import com.android.dx.command.dexer.Main;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.io.inputstream.ZipInputStream;
 import net.lingala.zip4j.model.FileHeader;
-
-import org.microemu.android.asm.AndroidProducer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -51,7 +47,6 @@ import io.reactivex.SingleEmitter;
 import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
-import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.ConverterException;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.ZipUtils;
@@ -259,14 +254,10 @@ public class AppInstaller {
 				throw new ConverterException("*Jad not matches with Jar");
 			}
 		}
-		File patchedJar = new File(cacheDir, "patched.jar");
-		AndroidProducer.processJar(srcJar, patchedJar);
-		boolean compress = PreferenceManager.getDefaultSharedPreferences(context)
-				.getBoolean(Constants.PREF_DEX_COMPRESSION, false);
 		try {
 			Main.main(new String[]{"--no-optimize",
-					"--output=" + tmpDir + (compress ? Config.MIDLET_DEX_ARCH : Config.MIDLET_DEX_FILE),
-					patchedJar.getAbsolutePath()});
+					"--output=" + tmpDir + Config.MIDLET_DEX_ARCH,
+					srcJar.getAbsolutePath()});
 		} catch (Throwable e) {
 			throw new ConverterException("Dexing error", e);
 		}

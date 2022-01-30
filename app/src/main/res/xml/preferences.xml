@@ -54,10 +54,5 @@
             android:icon="@drawable/ic_setting_message"
             android:title="@string/pref_mascot_title"
             android:summary="@string/pref_mascot_summary" />
-        <SwitchPreferenceCompat
-            android:key="pref_dex_compression"
-            app:defaultValue="false"
-            android:title="@string/pref_compress_title"
-            android:summary="@string/pref_compress_summary" />
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>
