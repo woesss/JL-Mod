@@ -7,6 +7,7 @@
     <string name="action_context_shortcut">نماد این برنامه یا بازی به صفحه اصلی دستگاه اضافه شود</string>
     <string name="action_settings">تنظیمات</string>
     <string name="author">برنامه نویس :</string>
+    <string name="CANCEL_CMD">لغو</string>
     <string name="CLEAR_DATA_CMD">پاک کردن اطلاعات</string>
     <string name="close">بستن</string>
     <string name="common_settings">[تنظیمات مشترک]</string>

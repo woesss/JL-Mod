@@ -9,6 +9,7 @@
     <string name="add">जोड़ना</string>
     <string name="add_profile_description">नई प्रोफ़ाइल बनाएँ</string>
     <string name="author">लेखक: </string>
+    <string name="CANCEL_CMD">रद्द करें</string>
     <string name="CLEAR_DATA_CMD">डेटा मिटाएँ</string>
     <string name="close">बंद करें</string>
     <string name="common_settings">[सामान्य सेटिंग]</string>
@@ -132,7 +133,6 @@
     <string name="PREF_VK_SIZE_HINT">आकार</string>
     <string name="PREF_VK_SOFT_KEYS">सोफ्ट किज: </string>
     <string name="PREF_VK_TYPE">कीबोर्ड के प्रकार</string>
-    <string name="pref_vk_type_custom">अनुकूलन योग्य (Automatic Translation)</string>
     <string name="pref_vk_type_phone">फ़ोन</string>
     <string name="pref_vk_type_phone_arrows">फ़ोन (तीर)</string>
     <string name="pref_wakelock_title">स्क्रीन चालू रखें</string>

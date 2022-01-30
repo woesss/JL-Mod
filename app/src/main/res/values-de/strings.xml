@@ -7,6 +7,7 @@
     <string name="action_context_shortcut">Verknüpfung hinzufügen</string>
     <string name="action_settings">Einstellungen</string>
     <string name="author">Autor: </string>
+    <string name="CANCEL_CMD">Abbrechen</string>
     <string name="CLEAR_DATA_CMD">Daten löschen</string>
     <string name="close">Schließen</string>
     <string name="common_settings">[ALLGEMEINE EINSTELLUNGEN]</string>
@@ -14,11 +15,12 @@
     <string name="converting_wait">Konvertiere Jar…</string>
     <string name="crash_dialog_message">Möchten Sie ein Fehlerbericht an den Entwickler senden?</string>
     <string name="crash_dialog_title">Fehler festgestellt</string>
+    <string name="create">create</string>
     <string name="donate">Spenden</string>
     <string name="error">Fehler</string>
     <string name="exit">Beenden</string>
     <string name="external_storage_not_mounted">Diese App benötigt externen Speicher</string>
-    <string name="FORCE_CLOSE_CONFIRMATION">Erzwungenes Schliessen der Anwendung kann zu Datenverlust führen oder die Anwendung beschädigen!\nFortfahren?</string>
+    <string name="FORCE_CLOSE_CONFIRMATION">Erzwungenes Schließen der Anwendung kann zu Datenverlust führen oder die Anwendung beschädigen!\nFortfahren?</string>
     <string name="help">Hilfe</string>
     <string name="help_message">&#8226; Das Aktivieren der Filterung kann in einigen Fällen die Leistung erheblich beeinträchtigen. Deaktivieren Sie diese Option, wenn das Spiel zu langsam ist.&lt;BR&gt;&#8226; Bildflimmerprobleme können behoben werden, indem die Option \"Sofortiger Verarbeitungsmodus\" aktiviert wird.</string>
     <string name="hide_buttons">Tasten ausblenden</string>

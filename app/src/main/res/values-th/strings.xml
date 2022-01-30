@@ -7,6 +7,7 @@
     <string name="action_context_shortcut">เพิ่มทางลัด</string>
     <string name="action_settings">การตั้งค่า</string>
     <string name="author">ผู้เขียน: </string>
+    <string name="CANCEL_CMD">ยกเลิก</string>
     <string name="CLEAR_DATA_CMD">ล้างข้อมูล</string>
     <string name="common_settings">ตั้งค่าทั่วไป</string>
     <string name="CONFIRMATION_REQUIRED">ต้องการยืนยัน</string>

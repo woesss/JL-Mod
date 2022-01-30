@@ -9,6 +9,7 @@
     <string name="add">Aggiungi</string>
     <string name="add_profile_description">Crea un nuovo profilo</string>
     <string name="author">Autore: </string>
+    <string name="CANCEL_CMD">Annulla</string>
     <string name="CLEAR_DATA_CMD">Cancella i dati</string>
     <string name="close">Chiudi</string>
     <string name="common_settings">[IMPOSTAZIONI COMUNI]</string>

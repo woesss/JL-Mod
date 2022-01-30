@@ -5,10 +5,14 @@
     <string name="action_context_delete">Изтриване</string>
     <string name="action_context_rename">Преименуване</string>
     <string name="action_context_shortcut">Добавяне на пряк път</string>
+    <string name="action_reinstall">Преинсталирай</string>
     <string name="action_settings">Настройки</string>
     <string name="add">Добави</string>
     <string name="add_profile_description">Създай нов профил</string>
     <string name="author">Автор: </string>
+    <string name="CANCEL_CMD">Отказ</string>
+    <string name="change">Промени</string>
+    <string name="choose">Избери</string>
     <string name="CLEAR_DATA_CMD">Изчистване на данните</string>
     <string name="close">Затваряне</string>
     <string name="common_settings">[ОБЩИ НАСТРОЙКИ]</string>
@@ -16,6 +20,7 @@
     <string name="converting_wait">Конвертиране на JAR…</string>
     <string name="crash_dialog_message">Искате ли да изпратите отчет за грешки на разработчика?</string>
     <string name="crash_dialog_title">Открита е грешка</string>
+    <string name="create">създай</string>
     <string name="create_apps_dir_failed">Неуспешно създаване на папка във:\n\'%1$s\'\nизберете друга.</string>
     <string name="default_label">%1$s (по подразбиране)</string>
     <string name="donate">Даряване</string>
@@ -34,6 +39,10 @@
     <string name="help_message">&#8226; Включването на филтри може значително да подобри производителността.Изключете тази опция ако играта е прекалено бавна.&lt;BR&gt;&#8226; Премигвания на екрана могат да бъдат поправени като изключите опцията за незабавна обработка.</string>
     <string name="hide_buttons">Скриване на бутони</string>
     <string name="identity_filter">Бързо (без филтър)</string>
+    <string name="install">инсталиране</string>
+    <string name="install_done">Приложението е инсталирано успешно!</string>
+    <string name="install_jar_non_matched_jad">Приложението се различава от посоченото във JAD.\nИгнорирай и продължи?</string>
+    <string name="invalid_resolution_not_saved">Невалидна резолюция: не е запазено!</string>
     <string name="layout_edit_finish">Завърши режим на редактиране</string>
     <string name="layout_edit_finished">Режим на редактиране е приключен</string>
     <string name="layout_edit_mode">Режим за редактиране на клавишите</string>
@@ -46,6 +55,11 @@
     <string name="mapping_dialog_title">Натиснете клавиш</string>
     <string name="message_clear_data">Наистина ли искате да изтриете всички данни на приложението?</string>
     <string name="message_delete">Наистина ли искате да изтриете това приложение?</string>
+    <string name="midlet_name"><b>Име: </b></string>
+    <string name="midlet_size"><b>Размер: </b></string>
+    <string name="midlet_source"><b>Източник: </b></string>
+    <string name="midlet_vendor"><b>Доставчик: </b></string>
+    <string name="midlet_version"><b>Версия: </b></string>
     <string name="more">Още</string>
     <string name="no_data_for_display">Няма данни</string>
     <string name="not_saved_exists">Вече съществува</string>
@@ -144,6 +158,7 @@
     <string name="RESET_LAYOUT_CMD">Нулиране на подредбата за клавиатурата</string>
     <string name="reset_mapping">Нулиране</string>
     <string name="RESET_SETTINGS_CMD">Нулиране на настройките</string>
+    <string name="retry">опитай отново</string>
     <string name="save_log">Запиши регистрационния файл</string>
     <string name="save_profile">Запази профила</string>
     <string name="saved">Запазено %1$s</string>
@@ -159,4 +174,5 @@
     <string name="take_screenshot">Заснемане на екрана</string>
     <string name="unlimited">неограничено</string>
     <string name="version">Версия: </string>
+    <string name="warn_install_from_net">Файлът ще бъде изтеглен от интернет</string>
 </resources>

@@ -142,7 +142,7 @@ public class MainActivity extends BaseActivity {
 	private void alertCreateDir() {
 		String emulatorDir = Config.getEmulatorDir();
 		String lblChange = getString(R.string.change);
-		String msg = getString(R.string.alert_msg_workdir_not_exists, emulatorDir, lblChange);
+		String msg = getString(R.string.alert_msg_workdir_not_exists, emulatorDir);
 		new AlertDialog.Builder(this)
 				.setTitle(android.R.string.dialog_alert_title)
 				.setCancelable(false)

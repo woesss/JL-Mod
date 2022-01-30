@@ -9,6 +9,7 @@
     <string name="add">Tambahkan</string>
     <string name="add_profile_description">Buat profil baru</string>
     <string name="author">Vendor: </string>
+    <string name="CANCEL_CMD">Batal</string>
     <string name="CLEAR_DATA_CMD">Hapus data</string>
     <string name="close">Tutup</string>
     <string name="common_settings">[PENGATURAN UMUM]</string>

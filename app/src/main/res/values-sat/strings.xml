@@ -6,10 +6,15 @@
     <string name="action_context_rename">ᱫᱚᱦᱲᱟ ᱧᱩᱛᱩᱢ</string>
     <string name="action_context_shortcut">ᱥᱚᱴᱠᱚᱴ ᱥᱮᱞᱮᱫᱽ ᱢᱮ</string>
     <string name="action_keyboard_ime">ᱠᱮᱭᱵᱚᱰ (IME)</string>
+    <string name="action_reinstall">ᱫᱩᱦᱲᱟᱹᱵᱚᱦᱟᱞ</string>
     <string name="action_settings">ᱥᱟᱡᱟᱣᱠᱚ</string>
     <string name="add">ᱥᱮᱞᱮᱫᱽ ᱢᱮ</string>
     <string name="add_profile_description">ᱱᱟᱶᱟ ᱢᱚᱦᱲᱟ ᱛᱮᱭᱟᱨ ᱢᱮ</string>
+    <string name="alert_msg_workdir_not_exists">ᱡᱟᱭᱜᱟ ᱨᱮ ᱠᱟᱹᱢᱤ ᱰᱟᱭᱨᱮᱠᱴᱚᱨᱭ ᱵᱟᱹᱱᱩᱜᱼᱟ : \n%1$s ᱾ \nᱟᱢ ᱮᱪᱫ ᱛᱮᱭᱟᱨ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ ᱟᱨᱵᱟᱝᱠᱷᱟᱱ ᱮᱴᱟᱜ ᱵᱟᱪᱷᱟᱣᱟᱢ ᱥᱮ ?</string>
     <string name="author">ᱚᱱᱚᱞᱤᱭᱟᱹ: </string>
+    <string name="CANCEL_CMD">ᱵᱟᱹᱰᱨᱟᱹ</string>
+    <string name="change">ᱵᱚᱫᱚᱞ</string>
+    <string name="choose">ᱵᱟᱪᱷᱟᱣ</string>
     <string name="CLEAR_DATA_CMD">ᱰᱟᱴᱟ ᱢᱮᱴᱟᱣ ᱢᱮ</string>
     <string name="close">ᱵᱚᱸᱫ ᱢᱮ</string>
     <string name="common_settings">[ᱠᱚᱢᱚᱱ ᱥᱟᱡᱟᱣ ᱠᱚ]</string>
@@ -17,6 +22,7 @@
     <string name="converting_wait">JAR ᱵᱚᱫᱚᱞᱚᱜ ᱠᱟᱱᱟ…</string>
     <string name="crash_dialog_message">ᱟᱢ ᱰᱮᱵᱽᱷᱞᱚᱯᱟᱹᱨ ᱴᱷᱮᱱ ᱵᱷᱩᱞ ᱨᱤᱯᱚᱴ ᱵᱷᱮᱡᱟ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
     <string name="crash_dialog_title">ᱵᱷᱩᱞ ᱯᱟᱸᱛᱮ ᱧᱟᱢᱮᱱᱟ</string>
+    <string name="create">ᱛᱮᱭᱟᱨ</string>
     <string name="create_apps_dir_failed">ᱚᱱᱟ ᱡᱟᱨᱚᱣᱟ ᱨᱮ ᱯᱚᱴᱚᱢ ᱛᱮᱭᱟᱨ ᱵᱷᱩᱞ:\n%1$s\nᱚᱞᱜᱟ ᱵᱟᱪᱷᱟᱣᱢᱮ ᱾</string>
     <string name="default_label">%1$s (ᱢᱩᱞ)</string>
     <string name="donate">ᱫᱟᱱ</string>
@@ -35,6 +41,8 @@
     <string name="help_message">&#8226;ᱯᱷᱤᱞᱴᱚᱨᱤᱝ ᱠᱚ ᱠᱷᱟᱹᱛᱤᱨ ᱛᱮ ᱠᱟᱹᱢᱤ ᱠᱚ ᱵᱟᱫᱷᱟ ᱮᱢ ᱫᱟᱲᱮᱭᱟᱜᱟᱭ ᱾ ᱠᱷᱮᱞ ᱫᱚ ᱡᱩᱫᱤ ᱫᱷᱤᱨᱮ ᱥᱮ ᱪᱟᱹᱞᱩᱜ ᱠᱷᱟᱱ ᱫᱚ ᱱᱚᱶᱟ ᱚᱯᱥᱚᱱ ᱵᱚᱸᱫᱚᱭ ᱢᱮ ᱾&lt;BR&gt;&#8226; \"ᱞᱚᱜᱤᱱ ᱯᱨᱚᱥᱮᱥᱤᱝ ᱢᱳᱰ\" ᱚᱯᱥᱚᱱ ᱛᱮ ᱯᱷᱤᱠᱚᱨᱤᱝ ᱤᱥᱩ ᱠᱚ ᱴᱷᱤᱠ ᱫᱟᱲᱮᱭᱟᱜ ᱼᱟ ᱾</string>
     <string name="hide_buttons">ᱵᱩᱛᱟᱹᱢᱠᱚ ᱩᱠᱩᱭ ᱢᱮ</string>
     <string name="identity_filter">ᱞᱚᱜᱚᱱ (ᱯᱷᱤᱞᱴᱚᱨ ᱵᱟᱹᱱᱩᱜᱼᱟ)</string>
+    <string name="install">ᱵᱚᱦᱟᱞ</string>
+    <string name="install_done">ᱮᱯᱞᱤᱠᱮᱥᱚᱱ ᱨᱟᱹᱥ ᱞᱮᱠᱷᱟᱛᱮ ᱵᱚᱦᱟᱞ ᱮᱱᱟ!</string>
     <string name="layout_edit_finish">ᱥᱟᱯᱲᱟᱣ ᱢᱤᱰ ᱪᱟᱵᱟᱭᱢᱮ</string>
     <string name="layout_edit_finished">ᱥᱟᱯᱲᱟᱣ ᱢᱳᱰ ᱪᱟᱵᱟᱮᱱᱟ</string>
     <string name="layout_edit_mode">ᱠᱤᱭᱞᱮᱭᱟᱩᱴ ᱥᱟᱯᱲᱟᱣ ᱢᱳᱰ</string>
@@ -47,6 +55,11 @@
     <string name="mapping_dialog_title">ᱠᱭ ᱚᱛᱟᱭ ᱢᱮ</string>
     <string name="message_clear_data">ᱟᱢ ᱥᱟᱹᱨᱤ ᱛᱮ ᱮᱯ ᱰᱟᱴᱟ ᱢᱮᱴᱟᱣ ᱥᱟᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
     <string name="message_delete">ᱟᱢ ᱥᱟᱹᱨᱤ ᱛᱮ ᱱᱚᱶᱟ ᱮᱯ ᱢᱮᱴᱟᱣ ᱥᱮᱱᱟᱢ ᱠᱟᱱᱟ ᱥᱮ?</string>
+    <string name="midlet_name"><b>ᱧᱩᱛᱩᱢ : </b></string>
+    <string name="midlet_size"><b>ᱢᱟᱯ : </b></string>
+    <string name="midlet_source"><b>ᱥᱨᱚᱛ : </b></string>
+    <string name="midlet_vendor"><b>ᱵᱮᱯᱟᱨᱤᱭᱟᱹ : </b></string>
+    <string name="midlet_version"><b>ᱦᱟᱹᱞᱤᱭᱟᱹᱠ : </b></string>
     <string name="more">ᱵᱟᱹᱲᱛᱤ</string>
     <string name="no_data_for_display">ᱰᱟᱴᱟ ᱵᱚᱱᱩᱜ-ᱟ</string>
     <string name="not_saved_exists">ᱢᱟᱲᱟᱝ ᱠᱷᱚᱱ ᱢᱮᱱᱟᱜᱼᱟ</string>
@@ -165,4 +178,5 @@
     <string name="take_screenshot">ᱥᱠᱨᱤᱱᱥᱚᱴ ᱤᱫᱤ ᱢᱮ</string>
     <string name="unlimited">ᱟᱹᱱᱞᱤᱢᱤᱴᱮᱰ</string>
     <string name="version">ᱦᱟᱹᱞᱤᱭᱟᱜ: </string>
+    <string name="warning">ᱦᱩᱥᱤᱭᱟᱹᱨ</string>
 </resources>

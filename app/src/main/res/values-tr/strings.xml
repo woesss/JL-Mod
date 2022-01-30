@@ -9,6 +9,7 @@
     <string name="add">Ekle</string>
     <string name="add_profile_description">Yeni profil oluştur</string>
     <string name="author">Geliştirici: </string>
+    <string name="CANCEL_CMD">İptal</string>
     <string name="CLEAR_DATA_CMD">Verileri temizle</string>
     <string name="close">Kapat</string>
     <string name="common_settings">[GENEL AYARLAR]</string>

@@ -9,6 +9,7 @@
     <string name="add">Додати</string>
     <string name="add_profile_description">Створити новий профіль</string>
     <string name="author">Автор: </string>
+    <string name="CANCEL_CMD">Скасувати</string>
     <string name="CLEAR_DATA_CMD">Очистити дані</string>
     <string name="close">Закрити</string>
     <string name="common_settings">[ЗАГАЛЬНІ НАЛАШТУВАННЯ]</string>

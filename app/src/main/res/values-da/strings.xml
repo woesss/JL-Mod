@@ -6,6 +6,7 @@
     <string name="action_context_shortcut">Tilføj genvej</string>
     <string name="action_settings">Indstillinger</string>
     <string name="author">Forfatter: </string>
+    <string name="CANCEL_CMD">Annullér</string>
     <string name="CLEAR_DATA_CMD">Ryd data</string>
     <string name="common_settings">[GENERELLE INDSTILLINGER]</string>
     <string name="CONFIRMATION_REQUIRED">Bekræftelse kræves</string>
@@ -53,6 +54,7 @@
     <string name="PREF_SCREEN_OPTIONS">Skærmindstillinger</string>
     <string name="PREF_SYS_PROPS">Systemindstillinger</string>
     <string name="PREF_TOUCH_INPUT">Berøringsinput</string>
+    <string name="PREF_UNIT_MS">ms</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtuelt tastatur</string>
     <string name="PREF_VK_ALPHA">Gennemsigtighed: </string>
     <string name="PREF_VK_BACK">Knapper</string>
@@ -61,6 +63,7 @@
     <string name="PREF_VK_FORE">Etiketter</string>
     <string name="PREF_VK_HIDE_DELAY">Skjul forsinkelse: </string>
     <string name="PREF_VK_KEY_SIZES">Tastestørrelser</string>
+    <string name="PREF_VK_NAV_KEYS">Joystick: </string>
     <string name="PREF_VK_NUM_KEYS">Cifre: </string>
     <string name="PREF_VK_OUTLINE">Kontur</string>
     <string name="PREF_VK_SEL_BACK">Knapper (P)</string>
@@ -69,10 +72,13 @@
     <string name="PREF_VK_SIZE_HINT">Størrelse</string>
     <string name="PREF_VK_SOFT_KEYS">Softkeys: </string>
     <string name="PREF_WIDTH">Bredde</string>
+    <string name="report_crash">Send</string>
     <string name="RESET_LAYOUT_CMD">Nulstil tastelayout</string>
     <string name="reset_mapping">Nulstil</string>
     <string name="RESET_SETTINGS_CMD">Nulstil indstillinger</string>
     <string name="select_dialog_title">Vælg MIDlet</string>
     <string name="SIZE_PRESETS">Forudindstillinger</string>
+    <string name="START_CMD">Start</string>
     <string name="SWAP_SIZES">Bytte størrelser</string>
+    <string name="version">Version: </string>
 </resources>

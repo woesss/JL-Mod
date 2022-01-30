@@ -9,6 +9,7 @@
     <string name="add">Toevoegen</string>
     <string name="add_profile_description">Nieuw profiel aanmaken</string>
     <string name="author">Auteur: </string>
+    <string name="CANCEL_CMD">Annuleren</string>
     <string name="CLEAR_DATA_CMD">Gegevens wissen</string>
     <string name="close">Sluiten</string>
     <string name="common_settings">[ALGEMENE INSTELLINGEN]</string>

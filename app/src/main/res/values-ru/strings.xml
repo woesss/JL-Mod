@@ -13,8 +13,9 @@
     <string name="add_profile_description">Создать новый профиль</string>
     <string name="add_resolution_preset">Добавить в предустановки</string>
     <string name="alert_map_menu">ТРЕБУЕТСЯ назначить кнопку \"МЕНЮ\"!</string>
-    <string name="alert_msg_workdir_not_exists">Рабочая папка эмулятора будет создана по пути:\n\"%1$s\".\nВы можете выбрать другую сейчас, нажав кнопку %2$s, и в любое время через настройки</string>
+    <string name="alert_msg_workdir_not_exists">Рабочая папка эмулятора будет создана по пути:\n%1$s\nВы хотите создать её или выбрать другую?</string>
     <string name="author">Автор: </string>
+    <string name="CANCEL_CMD">Отмена</string>
     <string name="change">Изменить</string>
     <string name="choose">Выбрать</string>
     <string name="CLEAR_DATA_CMD">Очистить данные</string>
@@ -26,7 +27,7 @@
     <string name="crash_dialog_message">Вы хотите отправить отчет об ошибке разработчику?</string>
     <string name="crash_dialog_title">Произошла ошибка</string>
     <string name="create">создать</string>
-    <string name="create_apps_dir_failed">%1$s\nЭта папка не доступна для записи!\nВыберите другую.</string>
+    <string name="create_apps_dir_failed">Не удалось создать папку по пути:\n%1$s\nвыберите другую.</string>
     <string name="default_label">%1$s (стандартный)</string>
     <string name="donate">Поддержать</string>
     <string name="edit">Настроить</string>
@@ -112,8 +113,6 @@
     <string name="PREF_LAYOUT">Раскладка</string>
     <string name="PREF_LIMIT_FPS">Ограничить FPS</string>
     <string name="pref_map_keys">Назначение кнопок</string>
-    <string name="pref_mascot_summary">Показать сообщение когда используется</string>
-    <string name="pref_mascot_title">Идентифицировать Mascot Capsule 3D</string>
     <string name="PREF_ORIENTATION">Ориентация экрана</string>
     <string name="pref_orientation_auto">Автоматически</string>
     <string name="pref_orientation_default">По умолчанию</string>
@@ -150,7 +149,7 @@
     <string name="PREF_VK_BACK">Кнопки</string>
     <string name="PREF_VK_FEEDBACK">Тактильный отклик</string>
     <string name="PREF_VK_FIRE_KEY">Огонь: </string>
-    <string name="PREF_VK_FORCE_OPACITY">Не применять прозрачность вне экрана</string>
+    <string name="PREF_VK_FORCE_OPACITY">Принудительная непрозрачность кнопок вне экрана</string>
     <string name="PREF_VK_FORE">Надписи</string>
     <string name="PREF_VK_HIDE_DELAY">Скрывать через: </string>
     <string name="pref_vk_hide_hint">не скрывать</string>

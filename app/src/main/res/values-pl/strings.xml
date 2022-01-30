@@ -7,6 +7,7 @@
     <string name="action_context_shortcut">Dodaj skrót</string>
     <string name="action_settings">Ustawienia</string>
     <string name="author">Autor: </string>
+    <string name="CANCEL_CMD">Anuluj</string>
     <string name="CLEAR_DATA_CMD">Wyczyść dane</string>
     <string name="close">Zamknij</string>
     <string name="common_settings">[WSPÓLNE USTAWIENIA]</string>

@@ -3,6 +3,7 @@
     <string name="about">Om</string>
     <string name="action_context_delete">Radera</string>
     <string name="action_settings">Inställningar</string>
+    <string name="CANCEL_CMD">Avbryt</string>
     <string name="close">Stäng</string>
     <string name="donate">Donera</string>
     <string name="exit">Avsluta</string>

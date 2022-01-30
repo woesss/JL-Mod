@@ -5,8 +5,10 @@
     <string name="action_context_delete">刪除</string>
     <string name="action_context_rename">重命名</string>
     <string name="action_context_shortcut">添加到桌面</string>
+    <string name="action_keyboard_ime">鍵盤類型)</string>
     <string name="action_settings">設置</string>
     <string name="author">作者: </string>
+    <string name="CANCEL_CMD">取消</string>
     <string name="CLEAR_DATA_CMD">清除數據</string>
     <string name="close">關閉</string>
     <string name="common_settings">[常用設置]</string>
@@ -28,7 +30,7 @@
     <string name="layout_scale_mode">調整按鍵大小</string>
     <string name="layout_switch">切換按鍵佈挶</string>
     <string name="licenses">授權</string>
-    <string name="mapping_dialog_message">當前映射:\n%1$s</string>
+    <string name="mapping_dialog_message">當前映射: %1$s</string>
     <string name="mapping_dialog_title">按任意按鍵</string>
     <string name="message_clear_data">你確定要刪除所有的資料嗎？</string>
     <string name="message_delete">確定要刪除此應用？</string>
