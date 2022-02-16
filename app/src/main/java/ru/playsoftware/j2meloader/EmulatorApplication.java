@@ -48,7 +48,7 @@ public class EmulatorApplication extends Application {
 
 	private final SharedPreferences.OnSharedPreferenceChangeListener themeListener = (sharedPreferences, key) -> {
 		if (key.equals(Constants.PREF_THEME)) {
-			setNightMode(sharedPreferences.getString(Constants.PREF_THEME, "light"));
+			setNightMode(sharedPreferences.getString(Constants.PREF_THEME, null));
 		}
 	};
 
@@ -75,7 +75,7 @@ public class EmulatorApplication extends Application {
 		}
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		sp.registerOnSharedPreferenceChangeListener(themeListener);
-		setNightMode(sp.getString(Constants.PREF_THEME, "light"));
+		setNightMode(sp.getString(Constants.PREF_THEME, null));
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 	}
 
@@ -108,6 +108,9 @@ public class EmulatorApplication extends Application {
 	}
 
 	void setNightMode(String theme) {
+		if (theme == null) {
+			theme = getString(R.string.pref_theme_default);
+		}
 		switch (theme) {
 			case "light":
 				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
