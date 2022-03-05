@@ -61,6 +61,7 @@ import androidx.preference.PreferenceManager;
 import org.acra.ACRA;
 import org.acra.ErrorReporter;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -78,6 +79,7 @@ import javax.microedition.util.ContextHolder;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.Constants;
@@ -101,6 +103,7 @@ public class MicroActivity extends AppCompatActivity {
 	private String appName;
 	private InputMethodManager inputMethodManager;
 	private int menuKey;
+	private String appPath;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -122,13 +125,22 @@ public class MicroActivity extends AppCompatActivity {
 		ContextHolder.setVibration(sp.getBoolean(PREF_VIBRATION, true));
 		Canvas.setScreenshotRawMode(sp.getBoolean(PREF_SCREENSHOT_SWITCH, false));
 		Intent intent = getIntent();
-		appName = intent.getStringExtra(KEY_MIDLET_NAME);
-		Uri data = intent.getData();
-		if (data == null) {
-			showErrorDialog("Invalid intent: app path is null");
-			return;
+		if (BuildConfig.FULL_EMULATOR) {
+			appName = intent.getStringExtra(KEY_MIDLET_NAME);
+			Uri data = intent.getData();
+			if (data == null) {
+				showErrorDialog("Invalid intent: app path is null");
+				return;
+			}
+			appPath = data.toString();
+		} else {
+			appName = getTitle().toString();
+			appPath = getApplicationInfo().dataDir + "/files/converted/midlet";
+			File dir = new File(appPath);
+			if (!dir.exists() && !dir.mkdirs()) {
+				throw new RuntimeException("Can't access file system");
+			}
 		}
-		String appPath = data.toString();
 		microLoader = new MicroLoader(this, appPath);
 		if (!microLoader.init()) {
 			Config.startApp(this, appName, appPath, true);
@@ -346,9 +358,7 @@ public class MicroActivity extends AppCompatActivity {
 				})
 				.setNeutralButton(R.string.action_settings, (d, w) -> {
 					hideSoftInput();
-					Intent intent = getIntent();
-					Config.startApp(this, intent.getStringExtra(KEY_MIDLET_NAME),
-							intent.getDataString(), true);
+					Config.startApp(this, appName, appPath, true);
 					MidletThread.destroyApp();
 				})
 				.setNegativeButton(android.R.string.cancel, null);

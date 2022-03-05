@@ -45,6 +45,8 @@ import javax.microedition.shell.MicroActivity;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class ContextHolder {
@@ -129,9 +131,11 @@ public class ContextHolder {
 	}
 
 	public static File getCacheDir() {
-		File dir = new File(Config.getEmulatorDir() + "/cache");
-		if (dir.isDirectory() || dir.mkdirs())
-			return dir;
+		if (BuildConfig.FULL_EMULATOR) {
+			File dir = new File(Config.getEmulatorDir() + "/cache");
+			if (dir.isDirectory() || dir.mkdirs())
+				return dir;
+		}
 		return getAppContext().getCacheDir();
 	}
 

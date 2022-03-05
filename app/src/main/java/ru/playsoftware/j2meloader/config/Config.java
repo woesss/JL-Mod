@@ -28,6 +28,8 @@ import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import androidx.preference.PreferenceManager;
+
+import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
 
 import static ru.playsoftware.j2meloader.util.Constants.*;
