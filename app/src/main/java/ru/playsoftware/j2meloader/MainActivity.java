@@ -17,47 +17,43 @@
 
 package ru.playsoftware.j2meloader;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewConfiguration;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
-import java.util.Map;
 
 import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
+import ru.playsoftware.j2meloader.util.StoragePermissionContract;
 import ru.woesss.j2me.installer.InstallerDialog;
 
-import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_TOOLBAR;
-
 public class MainActivity extends BaseActivity {
-	private static final String[] STORAGE_PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-	private final ActivityResultLauncher<String[]> permissionsLauncher = registerForActivityResult(
-			new ActivityResultContracts.RequestMultiplePermissions(),
-			this::onPermissionResult);
+	private final ActivityResultLauncher<Void> permissionsLauncher = registerForActivityResult(
+			new StoragePermissionContract(),
+			this::onPermissionResult
+	);
+
 	private final ActivityResultLauncher<String> openDirLauncher = registerForActivityResult(
 			new PickDirResultContract(),
-			this::onPickDirResult);
+			this::onPickDirResult
+	);
 
 	private SharedPreferences preferences;
 	private AppListModel appListModel;
@@ -66,7 +62,7 @@ public class MainActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		permissionsLauncher.launch(STORAGE_PERMISSIONS);
+		permissionsLauncher.launch(null);
 		appListModel = new ViewModelProvider(this).get(AppListModel.class);
 		if (savedInstanceState == null) {
 			Intent intent = getIntent();
@@ -79,9 +75,9 @@ public class MainActivity extends BaseActivity {
 					.replace(R.id.container, fragment).commit();
 		}
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		if (!preferences.contains(PREF_TOOLBAR)) {
+		if (!preferences.contains(Constants.PREF_TOOLBAR)) {
 			boolean enable = !ViewConfiguration.get(this).hasPermanentMenuKey();
-			preferences.edit().putBoolean(PREF_TOOLBAR, enable).apply();
+			preferences.edit().putBoolean(Constants.PREF_TOOLBAR, enable).apply();
 		}
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
@@ -112,22 +108,18 @@ public class MainActivity extends BaseActivity {
 				.show();
 	}
 
-	private void onPermissionResult(Map<String, Boolean> status) {
-		if (!status.containsValue(false)) {
+	private void onPermissionResult(boolean status) {
+		if (status) {
 			checkAndCreateDirs();
-		} else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-			new AlertDialog.Builder(this)
-					.setTitle(android.R.string.dialog_alert_title)
-					.setCancelable(false)
-					.setMessage(R.string.permission_request_failed)
-					.setNegativeButton(R.string.retry, (d, w) ->
-							permissionsLauncher.launch(STORAGE_PERMISSIONS))
-					.setPositiveButton(R.string.exit, (d, w) -> finish())
-					.show();
-		} else {
-			Toast.makeText(this, R.string.permission_request_failed, Toast.LENGTH_SHORT).show();
-			finish();
+			return;
 		}
+		new AlertDialog.Builder(this)
+				.setTitle(android.R.string.dialog_alert_title)
+				.setCancelable(false)
+				.setMessage(R.string.permission_request_failed)
+				.setNegativeButton(R.string.retry, (d, w) -> permissionsLauncher.launch(null))
+				.setPositiveButton(R.string.exit, (d, w) -> finish())
+				.show();
 	}
 
 	private void onPickDirResult(Uri uri) {
@@ -159,7 +151,7 @@ public class MainActivity extends BaseActivity {
 			alertDirCannotCreate(path);
 			return;
 		}
-		preferences.edit().putString(PREF_EMULATOR_DIR, path).apply();
+		preferences.edit().putString(Constants.PREF_EMULATOR_DIR, path).apply();
 	}
 
 	@Override
