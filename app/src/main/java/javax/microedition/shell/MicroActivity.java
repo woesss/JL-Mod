@@ -292,7 +292,7 @@ public class MicroActivity extends AppCompatActivity {
 	};
 
 	private int getToolBarHeight() {
-		int[] attrs = new int[]{R.attr.actionBarSize};
+		int[] attrs = new int[]{androidx.appcompat.R.attr.actionBarSize};
 		TypedArray ta = obtainStyledAttributes(attrs);
 		int toolBarHeight = ta.getDimensionPixelSize(0, -1);
 		ta.recycle();
@@ -572,9 +572,9 @@ public class MicroActivity extends AppCompatActivity {
 			cb.setChecked(keepScreenPreferred);
 
 			TypedValue out = new TypedValue();
-			getTheme().resolveAttribute(R.attr.dialogPreferredPadding, out, true);
+			getTheme().resolveAttribute(androidx.appcompat.R.attr.dialogPreferredPadding, out, true);
 			int paddingH = getResources().getDimensionPixelOffset(out.resourceId);
-			int paddingT = getResources().getDimensionPixelOffset(R.dimen.abc_dialog_padding_top_material);
+			int paddingT = getResources().getDimensionPixelOffset(androidx.appcompat.R.dimen.abc_dialog_padding_top_material);
 			dialog.setView(cb, paddingH, paddingT, paddingH, 0);
 
 			dialog.setButton(dialog.BUTTON_POSITIVE, getText(android.R.string.yes), (d, w) -> {

@@ -3,22 +3,23 @@ plugins {
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdk
+    compileSdk COMPILE_SDK
+    ndkVersion NDK_VERSION
+    namespace 'ru.playsoftware.j2meloader'
 
     defaultConfig {
         applicationId "ru.woesss.j2meloader"
-        minSdkVersion rootProject.ext.minSdk
-        targetSdkVersion rootProject.ext.targetSdk
+        minSdk MIN_SDK
+        targetSdk TARGET_SDK
         versionCode 30
         versionName "0.81"
-        archivesBaseName = "JL-Mod_$versionName"
+        archivesBaseName = "${rootProject.name}_$versionName"
         ndk {
             abiFilters 'x86', 'armeabi-v7a'
         }
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    flavorDimensions "default"
 
     buildTypes {
         release {
@@ -34,40 +35,8 @@ android {
         }
     }
 
-    lintOptions {
+    lint {
         disable 'MissingTranslation'
-    }
-
-    productFlavors {
-        play {
-            buildConfigField "boolean", "DONATIONS_GOOGLE", "true"
-            versionNameSuffix "-play"
-            ndk {
-                abiFilters 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
-            }
-        }
-        open {
-            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
-            versionNameSuffix "-open"
-        }
-        fdroid {
-            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
-        }
-        dev {
-            buildConfigField "boolean", "DONATIONS_GOOGLE", "false"
-        }
-    }
-
-    bundle {
-        language {
-            enableSplit = false
-        }
-        density {
-            enableSplit = false
-        }
-        abi {
-            enableSplit = true
-        }
     }
 
     externalNativeBuild {
@@ -75,35 +44,37 @@ android {
             path 'src/main/cpp/Android.mk'
         }
     }
-    ndkVersion '22.1.7171670'
 }
 
 dependencies {
-    def roomVersion = '2.3.0'
+    implementation project(':dexlib')
+
+    def roomVersion = '2.4.2'
+    annotationProcessor "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
-    annotationProcessor "androidx.room:room-compiler:$roomVersion"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.preference:preference:1.1.1'
-    implementation "androidx.multidex:multidex:2.0.1"
-    implementation 'com.android.volley:volley:1.2.0'
+
+    annotationProcessor 'com.google.auto.service:auto-service:1.0.1'
+    compileOnly 'com.google.auto.service:auto-service-annotations:1.0.1'
+
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.preference:preference:1.2.0'
     implementation 'ch.acra:acra-dialog:5.8.4'
+    implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.github.billthefarmer:mididriver:v1.21'
-    implementation 'com.github.nikita36078:donations:2.8'
     implementation 'com.github.nikita36078:filepicker:4.3.0'
     implementation 'com.github.nikita36078:mobile-ffmpeg:v4.3.2-compact'
-    implementation 'com.github.nikita36078:pngj:2.2.2'
+    implementation 'com.github.nikita36078:pngj:2.2.3'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
-    implementation 'com.google.code.gson:gson:2.8.7'
-    compileOnly 'com.google.auto.service:auto-service-annotations:1.0'
-    annotationProcessor 'com.google.auto.service:auto-service:1.0'
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'net.lingala.zip4j:zip4j:2.9.0'
+    implementation 'net.lingala.zip4j:zip4j:2.9.1'
     implementation 'org.ow2.asm:asm:9.2'
-    implementation project(':dexlib')
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    testImplementation 'junit:junit:4.13.2'
 }

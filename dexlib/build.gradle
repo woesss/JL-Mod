@@ -3,11 +3,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdk
+    compileSdk COMPILE_SDK
+    namespace 'com.android.dx'
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdk
-        targetSdkVersion rootProject.ext.targetSdk
+        minSdk MIN_SDK
+        targetSdk TARGET_SDK
         versionCode 1
         versionName "1.13"
     }
@@ -19,7 +20,7 @@ android {
         }
     }
 
-    lintOptions {
+    lint {
         abortOnError false
     }
 }
