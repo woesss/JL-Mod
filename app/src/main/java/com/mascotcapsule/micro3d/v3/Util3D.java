@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2020 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,29 @@
 
 package com.mascotcapsule.micro3d.v3;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Util3D {
+
+	static final String TAG = "micro3d";
+
 	public static int sqrt(int p) {
-		return (int) Math.sqrt(p);
+		if (p == 0) return 0;
+		double a;
+		if (p < 0) {
+			if (p > 0xfffd0002) return 0xffff;
+			a = p & 0xffffffffL;
+		} else {
+			a = p;
+		}
+		return (int) Math.round(Math.sqrt(a));
 	}
 
 	public static int sin(int p) {
-		return (int) Math.sin(p);
+		double radian = p * Math.PI / 2048;
+		return (int) Math.round(Math.sin(radian) * 4096);
 	}
 
 	public static int cos(int p) {
-		return (int) Math.cos(p);
+		return sin(p + 1024);
 	}
 }
