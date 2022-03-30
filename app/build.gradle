@@ -14,9 +14,6 @@ android {
         versionCode 30
         versionName "0.81"
         archivesBaseName = "${rootProject.name}_$versionName"
-        ndk {
-            abiFilters 'x86', 'armeabi-v7a'
-        }
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -37,6 +34,14 @@ android {
 
     lint {
         disable 'MissingTranslation'
+    }
+
+    splits {
+        abi {
+            enable true
+            include 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            universalApk true
+        }
     }
 
     externalNativeBuild {
