@@ -68,6 +68,8 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
+import androidx.core.widget.TextViewCompat;
+
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
@@ -665,17 +667,13 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		cxVKForceOpacity.setChecked(params.vkForceOpacity);
 		cxTouchInput.setChecked(params.touchInput);
 		int fpsLimit = params.fpsLimit;
-		if (fpsLimit > 0) {
-			tfFpsLimit.setText(Integer.toString(fpsLimit));
-		}
+		tfFpsLimit.setText(fpsLimit > 0 ? Integer.toString(fpsLimit) : "");
 
 		spLayout.setSelection(params.keyCodesLayout);
 		spButtonsShape.setSelection(params.vkButtonShape);
 		sbVKAlpha.setProgress(params.vkAlpha);
 		int vkHideDelay = params.vkHideDelay;
-		if (vkHideDelay > 0) {
-			tfVKHideDelay.setText(Integer.toString(vkHideDelay));
-		}
+		tfVKHideDelay.setText(vkHideDelay > 0 ? Integer.toString(vkHideDelay) : "");
 
 		tfVKBack.setText(String.format("%06X", params.vkBgColor));
 		tfVKFore.setText(String.format("%06X", params.vkFgColor));
@@ -928,7 +926,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 			@Override
 			public void onOk(AmbilWarnaDialog dialog, int color) {
 				et.setText(String.format("%06X", color & 0xFFFFFF));
-				ColorDrawable drawable = (ColorDrawable) et.getCompoundDrawablesRelative()[2];
+				ColorDrawable drawable = (ColorDrawable) TextViewCompat.getCompoundDrawablesRelative(et)[2];
 				drawable.setColor(color);
 			}
 
@@ -1001,7 +999,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 					editText.getResources().getDisplayMetrics());
 			ColorDrawable colorDrawable = new ColorDrawable();
 			colorDrawable.setBounds(0, 0, size, size);
-			editText.setCompoundDrawablesRelative(null, null, colorDrawable, null);
+			TextViewCompat.setCompoundDrawablesRelative(editText,null, null, colorDrawable, null);
 			drawable = colorDrawable;
 			editText.setFilters(new InputFilter[]{this::filter});
 		}
