@@ -26,8 +26,7 @@ package javax.wireless.messaging;
 
 public interface TextMessage extends Message {
 
-	java.lang.String getPayloadText();
+	String getPayloadText();
 
 	void setPayloadText(String text);
-
 }

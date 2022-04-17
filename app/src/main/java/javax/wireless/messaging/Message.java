@@ -33,5 +33,4 @@ public interface Message {
 	Date getTimestamp();
 
 	void setAddress(String address);
-
 }

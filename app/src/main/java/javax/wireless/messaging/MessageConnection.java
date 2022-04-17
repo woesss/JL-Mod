@@ -30,9 +30,9 @@ import java.io.InterruptedIOException;
 import javax.microedition.io.Connection;
 
 public interface MessageConnection extends Connection {
-
-	java.lang.String BINARY_MESSAGE = "binary";
-	java.lang.String TEXT_MESSAGE = "text";
+	String BINARY_MESSAGE = "binary";
+	String MULTIPART_MESSAGE = "multipart";
+	String TEXT_MESSAGE = "text";
 
 	Message newMessage(String type);
 
