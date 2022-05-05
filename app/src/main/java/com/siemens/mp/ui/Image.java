@@ -103,7 +103,8 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
 		int[] tmp = new int[width * height];
-		bitmap.getPixels(tmp, 0, width, 0, 0, width, height);
+		IntBuffer buffer = IntBuffer.wrap(tmp);
+		bitmap.copyPixelsToBuffer(buffer);
 		for (int i = 0; i < height; ) {
 			for (int f = i * width, s = ++i * width; f < s; f++, s--) {
 				int c = tmp[f];
@@ -111,6 +112,7 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 				tmp[s] = c;
 			}
 		}
-		bitmap.copyPixelsFromBuffer(IntBuffer.wrap(tmp));
+		buffer.rewind();
+		bitmap.copyPixelsFromBuffer(buffer);
 	}
 }
