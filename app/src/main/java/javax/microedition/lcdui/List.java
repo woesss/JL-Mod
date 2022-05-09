@@ -319,14 +319,16 @@ public class List extends Screen implements Choice {
 	}
 
 	private void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		setSelectedIndex(position, true);
+		setSelectedIndex(position, listType != MULTIPLE || !adapter.getItem(position).isSelected());
 		if (listType == IMPLICIT) {
 			fireCommandAction(selectCommand, List.this);
 		}
 	}
 
 	private boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-		setSelectedIndex(position, true);
+		if (listType != MULTIPLE) {
+			setSelectedIndex(position, true);
+		}
 		return getCommands().length == 0;
 	}
 }
