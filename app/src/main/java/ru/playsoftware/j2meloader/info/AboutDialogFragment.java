@@ -38,7 +38,7 @@ public class AboutDialogFragment extends DialogFragment {
 				.append(getText(R.string.about_email))
 				.append(getText(R.string.about_github))
 				.append(getText(R.string.about_copyright));
-		TextView tv = new TextView(getActivity());
+		TextView tv = new TextView(requireActivity());
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		tv.setText(message);
 		tv.setTextSize(16);
@@ -52,11 +52,11 @@ public class AboutDialogFragment extends DialogFragment {
 				.setView(tv)
 				.setPositiveButton(R.string.licenses, (dialog, which) -> {
 					LicensesDialogFragment licensesDialogFragment = new LicensesDialogFragment();
-					licensesDialogFragment.show(getFragmentManager(), "licenses");
+					licensesDialogFragment.show(getParentFragmentManager(), "licenses");
 				})
 				.setNeutralButton(R.string.more, (dialog, which) -> {
 					InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
-					infoDialogFragment.show(getFragmentManager(), "more");
+					infoDialogFragment.show(getParentFragmentManager(), "more");
 				});
 		return builder.create();
 	}
