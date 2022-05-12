@@ -18,7 +18,6 @@
     <string name="choose">Vybrat</string>
     <string name="CLEAR_DATA_CMD">Vymazat data</string>
     <string name="close">Zavřít</string>
-    <string name="common_settings">[SPOLEČNÁ NASTAVENÍ]</string>
     <string name="CONFIRMATION_REQUIRED">Vyžadováno potvrzení</string>
     <string name="converting_wait">Probíhá převod JAR…</string>
     <string name="crash_dialog_message">Chcete odeslat hlášení o chybě vývojáři?</string>
@@ -195,7 +194,6 @@
     <string name="take_screenshot">Pořídit snímek obrazovky</string>
     <string name="unlimited">neomezeno</string>
     <string name="version">Verze: </string>
-    <string name="virtual_key_menu">menu</string>
     <string name="warn_install_from_net">Soubor bude stažen z internetu</string>
     <string name="warning">Varování</string>
 </resources>

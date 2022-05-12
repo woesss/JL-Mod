@@ -301,9 +301,9 @@ public class List extends Screen implements Choice {
 		}
 	}
 
-	public boolean contextMenuItemSelected(MenuItem item, int selectedIndex) {
+	public void contextMenuItemSelected(MenuItem item, int selectedIndex) {
 		if (listener == null) {
-			return false;
+			return;
 		}
 		this.selectedIndex = selectedIndex;
 
@@ -311,17 +311,16 @@ public class List extends Screen implements Choice {
 
 		for (Command cmd : getCommands()) {
 			if (cmd.hashCode() == id) {
-				fireCommandAction(cmd, this);
-				return true;
+				fireCommandAction(cmd);
+				return;
 			}
 		}
-		return false;
 	}
 
 	private void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		setSelectedIndex(position, listType != MULTIPLE || !adapter.getItem(position).isSelected());
 		if (listType == IMPLICIT) {
-			fireCommandAction(selectCommand, List.this);
+			fireCommandAction(selectCommand);
 		}
 	}
 

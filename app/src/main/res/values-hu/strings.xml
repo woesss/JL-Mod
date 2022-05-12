@@ -13,7 +13,6 @@
     <string name="CANCEL_CMD">Mégse</string>
     <string name="CLEAR_DATA_CMD">Adatok törlése</string>
     <string name="close">Bezárás</string>
-    <string name="common_settings">[ÁLTALÁNOS BEÁLLÍTÁSOK]</string>
     <string name="CONFIRMATION_REQUIRED">Megerősítés szükséges</string>
     <string name="converting_wait">JAR konvertálása…</string>
     <string name="crash_dialog_message">Szeretné elküldeni a hibajelentést a fejlesztőknek?</string>

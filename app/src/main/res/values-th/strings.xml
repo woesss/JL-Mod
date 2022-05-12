@@ -9,7 +9,6 @@
     <string name="author">ผู้เขียน: </string>
     <string name="CANCEL_CMD">ยกเลิก</string>
     <string name="CLEAR_DATA_CMD">ล้างข้อมูล</string>
-    <string name="common_settings">ตั้งค่าทั่วไป</string>
     <string name="CONFIRMATION_REQUIRED">ต้องการยืนยัน</string>
     <string name="converting_wait">กำลังแปลง JAR…</string>
     <string name="crash_dialog_message">คุณต้องการส่งรายงานข้อผิดพลาดให้นักพัฒนาหรือไม่?</string>

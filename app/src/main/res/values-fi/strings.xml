@@ -10,7 +10,6 @@
     <string name="CANCEL_CMD">Peruuta</string>
     <string name="CLEAR_DATA_CMD">Tyhjennä tiedot</string>
     <string name="close">Sulje</string>
-    <string name="common_settings">[YLEISET ASETUKSET]</string>
     <string name="CONFIRMATION_REQUIRED">Vahvistus vaaditaan</string>
     <string name="converting_wait">Muunnetaan JARia…</string>
     <string name="crash_dialog_message">Haluatko lähettää virheilmoituksen kehittäjälle?</string>

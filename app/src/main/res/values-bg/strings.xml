@@ -15,7 +15,6 @@
     <string name="choose">Избери</string>
     <string name="CLEAR_DATA_CMD">Изчистване на данните</string>
     <string name="close">Затваряне</string>
-    <string name="common_settings">[ОБЩИ НАСТРОЙКИ]</string>
     <string name="CONFIRMATION_REQUIRED">Изисква се потвърждение</string>
     <string name="converting_wait">Конвертиране на JAR…</string>
     <string name="crash_dialog_message">Искате ли да изпратите отчет за грешки на разработчика?</string>

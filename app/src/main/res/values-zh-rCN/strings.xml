@@ -18,7 +18,7 @@
     <string name="choose">选择</string>
     <string name="CLEAR_DATA_CMD">清除数据</string>
     <string name="close">关闭</string>
-    <string name="common_settings">常用设置</string>
+    <string name="cmd_menu">菜单</string>
     <string name="CONFIRMATION_REQUIRED">需要确认</string>
     <string name="converting_wait">正在安装…</string>
     <string name="crash_dialog_message">是否向开发者发送错误报告？</string>
@@ -195,7 +195,6 @@
     <string name="take_screenshot">屏幕截图</string>
     <string name="unlimited">无限制</string>
     <string name="version">版本: </string>
-    <string name="virtual_key_menu">菜单</string>
     <string name="warn_install_from_net">将从互联网下载文件</string>
     <string name="warning">警告</string>
 </resources>

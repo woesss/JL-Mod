@@ -10,7 +10,6 @@
     <string name="CANCEL_CMD">Abbrechen</string>
     <string name="CLEAR_DATA_CMD">Daten löschen</string>
     <string name="close">Schließen</string>
-    <string name="common_settings">[ALLGEMEINE EINSTELLUNGEN]</string>
     <string name="CONFIRMATION_REQUIRED">Bestätigung erforderlich</string>
     <string name="converting_wait">Konvertiere Jar…</string>
     <string name="crash_dialog_message">Möchten Sie ein Fehlerbericht an den Entwickler senden?</string>

@@ -12,7 +12,6 @@
     <string name="CANCEL_CMD">Annulla</string>
     <string name="CLEAR_DATA_CMD">Cancella i dati</string>
     <string name="close">Chiudi</string>
-    <string name="common_settings">[IMPOSTAZIONI COMUNI]</string>
     <string name="CONFIRMATION_REQUIRED">Conferma richiesta</string>
     <string name="converting_wait">Conversione del file JAR…</string>
     <string name="crash_dialog_message">Vuoi inviare il report dell\'errore allo sviluppatore?</string>

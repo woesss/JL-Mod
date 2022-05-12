@@ -10,7 +10,6 @@
     <string name="CANCEL_CMD">বাতিল</string>
     <string name="CLEAR_DATA_CMD">উপাত্ত সাফ করুন</string>
     <string name="close">বন্ধ</string>
-    <string name="common_settings">[সাধারণ সেটিংস]</string>
     <string name="CONFIRMATION_REQUIRED">অনুমোদন প্রয়োজন</string>
     <string name="converting_wait">JAR রূপান্তর…</string>
     <string name="crash_dialog_message">ডেভেলপারের করা ত্রুটির প্রতিবেদন পাঠাতে চান?</string>

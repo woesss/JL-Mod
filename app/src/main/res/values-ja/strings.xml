@@ -9,7 +9,6 @@
     <string name="author">作者: </string>
     <string name="CANCEL_CMD">キャンセル</string>
     <string name="CLEAR_DATA_CMD">データをクリア</string>
-    <string name="common_settings">[共通設定]</string>
     <string name="CONFIRMATION_REQUIRED">確認が必要です</string>
     <string name="converting_wait">JAR を変換しています…</string>
     <string name="crash_dialog_message">エラー報告を開発者に送信しますか？</string>

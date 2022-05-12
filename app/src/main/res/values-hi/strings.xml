@@ -12,7 +12,6 @@
     <string name="CANCEL_CMD">रद्द करें</string>
     <string name="CLEAR_DATA_CMD">डेटा मिटाएँ</string>
     <string name="close">बंद करें</string>
-    <string name="common_settings">[सामान्य सेटिंग]</string>
     <string name="CONFIRMATION_REQUIRED">पुष्टिकरण की आवश्यकता है</string>
     <string name="converting_wait">जार में परिवर्तित …</string>
     <string name="crash_dialog_message">क्या आप डेवलपर को त्रुटि रिपोर्ट भेजना चाहते हैं?</string>

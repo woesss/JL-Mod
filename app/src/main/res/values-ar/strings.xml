@@ -18,7 +18,7 @@
     <string name="choose">اختيار</string>
     <string name="CLEAR_DATA_CMD">مسح البيانات</string>
     <string name="close">إغلاق</string>
-    <string name="common_settings">[اعدادات عامه]</string>
+    <string name="cmd_menu">القائمة</string>
     <string name="CONFIRMATION_REQUIRED">التأكيد مطلوب</string>
     <string name="converting_wait">جار تحويل ملف تطبيق جافا…</string>
     <string name="crash_dialog_message">هل تريد إرسال تقرير عن الخطأ إلى المطور؟</string>
@@ -191,6 +191,5 @@
     <string name="take_screenshot">خذ لقطة للشاشة</string>
     <string name="unlimited">غير محدود</string>
     <string name="version">الاصدار: </string>
-    <string name="virtual_key_menu">القائمة</string>
     <string name="warn_install_from_net">سيتم تنزيل الملف من الإنترنت</string>
 </resources>

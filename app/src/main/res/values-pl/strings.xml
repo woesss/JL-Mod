@@ -10,7 +10,6 @@
     <string name="CANCEL_CMD">Anuluj</string>
     <string name="CLEAR_DATA_CMD">Wyczyść dane</string>
     <string name="close">Zamknij</string>
-    <string name="common_settings">[WSPÓLNE USTAWIENIA]</string>
     <string name="CONFIRMATION_REQUIRED">Wymagane potwierdzenie</string>
     <string name="converting_wait">Konwertuję plik JAR…</string>
     <string name="crash_dialog_message">Czy chcesz wysłać raport o błędzie do programisty?</string>

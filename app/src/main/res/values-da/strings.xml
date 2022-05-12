@@ -8,7 +8,6 @@
     <string name="author">Forfatter: </string>
     <string name="CANCEL_CMD">Annullér</string>
     <string name="CLEAR_DATA_CMD">Ryd data</string>
-    <string name="common_settings">[GENERELLE INDSTILLINGER]</string>
     <string name="CONFIRMATION_REQUIRED">Bekræftelse kræves</string>
     <string name="converting_wait">Konverterer JAR…</string>
     <string name="crash_dialog_message">Vil du sende en fejlrapport til udvikleren?</string>

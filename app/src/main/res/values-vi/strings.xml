@@ -18,7 +18,6 @@
     <string name="choose">Chọn</string>
     <string name="CLEAR_DATA_CMD">Xóa dữ liệu</string>
     <string name="close">Đóng</string>
-    <string name="common_settings">[THIẾT LẬP CHUNG]</string>
     <string name="CONFIRMATION_REQUIRED">Yêu cầu xác nhận</string>
     <string name="converting_wait">Đang chuyển đổi JAR…</string>
     <string name="crash_dialog_message">Bạn có muốn gửi báo cáo lỗi đến nhà phát triển không?</string>
@@ -190,6 +189,5 @@
     <string name="take_screenshot">Chụp ảnh màn hình</string>
     <string name="unlimited">không giới hạn</string>
     <string name="version">Phiên bản: </string>
-    <string name="virtual_key_menu">menu</string>
     <string name="warn_install_from_net">Tệp tin sẽ được tải xuống từ Internet</string>
 </resources>

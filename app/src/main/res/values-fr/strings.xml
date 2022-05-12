@@ -18,7 +18,7 @@
     <string name="choose">Sélectionnez le type de d\'initiative</string>
     <string name="CLEAR_DATA_CMD">Effacer les données</string>
     <string name="close">Terminer</string>
-    <string name="common_settings">[PARAMÈTRES COMMUNS]</string>
+    <string name="cmd_menu">menue</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation requise</string>
     <string name="converting_wait">Conversion JAD…</string>
     <string name="crash_dialog_message">Voulez-vous envoyer un rapport d\'erreur au développeur ?</string>
@@ -195,7 +195,6 @@
     <string name="take_screenshot">Effectuer une capture d\'écran</string>
     <string name="unlimited">illimité</string>
     <string name="version">Version: </string>
-    <string name="virtual_key_menu">menue</string>
     <string name="warn_install_from_net">Fichier téléchargé à partir d\'Internet</string>
     <string name="warning">Attention</string>
 </resources>

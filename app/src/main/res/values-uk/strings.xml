@@ -12,7 +12,6 @@
     <string name="CANCEL_CMD">Скасувати</string>
     <string name="CLEAR_DATA_CMD">Очистити дані</string>
     <string name="close">Закрити</string>
-    <string name="common_settings">[ЗАГАЛЬНІ НАЛАШТУВАННЯ]</string>
     <string name="CONFIRMATION_REQUIRED">Необхідне підтвердження</string>
     <string name="converting_wait">Перетворення JAR…</string>
     <string name="crash_dialog_message">Чи ви хочете, надіслати розробнику звіт про помилку?</string>

@@ -12,7 +12,6 @@
     <string name="CANCEL_CMD">Batal</string>
     <string name="CLEAR_DATA_CMD">Hapus data</string>
     <string name="close">Tutup</string>
-    <string name="common_settings">[PENGATURAN UMUM]</string>
     <string name="CONFIRMATION_REQUIRED">Memerlukan konfirmasi</string>
     <string name="converting_wait">Mengkonversi JAR…</string>
     <string name="crash_dialog_message">Apakah Anda ingin mengirim laporan kesalahan kepada pengembang?</string>

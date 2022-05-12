@@ -18,7 +18,7 @@
     <string name="choose">Elegir</string>
     <string name="CLEAR_DATA_CMD">Borrar datos</string>
     <string name="close">Cerrar</string>
-    <string name="common_settings">[CONFIGURACIÓN BÁSICA]</string>
+    <string name="cmd_menu">menú</string>
     <string name="CONFIRMATION_REQUIRED">Se requiere confirmación</string>
     <string name="converting_wait">Convirtiendo JAR…</string>
     <string name="crash_dialog_message">¿Desea enviar un informe de errores el desarrollador?</string>
@@ -190,7 +190,6 @@
     <string name="take_screenshot">Tomar captura de pantalla</string>
     <string name="unlimited">sin límite</string>
     <string name="version">Versión: </string>
-    <string name="virtual_key_menu">menú</string>
     <string name="warn_install_from_net">El fichero se descargará desde Internet</string>
     <string name="warning">Advertencia</string>
 </resources>

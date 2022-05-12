@@ -12,7 +12,6 @@
     <string name="CANCEL_CMD">İptal</string>
     <string name="CLEAR_DATA_CMD">Verileri temizle</string>
     <string name="close">Kapat</string>
-    <string name="common_settings">[GENEL AYARLAR]</string>
     <string name="CONFIRMATION_REQUIRED">Onaylama gerekli</string>
     <string name="converting_wait">JAR dönüştürülüyor…</string>
     <string name="crash_dialog_message">Geliştiriciye hata raporu göndermek istiyor musunuz?</string>

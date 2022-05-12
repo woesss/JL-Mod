@@ -12,7 +12,6 @@
     <string name="CANCEL_CMD">Annuleren</string>
     <string name="CLEAR_DATA_CMD">Gegevens wissen</string>
     <string name="close">Sluiten</string>
-    <string name="common_settings">[ALGEMENE INSTELLINGEN]</string>
     <string name="CONFIRMATION_REQUIRED">Bevestiging vereist</string>
     <string name="converting_wait">Converteren JAR…</string>
     <string name="crash_dialog_message">Wilt u een foutrapport verzenden naar de ontwikkelaar?</string>

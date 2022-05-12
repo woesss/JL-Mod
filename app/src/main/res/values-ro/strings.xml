@@ -10,7 +10,6 @@
     <string name="CANCEL_CMD">Anulare</string>
     <string name="CLEAR_DATA_CMD">Curata date</string>
     <string name="close">Închide</string>
-    <string name="common_settings">[SETĂRI COMUNE]</string>
     <string name="CONFIRMATION_REQUIRED">Confirmare necesară</string>
     <string name="converting_wait">Se convertește JAR…</string>
     <string name="crash_dialog_message">Dorești să trimiți raportul erorii către programator?</string>
