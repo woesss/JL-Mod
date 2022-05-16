@@ -470,13 +470,15 @@ public abstract class Canvas extends Displayable {
 		RectF screen = new RectF(0, 0, displayWidth, displayHeight);
 		virtualScreen.set(onX, onY, onX + onWidth, onY + onHeight);
 
-		if (offscreen == null) {
-			offscreen = Image.createImage(width, maxHeight);
-			offscreenCopy = Image.createImage(width, maxHeight);
-		}
-		if (offscreen.getWidth() != width || offscreen.getHeight() != height) {
-			offscreen.setSize(width, height);
-			offscreenCopy.setSize(width, height);
+		synchronized (bufferLock) {
+			if (offscreen == null) {
+				offscreen = Image.createImage(width, maxHeight);
+				offscreenCopy = Image.createImage(width, maxHeight);
+			}
+			if (offscreen.getWidth() != width || offscreen.getHeight() != height) {
+				offscreen.setSize(width, height);
+				offscreenCopy.setSize(width, height);
+			}
 		}
 		if (overlay != null) {
 			overlay.resize(screen, onX, onY, onX + onWidth, onY + onHeight + softBarHeight);
@@ -491,6 +493,7 @@ public abstract class Canvas extends Displayable {
 			float tw = (float) width / offscreen.getBitmap().getWidth();
 			renderer.updateSize(gl, gt, gr, gb, th, tw);
 		}
+		repaintInternal();
 	}
 
 	/**
@@ -629,22 +632,7 @@ public abstract class Canvas extends Displayable {
 		synchronized (bufferLock) {
 			offscreenCopy.getSingleGraphics().flush(image, x, y, width, height);
 		}
-		if (graphicsMode == 1) {
-			if (innerView != null) {
-				renderer.requestRender();
-			}
-			return;
-		} else if (graphicsMode == 2) {
-			if (innerView != null) {
-				innerView.postInvalidate();
-			}
-			return;
-		}
-		if (!parallelRedraw) {
-			repaintScreen();
-		} else if (!uiHandler.hasMessages(0)) {
-			uiHandler.sendEmptyMessage(0);
-		}
+		requestFlushToScreen();
 	}
 
 	// ExtendedImage
@@ -653,22 +641,7 @@ public abstract class Canvas extends Displayable {
 		synchronized (bufferLock) {
 			image.copyTo(offscreenCopy, x, y);
 		}
-		if (graphicsMode == 1) {
-			if (innerView != null) {
-				renderer.requestRender();
-			}
-			return;
-		} else if (graphicsMode == 2) {
-			if (innerView != null) {
-				innerView.postInvalidate();
-			}
-			return;
-		}
-		if (!parallelRedraw) {
-			repaintScreen();
-		} else if (!uiHandler.hasMessages(0)) {
-			uiHandler.sendEmptyMessage(0);
-		}
+		requestFlushToScreen();
 	}
 
 	private void limitFps() {
@@ -944,19 +917,7 @@ public abstract class Canvas extends Displayable {
 			if (surface == null || !surface.isValid()) {
 				return;
 			}
-			if (graphicsMode == 1) {
-				if (innerView != null) {
-					renderer.requestRender();
-				}
-			} else if (graphicsMode == 2) {
-				if (innerView != null) {
-					innerView.postInvalidate();
-				}
-			} else if (!parallelRedraw) {
-				repaintScreen();
-			} else if (!uiHandler.hasMessages(0)) {
-				uiHandler.sendEmptyMessage(0);
-			}
+			requestFlushToScreen();
 		}
 
 		@Override
@@ -1198,23 +1159,6 @@ public abstract class Canvas extends Displayable {
 						height));
 				repaintInternal();
 				sizeChangedCalled = true;
-			} else {
-				if (graphicsMode == 1) {
-					if (innerView != null) {
-						renderer.requestRender();
-					}
-					return;
-				} else if (graphicsMode == 2) {
-					if (innerView != null) {
-						innerView.postInvalidate();
-					}
-					return;
-				}
-				if (!parallelRedraw) {
-					repaintScreen();
-				} else if (!uiHandler.hasMessages(0)) {
-					uiHandler.sendEmptyMessage(0);
-				}
 			}
 		}
 
@@ -1258,6 +1202,23 @@ public abstract class Canvas extends Displayable {
 				overlay.setTarget(null);
 				overlay.cancel();
 			}
+		}
+
+	}
+
+	private void requestFlushToScreen() {
+		if (graphicsMode == 1) {
+			if (innerView != null) {
+				renderer.requestRender();
+			}
+		} else if (graphicsMode == 2) {
+			if (innerView != null) {
+				innerView.postInvalidate();
+			}
+		} else if (!parallelRedraw) {
+			repaintScreen();
+		} else if (!uiHandler.hasMessages(0)) {
+			uiHandler.sendEmptyMessage(0);
 		}
 	}
 

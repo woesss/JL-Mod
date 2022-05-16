@@ -31,21 +31,21 @@ import javax.microedition.shell.AppClassLoader;
 import ru.playsoftware.j2meloader.util.PNGUtils;
 
 public class Image {
-	private final Bitmap mBitmap;
-	private Graphics mGraphics;
-	private final Rect mBounds;
+	private Bitmap bitmap;
+	private Graphics graphics;
+	private final Rect bounds;
 	private boolean isBlackWhiteAlpha;
 
 	public Image(Bitmap bitmap) {
 		if (bitmap == null) {
 			throw new NullPointerException();
 		}
-		this.mBitmap = bitmap;
-		mBounds = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		this.bitmap = bitmap;
+		bounds = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 	}
 
 	public Bitmap getBitmap() {
-		return mBitmap;
+		return bitmap;
 	}
 
 	public static Image createImage(int width, int height) {
@@ -90,12 +90,12 @@ public class Image {
 
 	public static Image createImage(Image image, int x, int y, int width, int height, int transform) {
 		Matrix m = transform == 0 ? null : Sprite.transformMatrix(transform, width / 2.0f, height / 2.0f);
-		return new Image(Bitmap.createBitmap(image.mBitmap, x, y, width, height, m, false));
+		return new Image(Bitmap.createBitmap(image.bitmap, x, y, width, height, m, false));
 	}
 
 	public static Image createImage(Image source) {
 		if (source.isMutable())
-			return new Image(Bitmap.createBitmap(source.mBitmap));
+			return new Image(Bitmap.createBitmap(source.bitmap));
 		return source;
 	}
 
@@ -116,44 +116,58 @@ public class Image {
 	}
 
 	public boolean isMutable() {
-		return mBitmap.isMutable();
+		return bitmap.isMutable();
 	}
 
 	public int getWidth() {
-		return mBounds.right;
+		return bounds.right;
 	}
 
 	public int getHeight() {
-		return mBounds.bottom;
+		return bounds.bottom;
 	}
 
 	public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) {
-		mBitmap.getPixels(rgbData, offset, scanlength, x, y, width, height);
+		bitmap.getPixels(rgbData, offset, scanlength, x, y, width, height);
 	}
 
 	void copyTo(Image dst) {
-		dst.getSingleGraphics().getCanvas().drawBitmap(mBitmap, mBounds, mBounds, null);
+		dst.getSingleGraphics().getCanvas().drawBitmap(bitmap, bounds, bounds, null);
 	}
 
 	void copyTo(Image dst, int x, int y) {
-		Rect r = new Rect(x, y, x + mBounds.right, y + mBounds.bottom);
-		dst.getSingleGraphics().getCanvas().drawBitmap(mBitmap, mBounds, r, null);
+		Rect r = new Rect(x, y, x + bounds.right, y + bounds.bottom);
+		dst.getSingleGraphics().getCanvas().drawBitmap(bitmap, bounds, r, null);
 	}
 
 	public Graphics getSingleGraphics() {
-		if (mGraphics == null) {
-			mGraphics = getGraphics();
+		if (graphics == null) {
+			graphics = getGraphics();
 		}
-		return mGraphics;
+		return graphics;
 	}
 
 	void setSize(int width, int height) {
-		mBounds.right = width;
-		mBounds.bottom = height;
+		if (width > bitmap.getWidth() || height > bitmap.getHeight()) {
+			Bitmap b = bitmap;
+			bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+			bounds.right = width;
+			bounds.bottom = height;
+			if (graphics != null) {
+				graphics.reset(0, 0, width, height);
+				graphics.getCanvas().drawBitmap(b, 0, 0, null);
+			}
+		} else {
+			bounds.right = width;
+			bounds.bottom = height;
+			if (graphics != null) {
+				graphics.reset(0, 0, width, height);
+			}
+		}
 	}
 
 	public Rect getBounds() {
-		return mBounds;
+		return bounds;
 	}
 
 	public boolean isBlackWhiteAlpha() {
