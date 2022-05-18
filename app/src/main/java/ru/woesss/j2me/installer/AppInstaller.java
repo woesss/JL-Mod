@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Yury Kharchenko
+ *  Copyright 2020-2022 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -59,6 +58,7 @@ public class AppInstaller {
 	static final int STATUS_NEWEST = 1;
 	static final int STATUS_NEW = 2;
 	static final int STATUS_UNMATCHED = 3;
+	static final int STATUS_SUCCESS = 4;
 
 	private final Application context;
 	private final AppRepository appRepository;
@@ -122,7 +122,7 @@ public class AppInstaller {
 				}
 			}
 		} else if (name.toLowerCase().endsWith(".kjx")) {
-			/** Load kjx file */
+			// Load kjx file
 			parseKjx();
 			newDesc = new Descriptor(srcFile, true);
 		} else {
@@ -137,44 +137,39 @@ public class AppInstaller {
 		if (!cacheDir.exists() && !cacheDir.mkdirs()) {
 			throw new ConverterException("Can't create cache dir");
 		}
-		File kjxFile = srcFile;
-		File jadFile = null;
-		File jarFile = null;
-		try (InputStream inputStream = new FileInputStream(kjxFile);
-			 DataInputStream dis = new DataInputStream(inputStream);
-		) {
+		try (DataInputStream dis = new DataInputStream(new FileInputStream(srcFile))) {
 			byte[] magic = new byte[3];
-			dis.read(magic, 0, 3);
+			dis.readFully(magic, 0, 3);
 			if (!Arrays.equals(magic, "KJX".getBytes())) {
 				throw new ConverterException("Magic KJX does not match: " + new String(magic));
 			}
 
-			byte startJadPos = dis.readByte();
+			/*byte startJadPos = */dis.readByte();
 			byte lenKjxFileName = dis.readByte();
 			dis.skipBytes(lenKjxFileName);
 			int lenJadFileContent = dis.readUnsignedShort();
 			byte lenJadFileName = dis.readByte();
 			byte[] jadFileName = new byte[lenJadFileName];
-			dis.read(jadFileName, 0, lenJadFileName);
+			dis.readFully(jadFileName, 0, lenJadFileName);
 			String strJadFileName = new String(jadFileName);
 
 			int bufSize = 2048;
 			byte[] buf = new byte[bufSize];
 
-			jadFile = new File(cacheDir, strJadFileName);
+			File jadFile = new File(cacheDir, strJadFileName);
 			try (FileOutputStream fos = new FileOutputStream(jadFile)) {
 				int restSize = lenJadFileContent;
-				while(restSize > 0) {
+				while (restSize > 0) {
 					int readSize = dis.read(buf, 0, Math.min(restSize, bufSize));
 					fos.write(buf, 0, readSize);
 					restSize -= readSize;
 				}
 			}
 
-			jarFile = new File(cacheDir, strJadFileName.substring(0, strJadFileName.length() -4) + ".jar");
+			File jarFile = new File(cacheDir, strJadFileName.substring(0, strJadFileName.length() - 4) + ".jar");
 			try (FileOutputStream fos = new FileOutputStream(jarFile)) {
-				int length = 0;
-				while((length = dis.read(buf)) > 0) {
+				int length;
+				while ((length = dis.read(buf)) > 0) {
 					fos.write(buf, 0, length);
 				}
 			}
@@ -239,7 +234,7 @@ public class AppInstaller {
 	}
 
 	/** Install app */
-	void install(SingleEmitter<AppItem> emitter) throws ConverterException, IOException {
+	void install(SingleEmitter<Integer> emitter) throws ConverterException, IOException {
 		if (!cacheDir.exists() && !cacheDir.mkdirs()) {
 			throw new ConverterException("Can't create cache dir");
 		}
@@ -251,7 +246,8 @@ public class AppInstaller {
 			downloadJar();
 			manifest = loadManifest(srcJar);
 			if (!manifest.equals(newDesc)) {
-				throw new ConverterException("*Jad not matches with Jar");
+				emitter.onSuccess(STATUS_UNMATCHED);
+				return;
 			}
 		}
 		try {
@@ -310,7 +306,11 @@ public class AppInstaller {
 				FileUtils.deleteDirectory(appDir);
 			}
 		}
-		emitter.onSuccess(app);
+		currentApp = app;
+		appRepository.insert(app);
+		clearCache();
+		deleteTemp();
+		emitter.onSuccess(STATUS_SUCCESS);
 	}
 
 	private Descriptor loadManifest(File jar) throws IOException {
