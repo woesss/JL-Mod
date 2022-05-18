@@ -20,7 +20,7 @@
     <string name="add">Add</string>
     <string name="add_profile_description">Create new profile</string>
     <string name="add_resolution_preset">Add resolution to presets</string>
-    <string name="alert_map_menu">You MUST map menu (M) key!</string>
+    <string name="alert_map_menu">Menu key (M) is not assigned!\nThis may make it impossible to access the emulator options</string>
     <string name="alert_msg_workdir_not_exists">Working directory does not exist at path:\n%1$s\nDo you want to create it or choose another one?</string>
     <string name="alert_rewrite_profile">A profile named \"%1$s\" already exists.\nDo you want to overwrite it?</string>
     <string name="author">Author: </string>
@@ -202,6 +202,7 @@
     <string name="reset_mapping">Reset</string>
     <string name="RESET_SETTINGS_CMD">Reset settings</string>
     <string name="retry">retry</string>
+    <string name="save">Save</string>
     <string name="save_log">Save log</string>
     <string name="save_profile">Save profile</string>
     <string name="saved">Saved %1$s</string>

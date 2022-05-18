@@ -12,7 +12,7 @@
     <string name="add">Создать</string>
     <string name="add_profile_description">Создать новый профиль</string>
     <string name="add_resolution_preset">Добавить в предустановки</string>
-    <string name="alert_map_menu">ТРЕБУЕТСЯ назначить кнопку меню (M)!</string>
+    <string name="alert_map_menu">Кнопка меню (M) не назначена!\nЭто может сделать невозможным доступ к опциям эмулятора</string>
     <string name="alert_msg_workdir_not_exists">Рабочая папка эмулятора будет создана по пути:\n%1$s\nВы хотите создать её или выбрать другую?</string>
     <string name="alert_rewrite_profile">Профиль \"%1$s\" уже есть.\nХотите его перезаписать?</string>
     <string name="author">Автор: </string>
@@ -186,6 +186,7 @@
     <string name="reset_mapping">Сброс</string>
     <string name="RESET_SETTINGS_CMD">Сброс настроек</string>
     <string name="retry">повторить</string>
+    <string name="save">Сохранить</string>
     <string name="save_log">Сохранить лог</string>
     <string name="save_profile">Сохранить профиль</string>
     <string name="saved">Сохранено %1$s</string>
