@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Yury Kharchenko
+ *  Copyright 2020-2022 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package ru.woesss.j2me.installer;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,7 +53,6 @@ import ru.woesss.j2me.jar.Descriptor;
 public class InstallerDialog extends DialogFragment {
 	private static final String ARG_URI = "param2";
 
-	private TextView tvMessage;
 	private TextView tvStatus;
 	private ProgressBar progress;
 	private AppRepository appRepository;
@@ -61,9 +61,6 @@ public class InstallerDialog extends DialogFragment {
 	private Button btnRun;
 	private AppInstaller installer;
 	private AlertDialog mDialog;
-
-	public InstallerDialog() {
-	}
 
 	/**
 	 * @param uri original uri from intent.
@@ -88,20 +85,20 @@ public class InstallerDialog extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-		LayoutInflater inflater = requireActivity().getLayoutInflater();
+		LayoutInflater inflater = getLayoutInflater();
 		@SuppressLint("InflateParams")
 		View view = inflater.inflate(R.layout.fragment_installer, null);
-		tvMessage = view.findViewById(R.id.tvMidletInfo);
 		tvStatus = view.findViewById(R.id.tvStatus);
 		progress = view.findViewById(R.id.progress);
-		btnOk = view.findViewById(R.id.btnOk);
-		btnClose = view.findViewById(R.id.btnClose);
-		btnRun = view.findViewById(R.id.btnRun);
 		mDialog = new AlertDialog.Builder(requireActivity(), getTheme())
 				.setIcon(R.mipmap.ic_launcher)
 				.setView(view)
 				.setTitle("MIDlet installer")
+				.setMessage("")
 				.setCancelable(false)
+				.setPositiveButton(R.string.install, null)
+				.setNegativeButton(android.R.string.cancel, null)
+				.setNeutralButton(R.string.START_CMD, null)
 				.create();
 		return mDialog;
 	}
@@ -111,6 +108,10 @@ public class InstallerDialog extends DialogFragment {
 		super.onStart();
 		Bundle args = requireArguments();
 		Uri uri = args.getParcelable(ARG_URI);
+		btnOk = mDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+		btnClose = mDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+		btnRun = mDialog.getButton(DialogInterface.BUTTON_NEUTRAL);
+		hideButtons();
 		installApp(null, uri);
 	}
 
@@ -129,9 +130,8 @@ public class InstallerDialog extends DialogFragment {
 	}
 
 	private void hideProgress() {
-		progress.setVisibility(View.INVISIBLE);
-		tvStatus.setText("");
-		tvStatus.setVisibility(View.INVISIBLE);
+		progress.setVisibility(View.GONE);
+		tvStatus.setVisibility(View.GONE);
 	}
 
 	private void showProgress() {
@@ -153,7 +153,7 @@ public class InstallerDialog extends DialogFragment {
 	private void convert(AppInstaller installer) {
 		Descriptor nd = installer.getNewDescriptor();
 		SpannableStringBuilder info = nd.getInfo(requireActivity());
-		tvMessage.setText(info);
+		mDialog.setMessage(info);
 		tvStatus.setText(R.string.converting_wait);
 		showProgress();
 		hideButtons();
@@ -169,7 +169,7 @@ public class InstallerDialog extends DialogFragment {
 		hideProgress();
 		mDialog.setCancelable(false);
 		mDialog.setCanceledOnTouchOutside(false);
-		tvMessage.setText(message);
+		mDialog.setMessage(message);
 		btnOk.setOnClickListener(positive);
 		showButtons();
 	}
@@ -233,7 +233,7 @@ public class InstallerDialog extends DialogFragment {
 			mDialog.setTitle(nd.getName());
 			mDialog.setCancelable(false);
 			mDialog.setCanceledOnTouchOutside(false);
-			tvMessage.setText(message);
+			mDialog.setMessage(message);
 			btnOk.setOnClickListener(v -> convert(installer));
 			hideProgress();
 			showButtons();
@@ -267,10 +267,9 @@ public class InstallerDialog extends DialogFragment {
 			appRepository.insert(app);
 			installer.clearCache();
 			installer.deleteTemp();
-			hideProgress();
 			if (!isAdded()) return;
-			tvMessage.append("\n\n");
-			tvMessage.append(getString(R.string.install_done));
+			progress.setVisibility(View.GONE);
+			tvStatus.setText(getString(R.string.install_done));
 			Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
 			if (drawable != null) mDialog.setIcon(drawable);
 			btnOk.setText(R.string.START_CMD);
