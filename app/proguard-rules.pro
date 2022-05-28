@@ -34,3 +34,5 @@
 
 -keep class com.arthenica.mobileffmpeg.** { *; }
 -keep class ru.playsoftware.j2meloader.crashes.models.* { *; }
+
+-dontobfuscate
