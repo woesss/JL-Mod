@@ -2,10 +2,10 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+LOCAL_MODULE    := javam3g
 LOCAL_CFLAGS    := -O3 -DM3G_TARGET_ANDROID -DM3G_GL_ES_1_1 #-DM3G_DEBUG
 LOCAL_CXXFLAGS  := $(LOCAL_CFLAGS)
 LOCAL_LDLIBS    := -llog -lEGL -lGLESv1_CM -lz -ljnigraphics
-LOCAL_MODULE    := javam3g
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/m3g/inc/
 LOCAL_SRC_FILES := \
 	m3g/CSynchronization.cpp \
@@ -19,13 +19,12 @@ ifeq ($(NDK_DEBUG),1)
     cmd-strip :=
 endif
 
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    LOCAL_ARM_NEON := false
-endif
-
 include $(BUILD_SHARED_LIBRARY)
 
+#=================================================================================================
+
 include $(CLEAR_VARS)
+
 LOCAL_MODULE    := micro3d
 LOCAL_SRC_FILES := \
 	micro3d/src/utils.cpp  \
@@ -38,10 +37,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/micro3d/inc
 # Don't strip debug builds
 ifeq ($(NDK_DEBUG),1)
     cmd-strip :=
-endif
-
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
-    LOCAL_ARM_NEON := false
 endif
 
 include $(BUILD_SHARED_LIBRARY)
