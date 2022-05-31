@@ -27,12 +27,15 @@
 -keep public class com.sun.midp.midlet.** { public protected *; }
 -keep public class com.vodafone.** { public protected *; }
 -keep public class mmpp.media.** { public protected *; }
--keep public class org.microemu.** { public protected *; }
--keep class ru.playsoftware.j2meloader.util.SparseIntArrayAdapter { *; }
 # Keep the BuildConfig
 -keep class ru.playsoftware.j2meloader.BuildConfig { *; }
 
+-keep public class org.microemu.** { public protected *; }
+-keep class ru.playsoftware.j2meloader.util.SparseIntArrayAdapter { *; }
 -keep class com.arthenica.mobileffmpeg.** { *; }
 -keep class ru.playsoftware.j2meloader.crashes.models.* { *; }
+-keep public class org.acra.** { public protected *; }
 
--dontobfuscate
+-obfuscationdictionary dictionary.pro
+-classobfuscationdictionary dictionary.pro
+-repackageclasses
