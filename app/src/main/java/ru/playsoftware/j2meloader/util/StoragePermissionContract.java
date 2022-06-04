@@ -64,6 +64,10 @@ public class StoragePermissionContract extends ActivityResultContract<Void, Bool
 	@Override
 	public @Nullable SynchronousResult<Boolean> getSynchronousResult(
 			@NonNull Context context, @Nullable Void input) {
+		return isGranted(context) ? new SynchronousResult<>(true) : null;
+	}
+
+	public static boolean isGranted(@NonNull Context context) {
 		boolean granted;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 			granted = Environment.isExternalStorageManager();
@@ -71,7 +75,6 @@ public class StoragePermissionContract extends ActivityResultContract<Void, Bool
 			int status = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 			granted = status == PackageManager.PERMISSION_GRANTED;
 		}
-		return granted ? new SynchronousResult<>(true) : null;
+		return granted;
 	}
-
 }

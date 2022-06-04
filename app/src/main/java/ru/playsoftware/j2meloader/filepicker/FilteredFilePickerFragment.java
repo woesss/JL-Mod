@@ -20,6 +20,11 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.nononsenseapps.filepicker.FilePickerFragment;
 import com.nononsenseapps.filepicker.LogicHandler;
@@ -29,14 +34,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.util.StoragePermissionContract;
 
 public class FilteredFilePickerFragment extends FilePickerFragment {
 	private static final List<String> extList = Arrays.asList(".jad", ".jar", ".kjx");
 	private static final Stack<File> history = new Stack<>();
 	private static File currentDir = Environment.getExternalStorageDirectory();
+	private File mRequestedPath;
+	private final ActivityResultLauncher<Void> permissionsLauncher = registerForActivityResult(
+			new StoragePermissionContract(),
+			this::onPermissionResult
+	);
 
 	@NonNull
 	@Override
@@ -50,6 +59,33 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 			case LogicHandler.VIEWTYPE_DIR:
 			default:
 				return new DirViewHolder(li.inflate(R.layout.listitem_dir, parent, false));
+		}
+	}
+
+	@Override
+	protected boolean hasPermission(@NonNull File path) {
+		return StoragePermissionContract.isGranted(requireContext());
+	}
+
+	@Override
+	protected void handlePermission(@NonNull File path) {
+		this.mRequestedPath = path;
+		permissionsLauncher.launch(null);
+	}
+
+	private void onPermissionResult(boolean isGranted) {
+		if (isGranted) {
+			// Do refresh
+			if (this.mRequestedPath != null) {
+				refresh(this.mRequestedPath);
+			}
+		} else {
+			Toast.makeText(getContext(), com.nononsenseapps.filepicker.R.string.nnf_permission_external_write_denied,
+					Toast.LENGTH_SHORT).show();
+			// Treat this as a cancel press
+			if (mListener != null) {
+				mListener.onCancelled();
+			}
 		}
 	}
 
