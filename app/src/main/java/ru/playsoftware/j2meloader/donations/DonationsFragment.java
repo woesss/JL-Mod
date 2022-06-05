@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,32 +48,36 @@ public class DonationsFragment extends Fragment {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		// PayPal
-		ViewStub paypalViewStub = view.findViewById(R.id.donations_paypal_stub_me);
-		paypalViewStub.inflate();
 
-		Button btPayPal = view.findViewById(org.sufficientlysecure.donations.R.id.donations__paypal_donate_button);
-		btPayPal.setOnClickListener(v -> donateOnClick("https://www.paypal.me/j2meforever"));
+		view.<ViewStub>findViewById(R.id.donations_paypal_stub_me)
+				.inflate()
+				.<Button>findViewById(org.sufficientlysecure.donations.R.id.donations__paypal_donate_button)
+				.setOnClickListener(v -> donateOnClick("https://www.paypal.me/j2meforever"));
 
 		// Qiwi
-		ViewStub qiwiViewStub = view.findViewById(R.id.donations_qiwi_stub_me);
-		qiwiViewStub.inflate();
+		View qiwiView = view.<ViewStub>findViewById(R.id.donations_qiwi_stub_me).inflate();
 
-		Button btQiwi = view.findViewById(org.sufficientlysecure.donations.R.id.donations__paypal_donate_button);
-		btQiwi.setOnClickListener(v -> donateOnClick("https://my.qiwi.com/Yuryi-Khk_7vnCWvd"));
+		qiwiView.<Button>findViewById(org.sufficientlysecure.donations.R.id.donations__paypal_donate_button)
+				.setOnClickListener(v -> donateOnClick("https://my.qiwi.com/Yuryi-Khk_7vnCWvd"));
+
+		qiwiView.<TextView>findViewById(org.sufficientlysecure.donations.R.id.donations__paypal_title)
+				.setText("Qiwi");
+
 
 		// PayPal
-		ViewStub paypalViewStub2 = view.findViewById(R.id.donations_paypal_stub_jl);
-		paypalViewStub2.inflate();
 
-		Button btPayPal2 = view.findViewById(org.sufficientlysecure.donations.R.id.donations__paypal_donate_button);
-		btPayPal2.setOnClickListener(v -> donateOnClick("https://www.paypal.me/nikita36078"));
+		view.<ViewStub>findViewById(R.id.donations_paypal_stub_jl).inflate()
+				.<Button>findViewById(org.sufficientlysecure.donations.R.id.donations__paypal_donate_button)
+				.setOnClickListener(v -> donateOnClick("https://www.paypal.me/nikita36078"));
 
 		// Yandex
-		ViewStub ymViewStub = view.findViewById(R.id.donations_ym_stub_jl);
-		ymViewStub.inflate();
+		View ymView = view.<ViewStub>findViewById(R.id.donations_ym_stub_jl).inflate();
 
-		Button btYm = view.findViewById(org.sufficientlysecure.donations.R.id.donations__paypal_donate_button);
-		btYm.setOnClickListener(v -> donateOnClick("https://money.yandex.ru/to/41001670387745"));
+		ymView.<Button>findViewById(org.sufficientlysecure.donations.R.id.donations__paypal_donate_button)
+				.setOnClickListener(v -> donateOnClick("https://money.yandex.ru/to/41001670387745"));
+
+		ymView.<TextView>findViewById(org.sufficientlysecure.donations.R.id.donations__paypal_title)
+				.setText("ЮMoney");
 	}
 
 	public void donateOnClick(String uri) {
