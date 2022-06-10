@@ -25,7 +25,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew assembleEmulatorRelease
       
-    - uses: r0adkll/sign-android-release@v1
+    - uses: r0adkll/sign-android-release@v1.0.4
       id: sign_app
       with:
         releaseDirectory: app/build/outputs/apk/emulator/release
@@ -39,17 +39,18 @@ jobs:
 
     - name: Use jq to process JSON output from above command
       run: |
-        echo '${{ steps.sign_app.outputs }}'
-    - name: Example Release
-      uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.REPO_TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: true
-        draft: true
-        files: |
-          ${{ steps.sign_app.outputs.signedReleaseFile0 }}
-          ${{ steps.sign_app.outputs.signedReleaseFile1 }}
-          ${{ steps.sign_app.outputs.signedReleaseFile2 }}
-          ${{ steps.sign_app.outputs.signedReleaseFile3 }}
-          ${{ steps.sign_app.outputs.signedReleaseFile4 }}
+        echo '${{ steps.sign_app.outputs.signedReleaseFiles }}'
+
+#     - name: Example Release
+#       uses: "marvinpinto/action-automatic-releases@latest"
+#       with:
+#         repo_token: "${{ secrets.REPO_TOKEN }}"
+#         automatic_release_tag: "latest"
+#         prerelease: true
+#         draft: true
+#         files: |
+#           ${{ steps.sign_app.outputs.signedReleaseFile0 }}
+#           ${{ steps.sign_app.outputs.signedReleaseFile1 }}
+#           ${{ steps.sign_app.outputs.signedReleaseFile2 }}
+#           ${{ steps.sign_app.outputs.signedReleaseFile3 }}
+#           ${{ steps.sign_app.outputs.signedReleaseFile4 }}
