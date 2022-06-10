@@ -44,28 +44,16 @@ jobs:
         path: "./app/build/outputs/apk/emulator/release"
         type: "-signed.apk"
 
-    - name: Use jq to process JSON output from above command
-      run: |
-        echo '${{ steps.pl.outputs.paths }}'
-        echo '${{ steps.pl.outputs.paths[0] }}'
-        
-    - name: Output results
-      run: |
-          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
-          for i in ${{ steps.pl.outputs.paths }}; do
-          echo $i
-          done
-
-#     - name: Example Release
-#       uses: "marvinpinto/action-automatic-releases@latest"
-#       with:
-#         repo_token: "${{ secrets.REPO_TOKEN }}"
-#         automatic_release_tag: "latest"
-#         prerelease: true
-#         draft: true
-#         files: |
-#           ${{ steps.pl.outputs.paths[0] }}
-#           ${{ steps.pl.outputs.paths[1] }}
-#           ${{ steps.pl.outputs.paths[2] }}
-#           ${{ steps.pl.outputs.paths[3] }}
-#           ${{ steps.pl.outputs.paths[4] }}
+    - name: Example Release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.REPO_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        draft: true
+        files: |
+          ${{ steps.pl.outputs.paths[0] }}
+          ${{ steps.pl.outputs.paths[1] }}
+          ${{ steps.pl.outputs.paths[2] }}
+          ${{ steps.pl.outputs.paths[3] }}
+          ${{ steps.pl.outputs.paths[4] }}
