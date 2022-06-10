@@ -37,9 +37,24 @@ jobs:
         # override default build-tools version (29.0.3) -- optional
 #         BUILD_TOOLS_VERSION: "33.0.0"
 
+    - name: Path lister action
+      uses: Rishabh510/Path-lister-action@1.0
+      id: pl
+      with:
+        path: "./app/build/outputs/apk/emulator/release"
+        type: "-signed.apk"
+
     - name: Use jq to process JSON output from above command
       run: |
-        echo '${{ steps.sign_app.outputs.signedReleaseFiles }}'
+        echo '${{ steps.pl.outputs.paths }}'
+        echo '${{ steps.pl.outputs.paths[0] }}'
+        
+    - name: Output results
+      run: |
+          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
+          for i in ${{ steps.pl.outputs.paths }}; do
+          echo $i
+          done
 
 #     - name: Example Release
 #       uses: "marvinpinto/action-automatic-releases@latest"
@@ -49,8 +64,8 @@ jobs:
 #         prerelease: true
 #         draft: true
 #         files: |
-#           ${{ steps.sign_app.outputs.signedReleaseFile0 }}
-#           ${{ steps.sign_app.outputs.signedReleaseFile1 }}
-#           ${{ steps.sign_app.outputs.signedReleaseFile2 }}
-#           ${{ steps.sign_app.outputs.signedReleaseFile3 }}
-#           ${{ steps.sign_app.outputs.signedReleaseFile4 }}
+#           ${{ steps.pl.outputs.paths[0] }}
+#           ${{ steps.pl.outputs.paths[1] }}
+#           ${{ steps.pl.outputs.paths[2] }}
+#           ${{ steps.pl.outputs.paths[3] }}
+#           ${{ steps.pl.outputs.paths[4] }}
