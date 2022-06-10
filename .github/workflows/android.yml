@@ -43,6 +43,13 @@ jobs:
       with:
         path: "./app/build/outputs/apk/emulator/release"
         type: "-signed.apk"
+        
+    - name: Split Action
+      uses: JungWinter/split@v2.0.0
+      id: split
+      with:
+        msg: ${{ steps.pl.outputs.paths }}
+        separator: ' '
 
     - name: Example Release
       uses: "marvinpinto/action-automatic-releases@latest"
@@ -52,4 +59,8 @@ jobs:
         prerelease: true
         draft: true
         files: |
-          ${{ steps.pl.outputs.paths }}
+          ${{ steps.split.outputs._0 }}
+          ${{ steps.split.outputs._1 }}
+          ${{ steps.split.outputs._2 }}
+          ${{ steps.split.outputs._3 }}
+          ${{ steps.split.outputs._4 }}
