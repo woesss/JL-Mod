@@ -52,8 +52,4 @@ jobs:
         prerelease: true
         draft: true
         files: |
-          ${{ steps.pl.outputs.paths[0] }}
-          ${{ steps.pl.outputs.paths[1] }}
-          ${{ steps.pl.outputs.paths[2] }}
-          ${{ steps.pl.outputs.paths[3] }}
-          ${{ steps.pl.outputs.paths[4] }}
+          ${{ steps.pl.outputs.paths }}
