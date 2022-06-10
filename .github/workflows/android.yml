@@ -42,8 +42,8 @@ jobs:
         prerelease: true
         draft: true
         files: |
-          ${{ steps.sign_app.signedReleaseFile0 }}
-          ${{ steps.sign_app.signedReleaseFile1 }}
-          ${{ steps.sign_app.signedReleaseFile2 }}
-          ${{ steps.sign_app.signedReleaseFile3 }}
-          ${{ steps.sign_app.signedReleaseFile4 }}
+          ${{ steps.sign_app.outputs.signedReleaseFile0 }}
+          ${{ steps.sign_app.outputs.signedReleaseFile1 }}
+          ${{ steps.sign_app.outputs.signedReleaseFile2 }}
+          ${{ steps.sign_app.outputs.signedReleaseFile3 }}
+          ${{ steps.sign_app.outputs.signedReleaseFile4 }}
