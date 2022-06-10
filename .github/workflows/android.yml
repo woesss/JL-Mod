@@ -34,7 +34,7 @@ jobs:
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-    - uses: jungwinter/split@v1
+    - uses: JungWinter/split@v2.0.0
       id: signed_files
       with:
         msg: ${{ steps.sign_app.signedReleaseFiles }}
