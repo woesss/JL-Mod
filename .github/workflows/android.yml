@@ -24,3 +24,32 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew assembleEmulatorRelease
+      
+    - uses: r0adkll/sign-android-release@v1
+      id: sign_app
+      with:
+        releaseDirectory: app/build/outputs/apk/release
+        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+        alias: ${{ secrets.KEY_ALIAS }}
+        keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+    - uses: jungwinter/split@v1
+      id: signed_files
+      with:
+        msg: ${{ steps.sign_app.signedReleaseFiles }}
+        separator: ':'
+
+    - name: Example Release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.REPO_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        draft: true
+        files: |
+          ${{ steps.signed_files._0 }}
+          ${{ steps.signed_files._1 }}
+          ${{ steps.signed_files._2 }}
+          ${{ steps.signed_files._3 }}
+          ${{ steps.signed_files._4 }}
