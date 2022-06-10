@@ -25,7 +25,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew assembleEmulatorRelease
       
-    - uses: r0adkll/sign-android-release@v1.0.4
+    - uses: r0adkll/sign-android-release@v1
       id: sign_app
       with:
         releaseDirectory: app/build/outputs/apk/emulator/release
@@ -37,6 +37,9 @@ jobs:
         # override default build-tools version (29.0.3) -- optional
         BUILD_TOOLS_VERSION: "33.0.0"
 
+    - name: Use jq to process JSON output from above command
+      run: |
+        echo '${{ steps.sign_app.outputs.var }}'
     - name: Example Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
