@@ -34,12 +34,6 @@ jobs:
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-    - uses: JungWinter/split@v2.0.0
-      id: signed_files
-      with:
-        msg: ${{ steps.sign_app.signedReleaseFiles }}
-        separator: ':'
-
     - name: Example Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -48,8 +42,8 @@ jobs:
         prerelease: true
         draft: true
         files: |
-          ${{ steps.signed_files._0 }}
-          ${{ steps.signed_files._1 }}
-          ${{ steps.signed_files._2 }}
-          ${{ steps.signed_files._3 }}
-          ${{ steps.signed_files._4 }}
+          ${{ steps.sign_app.signedReleaseFile0 }}
+          ${{ steps.sign_app.signedReleaseFile1 }}
+          ${{ steps.sign_app.signedReleaseFile2 }}
+          ${{ steps.sign_app.signedReleaseFile3 }}
+          ${{ steps.sign_app.signedReleaseFile4 }}
