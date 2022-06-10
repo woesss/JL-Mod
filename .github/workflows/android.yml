@@ -39,7 +39,7 @@ jobs:
 
     - name: Use jq to process JSON output from above command
       run: |
-        echo '${{ steps.sign_app.outputs.var }}'
+        echo '${{ steps.sign_app.outputs }}'
     - name: Example Release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
