@@ -27,9 +27,46 @@ package com.siemens.mp.ui;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
+import java.io.IOException;
 import java.nio.IntBuffer;
 
 public class Image extends com.siemens.mp.misc.NativeMem {
+	public static final int COLOR_BMP_8BIT = 5;
+
+	protected Image() {
+	}
+
+	public Image(int imageWidth, int imageHeight) {}
+
+	public Image(Image image) {}
+
+	public Image(byte[] bytes, int imageWidth, int imageHeight) {}
+
+	public Image(byte[] bytes, int imageWidth, int imageHeight, boolean transparent) {}
+
+	public Image(String name, boolean doScale) throws IOException {}
+
+	public Image(byte[] imageData) {}
+
+	public Image(byte[] bytes, int imageWidth, int imageHeight, int BitmapType) throws IOException {}
+
+	public int getHeight() {
+		return 0;
+	}
+
+	public int getWidth() {
+		return 0;
+	}
+
+	public static javax.microedition.lcdui.Image createImageWithScaling(String name)
+			throws IOException {
+		return null;
+	}
+
+	public static javax.microedition.lcdui.Image createImageWithoutScaling(String name)
+			throws IOException {
+		return javax.microedition.lcdui.Image.createImage(name);
+	}
 
 	public static javax.microedition.lcdui.Image createImageFromBitmap(byte[] imageData, int imageWidth, int imageHeight) {
 		return createImageFromBitmap(imageData, null, imageWidth, imageHeight);
@@ -57,8 +94,30 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 		return rgbImage;
 	}
 
-	public static javax.microedition.lcdui.Image createImageWithoutScaling(String name) throws java.io.IOException {
-		return javax.microedition.lcdui.Image.createImage(name);
+	public static javax.microedition.lcdui.Image createRGBImage(byte[] imageData,
+																int imageWidth,
+																int imageHeight,
+																int BitmapType)
+			throws IOException {
+		if (imageWidth <= 0 || imageHeight <= 0) {
+			throw new ArrayIndexOutOfBoundsException();
+		}
+		if (BitmapType != COLOR_BMP_8BIT) {
+			throw new IOException("BitmapType = " + BitmapType);
+		}
+		int[] pixels = new int[imageWidth * imageHeight];
+		for (int i = 0; i < pixels.length; i++) {
+			int c = imageData[i] & 0xff;
+			if (c == 0xc0) {
+				pixels[i] = 0;
+				continue;
+			}
+			int r = (((c >> 5) & 0b111) * 255) / 7;
+			int g = (c >> 2 & 0b111) * 255 / 7;
+			int b = (c & 0b11) * 255 / 3;
+			pixels[i] = 0xff000000 | r << 16 | g << 8 | b;
+		}
+		return javax.microedition.lcdui.Image.createRGBImage(pixels, imageWidth, imageHeight, true);
 	}
 
 	public static javax.microedition.lcdui.Image createTransparentImageFromBitmap(byte[] imageData, int imageWidth, int imageHeight) {
@@ -98,7 +157,7 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 		return p | a;
 	}
 
-	public static void mirrorImageHorizontally(javax.microedition.lcdui.Image image){
+	public static void mirrorImageHorizontally(javax.microedition.lcdui.Image image) {
 		Bitmap bitmap = image.getBitmap();
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
@@ -114,5 +173,13 @@ public class Image extends com.siemens.mp.misc.NativeMem {
 		}
 		buffer.rewind();
 		bitmap.copyPixelsFromBuffer(buffer);
+	}
+
+	public static void mirrorImageVertically(javax.microedition.lcdui.Image image) {}
+
+	protected static void setNativeImage(javax.microedition.lcdui.Image img, Image simg) {}
+
+	public static Image getNativeImage(javax.microedition.lcdui.Image img) {
+		return null;
 	}
 }
