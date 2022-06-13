@@ -29,7 +29,6 @@ import android.graphics.Color;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 @SuppressWarnings("unused")
@@ -53,10 +52,8 @@ public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 	}
 
 	public void clear(byte color) {
-		int c = (color == 0) ? 0x00FFFFFF : 0x0;
-		Graphics g = image.getGraphics();
-		g.setColor(c);
-		g.fillRect(0, 0, image.getWidth(), image.getHeight());
+		int c = (color == 0) ? 0xFFFFFFFF : 0xFF000000;
+		image.getBitmap().eraseColor(c);
 	}
 
 	public Image getImage() {
@@ -116,9 +113,22 @@ public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 	}
 
 	public void setPixels(byte[] pixels, int x, int y, int width, int height) {
+		int imgWidth = image.getWidth();
+		int imgHeight = image.getHeight();
+		int right = x + width;
+		int bottom = y + height;
+		if (x >= imgWidth || right <= 0 || y >= imgHeight || bottom <= 0) {
+			return;
+		}
+		if (x < 0) x = 0;
+		if (y < 0) y = 0;
+		if (right > imgWidth) right = imgWidth;
+		if (bottom > imgHeight) bottom = imgHeight;
+		width = right - x;
+		height = bottom - y;
 		int[] colors = new int[width * height];
 		if (hasAlpha) {
-			final int dataLen = colors.length / 4;
+			final int dataLen = Math.min(pixels.length, colors.length / 4);
 			for (int i = 0, k = 0; i < dataLen; i++) {
 				final int data = pixels[i];
 				for (int j = 3; j >= 0; j--) {
@@ -131,7 +141,7 @@ public class ExtendedImage extends com.siemens.mp.misc.NativeMem {
 				}
 			}
 		} else {
-			final int dataLen = colors.length / 8;
+			final int dataLen = Math.min(pixels.length, colors.length / 8);
 			for (int i = 0, k = 0; i < dataLen; i++) {
 				final int data = pixels[i];
 				for (int j = 7; j >= 0; j--) {
