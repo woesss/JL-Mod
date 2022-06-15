@@ -22,6 +22,7 @@
 -keep public class com.sonyericsson.accelerometer.** { public protected *; }
 -keep public class com.sprintpcs.media.** { public protected *; }
 -keep public class com.mascotcapsule.micro3d.v3.* { public protected *; }
+-keep public class com.jblend.graphics.j3d.* { public protected *; }
 -keep public class com.motorola.** { public protected *; }
 -keep public class com.nokia.mid.** { public protected *; }
 -keep public class com.sun.midp.midlet.** { public protected *; }
