@@ -31,13 +31,13 @@ Another one property turns on the texture filter (built into OpenGL), but this c
 without this setting, the quality of the textures is as close to the original as possible and looks more vintage.
 
 #### **Porting**
-Added the ability to build an Android application from the source code of a J2ME application using the code of this project
+Added the ability to build an Android application from the source code of a J2ME application using the code of this project  
 Read more in the [Wiki](https://github.com/woesss/JL-Mod/wiki/Porting-midlet-instruction)
 
 [Download APK](https://github.com/woesss/JL-Mod/releases/latest)
 
-#### **External links**
-Emulation General Wiki:
-[JL-Mod](http://emulation.gametechwiki.com/index.php/JL-Mod)
-[Mascot Capsule 3D](http://emulation.gametechwiki.com/index.php/Mascot_Capsule_3D)
-[Mascot Capsule 3D compatibility list](https://emulation.gametechwiki.com/index.php/Mascot_Capsule_3D_compatibility_list)
+#### **External links**  
+Emulation General Wiki:  
+[JL-Mod](http://emulation.gametechwiki.com/index.php/JL-Mod)  
+[Mascot Capsule 3D](http://emulation.gametechwiki.com/index.php/Mascot_Capsule_3D)  
+[Mascot Capsule 3D compatibility list](https://emulation.gametechwiki.com/index.php/Mascot_Capsule_3D_compatibility_list)  
