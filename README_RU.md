@@ -30,14 +30,14 @@
  без этого параметра качество текстур максимально приближено к оригиналу и выглядит более винтажно.  
 
 #### **Портирование**
- Добавлена возможность сборки приложения для Андроид из исходного кода J2ME приложения с использованием кода этого проекта
+ Добавлена возможность сборки приложения для Андроид из исходного кода J2ME приложения с использованием кода этого проекта.
  Подробнее в [Wiki](https://github.com/woesss/JL-Mod/wiki/Porting-midlet-instruction)
     
  [Скачать APK](https://github.com/woesss/JL-Mod/releases/latest)
 
 #### **Внешние ссылки**
- Emulation General Wiki:
- [JL-Mod](http://emulation.gametechwiki.com/index.php/JL-Mod)
- [Mascot Capsule 3D](http://emulation.gametechwiki.com/index.php/Mascot_Capsule_3D)
- [Mascot Capsule 3D compatibility list](https://emulation.gametechwiki.com/index.php/Mascot_Capsule_3D_compatibility_list)
+ Emulation General Wiki:  
+ [JL-Mod](http://emulation.gametechwiki.com/index.php/JL-Mod)  
+ [Mascot Capsule 3D](http://emulation.gametechwiki.com/index.php/Mascot_Capsule_3D)  
+ [Mascot Capsule 3D compatibility list](https://emulation.gametechwiki.com/index.php/Mascot_Capsule_3D_compatibility_list)  
  
