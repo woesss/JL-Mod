@@ -4,6 +4,8 @@ plugins {
 
 archivesBaseName = rootProject.name
 def midletArchivesBaseName
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(rootProject.file("keystore.properties")))
 
 android {
     compileSdk COMPILE_SDK
@@ -19,6 +21,15 @@ android {
         resValue 'string', 'app_name', rootProject.name
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        emulator {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile rootProject.file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
     }
 
     buildTypes {
@@ -44,6 +55,8 @@ android {
         emulator {
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.emulator
+            versionNameSuffix System.getenv('VERSION_SUFFIX')
         }
         // variant dimension for create android port from J2ME app source
         midlet {
@@ -82,6 +95,15 @@ android {
         def baseName = flavorName == 'midlet' ? "${midletArchivesBaseName}-" : "${rootProject.name}_"
         outputs.all {
             outputFileName = "${baseName}${versionName}-${dirName}-${buildType.name}.apk".replaceAll('--+', '-')
+        }
+    }
+
+    signingConfigs {
+        emulatorRelease {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
 }

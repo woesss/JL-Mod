@@ -1,0 +1,83 @@
+name: Android CI
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Decode Keystore
+        env:
+          ENCODED_KEYSTORE: ${{ secrets.SIGNING_KEY }}
+          ENCODED_PROPS: ${{ secrets.KEYSTORE_PROPERTIES }}
+        run: |
+          echo $ENCODED_KEYSTORE | base64 -di > keystore.jks
+          echo $ENCODED_PROPS | base64 -di > keystore.properties
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew assembleEmulatorRelease
+
+      - name: rename
+        run: |
+          filenames=`ls app/build/outputs/apk/emulator/release/*.apk`
+          for eachfile in $filenames
+          do
+            newpath=${eachfile%.*};
+            mv $eachfile ${newpath%-*}.apk
+          done
+
+      - name: Path lister action
+        uses: Rishabh510/Path-lister-action@1.0
+        id: pl
+        with:
+          path: "app/build/outputs/apk/emulator/release"
+          type: ".apk"
+
+      - name: Split Action
+        uses: JungWinter/split@v2.0.0
+        id: split
+        with:
+          msg: ${{ steps.pl.outputs.paths }}
+          separator: ' '
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: symbols
+          path: |
+            app/build/outputs/mapping
+            app/build/outputs/native-debug-symbols
+
+      - name: Get version
+        id: get_version
+        run: |
+          msg=$(git log -1 --pretty=format:"%s")
+          echo "::set-output name=version::${msg#* }"
+
+      - name: Draft GitHub Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.REPO_TOKEN }}"
+          automatic_release_tag: ${{ steps.get_version.outputs.version }}
+          prerelease: true
+          draft: true
+          files: |
+            ${{ steps.split.outputs._0 }}
+            ${{ steps.split.outputs._1 }}
+            ${{ steps.split.outputs._2 }}
+            ${{ steps.split.outputs._3 }}
+            ${{ steps.split.outputs._4 }}
