@@ -26,6 +26,7 @@ import com.arthenica.mobileffmpeg.FFprobe;
 import com.arthenica.mobileffmpeg.MediaInformation;
 import com.arthenica.mobileffmpeg.StreamInformation;
 
+import java.io.DataOutput;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +34,10 @@ import java.io.RandomAccessFile;
 
 import javax.microedition.media.protocol.DataSource;
 import javax.microedition.media.protocol.SourceStream;
+import javax.microedition.shell.AppClassLoader;
 import javax.microedition.util.ContextHolder;
+
+import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class InternalDataSource extends DataSource {
 	private static final String TAG = InternalDataSource.class.getName();
@@ -44,9 +48,28 @@ public class InternalDataSource extends DataSource {
 	public InternalDataSource(InputStream stream, String type) throws IllegalArgumentException, IOException {
 		super(null);
 
+		this.type = type;
+		byte[] buf = new byte[0x10000];
+		int read = stream.read(buf);
+		if (read >= 4) {
+			if (buf[0] == 'M' && buf[1] == 'T' && buf[2] == 'h' && buf[3] == 'd') {
+				final File dlsFile = new File(new File(AppClassLoader.getDataDir()).getParentFile().getParentFile(), "soundbank.dls");
+				if (dlsFile.exists()) {
+					this.mediaFile = File.createTempFile("media", ".xmf", ContextHolder.getCacheDir());
+					try (RandomAccessFile raf = new RandomAccessFile(mediaFile, "rw")) {
+						Log.d(TAG, "Starting media pipe: " + mediaFile.getName());
+						convertMidi(read, buf, stream, raf, FileUtils.getBytes(dlsFile));
+					} finally {
+						stream.close();
+					}
+					return;
+				}
+			}
+		}
+
+
 		String extension = "." + MimeTypeMap.getSingleton().getExtensionFromMimeType(type);
 		this.mediaFile = File.createTempFile("media", extension, ContextHolder.getCacheDir());
-		this.type = type;
 
 		final RandomAccessFile raf = new RandomAccessFile(mediaFile, "rw");
 
@@ -59,22 +82,15 @@ public class InternalDataSource extends DataSource {
 			Log.d(TAG, "Changing file size to " + length + " bytes: " + name);
 		}
 
-		byte[] buf = new byte[0x10000];
-		int read;
 		try {
-			while (true) {
-				read = stream.read(buf);
-				if (read > 0) {
-					raf.write(buf, 0, read);
-				} else if (read < 0) {
-					break;
-				}
-			}
-			raf.close();
+			do {
+				raf.write(buf, 0, read);
+			} while ((read = stream.read(buf)) != -1);
 			Log.d(TAG, "Media pipe closed: " + name);
 		} catch (IOException e) {
-			Log.d(TAG, "Media pipe failure: " + e.toString());
+			Log.d(TAG, "Media pipe failure: " + e);
 		} finally {
+			raf.close();
 			stream.close();
 		}
 
@@ -83,6 +99,62 @@ public class InternalDataSource extends DataSource {
 		} catch (Throwable t) {
 			Log.e(TAG, "FFmpeg error", t);
 		}
+	}
+
+	private void convertMidi(int read, byte[] buf, InputStream stream, RandomAccessFile raf, byte[] dlsBytes)
+			throws IOException {
+
+		int dlsNodeLength = 8 + dlsBytes.length;
+		int smfNodeLength = 8 + read + stream.available();
+		int rootNodeLength = 8 + smfNodeLength + dlsNodeLength;
+
+		int fileLength = 18 + rootNodeLength;
+
+		raf.setLength(fileLength);
+		Log.d(TAG, "Changing file size to " + fileLength + " bytes: " + raf);
+
+		raf.write("XMF_1.00".getBytes());
+		writeVlq(fileLength, raf); // file length
+		raf.write(0); // MetaDataTypesTable length
+		raf.write(18); // TreeStart offset
+		writeVlq(fileLength - 1, raf); // TreeEnd offset
+
+		writeVlq(rootNodeLength, raf); // node length
+		raf.write(2); // number of contained items
+		raf.write(7); // node header length
+		raf.write(0); // metadata length
+		raf.write(1); // Reference Type
+
+		writeVlq(dlsNodeLength, raf); // node length
+		raf.write(0); // number of contained items
+		raf.write(7); // node header length
+		raf.write(0); // metadata length
+		raf.write(1); // Reference Type
+
+		raf.write(dlsBytes);
+
+		writeVlq(smfNodeLength, raf); // node length
+		raf.write(0); // number of contained items
+		raf.write(7); // node header length
+		raf.write(0); // metadata length
+		raf.write(1); // Reference Type
+
+		do {
+			raf.write(buf, 0, read);
+		} while ((read = stream.read(buf)) != -1);
+
+	}
+
+	/** Write fake VLQ (size fixed to 4 bytes for simplify node size computation) */
+	private static void writeVlq(int v, DataOutput out) throws IOException {
+		int b = v >>> 28;
+		if (b > 0) {
+			throw new RuntimeException("VLQ value is large");
+		}
+		out.write(v >>> 21 & 0x7f | 0x80);
+		out.write(v >>> 14 & 0x7f | 0x80);
+		out.write(v >>>  7 & 0x7f | 0x80);
+		out.write(v & 0x7f);
 	}
 
 	private void convert() {
