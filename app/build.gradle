@@ -16,7 +16,7 @@ android {
         minSdk MIN_SDK
         targetSdk TARGET_SDK
         versionCode 35
-        versionName "0.83"
+        versionName "0.83.SB"
         resValue 'string', 'app_name', rootProject.name
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
