@@ -70,7 +70,7 @@ public class EmulatorApplication extends Application {
 						.withEnabled(true)
 						.build()
 				));
-		ACRA.getErrorReporter().setEnabled(isSignatureValid());
+		ACRA.getErrorReporter().setEnabled(false);
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 		sp.registerOnSharedPreferenceChangeListener(themeListener);
 		setNightMode(sp.getString(Constants.PREF_THEME, null));

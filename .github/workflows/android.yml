@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.5.2
       - name: set up JDK 11
         uses: actions/setup-java@v3
         with:
@@ -31,15 +31,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew assembleEmulatorRelease
 
-      - name: rename
-        run: |
-          filenames=`ls app/build/outputs/apk/emulator/release/*.apk`
-          for eachfile in $filenames
-          do
-            newpath=${eachfile%.*};
-            mv $eachfile ${newpath%-*}.apk
-          done
-
       - name: Path lister action
         uses: Rishabh510/Path-lister-action@1.0
         id: pl
@@ -54,6 +45,40 @@ jobs:
           msg: ${{ steps.pl.outputs.paths }}
           separator: ' '
 
+      - name: list filenames
+        id: filenames
+        run: |
+          echo "name0=$(basename ${{ steps.split.outputs._0 }} .apk)" >> $GITHUB_OUTPUT
+          echo "name1=$(basename ${{ steps.split.outputs._1 }} .apk)" >> $GITHUB_OUTPUT
+          echo "name2=$(basename ${{ steps.split.outputs._2 }} .apk)" >> $GITHUB_OUTPUT
+          echo "name3=$(basename ${{ steps.split.outputs._3 }} .apk)" >> $GITHUB_OUTPUT
+          echo "name4=$(basename ${{ steps.split.outputs._4 }} .apk)" >> $GITHUB_OUTPUT
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.filenames.outputs.name0 }}
+          path: ${{ steps.split.outputs._0 }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.filenames.outputs.name1 }}
+          path: ${{ steps.split.outputs._1 }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.filenames.outputs.name2 }}
+          path: ${{ steps.split.outputs._2 }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.filenames.outputs.name3 }}
+          path: ${{ steps.split.outputs._3 }}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.filenames.outputs.name4 }}
+          path: ${{ steps.split.outputs._4 }}
+
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -61,23 +86,3 @@ jobs:
           path: |
             app/build/outputs/mapping
             app/build/outputs/native-debug-symbols
-
-      - name: Get version
-        id: get_version
-        run: |
-          msg=$(git log -1 --pretty=format:"%s")
-          echo "::set-output name=version::${msg#* }"
-
-      - name: Draft GitHub Release
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.REPO_TOKEN }}"
-          automatic_release_tag: ${{ steps.get_version.outputs.version }}
-          prerelease: true
-          draft: true
-          files: |
-            ${{ steps.split.outputs._0 }}
-            ${{ steps.split.outputs._1 }}
-            ${{ steps.split.outputs._2 }}
-            ${{ steps.split.outputs._3 }}
-            ${{ steps.split.outputs._4 }}
