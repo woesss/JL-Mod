@@ -16,12 +16,13 @@
 
 package ru.playsoftware.j2meloader.filepicker;
 
+import android.content.Context;
 import android.os.Environment;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,12 +41,30 @@ import ru.playsoftware.j2meloader.util.StoragePermissionContract;
 public class FilteredFilePickerFragment extends FilePickerFragment {
 	private static final List<String> extList = Arrays.asList(".jad", ".jar", ".kjx");
 	private static final Stack<File> history = new Stack<>();
-	private static File currentDir = Environment.getExternalStorageDirectory();
 	private File mRequestedPath;
 	private final ActivityResultLauncher<Void> permissionsLauncher = registerForActivityResult(
 			new StoragePermissionContract(),
 			this::onPermissionResult
 	);
+
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		if (history.empty()) {
+			history.push(Environment.getExternalStorageDirectory());
+		}
+		requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+			@Override
+			public void handleOnBackPressed() {
+				if (isBackTop()) {
+					setEnabled(false);
+					requireActivity().onBackPressed();
+				} else {
+					goBack();
+				}
+			}
+		});
+	}
 
 	@NonNull
 	@Override
@@ -90,12 +109,12 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 	}
 
 	private String getExtension(@NonNull File file) {
-		String path = file.getPath();
-		int i = path.lastIndexOf('.');
+		String name = file.getName();
+		int i = name.lastIndexOf('.');
 		if (i < 0) {
 			return null;
 		} else {
-			return path.substring(i);
+			return name.substring(i).toLowerCase();
 		}
 	}
 
@@ -108,38 +127,27 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 			return false;
 		}
 		String ext = getExtension(file);
-		return ext != null && extList.contains(ext.toLowerCase());
+		return ext != null && extList.contains(ext);
 	}
 
 	@Override
 	public void goToDir(@NonNull File file) {
-		history.add(currentDir);
-		currentDir = file;
+		history.add(mCurrentPath);
 		super.goToDir(file);
 	}
 
-	public static String getLastPath() {
-		return currentDir.getPath();
-	}
-
-	public boolean isBackTop() {
+	private boolean isBackTop() {
 		return history.empty();
 	}
 
-	public void goBack() {
+	private void goBack() {
 		File last = history.pop();
-		currentDir = last;
 		super.goToDir(last);
 	}
 
 	@Override
 	public void onBindHeaderViewHolder(@NonNull HeaderViewHolder viewHolder) {
-		viewHolder.itemView.setEnabled(compareFiles(currentDir, getRoot()) != 0);
+		viewHolder.itemView.setEnabled(!getRoot().equals(mCurrentPath));
 		super.onBindHeaderViewHolder(viewHolder);
-	}
-
-	@Override
-	public void onClickOk(@NonNull View view) {
-		super.onClickOk(view);
 	}
 }

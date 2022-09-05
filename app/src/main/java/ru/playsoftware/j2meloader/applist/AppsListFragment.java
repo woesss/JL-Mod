@@ -71,6 +71,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nononsenseapps.filepicker.FilePickerActivity;
+import com.nononsenseapps.filepicker.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -139,7 +140,7 @@ public class AppsListFragment extends ListFragment {
 					return;
 				}
 				preferences.edit()
-						.putString(Constants.PREF_LAST_PATH, FilteredFilePickerFragment.getLastPath())
+						.putString(Constants.PREF_LAST_PATH, Utils.getFileForUri(uri).getAbsolutePath())
 						.apply();
 				InstallerDialog.newInstance(uri).show(getParentFragmentManager(), "installer");
 			});
