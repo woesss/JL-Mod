@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
@@ -34,13 +35,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-public class StoragePermissionContract extends ActivityResultContract<Void, Boolean> {
+public class StoragePermissionContract extends ActivityResultContract<Boolean, Boolean> {
 
 	@NonNull
 	@Override
-	public Intent createIntent(@NonNull Context context, @NonNull Void input) {
+	public Intent createIntent(@NonNull Context context, @NonNull Boolean appSpecificSetting) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-			return new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+			Intent intent;
+			if (appSpecificSetting) {
+				intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+						Uri.parse("package:" + context.getPackageName()));
+				intent.addCategory(Intent.CATEGORY_DEFAULT);
+			} else {
+				intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+			}
+			return intent;
 		} else {
 			String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 			return new Intent(ACTION_REQUEST_PERMISSIONS).putExtra(EXTRA_PERMISSIONS, permissions);
@@ -63,7 +72,7 @@ public class StoragePermissionContract extends ActivityResultContract<Void, Bool
 
 	@Override
 	public @Nullable SynchronousResult<Boolean> getSynchronousResult(
-			@NonNull Context context, @Nullable Void input) {
+			@NonNull Context context, @Nullable Boolean input) {
 		return isGranted(context) ? new SynchronousResult<>(true) : null;
 	}
 

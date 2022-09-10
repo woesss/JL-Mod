@@ -16,6 +16,7 @@
 
 package ru.playsoftware.j2meloader.filepicker;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -42,7 +43,7 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 	private static final List<String> extList = Arrays.asList(".jad", ".jar", ".kjx");
 	private static final Stack<File> history = new Stack<>();
 	private File mRequestedPath;
-	private final ActivityResultLauncher<Void> permissionsLauncher = registerForActivityResult(
+	private final ActivityResultLauncher<Boolean> permissionsLauncher = registerForActivityResult(
 			new StoragePermissionContract(),
 			this::onPermissionResult
 	);
@@ -89,7 +90,11 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 	@Override
 	protected void handlePermission(@NonNull File path) {
 		this.mRequestedPath = path;
-		permissionsLauncher.launch(null);
+		try {
+			permissionsLauncher.launch(true);
+		} catch (ActivityNotFoundException e) {
+			permissionsLauncher.launch(false);
+		}
 	}
 
 	private void onPermissionResult(boolean isGranted) {

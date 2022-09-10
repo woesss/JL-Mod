@@ -17,6 +17,7 @@
 
 package ru.playsoftware.j2meloader;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
@@ -46,7 +47,7 @@ import ru.woesss.j2me.installer.InstallerDialog;
 
 public class MainActivity extends AppCompatActivity {
 
-	private final ActivityResultLauncher<Void> permissionsLauncher = registerForActivityResult(
+	private final ActivityResultLauncher<Boolean> permissionsLauncher = registerForActivityResult(
 			new StoragePermissionContract(),
 			this::onPermissionResult
 	);
@@ -63,7 +64,11 @@ public class MainActivity extends AppCompatActivity {
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		permissionsLauncher.launch(null);
+		try {
+			permissionsLauncher.launch(true);
+		} catch (ActivityNotFoundException e) {
+			permissionsLauncher.launch(false);
+		}
 		appListModel = new ViewModelProvider(this).get(AppListModel.class);
 		if (savedInstanceState == null) {
 			Intent intent = getIntent();
@@ -118,7 +123,13 @@ public class MainActivity extends AppCompatActivity {
 				.setTitle(android.R.string.dialog_alert_title)
 				.setCancelable(false)
 				.setMessage(R.string.permission_request_failed)
-				.setNegativeButton(R.string.retry, (d, w) -> permissionsLauncher.launch(null))
+				.setNegativeButton(R.string.retry, (d, w) -> {
+					try {
+						permissionsLauncher.launch(true);
+					} catch (ActivityNotFoundException e) {
+						permissionsLauncher.launch(false);
+					}
+				})
 				.setPositiveButton(R.string.exit, (d, w) -> finish())
 				.show();
 	}
