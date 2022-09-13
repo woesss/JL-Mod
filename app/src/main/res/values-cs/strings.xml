@@ -30,7 +30,7 @@
     <string name="edit">Upravit</string>
     <string name="enter_name">Zadejte název</string>
     <string name="enter_new_name">Zadejte nový název</string>
-    <string name="err_missing_app">Aplikace nebyla nalezena.\nZkontrolujte prosím dostupnost úložiště %snebo vytvořte zástupce znovu.</string>
+    <string name="err_missing_app">Aplikace nebyla nalezena. Zkontrolujte prosím dostupnost úložiště %1$snebo vytvořte zástupce znovu.</string>
     <string name="error">Chyba</string>
     <string name="error_disk_io">Chyba úložiště: zkontrolujte místo v úložišti</string>
     <string name="error_name">Zadejte název!</string>

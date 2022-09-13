@@ -31,7 +31,7 @@
     <string name="edit">Paramètres</string>
     <string name="enter_name">Entrer le nom</string>
     <string name="enter_new_name">Entrez un nouveau nom de dossier</string>
-    <string name="err_missing_app">Application introuvable.\nVeuillez vérifier la disponibilité de l\'appareil de stockage %sou recréer le raccourci.</string>
+    <string name="err_missing_app">Application introuvable.\nVeuillez vérifier la disponibilité de l\'appareil de stockage %1$sou recréer le raccourci.</string>
     <string name="error">Erreur</string>
     <string name="error_disk_io">Erreur de stockage : Vérifiez l\'espace disque</string>
     <string name="error_name">Entrer le nom!</string>

@@ -30,7 +30,7 @@
     <string name="edit">تعديل</string>
     <string name="enter_name">أدخل الاسم</string>
     <string name="enter_new_name">أدخل الاسم الجديد</string>
-    <string name="err_missing_app">التطبيق غير موجود.\nالرجاء التحقق من توفر جهاز التخزين %sأو إعادة إنشاء الاختصار.</string>
+    <string name="err_missing_app">التطبيق غير موجود.\nالرجاء التحقق من توفر جهاز التخزين %s$1أو إعادة إنشاء الاختصار.</string>
     <string name="error">خطأ</string>
     <string name="error_disk_io">خطأ في التخزين: تحقق من مساحة القرص</string>
     <string name="error_name">أدخل الاسم!</string>

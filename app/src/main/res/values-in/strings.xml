@@ -22,7 +22,7 @@
     <string name="edit">Ubah</string>
     <string name="enter_name">Masukkan nama</string>
     <string name="enter_new_name">Masukkan nama baru</string>
-    <string name="err_missing_app">Aplikasi tidak ditemukan. \nSilahkan periksa ketersediaan penyimpanan perangkat atau membuat-ulang pintasan.</string>
+    <string name="err_missing_app">Aplikasi tidak ditemukan. \nSilahkan periksa ketersediaan penyimpanan perangkat %1$satau membuat-ulang pintasan.</string>
     <string name="error">Kesalahan</string>
     <string name="error_disk_io">Kesalahan penyimpanan: periksa ruang disk</string>
     <string name="error_name">Masukkan nama!</string>

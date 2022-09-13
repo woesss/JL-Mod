@@ -144,7 +144,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private String workDir;
 	private boolean needShow;
 
-	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
