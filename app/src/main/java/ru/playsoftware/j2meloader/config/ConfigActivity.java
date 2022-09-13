@@ -63,7 +63,9 @@ import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
@@ -71,14 +73,13 @@ import androidx.preference.PreferenceManager;
 import androidx.core.widget.TextViewCompat;
 
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 import static ru.playsoftware.j2meloader.util.Constants.*;
 
-public class ConfigActivity extends BaseActivity implements View.OnClickListener, ShaderTuneAlert.Callback {
+public class ConfigActivity extends AppCompatActivity implements View.OnClickListener, ShaderTuneAlert.Callback {
 	private static final String TAG = ConfigActivity.class.getSimpleName();
 
 	protected ScrollView rootContainer;
@@ -145,7 +146,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 	@SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
 		String action = intent.getAction();

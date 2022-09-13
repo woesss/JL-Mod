@@ -19,16 +19,17 @@ package ru.playsoftware.j2meloader.donations;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.base.BaseActivity;
 
-public class DonationsActivity extends BaseActivity {
+public class DonationsActivity extends AppCompatActivity {
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_donations);
 		ActionBar actionBar = getSupportActionBar();

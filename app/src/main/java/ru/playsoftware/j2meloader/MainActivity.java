@@ -25,7 +25,9 @@ import android.os.Bundle;
 import android.view.ViewConfiguration;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
@@ -35,7 +37,6 @@ import java.io.File;
 
 import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.applist.AppsListFragment;
-import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.FileUtils;
@@ -43,7 +44,7 @@ import ru.playsoftware.j2meloader.util.PickDirResultContract;
 import ru.playsoftware.j2meloader.util.StoragePermissionContract;
 import ru.woesss.j2me.installer.InstallerDialog;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
 
 	private final ActivityResultLauncher<Void> permissionsLauncher = registerForActivityResult(
 			new StoragePermissionContract(),
@@ -59,7 +60,7 @@ public class MainActivity extends BaseActivity {
 	private AppListModel appListModel;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		permissionsLauncher.launch(null);
