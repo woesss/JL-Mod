@@ -89,7 +89,6 @@ import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
-import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerFragment;
 import ru.playsoftware.j2meloader.info.AboutDialogFragment;
 import ru.playsoftware.j2meloader.info.HelpDialogFragment;
 import ru.playsoftware.j2meloader.settings.SettingsActivity;
@@ -204,8 +203,7 @@ public class AppsListFragment extends ListFragment {
 		}
 	}
 
-	private void alertRename(final int id) {
-		AppItem item = adapter.getItem(id);
+	private void alertRename(AppItem item) {
 		FragmentActivity activity = requireActivity();
 		EditText editText = new EditText(activity);
 		editText.setText(item.getTitle());
@@ -273,13 +271,12 @@ public class AppsListFragment extends ListFragment {
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-		int index = info.position;
-		AppItem appItem = adapter.getItem(index);
+		AppItem appItem = adapter.getItem(info.position);
 		int itemId = item.getItemId();
 		if (itemId == R.id.action_context_shortcut) {
 			requestAddShortcut(appItem);
 		} else if (itemId == R.id.action_context_rename) {
-			alertRename(index);
+			alertRename(appItem);
 		} else if (itemId == R.id.action_context_settings) {
 			Config.startApp(requireActivity(), appItem.getTitle(), appItem.getPathExt(), true);
 		} else if (itemId == R.id.action_context_reinstall) {
