@@ -18,6 +18,7 @@ package ru.playsoftware.j2meloader.filepicker;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -154,5 +155,11 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 	public void onBindHeaderViewHolder(@NonNull HeaderViewHolder viewHolder) {
 		viewHolder.itemView.setEnabled(!getRoot().equals(mCurrentPath));
 		super.onBindHeaderViewHolder(viewHolder);
+	}
+
+	@NonNull
+	@Override
+	public Uri toUri(@NonNull File file) {
+		return Uri.fromFile(file);
 	}
 }

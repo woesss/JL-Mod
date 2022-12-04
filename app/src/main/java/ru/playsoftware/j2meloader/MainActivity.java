@@ -32,8 +32,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
-import com.nononsenseapps.filepicker.Utils;
-
 import java.io.File;
 
 import ru.playsoftware.j2meloader.applist.AppListModel;
@@ -139,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 			checkAndCreateDirs();
 			return;
 		}
-		File file = Utils.getFileForUri(uri);
+		File file = new File(uri.getPath());
 		applyWorkDir(file);
 	}
 
