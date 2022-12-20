@@ -30,6 +30,7 @@ import android.view.KeyEvent;
 import org.acra.ACRA;
 import org.acra.ErrorReporter;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -283,8 +284,9 @@ public class MicroLoader {
 					if (!screenshotDir.exists() && !screenshotDir.mkdirs()) {
 						throw new IOException("Can't create directory: " + screenshotDir);
 					}
-					FileOutputStream out = new FileOutputStream(screenshotFile);
-					bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+					try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(screenshotFile))) {
+						bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+					}
 					return screenshotFile.getAbsolutePath();
 				})
 				.observeOn(AndroidSchedulers.mainThread())
