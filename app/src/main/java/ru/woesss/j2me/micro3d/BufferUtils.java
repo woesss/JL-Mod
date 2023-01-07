@@ -1,5 +1,5 @@
 /*
- *  Copyright 2022 Yury Kharchenko
+ *  Copyright 2023 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,20 +17,22 @@
 package ru.woesss.j2me.micro3d;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
-class TextureData {
-	private final ByteBuffer raster;
-	final int width;
-	final int height;
+class BufferUtils {
+	private BufferUtils(){}
 
-	TextureData(int width, int height) {
-		this.raster = BufferUtils.createByteBuffer(width * height * 4);
-		this.width = width;
-		this.height = height;
+	static IntBuffer createIntBuffer(int capacity) {
+		return createByteBuffer(capacity * 4).asIntBuffer();
 	}
 
-	ByteBuffer getRaster() {
-		raster.rewind();
-		return raster;
+	static FloatBuffer createFloatBuffer(int capacity) {
+		return createByteBuffer(capacity * 4).asFloatBuffer();
+	}
+
+	static ByteBuffer createByteBuffer(int capacity) {
+		return ByteBuffer.allocateDirect(capacity).order(ByteOrder.nativeOrder());
 	}
 }
