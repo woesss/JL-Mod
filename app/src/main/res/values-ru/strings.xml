@@ -205,4 +205,5 @@
     <string name="version">Версия: </string>
     <string name="warn_install_from_net">Файл будет загружен из сети Интернет</string>
     <string name="warning">Предупреждение!!!</string>
+    <string name="msg_no_matches">Нет совпадений для \"%1$s\"</string>
 </resources>
