@@ -17,6 +17,11 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT;
+import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT_PROFILE;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,10 +55,21 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.core.widget.TextViewCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -62,22 +78,10 @@ import java.util.Set;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.fragment.app.FragmentManager;
-import androidx.preference.PreferenceManager;
-import androidx.core.widget.TextViewCompat;
-
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
-
-import static ru.playsoftware.j2meloader.util.Constants.*;
 
 public class ConfigActivity extends AppCompatActivity implements View.OnClickListener, ShaderTuneAlert.Callback {
 	private static final String TAG = ConfigActivity.class.getSimpleName();
@@ -494,26 +498,23 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private void showCharsetPicker(View v) {
 		String[] charsets = Charset.availableCharsets().keySet().toArray(new String[0]);
 		new AlertDialog.Builder(this).setItems(charsets, (d, w) -> {
-			String enc = "microedition.encoding: " + charsets[w];
-			String[] props = tfSystemProperties.getText().toString().split("[\\n\\r]+");
-			int propsLength = props.length;
-			if (propsLength == 0) {
-				tfSystemProperties.setText(enc);
+			String text = tfSystemProperties.getText().toString();
+			String key = "microedition.encoding:";
+			int idx = text.lastIndexOf(key);
+			if (idx != -1) {
+				int nl = text.indexOf('\n', idx);
+				text = text.substring(0, idx + key.length()) + " " + charsets[w] + (nl == -1 ? "\n" : text.substring(nl));
+				tfSystemProperties.setText(text);
 				return;
 			}
-			int i = propsLength - 1;
-			while (i >= 0) {
-				if (props[i].startsWith("microedition.encoding")) {
-					props[i] = enc;
-					break;
-				}
-				i--;
+
+			if (!text.endsWith("\n")) {
+				tfSystemProperties.append("\n");
 			}
-			if (i < 0) {
-				tfSystemProperties.append(enc);
-				return;
-			}
-			tfSystemProperties.setText(TextUtils.join("\n", props));
+			tfSystemProperties.append(key);
+			tfSystemProperties.append(" ");
+			tfSystemProperties.append(charsets[w]);
+			tfSystemProperties.append("\n");
 		}).setTitle(R.string.pref_encoding_title).show();
 	}
 
@@ -665,7 +666,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		if (systemProperties == null) {
 			systemProperties = ContextHolder.getAssetAsString("defaults/system.props");
 		}
-		tfSystemProperties.setText(systemProperties);
+		tfSystemProperties.setText(getSystemProperties(systemProperties));
 	}
 
 	private void saveParams() {
@@ -765,7 +766,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				params.vkOutlineColor = Integer.parseInt(tfVKOutline.getText().toString(), 16);
 			} catch (Exception ignored) {
 			}
-			params.systemProperties = getSystemProperties();
+			params.systemProperties = getSystemProperties(tfSystemProperties.getText().toString());
 
 			ProfilesManager.saveConfig(params);
 		} catch (Throwable t) {
@@ -774,24 +775,22 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	}
 
 	@NonNull
-	private String getSystemProperties() {
-		String s = tfSystemProperties.getText().toString();
-		String[] lines = s.split("\\n");
-		StringBuilder sb = new StringBuilder(s.length());
-		boolean validCharset = false;
+	private String getSystemProperties(String text) {
+		String[] lines = text.split("[\\r\\n]+");
+		ArrayList<String> list = new ArrayList<>();
+		Set<String> keys = new HashSet<>();
 		for (int i = lines.length - 1; i >= 0; i--) {
 			String line = lines[i];
-			if (line.trim().isEmpty()) continue;
-			if (line.startsWith("microedition.encoding:")) {
-				if (validCharset) continue;
-				try {
-					Charset.forName(line.substring(22).trim());
-					validCharset = true;
-				} catch (Exception ignored) {
-					continue;
-				}
+			int colon = line.indexOf(':');
+			if (colon != -1 && keys.add(line.substring(0, colon).trim())) {
+				list.add(line);
 			}
-			sb.append(line).append('\n');
+		}
+		Collections.sort(list);
+		StringBuilder sb = new StringBuilder();
+		for (String string : list) {
+			sb.append(string);
+			sb.append("\n");
 		}
 		return sb.toString();
 	}
