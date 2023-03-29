@@ -1,0 +1,12 @@
+prefix=/home/vsts/work/1/s/android-build-root/opt/android
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: sndfile
+Description: A library for reading and writing audio files
+Requires:
+Requires.private: flac ogg vorbis vorbisenc opus
+Version: 1.0.31
+Libs: -L${libdir} -lsndfile
+Cflags: -I${includedir}

@@ -108,6 +108,7 @@ def getMidletManifestProperties() {
 
 dependencies {
     implementation project(':dexlib')
+    implementation project(':synthlib')
 
     def roomVersion = '2.5.1'
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
