@@ -35,7 +35,6 @@ import android.os.storage.StorageVolume;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
@@ -73,6 +72,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.microedition.shell.MicroActivity;
@@ -127,6 +127,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	protected EditText tfVKSelBack;
 	protected EditText tfVKOutline;
 
+	protected Spinner spSoundBank;
+
 	protected EditText tfSystemProperties;
 
 	protected ArrayList<String> screenPresets = new ArrayList<>();
@@ -147,6 +149,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private ImageButton btShaderTune;
 	private String workDir;
 	private boolean needShow;
+	private ArrayAdapter<String> spSoundBankAdapter;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -256,6 +259,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		tfVKSelFore = findViewById(R.id.tfVKSelFore);
 		tfVKSelBack = findViewById(R.id.tfVKSelBack);
 		tfVKOutline = findViewById(R.id.tfVKOutline);
+		spSoundBank = findViewById(R.id.spSoundBank);
 
 		fillScreenSizePresets(display.getWidth(), display.getHeight());
 
@@ -352,6 +356,28 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		tfVKSelFore.addTextChangedListener(new ColorTextWatcher(tfVKSelFore));
 		tfVKSelBack.addTextChangedListener(new ColorTextWatcher(tfVKSelBack));
 		tfVKOutline.addTextChangedListener(new ColorTextWatcher(tfVKOutline));
+		initSoundBankSpinner();
+	}
+
+	private void initSoundBankSpinner() {
+		File dir = new File(workDir + "/soundbank");
+		if (!dir.exists()) {
+			//noinspection ResultOfMethodCallIgnored
+			dir.mkdirs();
+		}
+		List<String> infos = new ArrayList<>();
+		spSoundBankAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, infos);
+		spSoundBankAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spSoundBank.setAdapter(spSoundBankAdapter);
+		String[] files = dir.list((d, n) -> new File(d, n).isFile());
+		if (files != null) {
+			infos.addAll(Arrays.asList(files));
+			Collections.sort(infos);
+		}
+		infos.add(0, "Android built-in soundfont");
+		spSoundBankAdapter.notifyDataSetChanged();
+		int position = infos.indexOf(params.soundBank);
+		spSoundBank.setSelection(Math.max(position, 0));
 	}
 
 	private void onLockAspectChanged(CompoundButton cb, boolean isChecked) {
@@ -489,10 +515,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-
 			}
 		});
-
 	}
 
 	private void showCharsetPicker(View v) {
@@ -766,6 +790,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				params.vkOutlineColor = Integer.parseInt(tfVKOutline.getText().toString(), 16);
 			} catch (Exception ignored) {
 			}
+			params.soundBank = spSoundBank.getSelectedItemPosition() > 0 ? (String) spSoundBank.getSelectedItem() : null;
 			params.systemProperties = getSystemProperties(tfSystemProperties.getText().toString());
 
 			ProfilesManager.saveConfig(params);
