@@ -26,6 +26,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -39,21 +40,27 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.ListPopupWindow;
+import androidx.core.widget.PopupWindowCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.preference.PreferenceManager;
 
@@ -72,15 +79,17 @@ import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.config.model.Size;
 import ru.playsoftware.j2meloader.databinding.ActivityConfigBinding;
 import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
+import ru.playsoftware.j2meloader.util.ViewUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ConfigActivity extends AppCompatActivity implements View.OnClickListener, ShaderTuneAlert.Callback {
 	private static final String TAG = ConfigActivity.class.getSimpleName();
 
-	protected ArrayList<String> screenPresets = new ArrayList<>();
+	protected ArrayList<Size> screenPresets = new ArrayList<>();
 	protected ArrayList<int[]> fontPresetValues = new ArrayList<>();
 	protected ArrayList<String> fontPresetTitles = new ArrayList<>();
 
@@ -107,7 +116,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		String path = intent.getDataString();
 		if (path == null) {
 			needShow = false;
-			finish();
+			onBackPressed();
 			return;
 		}
 		if (isProfile) {
@@ -138,7 +147,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				new AlertDialog.Builder(this)
 						.setTitle(R.string.error)
 						.setMessage(getString(R.string.err_missing_app, storageName))
-						.setPositiveButton(R.string.exit, (d, w) -> finish())
+						.setPositiveButton(R.string.exit, (d, w) -> onBackPressed())
 						.setCancelable(false)
 						.show();
 				return;
@@ -192,13 +201,9 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				int length = s.length();
 				if (length > 4) {
-					if (start >= 4) {
-						binding.tfScaleRatioValue.getText().delete(4, length);
-					} else {
-						int st = start + count;
-						int end = st + (before == 0 ? count : before);
-						binding.tfScaleRatioValue.getText().delete(st, Math.min(end, length));
-					}
+					int st = Math.min(start + count, 4);
+					int end = st + length - 4;
+					binding.tfScaleRatioValue.getText().delete(st, end);
 				}
 			}
 
@@ -486,46 +491,41 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	}
 
 	private void fillScreenSizePresets(int w, int h) {
-		ArrayList<String> screenPresets = this.screenPresets;
+		ArrayList<Size> screenPresets = this.screenPresets;
 		screenPresets.clear();
 
-		screenPresets.add("128 x 128");
-		screenPresets.add("128 x 160");
-		screenPresets.add("132 x 176");
-		screenPresets.add("176 x 220");
-		screenPresets.add("240 x 320");
-		screenPresets.add("352 x 416");
-		screenPresets.add("640 x 360");
-		screenPresets.add("800 x 480");
+		screenPresets.add(new Size(128, 128));
+		screenPresets.add(new Size(128, 160));
+		screenPresets.add(new Size(132, 176));
+		screenPresets.add(new Size(176, 220));
+		screenPresets.add(new Size(240, 320));
+		screenPresets.add(new Size(352, 416));
+		screenPresets.add(new Size(640, 360));
+		screenPresets.add(new Size(800, 480));
 
 		if (w > h) {
-			screenPresets.add(h * 3 / 4 + " x " + h);
-			screenPresets.add(h * 4 / 3 + " x " + h);
+			screenPresets.add(new Size(h * 3 / 4, h));
+			screenPresets.add(new Size(h * 4 / 3, h));
 		} else {
-			screenPresets.add(w + " x " + w * 4 / 3);
-			screenPresets.add(w + " x " + w * 3 / 4);
+			screenPresets.add(new Size(w, w * 4 / 3));
+			screenPresets.add(new Size(w, w * 3 / 4));
 		}
 
-		screenPresets.add(w + " x " + h);
+		screenPresets.add(new Size(w, h));
 		Set<String> preset = PreferenceManager.getDefaultSharedPreferences(this)
 				.getStringSet("ResolutionsPreset", null);
 		if (preset != null) {
-			screenPresets.addAll(preset);
+			for (String s : preset) {
+				Size size = Size.parse(s);
+				if (size != null) {
+					screenPresets.add(size);
+				}
+			}
 		}
-		Collections.sort(screenPresets, (o1, o2) -> {
-			int sep1 = o1.indexOf(" x ");
-			int sep2 = o2.indexOf(" x ");
-			if (sep1 == -1) {
-				if (sep2 != -1) return -1;
-				else return 0;
-			} else if (sep2 == -1) return 1;
-			int r = Integer.decode(o1.substring(0, sep1)).compareTo(Integer.decode(o2.substring(0, sep2)));
-			if (r != 0) return r;
-			return Integer.decode(o1.substring(sep1 + 3)).compareTo(Integer.decode(o2.substring(sep2 + 3)));
-		});
-		String prev = null;
-		for (Iterator<String> iterator = screenPresets.iterator(); iterator.hasNext(); ) {
-			String next = iterator.next();
+		Collections.sort(screenPresets);
+		Size prev = null;
+		for (Iterator<Size> iterator = screenPresets.iterator(); iterator.hasNext(); ) {
+			Size next = iterator.next();
 			if (next.equals(prev)) iterator.remove();
 			else prev = next;
 		}
@@ -729,7 +729,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			menu.findItem(R.id.action_start).setVisible(false);
 			menu.findItem(R.id.action_clear_data).setVisible(false);
 		}
-		return super.onCreateOptionsMenu(menu);
+		return true;
 	}
 
 	@Override
@@ -742,7 +742,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		} else if (itemId == R.id.action_reset_settings) {
 			params = new ProfileModel(configDir);
 			loadParams(false);
-		} else if (itemId == R.id.action_reset_layout) {//noinspection ResultOfMethodCallIgnored
+		} else if (itemId == R.id.action_reset_layout) {
+			//noinspection ResultOfMethodCallIgnored
 			keylayoutFile.delete();
 			loadKeyLayout();
 		} else if (itemId == R.id.action_load_profile) {
@@ -753,9 +754,11 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			SaveProfileAlert.getInstance(keylayoutFile.getParent())
 					.show(getSupportFragmentManager(), "save_profile");
 		} else if (itemId == android.R.id.home) {
-			finish();
+			onBackPressed();
+		} else {
+			return false;
 		}
-		return super.onOptionsItemSelected(item);
+		return true;
 	}
 
 	private void showClearDataDialog() {
@@ -768,11 +771,14 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	}
 
 	private void startMIDlet() {
+		if (needShow && configDir != null) {
+			saveParams();
+		}
 		Intent i = new Intent(this, MicroActivity.class);
 		i.setData(getIntent().getData());
 		i.putExtra(KEY_MIDLET_NAME, getIntent().getStringExtra(KEY_MIDLET_NAME));
 		startActivity(i);
-		finish();
+		onBackPressed();
 	}
 
 	@SuppressLint("SetTextI18n")
@@ -813,20 +819,55 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		}
 	}
 
+	@SuppressLint("SetTextI18n")
 	private void showScreenPresets(View v) {
-		PopupMenu popup = new PopupMenu(this, v);
-		Menu menu = popup.getMenu();
-		for (String preset : screenPresets) {
-			menu.add(preset);
-		}
-		popup.setOnMenuItemClickListener(item -> {
-			String string = item.getTitle().toString();
-			int separator = string.indexOf(" x ");
-			binding.tfScreenWidth.setText(string.substring(0, separator));
-			binding.tfScreenHeight.setText(string.substring(separator + 3));
-			return true;
+		ListPopupWindow popup = new ListPopupWindow(this);
+		popup.setAnchorView(v);
+		popup.setModal(true);
+		ArrayAdapter<Size> adapter = new ArrayAdapter<Size>(this, android.R.layout.simple_list_item_1, screenPresets) {
+			@NonNull
+			@Override
+			public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+				final View view;
+				final TextView text;
+
+				if (convertView == null) {
+					view = getLayoutInflater().inflate(android.R.layout.simple_list_item_1, parent, false);
+					text = (TextView) view;
+					view.setTag(text);
+				} else {
+					view = convertView;
+					text = (TextView) view.getTag();
+				}
+				final Size item = getItem(position);
+				text.setText(item.toString());
+//				view.setOnLongClickListener(v1 -> {
+//					Log.d(TAG, "getView: onLongClick");
+//					return true;
+//				});
+				return view;
+			}
+		};
+		popup.setAdapter(adapter);
+		final Resources res = getResources();
+		int maxWidth = Math.max(res.getDisplayMetrics().widthPixels / 2,
+				res.getDimensionPixelSize(androidx.appcompat.R.dimen.abc_config_prefDialogWidth));
+		popup.setWidth(ViewUtils.measureListViewWidth(adapter, null, this, maxWidth));
+		popup.setOnItemClickListener((parent, view, position, id) -> {
+			Size size = ((Size) parent.getItemAtPosition(position));
+			binding.tfScreenWidth.setText(Integer.toString(size.width));
+			binding.tfScreenHeight.setText(Integer.toString(size.height));
+			popup.dismiss();
 		});
 		popup.show();
+		//noinspection ConstantConditions
+		popup.getListView().setOnItemLongClickListener((parent, view, position, id) -> {
+			AppCompatImageView iv = new AppCompatImageView(this);
+			iv.setImageResource(R.drawable.ic_setting_theme);
+			PopupWindow pw = new PopupWindow(iv, 50, 50);
+			PopupWindowCompat.showAsDropDown(pw, view, 0, 0, Gravity.END);
+			return true;
+		});
 	}
 
 	private void showColorPicker(EditText et) {
@@ -856,8 +897,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private void addResolutionToPresets() {
 		String width = binding.tfScreenWidth.getText().toString();
 		String height = binding.tfScreenHeight.getText().toString();
-		if (width.isEmpty()) width = "-1";
-		if (height.isEmpty()) height = "-1";
 		int w;
 		try {
 			w = Integer.parseInt(width);
@@ -885,7 +924,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		}
 		if (set.add(preset)) {
 			preferences.edit().putStringSet("ResolutionsPreset", set).apply();
-			screenPresets.add(preset);
+			screenPresets.add(new Size(w, h));
 			Toast.makeText(this, getString(R.string.saved, preset), Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(this, R.string.not_saved_exists, Toast.LENGTH_SHORT).show();
@@ -908,7 +947,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 					editText.getResources().getDisplayMetrics());
 			ColorDrawable colorDrawable = new ColorDrawable();
 			colorDrawable.setBounds(0, 0, size, size);
-			TextViewCompat.setCompoundDrawablesRelative(editText,null, null, colorDrawable, null);
+			TextViewCompat.setCompoundDrawablesRelative(editText, null, null, colorDrawable, null);
 			drawable = colorDrawable;
 			editText.setFilters(new InputFilter[]{this::filter});
 		}
@@ -932,13 +971,11 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
-			if (s.length() > 6) {
-				if (start >= 6) editText.getText().delete(6, s.length());
-				else {
-					int st = start + count;
-					int end = st + (before == 0 ? count : before);
-					editText.getText().delete(st, Math.min(end, s.length()));
-				}
+			int length = s.length();
+			if (length > 6) {
+				int st = Math.min(start + count, 6);
+				int end = st + (length - 6);
+				editText.getText().delete(st, end);
 			}
 		}
 
