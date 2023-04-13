@@ -27,6 +27,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'net.lingala.zip4j:zip4j:2.10.0'
-    implementation 'org.ow2.asm:asm:9.3'
+    //noinspection GradleDependency
+    implementation 'net.lingala.zip4j:zip4j:2.11.0'
+    implementation 'org.ow2.asm:asm:9.5'
 }
