@@ -19,6 +19,8 @@ package javax.microedition.media;
 
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,45 +30,61 @@ import javax.microedition.amms.control.PanControl;
 import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.VolumeControl;
-import javax.microedition.media.protocol.DataSource;
+import javax.microedition.util.ContextHolder;
+
+import ru.woesss.synthlib.MidiPlayer;
 
 public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionListener,
 		VolumeControl, PanControl {
-	protected DataSource source;
-	protected int state;
+	private static String soundFont;
+	private final boolean useSoundFont;
+	protected InternalDataSource source;
+	protected int state = UNREALIZED;
 	private MediaPlayer player;
-	private int loopCount;
+	private MidiPlayer midiPlayer;
+	private int loopCount = 1;
 
-	private ArrayList<PlayerListener> listeners;
-	private HashMap<String, Control> controls;
+	private final ArrayList<PlayerListener> listeners = new ArrayList<>();
+	private final HashMap<String, Control> controls = new HashMap<>();
 
-	private boolean mute;
-	private int level, pan;
+	private boolean mute = false;
+	private int level = 100;
+	private int pan;
 
-	private InternalMetaData metadata;
+	private final InternalMetaData metadata = new InternalMetaData();
 
-	public MicroPlayer(DataSource datasource) {
-		player = new AndroidPlayer();
-		player.setOnCompletionListener(this);
-
+	public MicroPlayer(InternalDataSource datasource) {
 		source = datasource;
-		state = UNREALIZED;
-
-		mute = false;
-		level = 100;
-		pan = 0;
-		loopCount = 1;
-
-		metadata = new InternalMetaData();
-		InternalEqualizer equalizer = new InternalEqualizer();
-
-		listeners = new ArrayList<>();
-		controls = new HashMap<>();
+		boolean useSoundFont = false;
+		if (soundFont != null && datasource.isMidi) {
+			try {
+				midiPlayer = new MidiPlayer(soundFont);
+				midiPlayer.setOnCompletionListener(this);
+				useSoundFont = true;
+			} catch (Exception e) {
+				Log.e("MicroPlayer", "Init soundfont failed", e);
+				ContextHolder.getActivity().runOnUiThread(() -> {
+					Toast.makeText(ContextHolder.getActivity(),
+							"Failed to load soundfont, default selected",
+							Toast.LENGTH_SHORT)
+							.show();
+				});
+			}
+		}
+		if (!useSoundFont) {
+			player = new AndroidPlayer();
+			player.setOnCompletionListener(this);
+		}
+		this.useSoundFont = useSoundFont;
 
 		controls.put(VolumeControl.class.getName(), this);
 		controls.put(PanControl.class.getName(), this);
 		controls.put(MetaDataControl.class.getName(), metadata);
-		controls.put(EqualizerControl.class.getName(), equalizer);
+		controls.put(EqualizerControl.class.getName(), new InternalEqualizer());
+	}
+
+	public static void setSoundFont(String path) {
+		soundFont = path;
 	}
 
 	@Override
@@ -115,14 +133,21 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 
 		if (loopCount == 1) {
 			state = PREFETCHED;
-			player.reset();
+			if (useSoundFont) {
+				midiPlayer.reset();
+			} else {
+				player.reset();
+			}
 		} else if (loopCount > 1) {
 			loopCount--;
 		}
 
-		if (state == STARTED && loopCount != -1) {
-			player.start();
-			postEvent(PlayerListener.STARTED, getMediaTime());
+		if (state == STARTED) {
+			if (useSoundFont) {
+				midiPlayer.start();
+			} else if (loopCount != -1) {
+				player.start();
+			}
 		}
 	}
 
@@ -133,7 +158,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		if (state == UNREALIZED) {
 			try {
 				source.connect();
-				player.setDataSource(source.getLocator());
+				if (useSoundFont) {
+					midiPlayer.setDataSource(source.getLocator());
+				} else {
+					player.setDataSource(source.getLocator());
+				}
 			} catch (IOException e) {
 				throw new MediaException(e.getMessage());
 			}
@@ -168,7 +197,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		prefetch();
 
 		if (state == PREFETCHED) {
-			player.start();
+			if (useSoundFont) {
+				midiPlayer.start();
+			} else {
+				player.start();
+			}
 
 			state = STARTED;
 			postEvent(PlayerListener.STARTED, getMediaTime());
@@ -179,7 +212,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	public synchronized void stop() {
 		checkClosed();
 		if (state == STARTED) {
-			player.pause();
+			if (useSoundFont) {
+				midiPlayer.stop();
+			} else {
+				player.pause();
+			}
 
 			state = PREFETCHED;
 			postEvent(PlayerListener.STOPPED, getMediaTime());
@@ -191,7 +228,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		stop();
 
 		if (state == PREFETCHED) {
-			player.reset();
+			if (useSoundFont) {
+				midiPlayer.reset();
+			} else {
+				player.reset();
+			}
 			state = UNREALIZED;
 
 			try {
@@ -205,7 +246,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	@Override
 	public synchronized void close() {
 		if (state != CLOSED) {
-			player.release();
+			if (useSoundFont) {
+				midiPlayer.release();
+			} else {
+				player.release();
+			}
 		}
 
 		source.disconnect();
@@ -233,8 +278,10 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		checkRealized();
 		if (state < PREFETCHED) {
 			return 0;
+		} else if (useSoundFont) {
+			return midiPlayer.setMediaTime(now);
 		} else {
-			int time = (int) now / 1000;
+			int time = (int) (now / 1000);
 			if (time != player.getCurrentPosition()) {
 				player.seekTo(time);
 			}
@@ -247,8 +294,10 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		checkClosed();
 		if (state < PREFETCHED) {
 			return TIME_UNKNOWN;
+		} else if (useSoundFont) {
+			return midiPlayer.getMediaTime();
 		} else {
-			return player.getCurrentPosition() * 1000;
+			return player.getCurrentPosition() * 1000L;
 		}
 	}
 
@@ -257,8 +306,10 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		checkClosed();
 		if (state < PREFETCHED) {
 			return TIME_UNKNOWN;
+		} else if (useSoundFont) {
+			return midiPlayer.getDuration();
 		} else {
-			return player.getDuration() * 1000;
+			return player.getDuration() * 1000L;
 		}
 	}
 
@@ -272,10 +323,10 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 			throw new IllegalArgumentException("loop count must not be 0");
 		}
 
-		if (count == -1) {
-			player.setLooping(true);
+		if (useSoundFont) {
+//			midiPlayer.setLoopCount(count);
 		} else {
-			player.setLooping(false);
+			player.setLooping(count == -1);
 		}
 
 		loopCount = count;
@@ -315,7 +366,11 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 			}
 		}
 
-		player.setVolume(left, right);
+		if (useSoundFont) {
+			midiPlayer.setVolume(left, right);
+		} else {
+			player.setVolume(left, right);
+		}
 		postEvent(PlayerListener.VOLUME_CHANGED, this);
 	}
 

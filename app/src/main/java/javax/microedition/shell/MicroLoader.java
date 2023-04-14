@@ -54,6 +54,7 @@ import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.m3g.Graphics3D;
+import javax.microedition.media.MicroPlayer;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
 
@@ -263,6 +264,10 @@ public class MicroLoader {
 
 			KeyMapper.setKeyMapping(params);
 			Canvas.setHasTouchInput(params.touchInput);
+			File soundFont = new File(workDir + "/soundfont", params.soundfont);
+			if (soundFont.exists()) {
+				MicroPlayer.setSoundFont(soundFont.getPath());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -37,6 +37,7 @@ import javax.microedition.util.ContextHolder;
 
 public class InternalDataSource extends DataSource {
 	private static final String TAG = InternalDataSource.class.getName();
+	final boolean isMidi;
 
 	private File mediaFile;
 	private final String type;
@@ -60,17 +61,25 @@ public class InternalDataSource extends DataSource {
 			}
 
 			byte[] buf = new byte[8192];
-			int read;
-			while ((read = stream.read(buf)) != -1) {
-				raf.write(buf, 0, read);
+			int read = stream.read(buf);
+			if (read == -1) {
+				throw new IOException();
 			}
+			isMidi = buf[0] == 'M' && buf[1] == 'T' && buf[2] == 'h' && buf[3] == 'd';
+
+			do {
+				raf.write(buf, 0, read);
+			} while ((read = stream.read(buf)) != -1);
 			raf.close();
 			Log.d(TAG, "Media pipe closed: " + name);
 		} catch (IOException e) {
 			Log.d(TAG, "Media pipe failure: " + e);
+			throw e;
 		}
 
-		convert();
+		if (!isMidi) {
+			convert();
+		}
 	}
 
 	private void convert() {
