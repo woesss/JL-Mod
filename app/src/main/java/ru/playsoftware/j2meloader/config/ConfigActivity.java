@@ -17,6 +17,11 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT;
+import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT_PROFILE;
+import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,33 +55,33 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.microedition.shell.MicroActivity;
-import javax.microedition.util.ContextHolder;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
-import androidx.core.widget.TextViewCompat;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.microedition.shell.MicroActivity;
+import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.base.BaseActivity;
 import ru.playsoftware.j2meloader.settings.KeyMapperActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import yuku.ambilwarna.AmbilWarnaDialog;
-
-import static ru.playsoftware.j2meloader.util.Constants.*;
 
 public class ConfigActivity extends BaseActivity implements View.OnClickListener, ShaderTuneAlert.Callback {
 	private static final String TAG = ConfigActivity.class.getSimpleName();
@@ -121,6 +126,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 	protected EditText tfVKSelFore;
 	protected EditText tfVKSelBack;
 	protected EditText tfVKOutline;
+
+	private Spinner spSoundfont;
 
 	protected EditText tfSystemProperties;
 
@@ -253,6 +260,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfVKSelBack = findViewById(R.id.tfVKSelBack);
 		tfVKOutline = findViewById(R.id.tfVKOutline);
 
+		spSoundfont = findViewById(R.id.spSoundfont);
+
 		fillScreenSizePresets(display.getWidth(), display.getHeight());
 
 		addFontSizePreset("128 x 128", 9, 13, 15);
@@ -348,6 +357,27 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 		tfVKSelFore.addTextChangedListener(new ColorTextWatcher(tfVKSelFore));
 		tfVKSelBack.addTextChangedListener(new ColorTextWatcher(tfVKSelBack));
 		tfVKOutline.addTextChangedListener(new ColorTextWatcher(tfVKOutline));
+		initSoundfontSpinner();
+	}
+
+	private void initSoundfontSpinner() {
+		File dir = new File(workDir + "/soundfont");
+		if (!dir.exists()) {
+			//noinspection ResultOfMethodCallIgnored
+			dir.mkdirs();
+		}
+		List<String> list = new ArrayList<>();
+		String[] files = dir.list((d, n) -> new File(d, n).isFile());
+		if (files != null) {
+			list.addAll(Arrays.asList(files));
+			Collections.sort(list);
+		}
+		list.add(0, "Android built-in soundfont");
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spSoundfont.setAdapter(adapter);
+		int position = list.indexOf(params.soundfont);
+		spSoundfont.setSelection(Math.max(position, 0));
 	}
 
 	private void onLockAspectChanged(CompoundButton cb, boolean isChecked) {
@@ -485,10 +515,8 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-
 			}
 		});
-
 	}
 
 	private void showCharsetPicker(View v) {
@@ -765,6 +793,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 				params.vkOutlineColor = Integer.parseInt(tfVKOutline.getText().toString(), 16);
 			} catch (Exception ignored) {
 			}
+			params.soundfont = spSoundfont.getSelectedItemPosition() > 0 ? (String) spSoundfont.getSelectedItem() : null;
 			params.systemProperties = getSystemProperties();
 
 			ProfilesManager.saveConfig(params);
@@ -983,7 +1012,7 @@ public class ConfigActivity extends BaseActivity implements View.OnClickListener
 					editText.getResources().getDisplayMetrics());
 			ColorDrawable colorDrawable = new ColorDrawable();
 			colorDrawable.setBounds(0, 0, size, size);
-			TextViewCompat.setCompoundDrawablesRelative(editText,null, null, colorDrawable, null);
+			TextViewCompat.setCompoundDrawablesRelative(editText, null, null, colorDrawable, null);
 			drawable = colorDrawable;
 			editText.setFilters(new InputFilter[]{this::filter});
 		}
