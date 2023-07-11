@@ -467,8 +467,11 @@ public class Main {
 
         // skip classes implemented in the emulator to avoid duplication (verification errors)
         try {
-            Class.forName(name.substring(0, name.length() - 6).replace('/', '.'));
-            return true;
+            String refName = name.substring(0, name.length() - 6).replace('/', '.');
+            if (!refName.startsWith("org.xmlpull.v1.")) {
+                Class.forName(refName);
+                return true;
+            }
         } catch (ClassNotFoundException ignored) {
         }
 
