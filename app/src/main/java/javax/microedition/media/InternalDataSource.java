@@ -74,7 +74,7 @@ public class InternalDataSource extends DataSource {
 	private void convert() {
 		try {
 			MediaInformation mediaInformation = FFprobe.getMediaInformation(mediaFile.getPath());
-			if (mediaInformation != null && "mmf".equals(mediaInformation.getFormat())) {
+			if (mediaInformation != null) {
 				StreamInformation streamInformation = mediaInformation.getStreams().get(0);
 				if (streamInformation.getCodec().contains("adpcm")) {
 					String newName = mediaFile.getPath() + ".wav";

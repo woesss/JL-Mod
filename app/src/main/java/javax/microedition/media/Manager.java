@@ -18,11 +18,14 @@
 package javax.microedition.media;
 
 import android.Manifest;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.microedition.io.Connector;
 import javax.microedition.media.protocol.DataSource;
@@ -34,15 +37,14 @@ import ru.woesss.j2me.mmapi.Plugin;
 import ru.woesss.j2me.mmapi.sonivox.PluginEAS;
 
 public class Manager {
+	private static final String TAG = "media.Manager";
 	public static final String TONE_DEVICE_LOCATOR = "device://tone";
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
 
 	private static final String FILE_LOCATOR = "file://";
 	private static final String CAPTURE_AUDIO_LOCATOR = "capture://audio";
 	private static final TimeBase DEFAULT_TIMEBASE = () -> System.nanoTime() / 1000L;
-	private static final Plugin[] PLUGINS = {
-			new PluginEAS()
-	};
+	private static final List<Plugin> PLUGINS = new ArrayList<>();
 
 	public static Player createPlayer(String locator) throws IOException, MediaException {
 		if (locator == null) {
@@ -93,8 +95,9 @@ public class Manager {
 		}
 		InternalDataSource datasource = new InternalDataSource(stream, type);
 		for (Plugin plugin : PLUGINS) {
-			if (plugin.checkFileType(datasource.getLocator())) {
-				return plugin.createPlayer(datasource);
+			Player player = plugin.createPlayer(datasource);
+			if (player != null) {
+				return player;
 			}
 		}
 		String[] supportedTypes = getSupportedContentTypes(null);
@@ -122,5 +125,13 @@ public class Manager {
 	public synchronized static void playTone(int note, int duration, int volume)
 			throws MediaException {
 		ToneManager.play(note, duration, volume);
+	}
+
+	static {
+		try {
+			PLUGINS.add(new PluginEAS());
+		} catch (Throwable e) {
+			Log.w(TAG, "static initializer: ", e);
+		}
 	}
 }
