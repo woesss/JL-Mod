@@ -91,12 +91,11 @@ LOCAL_CFLAGS += \
 
 LOCAL_C_INCLUDES := \
 	$(LOCAL_PATH)/host_src \
-	$(LOCAL_PATH)/lib_src \
-	$(LOCAL_PATH)/log
+	$(LOCAL_PATH)/lib_src
 
 LOCAL_ARM_MODE := arm
 
-LOCAL_LDLIBS := -llog
+LOCAL_SHARED_LIBRARIES := util
 
 LOCAL_MODULE := sonivox
 
