@@ -17,7 +17,6 @@
 
 package ru.playsoftware.j2meloader;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
@@ -40,15 +39,12 @@ import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
-import ru.playsoftware.j2meloader.util.StoragePermissionContract;
+import ru.playsoftware.j2meloader.util.StoragePermissionHelper;
 import ru.woesss.j2me.installer.InstallerDialog;
 
 public class MainActivity extends AppCompatActivity {
 
-	private final ActivityResultLauncher<Boolean> permissionsLauncher = registerForActivityResult(
-			new StoragePermissionContract(),
-			this::onPermissionResult
-	);
+	private final StoragePermissionHelper storagePermissionHelper = new StoragePermissionHelper(this, this::onPermissionResult);
 
 	private final ActivityResultLauncher<String> openDirLauncher = registerForActivityResult(
 			new PickDirResultContract(),
@@ -62,11 +58,7 @@ public class MainActivity extends AppCompatActivity {
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		try {
-			permissionsLauncher.launch(true);
-		} catch (ActivityNotFoundException e) {
-			permissionsLauncher.launch(false);
-		}
+		storagePermissionHelper.launch(this);
 		appListModel = new ViewModelProvider(this).get(AppListModel.class);
 		if (savedInstanceState == null) {
 			Intent intent = getIntent();
@@ -112,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
 				.show();
 	}
 
-	private void onPermissionResult(boolean status) {
-		if (status) {
+	void onPermissionResult(boolean granted) {
+		if (granted) {
 			checkAndCreateDirs();
 			return;
 		}
@@ -121,13 +113,7 @@ public class MainActivity extends AppCompatActivity {
 				.setTitle(android.R.string.dialog_alert_title)
 				.setCancelable(false)
 				.setMessage(R.string.permission_request_failed)
-				.setNegativeButton(R.string.retry, (d, w) -> {
-					try {
-						permissionsLauncher.launch(true);
-					} catch (ActivityNotFoundException e) {
-						permissionsLauncher.launch(false);
-					}
-				})
+				.setNegativeButton(R.string.retry, (d, w) -> storagePermissionHelper.launch(this))
 				.setPositiveButton(R.string.exit, (d, w) -> finish())
 				.show();
 	}

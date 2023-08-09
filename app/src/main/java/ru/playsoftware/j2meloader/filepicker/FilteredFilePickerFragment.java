@@ -16,7 +16,6 @@
 
 package ru.playsoftware.j2meloader.filepicker;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
@@ -25,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,16 +36,13 @@ import java.util.List;
 import java.util.Stack;
 
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.util.StoragePermissionContract;
+import ru.playsoftware.j2meloader.util.StoragePermissionHelper;
 
 public class FilteredFilePickerFragment extends FilePickerFragment {
 	private static final List<String> extList = Arrays.asList(".jad", ".jar", ".kjx");
 	private static final Stack<File> history = new Stack<>();
 	private File mRequestedPath;
-	private final ActivityResultLauncher<Boolean> permissionsLauncher = registerForActivityResult(
-			new StoragePermissionContract(),
-			this::onPermissionResult
-	);
+	private final StoragePermissionHelper storagePermissionHelper = new StoragePermissionHelper(this, this::onPermissionResult);
 
 	@Override
 	public void onAttach(Context context) {
@@ -85,27 +80,24 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 
 	@Override
 	protected boolean hasPermission(@NonNull File path) {
-		return StoragePermissionContract.isGranted(requireContext());
+		return StoragePermissionHelper.isGranted(requireContext());
 	}
 
 	@Override
 	protected void handlePermission(@NonNull File path) {
 		this.mRequestedPath = path;
-		try {
-			permissionsLauncher.launch(true);
-		} catch (ActivityNotFoundException e) {
-			permissionsLauncher.launch(false);
-		}
+		storagePermissionHelper.launch(requireContext());
 	}
 
-	private void onPermissionResult(boolean isGranted) {
-		if (isGranted) {
+	private void onPermissionResult(boolean granted) {
+		if (granted) {
 			// Do refresh
 			if (this.mRequestedPath != null) {
 				refresh(this.mRequestedPath);
 			}
 		} else {
-			Toast.makeText(getContext(), com.nononsenseapps.filepicker.R.string.nnf_permission_external_write_denied,
+			Toast.makeText(getContext(),
+					com.nononsenseapps.filepicker.R.string.nnf_permission_external_write_denied,
 					Toast.LENGTH_SHORT).show();
 			// Treat this as a cancel press
 			if (mListener != null) {
