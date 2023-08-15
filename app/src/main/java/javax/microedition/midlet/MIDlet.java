@@ -20,6 +20,7 @@ package javax.microedition.midlet;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 import org.microemu.cldc.file.FileSystemFileConnection;
 
@@ -33,6 +34,7 @@ import javax.microedition.shell.MidletThread;
 import javax.microedition.util.ContextHolder;
 
 public abstract class MIDlet {
+	private static final String TAG = "MIDlet";
 
 	private static Map<String, String> properties;
 
@@ -45,7 +47,9 @@ public abstract class MIDlet {
 	}
 
 	public String getAppProperty(String key) {
-		return properties.get(key);
+		String value = properties.get(key);
+		Log.d(TAG, "getAppProperty: " + key + "=" + value);
+		return value;
 	}
 
 	/**
