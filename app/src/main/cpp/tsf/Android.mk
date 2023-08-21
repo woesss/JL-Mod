@@ -4,7 +4,6 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES = \
 	Player.cpp \
-	PlayerListener.cpp \
 	mmapi_jni.cpp \
 
 LOCAL_CFLAGS += -O2 \
@@ -15,7 +14,7 @@ LOCAL_LDLIBS := -llog
 
 LOCAL_MODULE := tsf
 
-LOCAL_SHARED_LIBRARIES := oboe util
+LOCAL_SHARED_LIBRARIES := oboe util mmapi_common
 
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
     LOCAL_ARM_NEON := false

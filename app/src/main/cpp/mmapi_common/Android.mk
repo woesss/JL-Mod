@@ -3,21 +3,22 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES = \
+	src/PlayerListener.cpp \
+	src/BasePlayer.cpp \
+#	Player.cpp \
 	mmapi_jni.cpp \
-	mmapi_player.cpp \
-	mmapi_util.cpp \
-	mmapi_file.cpp \
-
 
 LOCAL_CFLAGS += -O2 \
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH) \
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include/mmapi \
+	$(LOCAL_PATH)/include/mmapi/midi \
 
-LOCAL_ARM_MODE := arm
+LOCAL_MODULE := mmapi_common
 
-LOCAL_MODULE := mmapi
+LOCAL_SHARED_LIBRARIES := oboe util
 
-LOCAL_SHARED_LIBRARIES := oboe sonivox util mmapi_common
+LOCAL_EXPORT_C_INCLUDES  :=	$(LOCAL_PATH)/include
+LOCAL_EXPORT_CFLAGS := $(LOCAL_CFLAGS)
 
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
     LOCAL_ARM_NEON := false
