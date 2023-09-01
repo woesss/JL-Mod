@@ -14,6 +14,10 @@ LOCAL_SRC_FILES := \
 	src/m3g_android.cpp \
 	src/m3g_android_gl.cpp
 
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+    LOCAL_ARM_NEON := false
+endif
+
 # Don't strip debug builds
 ifeq ($(NDK_DEBUG),1)
     cmd-strip :=

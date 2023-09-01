@@ -15,26 +15,31 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--keep public class javax.** { public protected *; }
--keep public class com.kddi.** { public protected *; }
--keep public class com.siemens.mp.** { public protected *; }
--keep public class com.samsung.util.** { public protected *; }
--keep public class com.sonyericsson.accelerometer.** { public protected *; }
--keep public class com.sprintpcs.media.** { public protected *; }
--keep public class com.mascotcapsule.micro3d.v3.* { public protected *; }
+
+# J2ME API's and extensions
 -keep public class com.jblend.graphics.j3d.* { public protected *; }
+-keep public class com.kddi.** { public protected *; }
+-keep public class com.mascotcapsule.micro3d.v3.* { public protected *; }
 -keep public class com.motorola.** { public protected *; }
 -keep public class com.nokia.mid.** { public protected *; }
+-keep public class com.samsung.util.** { public protected *; }
+-keep public class com.siemens.mp.** { public protected *; }
+-keep public class com.sonyericsson.accelerometer.** { public protected *; }
+-keep public class com.sprintpcs.media.** { public protected *; }
 -keep public class com.sun.midp.midlet.** { public protected *; }
 -keep public class com.vodafone.** { public protected *; }
+-keep public class javax.** { public protected *; }
 -keep public class mmpp.media.** { public protected *; }
+
+# emulator
+-keep public class org.microemu.** { public protected *; }
 # Keep the BuildConfig
 -keep class ru.playsoftware.j2meloader.BuildConfig { *; }
-
--keep public class org.microemu.** { public protected *; }
 -keep class ru.playsoftware.j2meloader.util.SparseIntArrayAdapter { *; }
--keep class com.arthenica.mobileffmpeg.** { *; }
 -keep class ru.playsoftware.j2meloader.crashes.models.* { *; }
+
+# dependencies
+-keep class com.arthenica.mobileffmpeg.** { *; }
 -keep public class org.acra.** { public protected *; }
 
 -obfuscationdictionary dictionary.pro

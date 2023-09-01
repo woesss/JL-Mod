@@ -1,16 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id 'com.android.application' version '7.2.1' apply false
-    id 'com.android.library' version '7.2.1' apply false
+    id 'com.android.application' version '8.1.1' apply false
+    id 'com.android.library' version '8.1.1' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.10' apply false
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
 
 ext {
-    COMPILE_SDK = 32
+    COMPILE_SDK = 34
     MIN_SDK = 14
-    TARGET_SDK = 32
-    NDK_VERSION = '24.0.8215888'
+    TARGET_SDK = 34
+    NDK_VERSION = '22.1.7171670'
 }

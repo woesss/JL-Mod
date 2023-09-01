@@ -4,13 +4,12 @@ plugins {
 
 android {
     compileSdk COMPILE_SDK
-    namespace 'com.android.dx'
+    namespace 'ru.playsoftware.j2meloader.dexlib'
 
     defaultConfig {
         minSdk MIN_SDK
         targetSdk TARGET_SDK
-        versionCode 1
-        versionName "1.13"
+        buildConfigField 'int', 'VERSION_CODE', "1"
     }
 
     buildTypes {
@@ -27,6 +26,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'net.lingala.zip4j:zip4j:2.10.0'
-    implementation 'org.ow2.asm:asm:9.3'
+    //noinspection GradleDependency
+    implementation 'net.lingala.zip4j:zip4j:2.11.0'
+    implementation 'org.ow2.asm:asm:9.5'
 }

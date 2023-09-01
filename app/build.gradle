@@ -1,11 +1,7 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
-
-archivesBaseName = rootProject.name
-def midletArchivesBaseName
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(rootProject.file("keystore.properties")))
 
 android {
     compileSdk COMPILE_SDK
@@ -23,12 +19,22 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        viewBinding true
+        prefab true
+    }
+
     signingConfigs {
         emulator {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile rootProject.file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            def file = rootProject.file("keystore.properties")
+            if (file.exists()) file.withInputStream {
+                def keystoreProperties = new Properties()
+                keystoreProperties.load(it)
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile rootProject.file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
 
@@ -49,17 +55,15 @@ android {
         disable 'MissingTranslation'
     }
 
-    flavorDimensions 'default'
+    flavorDimensions = ['default']
     productFlavors {
-        // variant dimension for create emulator
-        emulator {
+        emulator { // variant dimension for create emulator
             buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.emulator
             versionNameSuffix System.getenv('VERSION_SUFFIX')
         }
-        // variant dimension for create android port from J2ME app source
-        midlet {
+        midlet { // variant dimension for create android port from J2ME app source
             buildConfigField 'boolean', 'FULL_EMULATOR', 'false'
             // configure midlet's port project params here, as default it read from app manifest,
             // placed to 'app/src/midlet/resources/MIDLET-META-INF/MANIFEST.MF'
@@ -69,7 +73,6 @@ android {
             applicationId "com.example.androidlet.${apkName.toLowerCase()}"
             versionName = props.getValue('MIDlet-Version')
             resValue 'string', 'app_name', midletName
-            midletArchivesBaseName = apkName
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-midlet.pro'
         }
     }
@@ -88,57 +91,55 @@ android {
         }
     }
 
-    applicationVariants.all {
+    applicationVariants.configureEach {
         if (buildType.name == 'debug' && flavorName == 'emulator') {
             resValue 'string', 'app_name', 'JL-Debug'
         }
-        def baseName = flavorName == 'midlet' ? "${midletArchivesBaseName}-" : "${rootProject.name}_"
-        outputs.all {
-            outputFileName = "${baseName}${versionName}-${dirName}-${buildType.name}.apk".replaceAll('--+', '-')
-        }
-    }
-
-    signingConfigs {
-        emulatorRelease {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+        outputs.configureEach {
+            outputFileName = "${rootProject.name}_${versionName}-${dirName}.apk".replaceAll('--+', '-')
         }
     }
 }
 
 def getMidletManifestProperties() {
-    def file = project.file('src/midlet/resources/MIDLET-META-INF/MANIFEST.MF')
     def mf = new java.util.jar.Manifest()
-    if (file.exists()) {
-        def is = null
-        try {
-            is = new FileInputStream(file)
-            mf.read(is)
-        } finally {
-            if (is != null) is.close()
-        }
-    }
+    def file = project.file('src/midlet/resources/MIDLET-META-INF/MANIFEST.MF')
+    if (file.exists()) file.withInputStream { mf.read(it) }
     return mf.mainAttributes
 }
 
 dependencies {
     implementation project(':dexlib')
 
-    def roomVersion = '2.4.2'
+    def roomVersion = '2.5.2'
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
 
-    annotationProcessor 'com.google.auto.service:auto-service:1.0.1'
-    compileOnly 'com.google.auto.service:auto-service-annotations:1.0.1'
+    annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
+    compileOnly 'com.google.auto.service:auto-service-annotations:1.1.1'
 
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.activity:activity-ktx:1.7.2'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.arch.core:core-common:2.2.0'
+    implementation 'androidx.collection:collection-ktx:1.2.0'
+    implementation 'androidx.concurrent:concurrent-futures:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+    implementation 'androidx.fragment:fragment-ktx:1.6.1'
+    implementation 'androidx.lifecycle:lifecycle-common:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.preference:preference:1.2.0'
-    implementation 'ch.acra:acra-dialog:5.9.3'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.1'
+    implementation 'androidx.transition:transition:1.4.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.oboe:oboe:1.7.0'
+
+    implementation 'ch.acra:acra-dialog:5.11.0'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.github.billthefarmer:mididriver:v1.21'
     implementation 'com.github.nikita36078:filepicker:4.3.0'
@@ -146,12 +147,13 @@ dependencies {
     implementation 'com.github.nikita36078:pngj:2.2.3'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'com.github.penn5:donations:3.6.0'
-    implementation 'com.google.android.material:material:1.6.1'
-    implementation 'com.google.code.gson:gson:2.9.0'
+    //noinspection GradleDependency
+    implementation 'com.google.code.gson:gson:2.9.0' // next version incompatible with Android 4
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'net.lingala.zip4j:zip4j:2.10.0'
+    //noinspection GradleDependency
+    implementation 'net.lingala.zip4j:zip4j:2.11.0' // next version adds unwanted case sensitivity
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
     testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
