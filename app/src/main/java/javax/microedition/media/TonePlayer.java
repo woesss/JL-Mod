@@ -21,9 +21,10 @@ import org.billthefarmer.mididriver.MidiDriver;
 import java.util.HashMap;
 
 import javax.microedition.media.control.ToneControl;
+import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.tone.ToneSequence;
 
-public class TonePlayer extends BasePlayer implements ToneControl {
+public class TonePlayer extends BasePlayer implements ToneControl, VolumeControl {
 
 	private static final byte[] EMPTY_MIDI_SEQUENCE = {
 			0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x10,
@@ -35,9 +36,12 @@ public class TonePlayer extends BasePlayer implements ToneControl {
 	private final MidiDriver midiDriver = MidiInterface.getDriver();
 	private byte[] midiSequence = EMPTY_MIDI_SEQUENCE;
 	private long duration;
+	private boolean isMute;
+	private int volume;
 
 	public TonePlayer() {
 		controls.put(ToneControl.class.getName(), this);
+		controls.put(VolumeControl.class.getName(), this);
 	}
 
 	@Override
@@ -81,5 +85,29 @@ public class TonePlayer extends BasePlayer implements ToneControl {
 	@Override
 	public void close() {
 		deallocate();
+	}
+
+	@Override
+	public void setMute(boolean mute) {
+		isMute = mute;
+		midiDriver.setVolume(mute ? 0 : volume);
+	}
+
+	@Override
+	public boolean isMuted() {
+		return isMute;
+	}
+
+	@Override
+	public int setLevel(int level) {
+		if (isMute || midiDriver.setVolume(level)) {
+			volume = level;
+		}
+		return volume;
+	}
+
+	@Override
+	public int getLevel() {
+		return volume;
 	}
 }

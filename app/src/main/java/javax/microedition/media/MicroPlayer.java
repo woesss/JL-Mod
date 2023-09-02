@@ -23,6 +23,8 @@ import android.media.MediaPlayer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.microedition.amms.control.PanControl;
 import javax.microedition.amms.control.audioeffect.EqualizerControl;
@@ -30,43 +32,30 @@ import javax.microedition.media.control.MetaDataControl;
 import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.protocol.DataSource;
 
-public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionListener,
+class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionListener,
 		VolumeControl, PanControl {
-	protected DataSource source;
-	protected int state;
-	private MediaPlayer player;
-	private int loopCount;
+	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
+			new Thread(r, "MidletPlayerCallback"));
+	private final ArrayList<PlayerListener> listeners = new ArrayList<>();
+	private final HashMap<String, Control> controls = new HashMap<>();
+	private final InternalMetaData metadata = new InternalMetaData();
+	private final MediaPlayer player = new AndroidPlayer();
 
-	private ArrayList<PlayerListener> listeners;
-	private HashMap<String, Control> controls;
+	private final DataSource source;
 
-	private boolean mute;
-	private int level, pan;
+	private int state = UNREALIZED;
+	private int loopCount = 1;
+	private boolean mute = false;
+	private int level = 100;
+	private int pan;
 
-	private InternalMetaData metadata;
-
-	public MicroPlayer(DataSource datasource) {
-		player = new AndroidPlayer();
-		player.setOnCompletionListener(this);
-
+	MicroPlayer(DataSource datasource) {
 		source = datasource;
-		state = UNREALIZED;
-
-		mute = false;
-		level = 100;
-		pan = 0;
-		loopCount = 1;
-
-		metadata = new InternalMetaData();
-		InternalEqualizer equalizer = new InternalEqualizer();
-
-		listeners = new ArrayList<>();
-		controls = new HashMap<>();
-
+		player.setOnCompletionListener(this);
 		controls.put(VolumeControl.class.getName(), this);
 		controls.put(PanControl.class.getName(), this);
 		controls.put(MetaDataControl.class.getName(), metadata);
-		controls.put(EqualizerControl.class.getName(), equalizer);
+		controls.put(EqualizerControl.class.getName(), new InternalEqualizer());
 	}
 
 	@Override
@@ -98,11 +87,10 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		listeners.remove(playerListener);
 	}
 
-	public synchronized void postEvent(String event, Object eventData) {
+	private synchronized void postEvent(String event, Object eventData) {
 		for (PlayerListener listener : listeners) {
 			// Callbacks should be async
-			Runnable r = () -> listener.playerUpdate(this, event, eventData);
-			(new Thread(r, "MIDletPlayerCallback")).start();
+			callbackExecutor.execute(() -> listener.playerUpdate(this, event, eventData));
 		}
 	}
 
@@ -214,13 +202,13 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		postEvent(PlayerListener.CLOSED, null);
 	}
 
-	protected void checkClosed() {
+	private void checkClosed() {
 		if (state == CLOSED) {
 			throw new IllegalStateException("player is closed");
 		}
 	}
 
-	protected void checkRealized() {
+	private void checkRealized() {
 		checkClosed();
 
 		if (state == UNREALIZED) {
@@ -234,7 +222,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		if (state < PREFETCHED) {
 			return 0;
 		} else {
-			int time = (int) now / 1000;
+			int time = (int) (now / 1000L);
 			if (time != player.getCurrentPosition()) {
 				player.seekTo(time);
 			}
@@ -248,7 +236,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		if (state < PREFETCHED) {
 			return TIME_UNKNOWN;
 		} else {
-			return player.getCurrentPosition() * 1000;
+			return player.getCurrentPosition() * 1000L;
 		}
 	}
 
@@ -258,7 +246,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 		if (state < PREFETCHED) {
 			return TIME_UNKNOWN;
 		} else {
-			return player.getDuration() * 1000;
+			return player.getDuration() * 1000L;
 		}
 	}
 
@@ -272,11 +260,7 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 			throw new IllegalArgumentException("loop count must not be 0");
 		}
 
-		if (count == -1) {
-			player.setLooping(true);
-		} else {
-			player.setLooping(false);
-		}
+		player.setLooping(count == -1);
 
 		loopCount = count;
 	}
@@ -380,5 +364,4 @@ public class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionL
 	public int getPan() {
 		return pan;
 	}
-
 }

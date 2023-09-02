@@ -30,6 +30,9 @@ import javax.microedition.media.protocol.SourceStream;
 import javax.microedition.media.tone.ToneManager;
 import javax.microedition.util.ContextHolder;
 
+import ru.woesss.j2me.mmapi.Plugin;
+import ru.woesss.j2me.mmapi.sonivox.PluginEAS;
+
 public class Manager {
 	public static final String TONE_DEVICE_LOCATOR = "device://tone";
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
@@ -37,6 +40,9 @@ public class Manager {
 	private static final String FILE_LOCATOR = "file://";
 	private static final String CAPTURE_AUDIO_LOCATOR = "capture://audio";
 	private static final TimeBase DEFAULT_TIMEBASE = () -> System.nanoTime() / 1000L;
+	private static final Plugin[] PLUGINS = {
+			new PluginEAS()
+	};
 
 	public static Player createPlayer(String locator) throws IOException, MediaException {
 		if (locator == null) {
@@ -73,7 +79,8 @@ public class Manager {
 			}
 			SourceStream sourceStream = sourceStreams[0];
 			InputStream stream = new InternalSourceStream(sourceStream);
-			return new MicroPlayer(new InternalDataSource(stream, type));
+			InternalDataSource datasource = new InternalDataSource(stream, type);
+			return new MicroPlayer(datasource);
 		} else {
 			return new BasePlayer();
 		}
@@ -84,9 +91,15 @@ public class Manager {
 		if (stream == null) {
 			throw new IllegalArgumentException();
 		}
+		InternalDataSource datasource = new InternalDataSource(stream, type);
+		for (Plugin plugin : PLUGINS) {
+			if (plugin.checkFileType(datasource.getLocator())) {
+				return plugin.createPlayer(datasource);
+			}
+		}
 		String[] supportedTypes = getSupportedContentTypes(null);
 		if (type != null && Arrays.asList(supportedTypes).contains(type.toLowerCase())) {
-			return new MicroPlayer(new InternalDataSource(stream, type));
+			return new MicroPlayer(datasource);
 		} else {
 			return new BasePlayer();
 		}
