@@ -17,6 +17,8 @@
 package javax.microedition.media;
 
 public interface PlayerListener {
+	String BUFFERING_STARTED = "bufferingStarted";
+	String BUFFERING_STOPPED = "bufferingStopped";
 	String CLOSED = "closed";
 	String DEVICE_AVAILABLE = "deviceAvailable";
 	String DEVICE_UNAVAILABLE = "deviceUnavailable";
@@ -26,6 +28,11 @@ public interface PlayerListener {
 	String STARTED = "started";
 	String STOPPED = "stopped";
 	String VOLUME_CHANGED = "volumeChanged";
+	String RECORD_STARTED = "recordStarted";
+	String RECORD_STOPPED = "recordStopped";
+	String RECORD_ERROR = "recordError";
+	String SIZE_CHANGED = "sizeChanged";
+	String STOPPED_AT_TIME = "stoppedAtTime";
 
 	void playerUpdate(Player player, String event, Object eventData);
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package javax.microedition.media.protocol;
 
 import java.io.IOException;
@@ -40,6 +41,4 @@ public interface SourceStream extends Controllable {
 	long seek(long pos) throws IOException;
 
 	long tell();
-
-
 }

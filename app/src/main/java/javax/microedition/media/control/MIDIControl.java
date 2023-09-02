@@ -17,22 +17,23 @@
 package javax.microedition.media.control;
 
 import javax.microedition.media.Control;
+import javax.microedition.media.MediaException;
 
 public interface MIDIControl extends Control {
 	int CONTROL_CHANGE = 176;
 	int NOTE_ON = 144;
 
-	int[] getBankList(boolean custom);
+	int[] getBankList(boolean custom) throws MediaException;
 
 	int getChannelVolume(int channel);
 
-	String getKeyName(int bank, int prog, int key);
+	String getKeyName(int bank, int prog, int key) throws MediaException;
 
-	int[] getProgram(int channel);
+	int[] getProgram(int channel) throws MediaException;
 
-	int[] getProgramList(int bank);
+	int[] getProgramList(int bank) throws MediaException;
 
-	String getProgramName(int bank, int prog);
+	String getProgramName(int bank, int prog) throws MediaException;
 
 	boolean isBankQuerySupported();
 
