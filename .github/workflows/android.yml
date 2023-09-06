@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: set up JDK 11
+      - name: set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'temurin'
           cache: gradle
 
@@ -30,15 +30,6 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew assembleEmulatorRelease
-
-      - name: rename
-        run: |
-          filenames=`ls app/build/outputs/apk/emulator/release/*.apk`
-          for eachfile in $filenames
-          do
-            newpath=${eachfile%.*};
-            mv $eachfile ${newpath%-*}.apk
-          done
 
       - name: Path lister action
         uses: Rishabh510/Path-lister-action@1.0
