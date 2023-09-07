@@ -1362,7 +1362,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			selected = false;
 			MicroActivity activity = ContextHolder.getActivity();
 			if (activity != null) {
-				activity.showExitConfirmation();
+				activity.runOnUiThread(activity::showExitConfirmation);
 			}
 		}
 	}
