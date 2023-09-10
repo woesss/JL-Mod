@@ -20,22 +20,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:text="JL-Mod:"
+        android:text="@string/app_name"
         android:textAppearance="?android:textAppearanceLarge"
         tools:ignore="HardcodedText" />
 
     <ViewStub
-        android:id="@+id/donations_paypal_stub_me"
+        android:id="@+id/donations_yoomoney_stub_me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inflatedId="@+id/donations_paypal_me"
-        android:layout="@layout/donations__fragment_paypal" />
-
-    <ViewStub
-        android:id="@+id/donations_qiwi_stub_me"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inflatedId="@+id/donations_qiwi_me"
         android:layout="@layout/donations__fragment_paypal" />
 
     <TextView
@@ -43,16 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:text="J2ME Loader:"
+        android:text="J2ME Loader"
         android:textAppearance="?android:textAppearanceLarge"
         tools:ignore="HardcodedText" />
-
-    <ViewStub
-        android:id="@+id/donations_paypal_stub_jl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inflatedId="@+id/donations_paypal_jl"
-        android:layout="@layout/donations__fragment_paypal" />
 
     <ViewStub
         android:id="@+id/donations_ym_stub_jl"
