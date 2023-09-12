@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.0.0
       - name: set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v3.12.0
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -31,44 +31,26 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew assembleEmulatorRelease
 
-      - name: Path lister action
-        uses: Rishabh510/Path-lister-action@1.0
-        id: pl
-        with:
-          path: "app/build/outputs/apk/emulator/release"
-          type: ".apk"
-
-      - name: Split Action
-        uses: JungWinter/split@v2.0.0
-        id: split
-        with:
-          msg: ${{ steps.pl.outputs.paths }}
-          separator: ' '
-
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: symbols
-          path: |
-            app/build/outputs/mapping
-            app/build/outputs/native-debug-symbols
+      - name: Prepare artifact
+        run: |
+          mkdir -p artifact/mapping
+          mv app/build/outputs/native-debug-symbols/**/* artifact
+          mv app/build/outputs/mapping/**/* artifact/mapping
+          (cd artifact && zip -r "$OLDPWD/symbols.zip" .)
 
       - name: Get version
         id: get_version
         run: |
           msg=$(git log -1 --pretty=format:"%s")
-          echo "::set-output name=version::${msg#* }"
+          echo "version=${msg#* }" >> $GITHUB_OUTPUT
 
       - name: Draft GitHub Release
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: "marvinpinto/action-automatic-releases@v1.2.1"
         with:
-          repo_token: "${{ secrets.REPO_TOKEN }}"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: ${{ steps.get_version.outputs.version }}
           prerelease: true
           draft: true
           files: |
-            ${{ steps.split.outputs._0 }}
-            ${{ steps.split.outputs._1 }}
-            ${{ steps.split.outputs._2 }}
-            ${{ steps.split.outputs._3 }}
-            ${{ steps.split.outputs._4 }}
+            app/build/outputs/apk/**/*.apk
+            symbols.zip
