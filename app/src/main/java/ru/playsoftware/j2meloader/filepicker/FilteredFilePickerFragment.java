@@ -1,5 +1,6 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2018-2020 Nikita Shakarun
+ * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -171,11 +172,11 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 					for (StorageVolume volume : sm.getStorageVolumes()) {
 						files.add(volume.getDirectory());
 					}
-					mFiles.replaceAll(files);
+					mFiles = files;
 					isLoading = false;
 					mCheckedItems.clear();
 					mCheckedVisibleViewHolders.clear();
-					mAdapter.setList(mFiles);
+					mAdapter.replaceAll(files);
 					if (mCurrentDirView != null) {
 						mCurrentDirView.setText(getFullPath(mCurrentPath));
 					}

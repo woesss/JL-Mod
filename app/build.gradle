@@ -142,9 +142,9 @@ dependencies {
     implementation 'ch.acra:acra-dialog:5.11.2'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.github.billthefarmer:mididriver:v1.21'
-    implementation 'com.github.nikita36078:filepicker:4.3.0'
     implementation 'com.github.nikita36078:mobile-ffmpeg:v4.3.2-compact'
     implementation 'com.github.nikita36078:pngj:2.2.3'
+    implementation 'com.github.woesss:filepicker:4.4.0'
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'com.github.penn5:donations:3.6.0'
     //noinspection GradleDependency
