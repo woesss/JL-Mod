@@ -30,13 +30,15 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.loader.app.LoaderManager;
+import androidx.loader.content.AsyncTaskLoader;
+import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nononsenseapps.filepicker.FilePickerFragment;
+import com.nononsenseapps.filepicker.AbstractFilePickerFragment;
 import com.nononsenseapps.filepicker.LogicHandler;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,32 +47,30 @@ import java.util.Stack;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.util.StoragePermissionHelper;
 
-public class FilteredFilePickerFragment extends FilePickerFragment {
+public class FilteredFilePickerFragment extends AbstractFilePickerFragment<File> {
 	private static final List<String> extList = Arrays.asList(".jad", ".jar", ".kjx");
-	private static final Stack<File> history = new Stack<>();
-	private final List<File> roots = new ArrayList<>();
-	private File mRequestedPath;
+	private static final File ROOT_FILE = new File("/");
+
+	private final Stack<File> history = new Stack<>();
 	private final StoragePermissionHelper storagePermissionHelper = new StoragePermissionHelper(this, this::onPermissionResult);
+
+	private File mRequestedPath;
 
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-			StorageManager sm = ContextCompat.getSystemService(requireContext(), StorageManager.class);
-			if (sm != null) {
-				for (StorageVolume volume : sm.getStorageVolumes()) {
-					roots.add(volume.getDirectory());
-				}
-			}
-		}
 		if (history.empty()) {
-			history.push(roots.isEmpty() ? Environment.getExternalStorageDirectory() : getRoot());
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+				history.push(Environment.getStorageDirectory());
+			} else {
+				history.push(Environment.getExternalStorageDirectory());
+			}
 		}
 
 		requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
 			@Override
 			public void handleOnBackPressed() {
-				if (isBackTop()) {
+				if (history.empty()) {
 					setEnabled(false);
 					requireActivity().onBackPressed();
 				} else {
@@ -78,15 +78,6 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 				}
 			}
 		});
-	}
-
-	@NonNull
-	@Override
-	public File getParent(@NonNull File from) {
-		if (roots.contains(from)) {
-			return getRoot();
-		}
-		return super.getParent(from);
 	}
 
 	@NonNull
@@ -132,7 +123,7 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 		}
 	}
 
-	private String getExtension(@NonNull File file) {
+	private static String getExtension(@NonNull File file) {
 		String name = file.getName();
 		int i = name.lastIndexOf('.');
 		if (i < 0) {
@@ -160,56 +151,6 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 		super.goToDir(file);
 	}
 
-	@Override
-	protected void refresh(@NonNull File nextPath) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && compareFiles(nextPath, getRoot()) == 0) {
-			StorageManager sm = ContextCompat.getSystemService(requireContext(), StorageManager.class);
-			if (sm != null) {
-				if (hasPermission(nextPath)) {
-					mCurrentPath = nextPath;
-					isLoading = true;
-					List<File> files = new ArrayList<>();
-					for (StorageVolume volume : sm.getStorageVolumes()) {
-						files.add(volume.getDirectory());
-					}
-					mFiles = files;
-					isLoading = false;
-					mCheckedItems.clear();
-					mCheckedVisibleViewHolders.clear();
-					mAdapter.replaceAll(files);
-					if (mCurrentDirView != null) {
-						mCurrentDirView.setText(getFullPath(mCurrentPath));
-					}
-					// Stop loading now to avoid a refresh clearing the user's selections
-					LoaderManager.getInstance(this).destroyLoader(0);
-				} else {
-					handlePermission(nextPath);
-				}
-			}
-			return;
-		}
-		super.refresh(nextPath);
-	}
-
-	@NonNull
-	@Override
-	public String getName(@NonNull File path) {
-		if (roots.contains(path) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-			StorageManager sm = ContextCompat.getSystemService(requireContext(), StorageManager.class);
-			if (sm != null) {
-				StorageVolume volume = sm.getStorageVolume(path);
-				if (volume != null) {
-					return volume.getDescription(requireContext());
-				}
-			}
-		}
-		return super.getName(path);
-	}
-
-	private boolean isBackTop() {
-		return history.empty();
-	}
-
 	private void goBack() {
 		File last = history.pop();
 		super.goToDir(last);
@@ -225,5 +166,124 @@ public class FilteredFilePickerFragment extends FilePickerFragment {
 	@Override
 	public Uri toUri(@NonNull File file) {
 		return Uri.fromFile(file);
+	}
+
+	@NonNull
+	@Override
+	public File getRoot() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+			return Environment.getStorageDirectory();
+		} else {
+			return ROOT_FILE;
+		}
+	}
+
+	@NonNull
+	@Override
+	public Loader<List<File>> getLoader() {
+		return new FileAsyncTaskLoader(requireContext(), mCurrentPath, this::isItemVisible);
+	}
+
+	@Override
+	public boolean isDir(@NonNull final File path) {
+		return path.isDirectory();
+	}
+
+	@NonNull
+	@Override
+	public String getName(@NonNull File path) {
+		return path.getName();
+	}
+
+	@NonNull
+	@Override
+	public File getParent(@NonNull final File from) {
+		if (from.getPath().equals(getRoot().getPath())) {
+			// Already at root, we can't go higher
+			return from;
+		} else if (from.getParentFile() != null) {
+			return from.getParentFile();
+		} else {
+			return from;
+		}
+	}
+
+	@NonNull
+	@Override
+	public File getPath(@NonNull final String path) {
+		return new File(path);
+	}
+
+	@NonNull
+	@Override
+	public String getFullPath(@NonNull final File path) {
+		return path.getPath();
+	}
+
+	@Override
+	public void onNewFolder(@NonNull final String name) {
+		File folder = new File(mCurrentPath, name);
+
+		if (folder.mkdir()) {
+			refresh(folder);
+		} else {
+			Toast.makeText(getActivity(),
+					com.nononsenseapps.filepicker.R.string.nnf_create_folder_error,
+					Toast.LENGTH_SHORT)
+					.show();
+		}
+	}
+
+	private static class FileAsyncTaskLoader extends AsyncTaskLoader<List<File>> {
+		private final FileFilter fileFilter;
+		private final File path;
+
+		public FileAsyncTaskLoader(Context context, File path, FileFilter fileFilter) {
+			super(context);
+			this.path = path;
+			this.fileFilter = fileFilter;
+		}
+
+		@Override
+		protected void onStartLoading() {
+			forceLoad();
+		}
+
+		@Override
+		public List<File> loadInBackground() {
+			List<File> fileList = new ArrayList<>();
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && path.equals(Environment.getStorageDirectory())) {
+				StorageManager sm = ContextCompat.getSystemService(getContext(), StorageManager.class);
+				if (sm != null) {
+					for (StorageVolume volume : sm.getStorageVolumes()) {
+						File volumeDirectory = volume.getDirectory();
+						if (volumeDirectory != null) {
+							String description = volume.getDescription(getContext());
+							fileList.add(new VolumeFile(volumeDirectory.getPath(), description));
+						}
+					}
+					if (fileList.size() > 0) {
+						return fileList;
+					}
+				}
+			}
+			File[] files = path.listFiles(fileFilter);
+			if (files != null) {
+				Arrays.sort(files, this::compareFiles);
+				fileList.addAll(Arrays.asList(files));
+			}
+			return fileList;
+		}
+
+		private int compareFiles(@NonNull File lhs, @NonNull File rhs) {
+			if (lhs.isDirectory()) {
+				if (!rhs.isDirectory()) {
+					return -1;
+				}
+			} else if (rhs.isDirectory()) {
+				return 1;
+			}
+			return lhs.getName().compareToIgnoreCase(rhs.getName());
+		}
 	}
 }
