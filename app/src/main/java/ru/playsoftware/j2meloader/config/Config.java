@@ -1,5 +1,6 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2018-2019 Nikita Shakarun
+ * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,10 +98,6 @@ public class Config {
 
 	public static String getAppDir() {
 		return appDir;
-	}
-
-	public static String getShadersDir() {
-		return emulatorDir + SHADERS_DIR;
 	}
 
 	public static void startApp(Context context, String name, String path, boolean showSettings) {

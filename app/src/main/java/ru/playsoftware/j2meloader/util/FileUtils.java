@@ -1,6 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2017-2020 Nikita Shakarun
+ * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +22,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import com.nononsenseapps.filepicker.Utils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -37,7 +36,6 @@ import kotlin.io.FilesKt;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class FileUtils {
-
 	private static final String TAG = FileUtils.class.getName();
 	private static final String TEMP_JAR_NAME = "tmp.jar";
 	private static final String TEMP_JAD_NAME = "tmp.jad";
@@ -69,8 +67,10 @@ public class FileUtils {
 	}
 
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
-		try (FileChannel sourceChannel = new FileInputStream(source).getChannel();
-			 FileChannel destChannel = new FileOutputStream(dest).getChannel()) {
+		try (FileInputStream fis = new FileInputStream(source);
+			 FileChannel sourceChannel = fis.getChannel();
+			 FileOutputStream fos = new FileOutputStream(dest);
+			 FileChannel destChannel = fos.getChannel()) {
 			destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
 		}
 	}
@@ -78,7 +78,7 @@ public class FileUtils {
 	public static void deleteDirectory(File dir) {
 		if (dir.isDirectory()) {
 			File[] listFiles = dir.listFiles();
-			if (listFiles != null && listFiles.length != 0) {
+			if (listFiles != null) {
 				for (File file : listFiles) {
 					deleteDirectory(file);
 				}
@@ -116,6 +116,7 @@ public class FileUtils {
 			} else {
 				file = new File(tmpDir, TEMP_JAD_NAME);
 			}
+			//noinspection IOStreamConstructor
 			try (OutputStream out = new FileOutputStream(file)) {
 				out.write(buf, 0, len);
 				while ((len = in.read(buf)) > 0) {
@@ -144,35 +145,6 @@ public class FileUtils {
 		}
 	}
 
-	static void moveFiles(File src, File dst) {
-		if (src.renameTo(dst)) return;
-		File[] files = src.listFiles();
-		if (files == null) {
-			return;
-		}
-		if (!dst.mkdirs()) {
-			Log.e(TAG, "moveFiles() can't create directory: " + dst);
-		}
-		for (File file : files) {
-			File to = new File(dst, file.getName());
-			if (file.isDirectory()) {
-				moveFiles(file, to);
-			} else if (!file.renameTo(to)) {
-				try {
-					copyFileUsingChannel(file, to);
-					if (!file.delete()) {
-						Log.e(TAG, "moveFiles() can't delete: " + file);
-					}
-				} catch (IOException e) {
-					Log.e(TAG, "moveFiles() can't move [" + file + "] to [" + to + "]", e);
-				}
-			}
-		}
-		if (!src.delete()) {
-			Log.e(TAG, "moveFiles() can't delete: " + src);
-		}
-	}
-
 	public static String getText(String path) {
 		try {
 			//noinspection CharsetObjectCanBeUsed
@@ -187,6 +159,8 @@ public class FileUtils {
 		if ((dir.isDirectory() || dir.mkdirs()) && dir.canWrite()) {
 			//noinspection ResultOfMethodCallIgnored
 			new File(dir, Config.SHADERS_DIR).mkdir();
+			//noinspection ResultOfMethodCallIgnored
+			new File(dir, Config.SOUNDBANKS_DIR).mkdir();
 			try {
 				File nomedia = new File(dir, ".nomedia");
 				//noinspection ResultOfMethodCallIgnored
