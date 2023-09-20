@@ -82,6 +82,9 @@
     <string name="midlet_vendor"><b>Vendor: </b></string>
     <string name="midlet_version"><b>Version: </b></string>
     <string name="more">More</string>
+    <string name="msg_error_loading_shader">Unsupported shader, default shader is used!</string>
+    <string name="msg_immediate_mode_disabled">Immediate mode disabled due to stack overflow</string>
+    <string name="msg_mascot_capsule" translatable="false">Mascot Capsule 3D!</string>
     <string name="msg_no_matches">No matches for \"%1$s\"</string>
     <string name="no_data_for_display">No data</string>
     <string name="not_saved_exists">Already exists</string>
@@ -250,5 +253,4 @@
     <string name="virtual_key_up" translatable="false">↑</string>
     <string name="warn_install_from_net">File will be downloaded from Internet</string>
     <string name="warning">Warning!!!</string>
-    <string name="warning_same_directory">Some settings have been changed in this mod.\nOriginal \"J2ME Loader\" may not work correctly with games, templates and settings installed or configured by the Mod.\nAre you sure you want to use the working folder \"J2ME Loader\"?</string>
 </resources>

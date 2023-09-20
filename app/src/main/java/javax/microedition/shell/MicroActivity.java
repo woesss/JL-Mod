@@ -1,7 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017-2018 Nikita Shakarun
- * Copyright 2019-2022 Yury Kharchenko
+ * Copyright 2017-2021 Nikita Shakarun
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -628,7 +629,7 @@ public class MicroActivity extends AppCompatActivity {
 		return appName;
 	}
 
-	public void toast(CharSequence message) {
+	public void toast(@StringRes int message) {
 		runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_LONG).show());
 	}
 
