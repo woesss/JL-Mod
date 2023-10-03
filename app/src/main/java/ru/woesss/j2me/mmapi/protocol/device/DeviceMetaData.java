@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package javax.microedition.media;
+package ru.woesss.j2me.mmapi.protocol.device;
 
-public class MediaException extends Exception {
-	public MediaException() {
-		super();
-	}
+import javax.microedition.media.InternalMetaData;
+import javax.microedition.media.protocol.DataSource;
 
-	public MediaException(String message) {
-		super(message);
+public class DeviceMetaData extends InternalMetaData {
+	@Override
+	public void updateMetaData(DataSource dataSource) {
+		// TODO: 07.10.2023 Is there anything that needs to be done here?
 	}
 }

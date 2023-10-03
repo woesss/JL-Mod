@@ -1,6 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2017-2020 Nikita Shakarun
+ * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +18,10 @@
 
 package javax.microedition.media;
 
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,28 +31,52 @@ import java.util.concurrent.Executors;
 import javax.microedition.amms.control.PanControl;
 import javax.microedition.amms.control.audioeffect.EqualizerControl;
 import javax.microedition.media.control.MetaDataControl;
+import javax.microedition.media.control.ToneControl;
 import javax.microedition.media.control.VolumeControl;
 import javax.microedition.media.protocol.DataSource;
+import javax.microedition.media.tone.MidiToneConstants;
+import javax.microedition.media.tone.ToneSequence;
+
+import kotlin.io.FilesKt;
+import ru.woesss.j2me.mmapi.FileCacheDataSource;
+import ru.woesss.j2me.mmapi.protocol.device.DeviceMetaData;
 
 class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionListener,
-		VolumeControl, PanControl {
+		VolumeControl, PanControl, ToneControl {
+	private static final String TAG = MicroPlayer.class.getSimpleName();
+
+	protected final HashMap<String, Control> controls = new HashMap<>();
+	protected final MediaPlayer player = new AndroidPlayer();
+	protected final DataSource source;
+	protected int state = UNREALIZED;
+
 	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
 			new Thread(r, "MidletPlayerCallback"));
 	private final ArrayList<PlayerListener> listeners = new ArrayList<>();
-	private final HashMap<String, Control> controls = new HashMap<>();
-	private final InternalMetaData metadata = new InternalMetaData();
-	private final MediaPlayer player = new AndroidPlayer();
+	private final InternalMetaData metadata;
 
-	private final DataSource source;
-
-	private int state = UNREALIZED;
 	private int loopCount = 1;
 	private boolean mute = false;
 	private int level = 100;
 	private int pan;
 
+	public MicroPlayer(String locator) throws IOException {
+		if (!Manager.TONE_DEVICE_LOCATOR.equals(locator)) {
+			throw new IllegalArgumentException();
+		}
+		source = new FileCacheDataSource("audio/x-tone-seq", "mid");
+		controls.put(MidiToneConstants.TONE_CONTROL_FULL_NAME, this);
+		metadata = new DeviceMetaData();
+		init();
+	}
+
 	MicroPlayer(DataSource datasource) {
 		source = datasource;
+		metadata = new InternalMetaData();
+		init();
+	}
+
+	private void init() {
 		player.setOnCompletionListener(this);
 		controls.put(VolumeControl.class.getName(), this);
 		controls.put(PanControl.class.getName(), this);
@@ -139,14 +165,7 @@ class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionListener
 		}
 
 		if (state == REALIZED) {
-			try {
-				MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-				retriever.setDataSource(source.getLocator());
-				metadata.updateMetaData(retriever);
-				retriever.release();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			metadata.updateMetaData(source);
 			state = PREFETCHED;
 		}
 	}
@@ -363,5 +382,26 @@ class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionListener
 	@Override
 	public int getPan() {
 		return pan;
+	}
+
+	// ToneControl
+
+	@Override
+	public void setSequence(byte[] sequence) {
+		if (state >= PREFETCHED) {
+			throw new IllegalStateException();
+		} else if (sequence == null) {
+			throw new IllegalArgumentException("sequence is NULL");
+		}
+		try {
+			ToneSequence tone = new ToneSequence(sequence);
+			tone.process();
+			byte[] data = tone.getByteArray();
+			String locator = source.getLocator();
+			FilesKt.writeBytes(new File(locator), data);
+		} catch (Exception e) {
+			Log.e(TAG, "setSequence: ", e);
+			throw new IllegalArgumentException(e);
+		}
 	}
 }
