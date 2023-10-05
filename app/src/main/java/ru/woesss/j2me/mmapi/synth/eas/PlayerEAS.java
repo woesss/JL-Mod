@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.woesss.j2me.mmapi.sonivox;
+package ru.woesss.j2me.mmapi.synth.eas;
 
 import android.util.Log;
 
@@ -63,8 +63,8 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		} else {
 			metadata = new InternalMetaData();
 		}
-		handle = EAS.playerInit(locator);
-		EAS.playerListener(handle, this);
+		handle = LibEAS.createPlayer(locator);
+		LibEAS.setListener(handle, this);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		checkClosed();
 
 		if (state == UNREALIZED) {
-			EAS.playerRealize(handle);
+			LibEAS.realize(handle);
 			if (controls == null) {
 				controls = new HashMap<>();
 				String locator = dataSource.getLocator();
@@ -100,9 +100,9 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 			try {
 				metadata.updateMetaData(dataSource);
 			} catch (Exception e) {
-				Log.w(TAG, "prefetch: get metadata failed", e);
+				Log.w(TAG, "prefetch: update metadata failed", e);
 			}
-			EAS.playerPrefetch(handle);
+			LibEAS.prefetch(handle);
 			state = PREFETCHED;
 		}
 	}
@@ -112,7 +112,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		prefetch();
 
 		if (state == PREFETCHED) {
-			EAS.playerStart(handle);
+			LibEAS.start(handle);
 
 			state = STARTED;
 			postEvent(PlayerListener.STARTED, getMediaTime());
@@ -123,7 +123,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 	public void stop() throws MediaException {
 		checkClosed();
 		if (state == STARTED) {
-			EAS.playerPause(handle);
+			LibEAS.pause(handle);
 
 			state = PREFETCHED;
 			postEvent(PlayerListener.STOPPED, getMediaTime());
@@ -139,7 +139,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		}
 
 		if (state == PREFETCHED) {
-			EAS.playerDeallocate(handle);
+			LibEAS.deallocate(handle);
 			state = UNREALIZED;
 		}
 	}
@@ -148,7 +148,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 	public void close() {
 		if (state != CLOSED) {
 			state = CLOSED;
-			EAS.playerClose(handle);
+			LibEAS.close(handle);
 		}
 
 		dataSource.disconnect();
@@ -158,7 +158,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 	@Override
 	public long setMediaTime(long now) throws MediaException {
 		checkRealized();
-		return EAS.setMediaTime(handle, now);
+		return LibEAS.setMediaTime(handle, now);
 	}
 
 	@Override
@@ -167,13 +167,13 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		if (state < PREFETCHED) {
 			return TIME_UNKNOWN;
 		} else {
-			return EAS.getMediaTime(handle);
+			return LibEAS.getMediaTime(handle);
 		}
 	}
 
 	@Override
 	public long getDuration() {
-		return EAS.playerGetDuration(handle);
+		return LibEAS.getDuration(handle);
 	}
 
 	@Override
@@ -185,7 +185,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		if (count == 0) {
 			throw new IllegalArgumentException("loop count must not be 0");
 		}
-		EAS.setRepeat(handle, count);
+		LibEAS.setRepeat(handle, count);
 	}
 
 	@Override
@@ -201,33 +201,33 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 
 	@Override
 	public int setPan(int pan) {
-		return EAS.setPan(handle, pan);
+		return LibEAS.setPan(handle, pan);
 	}
 
 	@Override
 	public int getPan() {
-		return EAS.getPan(handle);
+		return LibEAS.getPan(handle);
 	}
 
 	@Override
 	public void setMute(boolean mute) {
-		EAS.setMute(handle, mute);
+		LibEAS.setMute(handle, mute);
 
 	}
 
 	@Override
 	public boolean isMuted() {
-		return EAS.isMuted(handle);
+		return LibEAS.isMuted(handle);
 	}
 
 	@Override
 	public int setLevel(int level) {
-		return EAS.setVolume(handle, level);
+		return LibEAS.setVolume(handle, level);
 	}
 
 	@Override
 	public int getLevel() {
-		return EAS.getVolume(handle);
+		return LibEAS.getVolume(handle);
 	}
 
 	@Override
@@ -308,7 +308,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 			throw new IllegalArgumentException("sequence is NULL");
 		}
 		try {
-			EAS.playerSetDataSource(handle, sequence);
+			LibEAS.setDataSource(handle, sequence);
 		} catch (Exception e) {
 			Log.e(TAG, "setSequence: ", e);
 			throw new IllegalArgumentException(e);
@@ -317,7 +317,7 @@ class PlayerEAS extends BasePlayer implements VolumeControl, PanControl, ToneCon
 
 	@Override
 	protected void finalize() throws Throwable {
-		EAS.playerFinalize(handle);
+		LibEAS.finalize(handle);
 		super.finalize();
 	}
 }

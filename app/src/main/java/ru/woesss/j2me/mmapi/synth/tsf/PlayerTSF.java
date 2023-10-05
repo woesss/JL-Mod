@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.woesss.j2me.mmapi.tsf;
+package ru.woesss.j2me.mmapi.synth.tsf;
 
 import android.util.Log;
 
@@ -64,8 +64,8 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		} else {
 			metadata = new InternalMetaData();
 		}
-		handle = TinySoundFont.playerInit(locator);
-		TinySoundFont.playerListener(handle, this);
+		handle = LibTSF.createPlayer(locator);
+		LibTSF.setListener(handle, this);
 	}
 
 	@Override
@@ -73,7 +73,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		checkClosed();
 
 		if (state == UNREALIZED) {
-			TinySoundFont.playerRealize(handle);
+			LibTSF.realize(handle);
 			if (controls == null) {
 				controls = new HashMap<>();
 				String locator = dataSource.getLocator();
@@ -103,7 +103,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 			} catch (Exception e) {
 				Log.w(TAG, "prefetch: update metadata failed", e);
 			}
-			TinySoundFont.playerPrefetch(handle);
+			LibTSF.prefetch(handle);
 			state = PREFETCHED;
 		}
 	}
@@ -113,7 +113,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		prefetch();
 
 		if (state == PREFETCHED) {
-			TinySoundFont.playerStart(handle);
+			LibTSF.start(handle);
 
 			state = STARTED;
 			postEvent(PlayerListener.STARTED, getMediaTime());
@@ -124,7 +124,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 	public void stop() throws MediaException {
 		checkClosed();
 		if (state == STARTED) {
-			TinySoundFont.playerPause(handle);
+			LibTSF.pause(handle);
 
 			state = PREFETCHED;
 			postEvent(PlayerListener.STOPPED, getMediaTime());
@@ -140,7 +140,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		}
 
 		if (state == PREFETCHED) {
-			TinySoundFont.playerDeallocate(handle);
+			LibTSF.deallocate(handle);
 			state = UNREALIZED;
 		}
 	}
@@ -149,7 +149,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 	public void close() {
 		if (state != CLOSED) {
 			state = CLOSED;
-			TinySoundFont.playerClose(handle);
+			LibTSF.close(handle);
 		}
 
 		dataSource.disconnect();
@@ -159,7 +159,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 	@Override
 	public long setMediaTime(long now) throws MediaException {
 		checkRealized();
-		return TinySoundFont.setMediaTime(handle, now);
+		return LibTSF.setMediaTime(handle, now);
 	}
 
 	@Override
@@ -168,13 +168,13 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		if (state < PREFETCHED) {
 			return TIME_UNKNOWN;
 		} else {
-			return TinySoundFont.getMediaTime(handle);
+			return LibTSF.getMediaTime(handle);
 		}
 	}
 
 	@Override
 	public long getDuration() {
-		return TinySoundFont.playerGetDuration(handle);
+		return LibTSF.getDuration(handle);
 	}
 
 	@Override
@@ -186,7 +186,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 		if (count == 0) {
 			throw new IllegalArgumentException("loop count must not be 0");
 		}
-		TinySoundFont.setRepeat(handle, count);
+		LibTSF.setRepeat(handle, count);
 	}
 
 	@Override
@@ -202,33 +202,33 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 
 	@Override
 	public int setPan(int pan) {
-		return TinySoundFont.setPan(handle, pan);
+		return LibTSF.setPan(handle, pan);
 	}
 
 	@Override
 	public int getPan() {
-		return TinySoundFont.getPan(handle);
+		return LibTSF.getPan(handle);
 	}
 
 	@Override
 	public void setMute(boolean mute) {
-		TinySoundFont.setMute(handle, mute);
+		LibTSF.setMute(handle, mute);
 
 	}
 
 	@Override
 	public boolean isMuted() {
-		return TinySoundFont.isMuted(handle);
+		return LibTSF.isMuted(handle);
 	}
 
 	@Override
 	public int setLevel(int level) {
-		return TinySoundFont.setVolume(handle, level);
+		return LibTSF.setVolume(handle, level);
 	}
 
 	@Override
 	public int getLevel() {
-		return TinySoundFont.getVolume(handle);
+		return LibTSF.getVolume(handle);
 	}
 
 	@Override
@@ -312,7 +312,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 			ToneSequence tone = new ToneSequence(sequence);
 			tone.process();
 			sequence = tone.getByteArray();
-			TinySoundFont.playerSetDataSource(handle, sequence);
+			LibTSF.setDataSource(handle, sequence);
 		} catch (Exception e) {
 			Log.e(TAG, "setSequence: ", e);
 			throw new IllegalArgumentException(e);
@@ -321,7 +321,7 @@ class PlayerTSF extends BasePlayer implements VolumeControl, PanControl, ToneCon
 
 	@Override
 	protected void finalize() throws Throwable {
-		TinySoundFont.playerFinalize(handle);
+		LibTSF.finalize(handle);
 		super.finalize();
 	}
 }
