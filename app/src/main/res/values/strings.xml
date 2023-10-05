@@ -86,6 +86,7 @@
     <string name="msg_immediate_mode_disabled">Immediate mode disabled due to stack overflow</string>
     <string name="msg_mascot_capsule" translatable="false">Mascot Capsule 3D!</string>
     <string name="msg_no_matches">No matches for \"%1$s\"</string>
+    <string name="msg_unsupported_soundbank">Unsupported soundbank, default bank is used!</string>
     <string name="no_data_for_display">No data</string>
     <string name="not_saved_exists">Already exists</string>
     <string name="opt_save_screen_params">save screen params</string>

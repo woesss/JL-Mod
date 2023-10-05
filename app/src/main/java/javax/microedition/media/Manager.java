@@ -19,7 +19,6 @@
 package javax.microedition.media;
 
 import android.Manifest;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.IOException;
@@ -35,11 +34,9 @@ import javax.microedition.media.tone.ToneManager;
 import javax.microedition.util.ContextHolder;
 
 import ru.woesss.j2me.mmapi.Plugin;
-import ru.woesss.j2me.mmapi.synth.eas.PluginEAS;
-import ru.woesss.j2me.mmapi.synth.tsf.PluginTSF;
+import ru.woesss.j2me.mmapi.synth.SynthPluginFactory;
 
 public class Manager {
-	private static final String TAG = "media.Manager";
 	public static final String TONE_DEVICE_LOCATOR = "device://tone";
 	public static final String MIDI_DEVICE_LOCATOR = "device://midi";
 
@@ -137,15 +134,6 @@ public class Manager {
 	}
 
 	static {
-		try {
-			PLUGINS.add(new PluginEAS());
-		} catch (Throwable e) {
-			Log.w(TAG, "static initializer: ", e);
-		}
-		try {
-			PLUGINS.add(new PluginTSF());
-		} catch (Throwable e) {
-			Log.w(TAG, "static initializer: ", e);
-		}
+		SynthPluginFactory.loadPlugins(PLUGINS);
 	}
 }
