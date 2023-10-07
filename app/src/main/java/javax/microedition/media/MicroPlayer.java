@@ -50,8 +50,12 @@ class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionListener
 	protected final DataSource source;
 	protected int state = UNREALIZED;
 
-	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r ->
-			new Thread(r, "MidletPlayerCallback"));
+	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor(r -> {
+		Thread thread = new Thread(r, "MidletPlayerCallback");
+		thread.setUncaughtExceptionHandler((t, e) ->
+				Log.e(t.getName(), "UncaughtException in " + t, e));
+		return thread;
+	});
 	private final ArrayList<PlayerListener> listeners = new ArrayList<>();
 	private final InternalMetaData metadata;
 
