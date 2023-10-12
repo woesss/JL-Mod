@@ -44,7 +44,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -72,7 +71,6 @@ import java.util.Objects;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.List;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
@@ -612,9 +610,6 @@ public class MicroActivity extends AppCompatActivity {
 	public boolean onContextItemSelected(@NonNull MenuItem item) {
 		if (current instanceof Form) {
 			((Form) current).contextMenuItemSelected(item);
-		} else if (current instanceof List) {
-			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-			((List) current).contextMenuItemSelected(item, info.position);
 		}
 
 		return super.onContextItemSelected(item);

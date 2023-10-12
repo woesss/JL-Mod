@@ -1,17 +1,17 @@
 /*
- *  Copyright 2019-2022 Yury Kharchenko
+ * Copyright 2019-2023 Yury Kharchenko
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package javax.microedition.lcdui.commands;
 
@@ -50,12 +50,7 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 	private void onClick(View button) {
 		Object tag = button.getTag();
 		if (tag == null) {
-			PopupWindow popup = prepareMenu(2);
-			int y = btRight.getHeight();
-			View rootView = btRight.getRootView();
-			popup.setWidth(Math.min(rootView.getWidth(), rootView.getHeight()) / 2);
-			popup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-			popup.showAtLocation(rootView, Gravity.RIGHT | Gravity.BOTTOM, 0, y);
+			showMenu();
 		} else {
 			target.fireCommandAction((Command) tag);
 		}
@@ -137,5 +132,14 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 				btRight.setTag(null);
 		}
 		layout.setVisibility(View.VISIBLE);
+	}
+
+	public void showMenu() {
+		PopupWindow popup = prepareMenu(2);
+		int y = btRight.getHeight();
+		View rootView = btRight.getRootView();
+		popup.setWidth(Math.min(rootView.getWidth(), rootView.getHeight()) / 2);
+		popup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+		popup.showAtLocation(rootView, Gravity.RIGHT | Gravity.BOTTOM, 0, y);
 	}
 }
