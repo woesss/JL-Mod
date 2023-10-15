@@ -7,7 +7,9 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:background="?android:selectableItemBackground"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:focusable="true"
+    tools:showIn="@layout/fragment_appslist">
 
     <ImageView
         android:id="@+id/list_image"
