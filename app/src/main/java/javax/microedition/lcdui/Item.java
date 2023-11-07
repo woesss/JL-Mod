@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,8 +72,8 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 
 	private Form owner;
 
-	private final ArrayList<Command> commands = new ArrayList<>();
-	private ItemCommandListener listener = null;
+	final ArrayList<Command> commands = new ArrayList<>();
+	ItemCommandListener listener = null;
 	private Command defaultCommand;
 
 	private final SimpleEvent msgSetContextMenuListener = new SimpleEvent() {

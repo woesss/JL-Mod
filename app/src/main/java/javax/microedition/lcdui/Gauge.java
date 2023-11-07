@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2021-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +38,6 @@ public class Gauge extends Item {
 
 	private final boolean interactive;
 	private int value, maxValue;
-	private Alert alert;
 
 	private class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
 		@Override
@@ -57,14 +57,14 @@ public class Gauge extends Item {
 		}
 	}
 
-	private final SeekBarListener listener = new SeekBarListener();
+	private final SeekBarListener seekBarListener = new SeekBarListener();
 
 	public Gauge(String label, boolean interactive, int maxValue, int initialValue) {
 		setLabel(label);
 
 		this.interactive = interactive;
 		setMaxValue(maxValue);
-		setValue(value);
+		setValue(initialValue);
 	}
 
 	public int getValue() {
@@ -109,7 +109,7 @@ public class Gauge extends Item {
 			Context activity = ContextHolder.getActivity();
 			if (interactive) {
 				pbar = new AppCompatSeekBar(activity);
-				((SeekBar) pbar).setOnSeekBarChangeListener(listener);
+				((SeekBar) pbar).setOnSeekBarChangeListener(seekBarListener);
 			} else {
 				pbar = new ProgressBar(activity, null, android.R.attr.progressBarStyleHorizontal);
 				pbar.setIndeterminate(maxValue == INDEFINITE);
@@ -117,10 +117,6 @@ public class Gauge extends Item {
 
 			pbar.setMax(maxValue);
 			pbar.setProgress(value);
-
-			if (alert != null) {
-				pbar.setPadding(60, 0, 60, 0);
-			}
 		}
 
 		return pbar;
@@ -129,9 +125,5 @@ public class Gauge extends Item {
 	@Override
 	protected void clearItemContentView() {
 		pbar = null;
-	}
-
-	void setAlert(Alert alert) {
-		this.alert = alert;
 	}
 }

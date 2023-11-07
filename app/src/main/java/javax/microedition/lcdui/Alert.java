@@ -1,6 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
  * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ package javax.microedition.lcdui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.TypedValue;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
@@ -130,13 +132,15 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	public void setIndicator(Gauge indicator) {
-		if (indicator == null) {
-			if (this.indicator != null) {
-				this.indicator.setAlert(null);
-			}
-		} else {
-			if (indicator.isInteractive()) throw new IllegalArgumentException();
-			indicator.setAlert(this);
+		if (indicator != null && (indicator.isInteractive() ||
+				indicator.hasOwnerForm() ||
+				indicator.commands.size() > 0 ||
+				indicator.listener != null ||
+				indicator.getLabel() != null ||
+				indicator.getPreferredWidth() != -1 ||
+				indicator.getPreferredHeight() != -1 ||
+				indicator.getLayout() != Item.LAYOUT_DEFAULT)) {
+			throw new IllegalArgumentException();
 		}
 		this.indicator = indicator;
 	}
@@ -157,11 +161,11 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		return timeout;
 	}
 
-	public boolean finiteTimeout() {
+	boolean finiteTimeout() {
 		return timeout > 0 && countCommands() < 2;
 	}
 
-	public AlertDialog prepareDialog() {
+	AlertDialog prepareDialog() {
 		Context context = ContextHolder.getActivity();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -178,7 +182,12 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		}
 
 		if (indicator != null) {
-			builder.setView(indicator.getItemContentView());
+			View indicatorView = indicator.getItemContentView();
+			TypedValue typedValue = new TypedValue();
+			context.getTheme().resolveAttribute(androidx.appcompat.R.attr.dialogPreferredPadding, typedValue, true);
+			int p = (int) typedValue.getDimension(context.getResources().getDisplayMetrics());
+			indicatorView.setPadding(p, 0, p, 0);
+			builder.setView(indicatorView);
 		}
 
 		commands = getCommands();
