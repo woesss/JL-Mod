@@ -1,6 +1,8 @@
 /*
- * Copyright 2018 Nikita Shakarun
- * Copyright 2020 Yury Kharchenko
+ * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2015-2016 Nickolay Savchenko
+ * Copyright 2018-2019 Nikita Shakarun
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,27 +42,21 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.ListPopupWindow;
-import androidx.core.widget.PopupWindowCompat;
 import androidx.core.widget.TextViewCompat;
 import androidx.preference.PreferenceManager;
 
@@ -230,6 +226,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 						break;
 					case 1:
 						binding.cxParallel.setVisibility(View.GONE);
+						binding.shaderContainer.setVisibility(View.VISIBLE);
 						initShaderSpinner();
 						break;
 					case 2:
@@ -350,7 +347,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 	private void initShaderSpinner() {
 		if (spShaderAdapter != null) {
-			binding.shaderContainer.setVisibility(View.VISIBLE);
 			return;
 		}
 		File dir = new File(workDir + Config.SHADERS_DIR);
@@ -398,7 +394,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				binding.spShader.setSelection(position);
 			}
 		}
-		binding.shaderContainer.setVisibility(View.VISIBLE);
 		binding.spShader.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -828,34 +823,10 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		ListPopupWindow popup = new ListPopupWindow(this);
 		popup.setAnchorView(v);
 		popup.setModal(true);
-		ArrayAdapter<Size> adapter = new ArrayAdapter<Size>(this, android.R.layout.simple_list_item_1, screenPresets) {
-			@NonNull
-			@Override
-			public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-				final View view;
-				final TextView text;
-
-				if (convertView == null) {
-					view = getLayoutInflater().inflate(android.R.layout.simple_list_item_1, parent, false);
-					text = (TextView) view;
-					view.setTag(text);
-				} else {
-					view = convertView;
-					text = (TextView) view.getTag();
-				}
-				final Size item = getItem(position);
-				text.setText(item.toString());
-//				view.setOnLongClickListener(v1 -> {
-//					Log.d(TAG, "getView: onLongClick");
-//					return true;
-//				});
-				return view;
-			}
-		};
+		ArrayAdapter<Size> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, screenPresets);
 		popup.setAdapter(adapter);
 		final Resources res = getResources();
-		int maxWidth = Math.max(res.getDisplayMetrics().widthPixels / 2,
-				res.getDimensionPixelSize(androidx.appcompat.R.dimen.abc_config_prefDialogWidth));
+		int maxWidth = res.getDisplayMetrics().widthPixels;
 		popup.setWidth(ViewUtils.measureListViewWidth(adapter, null, this, maxWidth));
 		popup.setOnItemClickListener((parent, view, position, id) -> {
 			Size size = ((Size) parent.getItemAtPosition(position));
@@ -864,14 +835,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			popup.dismiss();
 		});
 		popup.show();
-		//noinspection ConstantConditions
-		popup.getListView().setOnItemLongClickListener((parent, view, position, id) -> {
-			AppCompatImageView iv = new AppCompatImageView(this);
-			iv.setImageResource(R.drawable.ic_setting_theme);
-			PopupWindow pw = new PopupWindow(iv, 50, 50);
-			PopupWindowCompat.showAsDropDown(pw, view, 0, 0, Gravity.END);
-			return true;
-		});
 	}
 
 	private void showColorPicker(EditText et) {
@@ -1026,7 +989,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				if (size <= 0) return;
 				int value = Math.round(size * aspect);
 				dst.setText(String.valueOf(value));
-			} catch (NumberFormatException ignored) { }
+			} catch (NumberFormatException ignored) {}
 		}
 
 		public void onFocusChange(View v, boolean hasFocus) {

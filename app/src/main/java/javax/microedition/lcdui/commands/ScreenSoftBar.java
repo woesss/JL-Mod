@@ -16,9 +16,9 @@
 package javax.microedition.lcdui.commands;
 
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.PopupWindow;
 
 import java.util.Arrays;
@@ -28,22 +28,17 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Screen;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.databinding.SoftButtonBarBinding;
 
 public class ScreenSoftBar extends AbstractSoftKeysBar {
-	private final View layout;
-	private final Button btLeft;
-	private final Button btMiddle;
-	private final Button btRight;
+	private final SoftButtonBarBinding binding;
 
-	public ScreenSoftBar(Screen target, View root) {
+	public ScreenSoftBar(Screen target, ViewGroup root) {
 		super(target);
-		layout = root.findViewById(R.id.softBar);
-		btLeft = layout.findViewById(R.id.softLeft);
-		btMiddle = layout.findViewById(R.id.softMiddle);
-		btRight = layout.findViewById(R.id.softRight);
-		btLeft.setOnClickListener(this::onClick);
-		btMiddle.setOnClickListener(this::onClick);
-		btRight.setOnClickListener(this::onClick);
+		binding = SoftButtonBarBinding.inflate(LayoutInflater.from(root.getContext()), root, true);
+		binding.softLeft.setOnClickListener(this::onClick);
+		binding.softMiddle.setOnClickListener(this::onClick);
+		binding.softRight.setOnClickListener(this::onClick);
 		notifyChanged();
 	}
 
@@ -63,13 +58,13 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 		Command[] commands = target.getCommands();
 		int size = commands.length;
 		if (size == 0) {
-			btLeft.setTag(null);
-			btMiddle.setTag(null);
-			btRight.setTag(null);
-			btLeft.setText("");
-			btMiddle.setText("");
-			btRight.setText("");
-			layout.setVisibility(View.GONE);
+			binding.softLeft.setTag(null);
+			binding.softMiddle.setTag(null);
+			binding.softRight.setTag(null);
+			binding.softLeft.setText("");
+			binding.softMiddle.setText("");
+			binding.softRight.setText("");
+			binding.softBar.setVisibility(View.GONE);
 			return;
 		}
 		Arrays.sort(commands);
@@ -77,67 +72,67 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 		switch (size) {
 			case 1:
 				Command c = list.get(0);
-				btLeft.setText(c.getAndroidLabel());
-				btLeft.setTag(c);
+				binding.softLeft.setText(c.getAndroidLabel());
+				binding.softLeft.setTag(c);
 
-				btMiddle.setVisibility(View.INVISIBLE);
-				btMiddle.setText("");
-				btMiddle.setTag(null);
+				binding.softMiddle.setVisibility(View.INVISIBLE);
+				binding.softMiddle.setText("");
+				binding.softMiddle.setTag(null);
 
-				btRight.setVisibility(View.INVISIBLE);
-				btRight.setText("");
-				btRight.setTag(null);
+				binding.softRight.setVisibility(View.INVISIBLE);
+				binding.softRight.setText("");
+				binding.softRight.setTag(null);
 				break;
 			case 2:
 				c = list.get(0);
-				btLeft.setText(c.getAndroidLabel());
-				btLeft.setTag(c);
+				binding.softLeft.setText(c.getAndroidLabel());
+				binding.softLeft.setTag(c);
 
-				btMiddle.setVisibility(View.INVISIBLE);
-				btMiddle.setText("");
-				btMiddle.setTag(null);
+				binding.softMiddle.setVisibility(View.INVISIBLE);
+				binding.softMiddle.setText("");
+				binding.softMiddle.setTag(null);
 
-				btRight.setVisibility(View.VISIBLE);
+				binding.softRight.setVisibility(View.VISIBLE);
 				c = list.get(1);
-				btRight.setText(c.getAndroidLabel());
-				btRight.setTag(c);
+				binding.softRight.setText(c.getAndroidLabel());
+				binding.softRight.setTag(c);
 				break;
 			case 3:
 				c = list.get(0);
-				btLeft.setText(c.getAndroidLabel());
-				btLeft.setTag(c);
+				binding.softLeft.setText(c.getAndroidLabel());
+				binding.softLeft.setTag(c);
 
-				btMiddle.setVisibility(View.VISIBLE);
+				binding.softMiddle.setVisibility(View.VISIBLE);
 				c = list.get(1);
-				btMiddle.setText(c.getAndroidLabel());
-				btMiddle.setTag(c);
+				binding.softMiddle.setText(c.getAndroidLabel());
+				binding.softMiddle.setTag(c);
 
-				btRight.setVisibility(View.VISIBLE);
+				binding.softRight.setVisibility(View.VISIBLE);
 				c = list.get(2);
-				btRight.setText(c.getAndroidLabel());
-				btRight.setTag(c);
+				binding.softRight.setText(c.getAndroidLabel());
+				binding.softRight.setTag(c);
 				break;
 			default:
 				c = list.get(0);
-				btLeft.setText(c.getAndroidLabel());
-				btLeft.setTag(c);
+				binding.softLeft.setText(c.getAndroidLabel());
+				binding.softLeft.setTag(c);
 
-				btMiddle.setVisibility(View.VISIBLE);
+				binding.softMiddle.setVisibility(View.VISIBLE);
 				c = list.get(1);
-				btMiddle.setText(c.getAndroidLabel());
-				btMiddle.setTag(c);
+				binding.softMiddle.setText(c.getAndroidLabel());
+				binding.softMiddle.setTag(c);
 
-				btRight.setVisibility(View.VISIBLE);
-				btRight.setText(R.string.cmd_menu);
-				btRight.setTag(null);
+				binding.softRight.setVisibility(View.VISIBLE);
+				binding.softRight.setText(R.string.cmd_menu);
+				binding.softRight.setTag(null);
 		}
-		layout.setVisibility(View.VISIBLE);
+		binding.softBar.setVisibility(View.VISIBLE);
 	}
 
 	public void showMenu() {
 		PopupWindow popup = prepareMenu(2);
-		int y = btRight.getHeight();
-		View rootView = btRight.getRootView();
+		int y = binding.softRight.getHeight();
+		View rootView = binding.softRight.getRootView();
 		popup.setWidth(Math.min(rootView.getWidth(), rootView.getHeight()) / 2);
 		popup.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 		popup.showAtLocation(rootView, Gravity.RIGHT | Gravity.BOTTOM, 0, y);

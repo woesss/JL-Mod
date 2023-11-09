@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,9 @@
 
 package ru.playsoftware.j2meloader.config;
 
+import static ru.playsoftware.j2meloader.util.Constants.ACTION_EDIT_PROFILE;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_DEFAULT_PROFILE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -31,9 +35,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.File;
-import java.util.ArrayList;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
@@ -42,9 +43,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
-import ru.playsoftware.j2meloader.R;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Objects;
 
-import static ru.playsoftware.j2meloader.util.Constants.*;
+import ru.playsoftware.j2meloader.R;
 
 public class ProfilesActivity extends AppCompatActivity implements EditNameAlert.Callback, AdapterView.OnItemClickListener {
 	private ProfilesAdapter adapter;
@@ -116,7 +119,7 @@ public class ProfilesActivity extends AppCompatActivity implements EditNameAlert
 			finish();
 			return true;
 		} else if (itemId == R.id.add) {
-			EditNameAlert.newInstance(getString(R.string.enter_name), -1)
+			EditNameAlert.newInstance(getString(R.string.enter_name), null, -1)
 					.show(getSupportFragmentManager(), "alert_create_profile");
 			return true;
 		}
@@ -138,7 +141,7 @@ public class ProfilesActivity extends AppCompatActivity implements EditNameAlert
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-		int index = info.position;
+		int index = Objects.requireNonNull(info).position;
 		final Profile profile = adapter.getItem(index);
 		int itemId = item.getItemId();
 		if (itemId == R.id.action_context_default) {
@@ -152,7 +155,7 @@ public class ProfilesActivity extends AppCompatActivity implements EditNameAlert
 			startActivity(intent);
 			return true;
 		} else if (itemId == R.id.action_context_rename) {
-			EditNameAlert.newInstance(getString(R.string.enter_new_name), index)
+			EditNameAlert.newInstance(getString(R.string.enter_new_name), profile.getName(), index)
 					.show(getSupportFragmentManager(), "alert_rename_profile");
 		} else if (itemId == R.id.action_context_delete) {
 			profile.delete();

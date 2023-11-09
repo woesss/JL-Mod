@@ -1,6 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2017-2019 Nikita Shakarun
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +37,8 @@ import java.util.List;
 
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.databinding.ListRowGridJarBinding;
+import ru.playsoftware.j2meloader.databinding.ListRowJarBinding;
 
 class AppsListAdapter extends ListAdapter<AppItem, AppsListAdapter.AppViewHolder> implements Filterable {
 	static final int LAYOUT_TYPE_LIST = 0;
@@ -49,7 +52,7 @@ class AppsListAdapter extends ListAdapter<AppItem, AppsListAdapter.AppViewHolder
 	private int layout = LAYOUT_TYPE_LIST;
 
 	AppsListAdapter(View.OnCreateContextMenuListener contextMenuListener) {
-		super(new DiffUtil.ItemCallback<AppItem>() {
+		super(new DiffUtil.ItemCallback<>() {
 			@Override
 			public boolean areItemsTheSame(@NonNull AppItem oldItem, @NonNull AppItem newItem) {
 				return oldItem.getId() == newItem.getId();
@@ -72,21 +75,14 @@ class AppsListAdapter extends ListAdapter<AppItem, AppsListAdapter.AppViewHolder
 	@NonNull
 	@Override
 	public AppViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-		View view;
-		AppViewHolder holder;
+		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 		if (viewType == 1) {
-			view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row_grid_jar, parent, false);
-			holder = new AppViewHolder(view);
+			ListRowGridJarBinding binding = ListRowGridJarBinding.inflate(inflater, parent, false);
+			return new AppViewHolder(binding, contextMenuListener);
 		} else {
-			view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row_jar, parent, false);
-			holder = new AppListViewHolder(view);
+			ListRowJarBinding binding = ListRowJarBinding.inflate(inflater, parent, false);
+			return new AppListViewHolder(binding, contextMenuListener);
 		}
-		view.setOnClickListener(v -> {
-			AppItem item = getCurrentList().get(holder.getLayoutPosition());
-			Config.startApp(v.getContext(), item.getTitle(), item.getPathExt(), false);
-		});
-		view.setOnCreateContextMenuListener(contextMenuListener);
-		return holder;
 	}
 
 	@Override
@@ -113,13 +109,29 @@ class AppsListAdapter extends ListAdapter<AppItem, AppsListAdapter.AppViewHolder
 	}
 
 	static class AppViewHolder extends RecyclerView.ViewHolder {
-		final ImageView icon;
-		final TextView name;
+		private final ImageView icon;
+		private final TextView name;
 
-		AppViewHolder(View itemView) {
+		AppViewHolder(ListRowGridJarBinding binding, View.OnCreateContextMenuListener contextMenuListener) {
+			this(binding.getRoot(), binding.listTitle, binding.listImage, contextMenuListener);
+		}
+
+		AppViewHolder(View itemView,
+					  TextView listTitle,
+					  ImageView listImage,
+					  View.OnCreateContextMenuListener contextMenuListener) {
 			super(itemView);
-			icon = itemView.findViewById(R.id.list_image);
-			name = itemView.findViewById(R.id.list_title);
+			icon = listImage;
+			name = listTitle;
+
+			itemView.setOnClickListener(v -> {
+				AppsListAdapter adapter = (AppsListAdapter) getBindingAdapter();
+				if (adapter != null) {
+					AppItem item = adapter.getItem(getLayoutPosition());
+					Config.startApp(v.getContext(), item.getTitle(), item.getPathExt(), false);
+				}
+			});
+			itemView.setOnCreateContextMenuListener(contextMenuListener);
 		}
 
 		void onBind(AppItem item) {
@@ -136,13 +148,13 @@ class AppsListAdapter extends ListAdapter<AppItem, AppsListAdapter.AppViewHolder
 	}
 
 	static class AppListViewHolder extends AppViewHolder {
-		final TextView author;
-		final TextView version;
+		private final TextView author;
+		private final TextView version;
 
-		AppListViewHolder(View view) {
-			super(view);
-			author = view.findViewById(R.id.list_author);
-			version = view.findViewById(R.id.list_version);
+		AppListViewHolder(ListRowJarBinding binding, View.OnCreateContextMenuListener contextMenuListener) {
+			super(binding.getRoot(), binding.listTitle, binding.listImage, contextMenuListener);
+			author = binding.listAuthor;
+			version = binding.listVersion;
 		}
 
 		@Override

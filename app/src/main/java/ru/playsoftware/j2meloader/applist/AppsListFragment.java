@@ -1,7 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2017-2020 Nikita Shakarun
- * Copyright 2018-2022 Yury Kharchenko
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,11 +68,13 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -85,6 +86,7 @@ import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
+import ru.playsoftware.j2meloader.databinding.DialogInputBinding;
 import ru.playsoftware.j2meloader.databinding.FragmentAppslistBinding;
 import ru.playsoftware.j2meloader.donations.DonationsActivity;
 import ru.playsoftware.j2meloader.filepicker.FilteredFilePickerActivity;
@@ -168,7 +170,6 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 
 	@Override
 	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
 		MenuHost menuHost = requireActivity();
 		menuHost.addMenuProvider(this, getViewLifecycleOwner());
 
@@ -217,22 +218,12 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 	}
 
 	private void alertRename(AppItem item) {
-		FragmentActivity activity = requireActivity();
-		EditText editText = new EditText(activity);
+		TextInputLayout layout = DialogInputBinding.inflate(getLayoutInflater()).getRoot();
+		EditText editText = Objects.requireNonNull(layout.getEditText());
 		editText.setText(item.getTitle());
-		float density = getResources().getDisplayMetrics().density;
-		LinearLayout linearLayout = new LinearLayout(activity);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		int margin = (int) (density * 20);
-		params.setMargins(margin, 0, margin, 0);
-		linearLayout.addView(editText, params);
-		int paddingVertical = (int) (density * 16);
-		int paddingHorizontal = (int) (density * 8);
-		editText.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity)
+		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
 				.setTitle(R.string.action_context_rename)
-				.setView(linearLayout)
+				.setView(layout)
 				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
 					String title = editText.getText().toString().trim();
 					if (title.equals("")) {
@@ -275,7 +266,7 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AppItem appItem = ((AppItemLayout.AppItemMenuInfo) item.getMenuInfo()).appItem;
+		AppItem appItem = ((AppItemLayout.AppItemMenuInfo) Objects.requireNonNull(item.getMenuInfo())).appItem;
 		int itemId = item.getItemId();
 		if (itemId == R.id.action_context_shortcut) {
 			requestAddShortcut(appItem);
@@ -335,7 +326,7 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 	public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.main, menu);
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
-		SearchView searchView = (SearchView) searchItem.getActionView();
+		SearchView searchView = (SearchView) Objects.requireNonNull(searchItem.getActionView());
 		searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter ->
 						searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 							@Override

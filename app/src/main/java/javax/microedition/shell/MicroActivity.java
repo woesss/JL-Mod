@@ -41,7 +41,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -58,6 +57,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.acra.ACRA;
 import org.acra.ErrorReporter;
@@ -82,6 +83,7 @@ import io.reactivex.disposables.Disposable;
 import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.databinding.DialogInputBinding;
 import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.LogUtils;
 
@@ -573,25 +575,16 @@ public class MicroActivity extends AppCompatActivity {
 	}
 
 	private void showLimitFpsDialog() {
-		EditText editText = new EditText(this);
+		TextInputLayout inputLayout = DialogInputBinding.inflate(getLayoutInflater()).getRoot();
+		EditText editText = Objects.requireNonNull(inputLayout.getEditText());
 		editText.setHint(R.string.unlimited);
 		editText.setInputType(InputType.TYPE_CLASS_NUMBER);
 		editText.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
 		editText.setMaxLines(1);
 		editText.setSingleLine(true);
-		float density = getResources().getDisplayMetrics().density;
-		LinearLayout linearLayout = new LinearLayout(this);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.WRAP_CONTENT);
-		int margin = (int) (density * 20);
-		params.setMargins(margin, 0, margin, 0);
-		linearLayout.addView(editText, params);
-		int paddingVertical = (int) (density * 16);
-		int paddingHorizontal = (int) (density * 8);
-		editText.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
 		new AlertDialog.Builder(this)
 				.setTitle(R.string.PREF_LIMIT_FPS)
-				.setView(linearLayout)
+				.setView(inputLayout)
 				.setPositiveButton(android.R.string.ok, (d, w) -> {
 					Editable text = editText.getText();
 					int fps = 0;

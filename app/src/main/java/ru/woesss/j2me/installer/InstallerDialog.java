@@ -1,22 +1,21 @@
 /*
- *  Copyright 2020-2022 Yury Kharchenko
+ * Copyright 2020-2023 Yury Kharchenko
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package ru.woesss.j2me.installer;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,11 +23,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -47,6 +43,7 @@ import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.databinding.FragmentInstallerBinding;
 import ru.woesss.j2me.jar.Descriptor;
 
 public class InstallerDialog extends DialogFragment {
@@ -54,14 +51,13 @@ public class InstallerDialog extends DialogFragment {
 	private static final String ARG_ID = "InstallerDialog.id";
 	private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-	private TextView tvStatus;
-	private ProgressBar progress;
-	private AppRepository appRepository;
+	private FragmentInstallerBinding binding;
 	private Button btnOk;
 	private Button btnClose;
 	private Button btnRun;
+	private AppRepository appRepository;
 	private AppInstaller installer;
-	private AlertDialog mDialog;
+	private AlertDialog dialog;
 
 	/**
 	 * @param uri original uri from intent.
@@ -103,14 +99,10 @@ public class InstallerDialog extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-		LayoutInflater inflater = getLayoutInflater();
-		@SuppressLint("InflateParams")
-		View view = inflater.inflate(R.layout.fragment_installer, null);
-		tvStatus = view.findViewById(R.id.tvStatus);
-		progress = view.findViewById(R.id.progress);
-		mDialog = new AlertDialog.Builder(requireActivity(), getTheme())
+		binding = FragmentInstallerBinding.inflate(getLayoutInflater());
+		dialog = new AlertDialog.Builder(requireActivity(), getTheme())
 				.setIcon(R.mipmap.ic_launcher)
-				.setView(view)
+				.setView(binding.getRoot())
 				.setTitle("MIDlet installer")
 				.setMessage("")
 				.setCancelable(false)
@@ -118,7 +110,13 @@ public class InstallerDialog extends DialogFragment {
 				.setNegativeButton(android.R.string.cancel, null)
 				.setNeutralButton(R.string.START_CMD, null)
 				.create();
-		return mDialog;
+		return dialog;
+	}
+
+	@Override
+	public void onDismiss(@NonNull DialogInterface dialog) {
+		super.onDismiss(dialog);
+		binding = null;
 	}
 
 	@Override
@@ -133,9 +131,9 @@ public class InstallerDialog extends DialogFragment {
 		if (installer != null) {
 			return;
 		}
-		btnOk = mDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-		btnClose = mDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-		btnRun = mDialog.getButton(DialogInterface.BUTTON_NEUTRAL);
+		btnOk = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+		btnClose = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+		btnRun = dialog.getButton(DialogInterface.BUTTON_NEUTRAL);
 		hideButtons();
 		Bundle args = requireArguments();
 		Uri uri = args.getParcelable(ARG_URI);
@@ -176,13 +174,13 @@ public class InstallerDialog extends DialogFragment {
 	}
 
 	private void hideProgress() {
-		progress.setVisibility(View.GONE);
-		tvStatus.setVisibility(View.GONE);
+		binding.progress.setVisibility(View.GONE);
+		binding.tvStatus.setVisibility(View.GONE);
 	}
 
 	private void showProgress() {
-		progress.setVisibility(View.VISIBLE);
-		tvStatus.setVisibility(View.VISIBLE);
+		binding.progress.setVisibility(View.VISIBLE);
+		binding.tvStatus.setVisibility(View.VISIBLE);
 	}
 
 	private void hideButtons() {
@@ -199,8 +197,8 @@ public class InstallerDialog extends DialogFragment {
 	private void convert() {
 		Descriptor nd = installer.getNewDescriptor();
 		SpannableStringBuilder info = nd.getInfo(requireActivity());
-		mDialog.setMessage(info);
-		tvStatus.setText(R.string.converting_wait);
+		dialog.setMessage(info);
+		binding.tvStatus.setText(R.string.converting_wait);
 		showProgress();
 		hideButtons();
 		Disposable disposable = Single.create(installer::install)
@@ -213,9 +211,9 @@ public class InstallerDialog extends DialogFragment {
 	private void alertConfirm(SpannableStringBuilder message,
 							  View.OnClickListener positive) {
 		hideProgress();
-		mDialog.setCancelable(false);
-		mDialog.setCanceledOnTouchOutside(false);
-		mDialog.setMessage(message);
+		dialog.setCancelable(false);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.setMessage(message);
 		btnOk.setOnClickListener(positive);
 		showButtons();
 	}
@@ -225,11 +223,11 @@ public class InstallerDialog extends DialogFragment {
 			return;
 		}
 		if (status == AppInstaller.STATUS_SUCCESS) {
-			progress.setVisibility(View.GONE);
-			tvStatus.setText(getString(R.string.install_done));
+			binding.progress.setVisibility(View.GONE);
+			binding.tvStatus.setText(getString(R.string.install_done));
 			AppItem app = installer.getExistsApp();
 			Drawable drawable = Drawable.createFromPath(app.getImagePathExt());
-			if (drawable != null) mDialog.setIcon(drawable);
+			if (drawable != null) dialog.setIcon(drawable);
 			btnOk.setText(R.string.START_CMD);
 			btnOk.setOnClickListener(v -> {
 				Config.startApp(v.getContext(), app.getTitle(), app.getPathExt(), false);
@@ -284,11 +282,11 @@ public class InstallerDialog extends DialogFragment {
 			message.append('\n').append(getString(R.string.warn_install_from_net));
 		}
 		Drawable drawable = Drawable.createFromPath(installer.getIconPath());
-		if (drawable != null) mDialog.setIcon(drawable);
-		mDialog.setTitle(nd.getName());
-		mDialog.setCancelable(false);
-		mDialog.setCanceledOnTouchOutside(false);
-		mDialog.setMessage(message);
+		if (drawable != null) dialog.setIcon(drawable);
+		dialog.setTitle(nd.getName());
+		dialog.setCancelable(false);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.setMessage(message);
 		btnOk.setOnClickListener(v -> convert());
 		hideProgress();
 		showButtons();
