@@ -26,7 +26,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.util.ContextHolder;
@@ -52,8 +52,6 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 
 	private Form form;
 	private Displayable nextDisplayable;
-
-	private Command[] commands;
 	private int positive, negative, neutral;
 
 	private final SimpleEvent msgSetString = new SimpleEvent() {
@@ -79,7 +77,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 				alertDialog.setCanceledOnTouchOutside(true);
 				return;
 			}
-			alertDialog.setCanceledOnTouchOutside(countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND);
+			alertDialog.setCanceledOnTouchOutside(commands.size() == 1 && commands.get(0) == DISMISS_COMMAND);
 		}
 	};
 
@@ -162,7 +160,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	}
 
 	boolean finiteTimeout() {
-		return timeout > 0 && countCommands() < 2;
+		return timeout > 0 && commands.size() < 2;
 	}
 
 	AlertDialog prepareDialog() {
@@ -172,7 +170,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		builder.setTitle(getTitle());
 		builder.setMessage(getString());
 		builder.setOnDismissListener(dialog -> {
-			if (countCommands() == 1 && getCommands()[0] == DISMISS_COMMAND && listener != null) {
+			if (commands.size() == 1 && commands.get(0) == DISMISS_COMMAND && listener != null) {
 				fireCommandAction(DISMISS_COMMAND);
 			}
 		});
@@ -190,15 +188,14 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 			builder.setView(indicatorView);
 		}
 
-		commands = getCommands();
-		Arrays.sort(commands);
+		Collections.sort(commands);
 
 		positive = -1;
 		negative = -1;
 		neutral = -1;
 
-		for (int i = 0; i < commands.length; i++) {
-			int cmdType = commands[i].getCommandType();
+		for (int i = 0; i < commands.size(); i++) {
+			int cmdType = commands.get(i).getCommandType();
 
 			if (positive < 0 && cmdType == Command.OK) {
 				positive = i;
@@ -208,7 +205,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 				neutral = i;
 			}
 		}
-		for (int i = 0; i < commands.length; i++) {
+		for (int i = 0; i < commands.size(); i++) {
 			if (positive < 0 && negative != i && neutral != i) {
 				positive = i;
 			} else if (negative < 0 && positive != i && neutral != i) {
@@ -217,15 +214,15 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 		}
 
 		if (positive >= 0) {
-			builder.setPositiveButton(commands[positive].getAndroidLabel(), this);
+			builder.setPositiveButton(commands.get(positive).getAndroidLabel(), this);
 		}
 
 		if (negative >= 0) {
-			builder.setNegativeButton(commands[negative].getAndroidLabel(), this);
+			builder.setNegativeButton(commands.get(negative).getAndroidLabel(), this);
 		}
 
 		if (neutral >= 0) {
-			builder.setNeutralButton(commands[neutral].getAndroidLabel(), this);
+			builder.setNeutralButton(commands.get(neutral).getAndroidLabel(), this);
 		}
 
 		alertDialog = builder.create();
@@ -233,7 +230,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 			alertDialog.setCancelable(true);
 			alertDialog.setCanceledOnTouchOutside(true);
 		} else {
-			alertDialog.setCanceledOnTouchOutside(commands.length == 1 && commands[0] == DISMISS_COMMAND);
+			alertDialog.setCanceledOnTouchOutside(commands.size() == 1 && commands.get(0) == DISMISS_COMMAND);
 		}
 		return alertDialog;
 	}
@@ -253,7 +250,7 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	public void removeCommand(Command cmd) {
 		if (cmd != DISMISS_COMMAND) {
 			super.removeCommand(cmd);
-			if (countCommands() == 0) {
+			if (commands.size() == 0) {
 				if (alertDialog != null) {
 					ViewHandler.postEvent(msgCommandsChanged);
 				}
@@ -296,17 +293,9 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
-			case DialogInterface.BUTTON_POSITIVE:
-				fireCommandAction(commands[positive]);
-				break;
-
-			case DialogInterface.BUTTON_NEGATIVE:
-				fireCommandAction(commands[negative]);
-				break;
-
-			case DialogInterface.BUTTON_NEUTRAL:
-				fireCommandAction(commands[neutral]);
-				break;
+			case DialogInterface.BUTTON_POSITIVE -> fireCommandAction(commands.get(positive));
+			case DialogInterface.BUTTON_NEGATIVE -> fireCommandAction(commands.get(negative));
+			case DialogInterface.BUTTON_NEUTRAL -> fireCommandAction(commands.get(neutral));
 		}
 	}
 

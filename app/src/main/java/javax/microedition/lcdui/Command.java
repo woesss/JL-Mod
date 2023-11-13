@@ -1,5 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
+ * Copyright 2018 Nikita Shakarun
+ * Copyright 2022-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,39 +59,18 @@ public class Command implements Comparable<Command> {
 	public String getAndroidLabel() {
 		if (shortLabel.length() > 0) {
 			return shortLabel;
-		} else {
-			String label;
-			switch (commandType) {
-				case SCREEN:
-					label = "Screen";
-					break;
-				case BACK:
-					label = "Back";
-					break;
-				case CANCEL:
-					label = "Cancel";
-					break;
-				case OK:
-					label = "OK";
-					break;
-				case HELP:
-					label = "Help";
-					break;
-				case STOP:
-					label = "Stop";
-					break;
-				case EXIT:
-					label = "Exit";
-					break;
-				case ITEM:
-					label = "Item";
-					break;
-				default:
-					label = shortLabel;
-					break;
-			}
-			return label;
 		}
+		return switch (commandType) {
+			case SCREEN -> "Screen";
+			case BACK -> "Back";
+			case CANCEL -> "Cancel";
+			case OK -> "OK";
+			case HELP -> "Help";
+			case STOP -> "Stop";
+			case EXIT -> "Exit";
+			case ITEM -> "Item";
+			default -> shortLabel;
+		};
 	}
 
 	public int getCommandType() {

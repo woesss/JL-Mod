@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package javax.microedition.lcdui.commands;
 
 import android.view.Gravity;
@@ -21,7 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.microedition.lcdui.Command;
@@ -33,13 +34,14 @@ import ru.playsoftware.j2meloader.databinding.SoftButtonBarBinding;
 public class ScreenSoftBar extends AbstractSoftKeysBar {
 	private final SoftButtonBarBinding binding;
 
-	public ScreenSoftBar(Screen target, ViewGroup root) {
+	public ScreenSoftBar(Screen target, ViewGroup root, List<Command> commands) {
 		super(target);
 		binding = SoftButtonBarBinding.inflate(LayoutInflater.from(root.getContext()), root, true);
 		binding.softLeft.setOnClickListener(this::onClick);
 		binding.softMiddle.setOnClickListener(this::onClick);
 		binding.softRight.setOnClickListener(this::onClick);
-		notifyChanged();
+		Collections.sort(commands);
+		onCommandsChanged(commands);
 	}
 
 	private void onClick(View button) {
@@ -52,11 +54,11 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 	}
 
 	@Override
-	protected void onCommandsChanged() {
-		List<Command> list = this.commands;
-		list.clear();
-		Command[] commands = target.getCommands();
-		int size = commands.length;
+	protected void onCommandsChanged(List<Command> list) {
+		List<Command> commands = this.commands;
+		commands.clear();
+		commands.addAll(list);
+		int size = commands.size();
 		if (size == 0) {
 			binding.softLeft.setTag(null);
 			binding.softMiddle.setTag(null);
@@ -67,11 +69,9 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 			binding.softBar.setVisibility(View.GONE);
 			return;
 		}
-		Arrays.sort(commands);
-		list.addAll(Arrays.asList(commands));
 		switch (size) {
 			case 1:
-				Command c = list.get(0);
+				Command c = commands.get(0);
 				binding.softLeft.setText(c.getAndroidLabel());
 				binding.softLeft.setTag(c);
 
@@ -84,7 +84,7 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 				binding.softRight.setTag(null);
 				break;
 			case 2:
-				c = list.get(0);
+				c = commands.get(0);
 				binding.softLeft.setText(c.getAndroidLabel());
 				binding.softLeft.setTag(c);
 
@@ -93,32 +93,32 @@ public class ScreenSoftBar extends AbstractSoftKeysBar {
 				binding.softMiddle.setTag(null);
 
 				binding.softRight.setVisibility(View.VISIBLE);
-				c = list.get(1);
+				c = commands.get(1);
 				binding.softRight.setText(c.getAndroidLabel());
 				binding.softRight.setTag(c);
 				break;
 			case 3:
-				c = list.get(0);
+				c = commands.get(0);
 				binding.softLeft.setText(c.getAndroidLabel());
 				binding.softLeft.setTag(c);
 
 				binding.softMiddle.setVisibility(View.VISIBLE);
-				c = list.get(1);
+				c = commands.get(1);
 				binding.softMiddle.setText(c.getAndroidLabel());
 				binding.softMiddle.setTag(c);
 
 				binding.softRight.setVisibility(View.VISIBLE);
-				c = list.get(2);
+				c = commands.get(2);
 				binding.softRight.setText(c.getAndroidLabel());
 				binding.softRight.setTag(c);
 				break;
 			default:
-				c = list.get(0);
+				c = commands.get(0);
 				binding.softLeft.setText(c.getAndroidLabel());
 				binding.softLeft.setTag(c);
 
 				binding.softMiddle.setVisibility(View.VISIBLE);
-				c = list.get(1);
+				c = commands.get(1);
 				binding.softMiddle.setText(c.getAndroidLabel());
 				binding.softMiddle.setTag(c);
 

@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 import javax.microedition.lcdui.commands.ScreenSoftBar;
 
 public abstract class Screen extends Displayable {
@@ -36,7 +38,7 @@ public abstract class Screen extends Displayable {
 			View screenView = getScreenView();
 			screenView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
 			layout.addView(screenView);
-			softBar = new ScreenSoftBar(this, layout);
+			softBar = new ScreenSoftBar(this, layout, new ArrayList<>(commands));
 		}
 
 		return layout;

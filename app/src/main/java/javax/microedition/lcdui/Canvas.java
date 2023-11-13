@@ -1,7 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017-2022 Nikita Shakarun
- * Copyright 2018-2022 Yriy Kharchenko
+ * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2018-2023 Yriy Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -566,7 +565,6 @@ public abstract class Canvas extends Displayable {
 		}
 		fullscreen = flag;
 		updateSize();
-		softBar.notifyChanged();
 		if (!visible) {
 			return;
 		}
@@ -826,9 +824,9 @@ public abstract class Canvas extends Displayable {
 				FloatBuffer vertex_bg = vbo;
 				vertex_bg.rewind();
 				vertex_bg.put(gl).put(gt).put(0.0f).put(0.0f);// lt
-				vertex_bg.put(gl).put(gb).put(0.0f).put(  th);// lb
-				vertex_bg.put(gr).put(gt).put(  tw).put(0.0f);// rt
-				vertex_bg.put(gr).put(gb).put(  tw).put(  th);// rb
+				vertex_bg.put(gl).put(gb).put(0.0f).put(th);// lb
+				vertex_bg.put(gr).put(gt).put(tw).put(0.0f);// rt
+				vertex_bg.put(gr).put(gb).put(tw).put(th);// rb
 			}
 			if (isStarted) {
 				mView.queueEvent(() -> {
@@ -1240,7 +1238,6 @@ public abstract class Canvas extends Displayable {
 			padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, metrics);
 			textColor = ContextCompat.getColor(activity, R.color.accent);
 			bgColor = ContextCompat.getColor(activity, R.color.background);
-			notifyChanged();
 		}
 
 		private void showPopup() {
@@ -1253,27 +1250,25 @@ public abstract class Canvas extends Displayable {
 		}
 
 		@Override
-		protected void onCommandsChanged() {
-			List<Command> list = this.commands;
-			list.clear();
-			Command[] commands = target.getCommands();
-			Arrays.sort(commands);
-			list.addAll(Arrays.asList(commands));
+		protected void onCommandsChanged(List<Command> list) {
+			List<Command> commands = this.commands;
+			commands.clear();
+			commands.addAll(list);
 			if (!fullscreen) {
-				int size = list.size();
+				int size = commands.size();
 				switch (size) {
 					case 0:
 						break;
 					case 1:
-						leftLabel = list.get(0).getAndroidLabel();
+						leftLabel = commands.get(0).getAndroidLabel();
 						rightLabel = null;
 						break;
 					case 2:
-						leftLabel = list.get(0).getAndroidLabel();
-						rightLabel = list.get(1).getAndroidLabel();
+						leftLabel = commands.get(0).getAndroidLabel();
+						rightLabel = commands.get(1).getAndroidLabel();
 						break;
 					default:
-						leftLabel = list.get(0).getAndroidLabel();
+						leftLabel = commands.get(0).getAndroidLabel();
 						rightLabel = overlayView.getResources().getString(R.string.cmd_menu);
 				}
 			}
@@ -1321,7 +1316,7 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void paint(CanvasWrapper g) {
-			if (bounds.isEmpty() || commands.size() == 0) {
+			if (bounds.isEmpty() || commands.isEmpty()) {
 				return;
 			}
 			g.setFillColor(bgColor);
@@ -1389,6 +1384,7 @@ public abstract class Canvas extends Displayable {
 			float top = fullscreen ? bottom : bottom - canvasWrapper.getTextHeight();
 			bounds.set(left, top, right, bottom);
 			canvasWrapper.setTextScale(1.0f);
+			overlayView.postInvalidate();
 		}
 	}
 }

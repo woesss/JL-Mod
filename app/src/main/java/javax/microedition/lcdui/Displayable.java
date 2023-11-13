@@ -149,23 +149,15 @@ public abstract class Displayable {
 		}
 		commands.add(cmd);
 		if (softBar != null) {
-			softBar.notifyChanged();
+			softBar.notifyChanged(new ArrayList<>(commands));
 		}
 	}
 
 	public void removeCommand(Command cmd) {
 		commands.remove(cmd);
 		if (softBar != null) {
-			softBar.notifyChanged();
+			softBar.notifyChanged(new ArrayList<>(commands));
 		}
-	}
-
-	int countCommands() {
-		return commands.size();
-	}
-
-	public Command[] getCommands() {
-		return commands.toArray(new Command[0]);
 	}
 
 	public void setCommandListener(CommandListener listener) {
