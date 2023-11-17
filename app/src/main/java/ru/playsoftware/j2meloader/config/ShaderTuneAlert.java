@@ -25,7 +25,6 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
@@ -119,8 +118,8 @@ public class ShaderTuneAlert extends DialogFragment {
 	}
 
 	@Override
-	public void onCreate(@Nullable Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onStart() {
+		super.onStart();
 		AlertDialog dialog = (AlertDialog) requireDialog();
 		dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v -> onClickReset());
 	}
