@@ -135,8 +135,8 @@ public class Alert extends Screen implements DialogInterface.OnClickListener {
 				indicator.commands.size() > 0 ||
 				indicator.listener != null ||
 				indicator.getLabel() != null ||
-				indicator.getPreferredWidth() != -1 ||
-				indicator.getPreferredHeight() != -1 ||
+				indicator.preferredWidth != -1 ||
+				indicator.preferredHeight != -1 ||
 				indicator.getLayout() != Item.LAYOUT_DEFAULT)) {
 			throw new IllegalArgumentException();
 		}

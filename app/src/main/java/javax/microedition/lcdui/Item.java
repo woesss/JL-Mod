@@ -61,13 +61,16 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	private static final int LABEL_SHOW = 1;
 	private static final int LABEL_HIDE = 2;
 
+	int width;
+	int height;
 	private LinearLayout layout;
 	private View contentview;
 
 	private String label;
 	private TextView labelview;
 	private int labelmode;
-	private int preferredWidth, preferredHeight;
+	int preferredWidth = -1;
+	int preferredHeight = -1;
 	private int layoutmode;
 
 	private Form owner;
@@ -298,16 +301,23 @@ public abstract class Item implements View.OnCreateContextMenuListener {
 	}
 
 	public void setPreferredSize(int width, int height) {
+		if (width < -1 || height < -1) {
+			throw new IllegalArgumentException();
+		}
 		preferredWidth = width;
 		preferredHeight = height;
+		// FIXME: 18.11.2023 width and height MUST be computed from content
+		// now we are reproducing the previous logic
+		this.width = width == -1 ? 0 : width;
+		this.height = height == -1 ? 0 : height;
 	}
 
 	public int getPreferredWidth() {
-		return preferredWidth;
+		return width;
 	}
 
 	public int getPreferredHeight() {
-		return preferredHeight;
+		return height;
 	}
 
 	public int getMinimumHeight() {
