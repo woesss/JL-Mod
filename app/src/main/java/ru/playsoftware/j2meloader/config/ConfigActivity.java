@@ -921,13 +921,20 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 
 		private CharSequence filter(CharSequence src, int ss, int se, Spanned dst, int ds, int de) {
 			StringBuilder sb = new StringBuilder(se - ss);
+			boolean changed = false;
 			for (int i = ss; i < se; i++) {
 				char c = src.charAt(i);
 				if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
 					sb.append(c);
 				} else if (c >= 'a' && c <= 'f') {
 					sb.append((char) (c - 32));
+					changed = true;
+				} else {
+					changed = true;
 				}
+			}
+			if (!changed) {
+				return null;
 			}
 			return sb;
 		}

@@ -23,12 +23,18 @@ class FileNameInputFilter implements InputFilter {
 	@Override
 	public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
 		StringBuilder sb = new StringBuilder();
+		boolean changed = false;
 		for (int i = start; i < end; i++) {
 			char ch = source.charAt(i);
 			if ("/\\:*?\"<>|".indexOf(ch) == -1) {
 				sb.append(ch);
+			} else {
+				changed = true;
 			}
 		}
-		return sb.toString();
+		if (!changed) {
+			return null;
+		}
+		return sb;
 	}
 }
