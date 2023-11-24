@@ -32,8 +32,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
@@ -43,11 +41,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
 import ru.playsoftware.j2meloader.R;
+import ru.playsoftware.j2meloader.databinding.ActivityProfilesBinding;
 
 public class ProfilesActivity extends AppCompatActivity implements EditNameAlert.Callback, AdapterView.OnItemClickListener {
 	private ProfilesAdapter adapter;
@@ -78,7 +76,8 @@ public class ProfilesActivity extends AppCompatActivity implements EditNameAlert
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_profiles);
+		ActivityProfilesBinding binding = ActivityProfilesBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
@@ -87,12 +86,10 @@ public class ProfilesActivity extends AppCompatActivity implements EditNameAlert
 
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		ArrayList<Profile> profiles = ProfilesManager.getProfiles();
-		ListView listView = findViewById(R.id.list_view);
-		TextView emptyView = findViewById(R.id.empty_view);
-		listView.setEmptyView(emptyView);
-		registerForContextMenu(listView);
+		binding.list.setEmptyView(binding.empty);
+		registerForContextMenu(binding.list);
 		adapter = new ProfilesAdapter(getLayoutInflater(), profiles);
-		listView.setAdapter(adapter);
+		binding.list.setAdapter(adapter);
 		final String def = preferences.getString(PREF_DEFAULT_PROFILE, null);
 		if (def != null) {
 			for (int i = profiles.size() - 1; i >= 0; i--) {
@@ -103,7 +100,7 @@ public class ProfilesActivity extends AppCompatActivity implements EditNameAlert
 				}
 			}
 		}
-		listView.setOnItemClickListener(this);
+		binding.list.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -132,7 +129,7 @@ public class ProfilesActivity extends AppCompatActivity implements EditNameAlert
 		inflater.inflate(R.menu.profile, menu);
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		final Profile profile = adapter.getItem(info.position);
-		if (!profile.hasConfig() && !new File(profile.getDir(), "config.xml").exists()) {
+		if (!profile.hasConfig() && !profile.hasOldConfig()) {
 			menu.findItem(R.id.action_context_default).setVisible(false);
 			menu.findItem(R.id.action_context_edit).setVisible(false);
 		}

@@ -1,6 +1,6 @@
 /*
  * Copyright 2018-2019 Nikita Shakarun
- * Copyright 2020-2022 Yury Kharchenko
+ * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -47,6 +46,7 @@ import javax.microedition.lcdui.keyboard.KeyMapper;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 import ru.playsoftware.j2meloader.config.ProfilesManager;
+import ru.playsoftware.j2meloader.databinding.ActivityKeymapperBinding;
 import ru.playsoftware.j2meloader.util.SparseIntArrayAdapter;
 
 public class KeyMapperActivity extends AppCompatActivity implements View.OnClickListener {
@@ -56,10 +56,8 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 	private final Rect popupRect = new Rect();
 	private SparseIntArray androidToMIDP;
 	private ProfileModel params;
-	private View popupLayout;
-	private TextView popupMsg;
-	private View keyMapperLayer;
 	private int canvasKey;
+	private ActivityKeymapperBinding binding;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +69,8 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 			finish();
 			return;
 		}
-		setContentView(R.layout.activity_keymapper);
+		binding = ActivityKeymapperBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
@@ -79,34 +78,30 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 		}
 		params = ProfilesManager.loadConfig(new File(path));
 
-		keyMapperLayer = findViewById(R.id.keyMapperLayer);
-		popupLayout = findViewById(R.id.keyMapperPopup);
-		popupMsg = findViewById(R.id.keyMapperPopupMsg);
-
-		setupButton(R.id.virtual_key_left_soft, Canvas.KEY_SOFT_LEFT);
-		setupButton(R.id.virtual_key_right_soft, Canvas.KEY_SOFT_RIGHT);
-		setupButton(R.id.virtual_key_d, Canvas.KEY_SEND);
-		setupButton(R.id.virtual_key_c, Canvas.KEY_END);
-		setupButton(R.id.virtual_key_left, Canvas.KEY_LEFT);
-		setupButton(R.id.virtual_key_right, Canvas.KEY_RIGHT);
-		setupButton(R.id.virtual_key_up, Canvas.KEY_UP);
-		setupButton(R.id.virtual_key_down, Canvas.KEY_DOWN);
-		setupButton(R.id.virtual_key_f, Canvas.KEY_FIRE);
-		setupButton(R.id.virtual_key_1, Canvas.KEY_NUM1);
-		setupButton(R.id.virtual_key_2, Canvas.KEY_NUM2);
-		setupButton(R.id.virtual_key_3, Canvas.KEY_NUM3);
-		setupButton(R.id.virtual_key_4, Canvas.KEY_NUM4);
-		setupButton(R.id.virtual_key_5, Canvas.KEY_NUM5);
-		setupButton(R.id.virtual_key_6, Canvas.KEY_NUM6);
-		setupButton(R.id.virtual_key_7, Canvas.KEY_NUM7);
-		setupButton(R.id.virtual_key_8, Canvas.KEY_NUM8);
-		setupButton(R.id.virtual_key_9, Canvas.KEY_NUM9);
-		setupButton(R.id.virtual_key_0, Canvas.KEY_NUM0);
-		setupButton(R.id.virtual_key_star, Canvas.KEY_STAR);
-		setupButton(R.id.virtual_key_pound, Canvas.KEY_POUND);
-		setupButton(R.id.virtual_key_a, KeyMapper.SE_KEY_SPECIAL_GAMING_A);
-		setupButton(R.id.virtual_key_b, KeyMapper.SE_KEY_SPECIAL_GAMING_B);
-		setupButton(R.id.virtual_key_menu, KeyMapper.KEY_OPTIONS_MENU);
+		setupButton(binding.virtualKeyLeftSoft, Canvas.KEY_SOFT_LEFT);
+		setupButton(binding.virtualKeyRightSoft, Canvas.KEY_SOFT_RIGHT);
+		setupButton(binding.virtualKeyD, Canvas.KEY_SEND);
+		setupButton(binding.virtualKeyC, Canvas.KEY_END);
+		setupButton(binding.virtualKeyLeft, Canvas.KEY_LEFT);
+		setupButton(binding.virtualKeyRight, Canvas.KEY_RIGHT);
+		setupButton(binding.virtualKeyUp, Canvas.KEY_UP);
+		setupButton(binding.virtualKeyDown, Canvas.KEY_DOWN);
+		setupButton(binding.virtualKeyF, Canvas.KEY_FIRE);
+		setupButton(binding.virtualKey1, Canvas.KEY_NUM1);
+		setupButton(binding.virtualKey2, Canvas.KEY_NUM2);
+		setupButton(binding.virtualKey3, Canvas.KEY_NUM3);
+		setupButton(binding.virtualKey4, Canvas.KEY_NUM4);
+		setupButton(binding.virtualKey5, Canvas.KEY_NUM5);
+		setupButton(binding.virtualKey6, Canvas.KEY_NUM6);
+		setupButton(binding.virtualKey7, Canvas.KEY_NUM7);
+		setupButton(binding.virtualKey8, Canvas.KEY_NUM8);
+		setupButton(binding.virtualKey9, Canvas.KEY_NUM9);
+		setupButton(binding.virtualKey0, Canvas.KEY_NUM0);
+		setupButton(binding.virtualKeyStar, Canvas.KEY_STAR);
+		setupButton(binding.virtualKeyPound, Canvas.KEY_POUND);
+		setupButton(binding.virtualKeyA, KeyMapper.SE_KEY_SPECIAL_GAMING_A);
+		setupButton(binding.virtualKeyB, KeyMapper.SE_KEY_SPECIAL_GAMING_B);
+		setupButton(binding.virtualKeyMenu, KeyMapper.KEY_OPTIONS_MENU);
 		if (savedInstanceState == null) {
 			SparseIntArray keyMap = params.keyMappings;
 			androidToMIDP = keyMap == null ? defaultKeyMap.clone() : keyMap.clone();
@@ -143,9 +138,8 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 		super.onSaveInstanceState(outState);
 	}
 
-	private void setupButton(int resId, int index) {
-		idToCanvasKey.put(resId, index);
-		Button button = findViewById(resId);
+	private void setupButton(Button button, int index) {
+		idToCanvasKey.put(button.getId(), index);
 		button.setOnClickListener(this);
 	}
 
@@ -165,8 +159,8 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 		} else {
 			keyName = KeyEvent.keyCodeToString(androidToMIDP.keyAt(idx));
 		}
-		popupMsg.setText(getString(R.string.mapping_dialog_message, keyName));
-		keyMapperLayer.setVisibility(View.VISIBLE);
+		binding.keyMapperPopupMsg.setText(getString(R.string.mapping_dialog_message, keyName));
+		binding.keyMapperLayer.setVisibility(View.VISIBLE);
 	}
 
 	private void deleteDuplicates(int value) {
@@ -248,7 +242,7 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
-		if (keyMapperLayer.getVisibility() == View.VISIBLE
+		if (binding.keyMapperLayer.getVisibility() == View.VISIBLE
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
 			int keyCode = event.getKeyCode();
 			switch (keyCode) {
@@ -259,7 +253,7 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 				default:
 					deleteDuplicates(canvasKey);
 					androidToMIDP.put(keyCode, canvasKey);
-					keyMapperLayer.setVisibility(View.GONE);
+					binding.keyMapperLayer.setVisibility(View.GONE);
 					return true;
 			}
 		}
@@ -268,10 +262,10 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent event) {
-		if (keyMapperLayer.getVisibility() == View.VISIBLE && event.getAction() == MotionEvent.ACTION_DOWN) {
-			popupLayout.getGlobalVisibleRect(popupRect);
+		if (binding.keyMapperLayer.getVisibility() == View.VISIBLE && event.getAction() == MotionEvent.ACTION_DOWN) {
+			binding.keyMapperPopup.getGlobalVisibleRect(popupRect);
 			if (!popupRect.contains(((int) event.getX()), ((int) event.getY()))) {
-				keyMapperLayer.setVisibility(View.GONE);
+				binding.keyMapperLayer.setVisibility(View.GONE);
 			}
 			return true;
 		}

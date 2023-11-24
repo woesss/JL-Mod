@@ -44,7 +44,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -55,7 +54,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -75,7 +73,6 @@ import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
-import javax.microedition.lcdui.overlay.OverlayView;
 import javax.microedition.util.ContextHolder;
 
 import io.reactivex.SingleObserver;
@@ -83,6 +80,7 @@ import io.reactivex.disposables.Disposable;
 import ru.playsoftware.j2meloader.BuildConfig;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.databinding.ActivityMicroBinding;
 import ru.playsoftware.j2meloader.databinding.DialogInputBinding;
 import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.LogUtils;
@@ -97,25 +95,21 @@ public class MicroActivity extends AppCompatActivity {
 	private boolean visible;
 	private boolean actionBarEnabled;
 	private boolean statusBarEnabled;
-	private FrameLayout layout;
-	private Toolbar toolbar;
 	private MicroLoader microLoader;
 	private String appName;
 	private InputMethodManager inputMethodManager;
 	private int menuKey;
 	private String appPath;
-	private OverlayView overlayView;
+	private ActivityMicroBinding binding;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		lockNightMode();
 		super.onCreate(savedInstanceState);
 		ContextHolder.setCurrentActivity(this);
-		setContentView(R.layout.activity_micro);
-		overlayView = findViewById(R.id.vOverlay);
-		layout = findViewById(R.id.displayable_container);
-		toolbar = findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
+		binding = ActivityMicroBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
+		setSupportActionBar(binding.toolbar);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		actionBarEnabled = sp.getBoolean(PREF_TOOLBAR, false);
@@ -152,8 +146,8 @@ public class MicroActivity extends AppCompatActivity {
 		VirtualKeyboard vk = ContextHolder.getVk();
 		int orientation = microLoader.getOrientation();
 		if (vk != null) {
-			vk.setView(overlayView);
-			overlayView.addLayer(vk);
+			vk.setView(binding.overlay);
+			binding.overlay.addLayer(vk);
 			if (vk.isPhone()) {
 				orientation = ORIENTATION_PORTRAIT;
 			}
@@ -196,7 +190,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	private void hideSoftInput() {
 		if (inputMethodManager != null) {
-			IBinder windowToken = layout.getWindowToken();
+			IBinder windowToken = binding.displayableContainer.getWindowToken();
 			inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
 		}
 	}
@@ -339,7 +333,7 @@ public class MicroActivity extends AppCompatActivity {
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		if (event.getKeyCode() == KeyEvent.KEYCODE_MENU)
-			if (current instanceof Canvas && layout.dispatchKeyEvent(event)) {
+			if (current instanceof Canvas && binding.displayableContainer.dispatchKeyEvent(event)) {
 				return true;
 			} else if (event.getAction() == KeyEvent.ACTION_DOWN) {
 				if (event.getRepeatCount() == 0) {
@@ -448,7 +442,7 @@ public class MicroActivity extends AppCompatActivity {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 			}
 		} else if (id == R.id.action_ime_keyboard) {
-			inputMethodManager.toggleSoftInputFromWindow(layout.getWindowToken(),
+			inputMethodManager.toggleSoftInputFromWindow(binding.displayableContainer.getWindowToken(),
 					InputMethodManager.SHOW_FORCED, 0);
 		} else if (id == R.id.action_take_screenshot) {
 			takeScreenshot();
@@ -636,9 +630,9 @@ public class MicroActivity extends AppCompatActivity {
 			if (current != null) {
 				current.clearDisplayableView();
 			}
-			layout.removeAllViews();
+			binding.displayableContainer.removeAllViews();
 			ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
-			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
+			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) binding.toolbar.getLayoutParams();
 			int toolbarHeight = 0;
 			if (next instanceof Canvas) {
 				hideSystemUI();
@@ -658,10 +652,10 @@ public class MicroActivity extends AppCompatActivity {
 				toolbarHeight = getToolBarHeight();
 				layoutParams.height = toolbarHeight;
 			}
-			overlayView.setLocation(0, toolbarHeight);
-			toolbar.setLayoutParams(layoutParams);
+			binding.overlay.setLocation(0, toolbarHeight);
+			binding.toolbar.setLayoutParams(layoutParams);
 			if (next != null) {
-				layout.addView(next.getDisplayableView());
+				binding.displayableContainer.addView(next.getDisplayableView());
 			}
 		}
 	}

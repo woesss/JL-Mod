@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@
 
 package ru.playsoftware.j2meloader.config;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +60,7 @@ public class ProfilesAdapter extends BaseAdapter {
 	public View getView(int position, View view, ViewGroup viewGroup) {
 		ViewHolder holder;
 		if (view == null) {
-			view = layoutInflater.inflate(R.layout.list_row_profile, viewGroup, false);
+			view = layoutInflater.inflate(android.R.layout.simple_list_item_single_choice, viewGroup, false);
 			holder = new ViewHolder();
 			holder.name = (TextView) view;
 			view.setTag(holder);
