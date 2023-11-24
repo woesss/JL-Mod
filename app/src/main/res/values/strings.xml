@@ -225,7 +225,7 @@
     <string name="START_CMD">Start</string>
     <string name="SWAP_SIZES">Swap sizes</string>
     <string name="take_screenshot">Take screenshot</string>
-    <string name="toast_close_filepicker">Press again to close file picker</string>
+    <string name="msg_press_again_to_close">Press again to close</string>
     <string name="unlimited">unlimited</string>
     <string name="version">Version: </string>
     <string name="virtual_key_0" translatable="false">0</string>
@@ -253,5 +253,5 @@
     <string name="virtual_key_star" translatable="false">*</string>
     <string name="virtual_key_up" translatable="false">↑</string>
     <string name="warn_install_from_net">File will be downloaded from Internet</string>
-    <string name="warning">Warning!!!</string>
+    <string name="warning">Warning!</string>
 </resources>

@@ -17,6 +17,7 @@
 
 package ru.playsoftware.j2meloader.filepicker;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
@@ -68,11 +69,26 @@ public class FilteredFilePickerFragment extends AbstractFilePickerFragment<File>
 		}
 
 		requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+			private Toast toast;
+			private long lastTime;
+
 			@Override
 			public void handleOnBackPressed() {
 				if (history.empty()) {
-					setEnabled(false);
-					requireActivity().onBackPressed();
+					long time = System.currentTimeMillis();
+					if (time - lastTime > 1500) {
+						lastTime = time;
+						if (toast == null) {
+							toast = Toast.makeText(context, R.string.msg_press_again_to_close, Toast.LENGTH_SHORT);
+						}
+						toast.show();
+					} else {
+						toast.cancel();
+						Activity activity = getActivity();
+						if (activity != null) {
+							activity.finish();
+						}
+					}
 				} else {
 					goBack();
 				}
@@ -84,15 +100,14 @@ public class FilteredFilePickerFragment extends AbstractFilePickerFragment<File>
 	@Override
 	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		LayoutInflater li = getLayoutInflater();
-		switch (viewType) {
-			case LogicHandler.VIEWTYPE_HEADER:
-				return new HeaderViewHolder(li.inflate(R.layout.listitem_dir, parent, false));
-			case LogicHandler.VIEWTYPE_CHECKABLE:
-				return new CheckableViewHolder(li.inflate(R.layout.listitem_checkable, parent, false));
-			case LogicHandler.VIEWTYPE_DIR:
-			default:
-				return new DirViewHolder(li.inflate(R.layout.listitem_dir, parent, false));
-		}
+		return switch (viewType) {
+			case LogicHandler.VIEWTYPE_HEADER ->
+					new HeaderViewHolder(li.inflate(R.layout.listitem_dir, parent, false));
+			case LogicHandler.VIEWTYPE_CHECKABLE ->
+					new CheckableViewHolder(li.inflate(R.layout.listitem_checkable, parent, false));
+			//case LogicHandler.VIEWTYPE_DIR,
+			default -> new DirViewHolder(li.inflate(R.layout.listitem_dir, parent, false));
+		};
 	}
 
 	@Override
@@ -228,8 +243,8 @@ public class FilteredFilePickerFragment extends AbstractFilePickerFragment<File>
 			refresh(folder);
 		} else {
 			Toast.makeText(getActivity(),
-					com.nononsenseapps.filepicker.R.string.nnf_create_folder_error,
-					Toast.LENGTH_SHORT)
+							com.nononsenseapps.filepicker.R.string.nnf_create_folder_error,
+							Toast.LENGTH_SHORT)
 					.show();
 		}
 	}

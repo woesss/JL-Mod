@@ -72,6 +72,7 @@
     <string name="midlet_version"><b>Версия:</b> </string>
     <string name="more">Подробнее</string>
     <string name="msg_no_matches">Нет совпадений для \"%1$s\"</string>
+    <string name="msg_press_again_to_close">Нажмите ещё раз, чтобы закрыть</string>
     <string name="no_data_for_display">Нет данных</string>
     <string name="not_saved_exists">Уже существует</string>
     <string name="opt_save_screen_params">сохранить параметры экрана</string>
@@ -206,5 +207,5 @@
     <string name="unlimited">без ограничений</string>
     <string name="version">Версия: </string>
     <string name="warn_install_from_net">Файл будет загружен из сети Интернет</string>
-    <string name="warning">Предупреждение!!!</string>
+    <string name="warning">Предупреждение!</string>
 </resources>

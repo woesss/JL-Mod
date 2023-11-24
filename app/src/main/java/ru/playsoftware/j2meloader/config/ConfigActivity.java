@@ -111,7 +111,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		String path = intent.getDataString();
 		if (path == null) {
 			needShow = false;
-			onBackPressed();
+			finish();
 			return;
 		}
 		if (isProfile) {
@@ -142,7 +142,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				new AlertDialog.Builder(this)
 						.setTitle(R.string.error)
 						.setMessage(getString(R.string.err_missing_app, storageName))
-						.setPositiveButton(R.string.exit, (d, w) -> onBackPressed())
+						.setPositiveButton(R.string.exit, (d, w) -> finish())
 						.setCancelable(false)
 						.show();
 				return;
@@ -753,7 +753,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			SaveProfileAlert.getInstance(keylayoutFile.getParent())
 					.show(getSupportFragmentManager(), "save_profile");
 		} else if (itemId == android.R.id.home) {
-			onBackPressed();
+			finish();
 		} else {
 			return false;
 		}
@@ -777,7 +777,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		i.setData(getIntent().getData());
 		i.putExtra(KEY_MIDLET_NAME, getIntent().getStringExtra(KEY_MIDLET_NAME));
 		startActivity(i);
-		onBackPressed();
+		finish();
 	}
 
 	@SuppressLint("SetTextI18n")

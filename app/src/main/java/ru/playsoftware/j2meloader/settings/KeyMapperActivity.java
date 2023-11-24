@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -119,6 +120,17 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 						.fromJson(save, SparseIntArray.class);
 			}
 		}
+		getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+			@Override
+			public void handleOnBackPressed() {
+				if (androidToMIDP.indexOfValue(KeyMapper.KEY_OPTIONS_MENU) < 0) {
+					alertMenuKey();
+					return;
+				}
+				save();
+				finish();
+			}
+		});
 	}
 
 	@Override
@@ -183,21 +195,11 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
 		if (itemId == android.R.id.home) {
-			onBackPressed();
+			getOnBackPressedDispatcher().onBackPressed();
 		} else if (itemId == R.id.action_reset_mapping) {
 			androidToMIDP = defaultKeyMap.clone();
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public void onBackPressed() {
-		if (androidToMIDP.indexOfValue(KeyMapper.KEY_OPTIONS_MENU) < 0) {
-			alertMenuKey();
-			return;
-		}
-		save();
-		super.onBackPressed();
 	}
 
 	private void save() {
@@ -214,11 +216,11 @@ public class KeyMapperActivity extends AppCompatActivity implements View.OnClick
 
 	private void alertMenuKey() {
 		new AlertDialog.Builder(this)
-				.setMessage(R.string.alert_map_menu)
 				.setTitle(R.string.warning)
+				.setMessage(R.string.alert_map_menu)
 				.setNegativeButton(R.string.save, (d, w) -> {
 					save();
-					super.onBackPressed();
+					finish();
 				})
 				.setPositiveButton(R.string.CANCEL_CMD, null)
 				.show();

@@ -47,6 +47,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
@@ -162,6 +163,12 @@ public class MicroActivity extends AppCompatActivity {
 			e.printStackTrace();
 			showErrorDialog(e.toString());
 		}
+		getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+			@Override
+			public void handleOnBackPressed() {
+				// Intentionally overridden by empty due to support for back-key remapping.
+			}
+		});
 	}
 
 	public void lockNightMode() {
@@ -382,11 +389,6 @@ public class MicroActivity extends AppCompatActivity {
 			return true;
 		}
 		return super.onKeyUp(keyCode, event);
-	}
-
-	@Override
-	public void onBackPressed() {
-		// Intentionally overridden by empty due to support for back-key remapping.
 	}
 
 	@Override
