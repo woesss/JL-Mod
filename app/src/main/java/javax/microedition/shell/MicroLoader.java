@@ -227,11 +227,6 @@ public class MicroLoader {
 		return params.orientation;
 	}
 
-	void setLimitFps(int fps) {
-		if (fps == -1) Canvas.setLimitFps(params.fpsLimit);
-		else Canvas.setLimitFps(fps);
-	}
-
 	void applyConfiguration() {
 		try {
 			// Apply configuration to the launching MIDlet
@@ -244,7 +239,7 @@ public class MicroLoader {
 
 			final String[] propLines = params.systemProperties.split("\n");
 			for (String line : propLines) {
-				String[] prop = line.split(":[ ]*", 2);
+				String[] prop = line.split(": *", 2);
 				if (prop.length == 2) {
 					System.setProperty(prop[0], prop[1]);
 					MidletSystem.setProperty(prop[0], prop[1]);
@@ -257,27 +252,17 @@ public class MicroLoader {
 				MidletSystem.setProperty("microedition.encoding", "ISO-8859-1");
 			}
 
-			int screenWidth = params.screenWidth;
-			int screenHeight = params.screenHeight;
-			Displayable.setVirtualSize(screenWidth, screenHeight);
-			Canvas.setBackgroundColor(params.screenBackgroundColor);
-			Canvas.setScale(params.screenGravity, params.screenScaleType, params.screenScaleRatio);
-			Canvas.setFilterBitmap(params.screenFilter);
+			Displayable.setVirtualSize(params.screenWidth, params.screenHeight);
 			EventQueue.setImmediate(params.immediateMode);
-			Canvas.setGraphicsMode(params.graphicsMode, params.parallelRedrawScreen);
 			ShaderInfo shader = params.shader;
 			if (shader != null) {
 				shader.dir = workDir + Config.SHADERS_DIR;
 			}
-			Canvas.setShaderFilter(shader);
-			Canvas.setForceFullscreen(params.forceFullscreen);
-			Canvas.setShowFps(params.showFps);
-			Canvas.setLimitFps(params.fpsLimit);
+			Canvas.setSettings(params);
 
 			Font.applySettings(params);
 
 			KeyMapper.setKeyMapping(params);
-			Canvas.setHasTouchInput(params.touchInput);
 			File sb = new File(workDir + Config.SOUNDBANKS_DIR + params.soundBank);
 			if (sb.exists()) {
 				soundBank = sb.getPath();

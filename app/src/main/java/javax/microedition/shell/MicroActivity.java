@@ -588,10 +588,10 @@ public class MicroActivity extends AppCompatActivity {
 						fps = TextUtils.isEmpty(text) ? 0 : Integer.parseInt(text.toString().trim());
 					} catch (NumberFormatException ignored) {
 					}
-					microLoader.setLimitFps(fps);
+					Canvas.setLimitFps(fps);
 				})
 				.setNegativeButton(android.R.string.cancel, null)
-				.setNeutralButton(R.string.reset, ((d, which) -> microLoader.setLimitFps(-1)))
+				.setNeutralButton(R.string.reset, ((d, which) -> Canvas.setLimitFps(-1)))
 				.show();
 	}
 

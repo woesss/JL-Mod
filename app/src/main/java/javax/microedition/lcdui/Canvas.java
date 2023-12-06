@@ -1,7 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017-2018 Nikita Shakarun
- * Copyright 2018-2023 Yriy Kharchenko
+ * Copyright 2017-2020 Nikita Shakarun
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import static android.opengl.GLES20.*;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -78,7 +79,7 @@ import javax.microedition.util.ContextHolder;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.config.ShaderInfo;
+import ru.playsoftware.j2meloader.config.ProfileModel;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class Canvas extends Displayable {
@@ -118,27 +119,16 @@ public abstract class Canvas extends Displayable {
 	public static final int GAME_C = 11;
 	public static final int GAME_D = 12;
 
-	private static final float FULLSCREEN_HEIGHT_RATIO = 0.85f;
-
-	private static boolean filter;
-	private static boolean touchInput;
-	private static int graphicsMode;
-	private static ShaderInfo shaderFilter;
+	private static ProfileModel settings;
 	private static boolean parallelRedraw;
-	private static boolean forceFullscreen;
-	private static boolean showFps;
-	private static int backgroundColor;
-	private static int scaleRatio;
 	private static int fpsLimit;
 	private static boolean screenshotRawMode;
-	private static int scaleType;
-	private static int screenGravity;
 
 	private final Object bufferLock = new Object();
 	private final Object surfaceLock = new Object();
 	private final PaintEvent paintEvent = new PaintEvent();
 	private final SoftBar softBar = new SoftBar();
-	private final CanvasWrapper canvasWrapper = new CanvasWrapper(filter);
+	private final CanvasWrapper canvasWrapper = new CanvasWrapper(settings.screenFilter);
 	private final RectF virtualScreen = new RectF();
 
 	protected int width, height;
@@ -163,13 +153,13 @@ public abstract class Canvas extends Displayable {
 	private boolean skipRightSoft;
 
 	protected Canvas() {
-		this(forceFullscreen);
+		this(settings.forceFullscreen);
 	}
 
 	protected Canvas(boolean fullscreen) {
 		this.fullscreen = fullscreen;
 		super.softBar = softBar;
-		if (graphicsMode == 1) {
+		if (settings.graphicsMode == 1) {
 			renderer = new GLRenderer();
 		}
 		if (parallelRedraw) {
@@ -180,47 +170,19 @@ public abstract class Canvas extends Displayable {
 		updateSize();
 	}
 
-	public static void setShaderFilter(ShaderInfo shader) {
-		Canvas.shaderFilter = shader;
-	}
-
-	public static void setScale(int screenGravity, int scaleType, int scaleRatio) {
-		Canvas.screenGravity = screenGravity;
-		Canvas.scaleType = scaleType;
-		Canvas.scaleRatio = scaleRatio;
-	}
-
-	public static void setBackgroundColor(int color) {
-		backgroundColor = color | 0xFF000000;
-	}
-
-	public static void setFilterBitmap(boolean filter) {
-		Canvas.filter = filter;
-	}
-
-	public static void setHasTouchInput(boolean touchInput) {
-		Canvas.touchInput = touchInput;
-	}
-
-	public static void setGraphicsMode(int mode, boolean parallel) {
-		Canvas.graphicsMode = mode;
-		Canvas.parallelRedraw = (mode == 0 || mode == 3) && parallel;
-	}
-
-	public static void setForceFullscreen(boolean forceFullscreen) {
-		Canvas.forceFullscreen = forceFullscreen;
-	}
-
-	public static void setShowFps(boolean showFps) {
-		Canvas.showFps = showFps;
-	}
-
 	public static void setLimitFps(int fpsLimit) {
-		Canvas.fpsLimit = fpsLimit;
+		Canvas.fpsLimit = fpsLimit == -1 ? settings.fpsLimit : fpsLimit;
 	}
 
 	public static void setScreenshotRawMode(boolean enable) {
 		screenshotRawMode = enable;
+	}
+
+	public static void setSettings(ProfileModel settings) {
+		Canvas.settings = settings;
+		fpsLimit = settings.fpsLimit;
+		int mode = settings.graphicsMode;
+		parallelRedraw = (mode == 0 || mode == 3) && settings.parallelRedrawScreen;
 	}
 
 	public int getKeyCode(int gameAction) {
@@ -298,10 +260,10 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public void onDraw(android.graphics.Canvas canvas) {
-		if (graphicsMode != 2) return; // Fix for Android Pie
+		if (settings.graphicsMode != 2) return; // Fix for Android Pie
 		CanvasWrapper g = canvasWrapper;
 		g.bind(canvas);
-		g.clear(backgroundColor);
+		g.clear(settings.screenBackgroundColor | Color.BLACK);
 		synchronized (bufferLock) {
 			offscreenCopy.getBitmap().prepareToDraw();
 			g.drawImage(offscreenCopy, virtualScreen);
@@ -398,8 +360,8 @@ public abstract class Canvas extends Displayable {
 		 * We turn the size of the canvas into the size of the image
 		 * that will be displayed on the screen of the device.
 		 */
-		int scaleRatio = Canvas.scaleRatio;
-		switch (scaleType) {
+		int scaleRatio = settings.screenScaleRatio;
+		switch (settings.screenScaleType) {
 			case 0:
 				// without scaling
 				onWidth = width;
@@ -432,7 +394,7 @@ public abstract class Canvas extends Displayable {
 		onWidth = onWidth * scaleRatio / 100;
 		onHeight = onHeight * scaleRatio / 100;
 
-		switch (Canvas.screenGravity) {
+		switch (settings.screenGravity) {
 			case 0: // left
 				onX = 0;
 				onY = (scaledDisplayHeight - onHeight) / 2;
@@ -489,7 +451,7 @@ public abstract class Canvas extends Displayable {
 			overlay.resize(screen, onX, onY, onX + onWidth, onY + onHeight + softBarHeight);
 		}
 
-		if (graphicsMode == 1) {
+		if (settings.graphicsMode == 1) {
 			float gl = 2.0f * virtualScreen.left / displayWidth - 1.0f;
 			float gt = 1.0f - 2.0f * virtualScreen.top / displayHeight;
 			float gr = 2.0f * virtualScreen.right / displayWidth - 1.0f;
@@ -527,7 +489,7 @@ public abstract class Canvas extends Displayable {
 		if (layout == null) {
 			layout = (LinearLayout) super.getDisplayableView();
 			MicroActivity activity = ContextHolder.getActivity();
-			if (graphicsMode == 1) {
+			if (settings.graphicsMode == 1) {
 				GlesView glesView = new GlesView(activity);
 				glesView.setRenderer(renderer);
 				glesView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -535,7 +497,7 @@ public abstract class Canvas extends Displayable {
 				innerView = glesView;
 			} else {
 				CanvasView canvasView = new CanvasView(this, activity);
-				if (graphicsMode == 2) {
+				if (settings.graphicsMode == 2) {
 					canvasView.setWillNotDraw(false);
 				}
 				canvasView.getHolder().setFormat(PixelFormat.RGBA_8888);
@@ -573,11 +535,11 @@ public abstract class Canvas extends Displayable {
 	}
 
 	public boolean hasPointerEvents() {
-		return touchInput;
+		return settings.touchInput;
 	}
 
 	public boolean hasPointerMotionEvents() {
-		return touchInput;
+		return settings.touchInput;
 	}
 
 	public boolean hasRepeatEvents() {
@@ -667,14 +629,14 @@ public abstract class Canvas extends Displayable {
 		}
 		try {
 			synchronized (surfaceLock) {
-				android.graphics.Canvas canvas = graphicsMode == 3 ?
+				android.graphics.Canvas canvas = settings.graphicsMode == 3 ?
 						surface.lockHardwareCanvas() : surface.lockCanvas(null);
 				if (canvas == null) {
 					return true;
 				}
 				CanvasWrapper g = this.canvasWrapper;
 				g.bind(canvas);
-				g.clear(backgroundColor);
+				g.clear(settings.screenBackgroundColor | Color.BLACK);
 				synchronized (bufferLock) {
 					g.drawImage(offscreenCopy, virtualScreen);
 				}
@@ -771,8 +733,8 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-			program = new ShaderProgram(shaderFilter);
-			int c = Canvas.backgroundColor;
+			program = new ShaderProgram(settings.shader);
+			int c = settings.screenBackgroundColor;
 			glClearColor((c >> 16 & 0xff) / 255.0f, (c >> 8 & 0xff) / 255.0f, (c & 0xff) / 255.0f, 1.0f);
 			glDisable(GL_BLEND);
 			glDisable(GL_DEPTH_TEST);
@@ -780,8 +742,8 @@ public abstract class Canvas extends Displayable {
 			initTex();
 			Bitmap bitmap = offscreenCopy.getBitmap();
 			program.loadVbo(vbo, bitmap.getWidth(), bitmap.getHeight());
-			if (shaderFilter != null && shaderFilter.values != null && program.uSetting >= 0) {
-				glUniform4fv(program.uSetting, 1, shaderFilter.values, 0);
+			if (settings.shader != null && settings.shader.values != null && program.uSetting >= 0) {
+				glUniform4fv(program.uSetting, 1, settings.shader.values, 0);
 			}
 			isStarted = true;
 		}
@@ -810,8 +772,8 @@ public abstract class Canvas extends Displayable {
 			glGenTextures(1, bgTextureId, 0);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, bgTextureId[0]);
-			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter ? GL_LINEAR : GL_NEAREST);
-			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter ? GL_LINEAR : GL_NEAREST);
+			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, settings.screenFilter ? GL_LINEAR : GL_NEAREST);
+			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, settings.screenFilter ? GL_LINEAR : GL_NEAREST);
 			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -1061,7 +1023,7 @@ public abstract class Canvas extends Displayable {
 					if (overlay != null) {
 						overlay.pointerPressed(id, x, y);
 					}
-					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+					if (settings.touchInput && id == 0 && virtualScreen.contains(x, y)) {
 						Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 								CanvasEvent.POINTER_PRESSED,
 								id,
@@ -1080,7 +1042,7 @@ public abstract class Canvas extends Displayable {
 							if (overlay != null) {
 								overlay.pointerDragged(id, x, y);
 							}
-							if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+							if (settings.touchInput && id == 0 && virtualScreen.contains(x, y)) {
 								Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 										CanvasEvent.POINTER_DRAGGED,
 										id,
@@ -1096,7 +1058,7 @@ public abstract class Canvas extends Displayable {
 						if (overlay != null) {
 							overlay.pointerDragged(id, x, y);
 						}
-						if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+						if (settings.touchInput && id == 0 && virtualScreen.contains(x, y)) {
 							Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 									CanvasEvent.POINTER_DRAGGED,
 									id,
@@ -1117,7 +1079,7 @@ public abstract class Canvas extends Displayable {
 					if (overlay != null) {
 						overlay.pointerReleased(id, x, y);
 					}
-					if (touchInput && id == 0 && virtualScreen.contains(x, y)) {
+					if (settings.touchInput && id == 0 && virtualScreen.contains(x, y)) {
 						Display.postEvent(CanvasEvent.getInstance(Canvas.this,
 								CanvasEvent.POINTER_RELEASED,
 								id,
@@ -1165,7 +1127,7 @@ public abstract class Canvas extends Displayable {
 			surface = holder.getSurface();
 			Display.postEvent(CanvasEvent.getInstance(Canvas.this, CanvasEvent.SHOW_NOTIFY));
 			repaintInternal();
-			if (showFps) {
+			if (settings.showFps) {
 				fpsCounter = new FpsCounter(overlayView);
 				overlayView.addLayer(fpsCounter);
 			}
@@ -1204,11 +1166,11 @@ public abstract class Canvas extends Displayable {
 	}
 
 	private void requestFlushToScreen() {
-		if (graphicsMode == 1) {
+		if (settings.graphicsMode == 1) {
 			if (innerView != null) {
 				renderer.requestRender();
 			}
-		} else if (graphicsMode == 2) {
+		} else if (settings.graphicsMode == 2) {
 			if (innerView != null) {
 				innerView.postInvalidate();
 			}

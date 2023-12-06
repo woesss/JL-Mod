@@ -1,7 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
- * Copyright 2017-2018 Nikita Shakarun
- * Copyright 2021 Yury Kharchenko
+ * Copyright 2017-2021 Nikita Shakarun
+ * Copyright 2019-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -1190,7 +1189,6 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		float scale = virtualScreen.width() / screen.width();
 		settings.screenScaleRatio = Math.round(scale * 100);
 		settings.screenGravity = 1;
-		Canvas.setScale(settings.screenGravity, settings.screenScaleType, settings.screenScaleRatio);
 		ProfilesManager.saveConfig(settings);
 	}
 
