@@ -1000,18 +1000,24 @@ public class VirtualKeyboard implements Overlay, Runnable {
 			case LAYOUT_SCALES:
 				float dx = x - offsetX;
 				float dy = offsetY - y;
-				float scale;
 				int index = this.editedIndex * 2;
-				if (Math.abs(dx) > Math.abs(dy)) {
-					scale = prevScaleX + dx / Math.min(screen.centerX(), screen.centerY());
-				} else {
-					scale = prevScaleY + dy / Math.min(screen.centerX(), screen.centerY());
-					index++;
-				}
+				float scale = prevScaleX + dx / Math.min(screen.centerX(), screen.centerY());
 				if (Math.abs(1 - scale) <= SCALE_SNAP_RADIUS) {
 					scale = 1;
 				} else {
-					for (int i = index % 2; i < keyScales.length; i += 2) {
+					for (int i = 0; i < keyScales.length; i += 2) {
+						if (i != index && Math.abs(keyScales[i] - scale) <= SCALE_SNAP_RADIUS) {
+							scale = keyScales[i];
+							break;
+						}
+					}
+				}
+				keyScales[index++] = scale;
+				scale = prevScaleY + dy / Math.min(screen.centerX(), screen.centerY());
+				if (Math.abs(1 - scale) <= SCALE_SNAP_RADIUS) {
+					scale = 1;
+				} else {
+					for (int i = 1; i < keyScales.length; i += 2) {
 						if (i != index && Math.abs(keyScales[i] - scale) <= SCALE_SNAP_RADIUS) {
 							scale = keyScales[i];
 							break;
