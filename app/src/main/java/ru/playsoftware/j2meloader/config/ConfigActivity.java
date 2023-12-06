@@ -84,9 +84,9 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 public class ConfigActivity extends AppCompatActivity implements View.OnClickListener, ShaderTuneAlert.Callback {
 	private static final String TAG = ConfigActivity.class.getSimpleName();
 
-	protected ArrayList<Size> screenPresets = new ArrayList<>();
-	protected ArrayList<int[]> fontPresetValues = new ArrayList<>();
-	protected ArrayList<String> fontPresetTitles = new ArrayList<>();
+	private final ArrayList<Size> screenPresets = new ArrayList<>();
+	private final ArrayList<int[]> fontPresetValues = new ArrayList<>();
+	private final ArrayList<String> fontPresetTitles = new ArrayList<>();
 
 	private File keylayoutFile;
 	private File dataDir;
@@ -98,7 +98,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private ArrayAdapter<ShaderInfo> spShaderAdapter;
 	private String workDir;
 	private boolean needShow;
-	private ArrayAdapter<String> spSoundBankAdapter;
 	private ActivityConfigBinding binding;
 
 	@Override
@@ -219,19 +218,19 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				switch (position) {
-					case 0:
-					case 3:
+					case 0, 3 -> {
 						binding.cxParallel.setVisibility(View.VISIBLE);
 						binding.shaderContainer.setVisibility(View.GONE);
-						break;
-					case 1:
+					}
+					case 1 -> {
 						binding.cxParallel.setVisibility(View.GONE);
 						binding.shaderContainer.setVisibility(View.VISIBLE);
 						initShaderSpinner();
-						break;
-					case 2:
+					}
+					case 2 -> {
 						binding.cxParallel.setVisibility(View.GONE);
 						binding.shaderContainer.setVisibility(View.GONE);
+					}
 				}
 			}
 
@@ -245,7 +244,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
 					View focus = binding.getRoot().findFocus();
 					if (focus != null) focus.clearFocus();
-					v.scrollTo(0, binding.rootInputConfig.getTop());
+					v.scrollTo(0, binding.rootConfigInput.getTop());
 					v.removeOnLayoutChangeListener(this);
 				}
 			};
@@ -291,20 +290,20 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			//noinspection ResultOfMethodCallIgnored
 			dir.mkdirs();
 		}
-		spSoundBankAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-		spSoundBankAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		binding.spSoundBank.setAdapter(spSoundBankAdapter);
-		spSoundBankAdapter.add(getString(R.string.default_label, "Android"));
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		binding.spSoundBank.setAdapter(adapter);
+		adapter.add(getString(R.string.default_label, "Android"));
 		String[] files = dir.list((d, n) -> new File(d, n).isFile());
 		if (files != null) {
 			Arrays.sort(files, (o1, o2) -> {
 				int res = o1.compareToIgnoreCase(o2);
 				return res != 0 ? res : o1.compareTo(o2);
 			});
-			spSoundBankAdapter.addAll(files);
+			adapter.addAll(files);
 		}
-		spSoundBankAdapter.notifyDataSetChanged();
-		int position = spSoundBankAdapter.getPosition(params.soundBank);
+		adapter.notifyDataSetChanged();
+		int position = adapter.getPosition(params.soundBank);
 		binding.spSoundBank.setSelection(Math.max(position, 0));
 	}
 
@@ -890,18 +889,11 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	}
 
 	private void addResolutionToPresets() {
-		String width = binding.tfScreenWidth.getText().toString();
-		String height = binding.tfScreenHeight.getText().toString();
 		int w;
-		try {
-			w = Integer.parseInt(width);
-		} catch (NumberFormatException e) {
-			Toast.makeText(this, R.string.invalid_resolution_not_saved, Toast.LENGTH_SHORT).show();
-			return;
-		}
 		int h;
 		try {
-			h = Integer.parseInt(height);
+			w = Integer.parseInt(binding.tfScreenWidth.getText().toString());
+			h = Integer.parseInt(binding.tfScreenHeight.getText().toString());
 		} catch (NumberFormatException e) {
 			Toast.makeText(this, R.string.invalid_resolution_not_saved, Toast.LENGTH_SHORT).show();
 			return;
@@ -910,20 +902,18 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			Toast.makeText(this, R.string.invalid_resolution_not_saved, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		String preset = width + " x " + height;
-
+		Size size = new Size(w, h);
+		int index = Collections.binarySearch(screenPresets, size);
+		if (index >= 0) {
+			Toast.makeText(this, R.string.not_saved_exists, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		screenPresets.add(~index, size);
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		Set<String> set = preferences.getStringSet("ResolutionsPreset", null);
-		if (set == null) {
-			set = new HashSet<>(1);
-		}
-		if (set.add(preset)) {
-			preferences.edit().putStringSet("ResolutionsPreset", set).apply();
-			screenPresets.add(new Size(w, h));
-			Toast.makeText(this, getString(R.string.saved, preset), Toast.LENGTH_SHORT).show();
-		} else {
-			Toast.makeText(this, R.string.not_saved_exists, Toast.LENGTH_SHORT).show();
-		}
+		Set<String> presets = set == null ? new HashSet<>(1) : new HashSet<>(set);
+		preferences.edit().putStringSet("ResolutionsPreset", presets).apply();
+		Toast.makeText(this, getString(R.string.saved, size.toString()), Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

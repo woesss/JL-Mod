@@ -196,7 +196,7 @@ public class ProfileModel {
 		showKeyboard = true;
 		touchInput = true;
 
-		vkButtonShape = VirtualKeyboard.ROUND_RECT_SHAPE;
+		vkButtonShape = VirtualKeyboard.SHAPE_ROUND_RECT;
 		vkAlpha = 64;
 
 		vkBgColor = 0xD0D0D0;

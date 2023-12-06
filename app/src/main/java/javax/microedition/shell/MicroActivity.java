@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -229,21 +228,13 @@ public class MicroActivity extends AppCompatActivity {
 
 	@SuppressLint("SourceLockedOrientationActivity")
 	private void setOrientation(int orientation) {
-		switch (orientation) {
-			case ORIENTATION_AUTO:
-				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-				break;
-			case ORIENTATION_PORTRAIT:
-				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-				break;
-			case ORIENTATION_LANDSCAPE:
-				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-				break;
-			case ORIENTATION_DEFAULT:
-			default:
-				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-				break;
-		}
+		setRequestedOrientation(switch (orientation) {
+			case ORIENTATION_DEFAULT -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+			case ORIENTATION_AUTO -> ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR;
+			case ORIENTATION_PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
+			case ORIENTATION_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
+			default -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+		});
 	}
 
 	private void loadMIDlet() throws Exception {
@@ -293,12 +284,12 @@ public class MicroActivity extends AppCompatActivity {
 		builder.show();
 	}
 
-	private int getToolBarHeight() {
-		int[] attrs = new int[]{androidx.appcompat.R.attr.actionBarSize};
-		TypedArray ta = obtainStyledAttributes(attrs);
-		int toolBarHeight = ta.getDimensionPixelSize(0, -1);
-		ta.recycle();
-		return toolBarHeight;
+	private float getToolBarHeight() {
+		TypedValue typedValue = new TypedValue();
+		if (getTheme().resolveAttribute(androidx.appcompat.R.attr.actionBarSize, typedValue, true)) {
+			return typedValue.getDimension(getResources().getDisplayMetrics());
+		}
+		return 0;
 	}
 
 	private void hideSystemUI() {
@@ -494,7 +485,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	@SuppressLint("CheckResult")
 	private void takeScreenshot() {
-		microLoader.takeScreenshot((Canvas) current, new SingleObserver<String>() {
+		microLoader.takeScreenshot((Canvas) current, new SingleObserver<>() {
 			@Override
 			public void onSubscribe(@NonNull Disposable d) {
 			}
@@ -667,7 +658,7 @@ public class MicroActivity extends AppCompatActivity {
 				actionBar.show();
 				final String title = next != null ? next.getTitle() : null;
 				actionBar.setTitle(title == null ? appName : title);
-				toolbarHeight = getToolBarHeight();
+				toolbarHeight = (int) getToolBarHeight();
 				layoutParams.height = toolbarHeight;
 			}
 			binding.overlay.setLocation(0, toolbarHeight);

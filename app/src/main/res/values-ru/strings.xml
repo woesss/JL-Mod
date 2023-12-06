@@ -87,6 +87,7 @@
     <string name="pref_app_sort_title">Сортировка приложений</string>
     <string name="pref_app_sort_vendor">Поставщик</string>
     <string name="pref_apps_view">вид</string>
+    <string name="pref_audio_title">Аудио</string>
     <string name="PREF_BACKGROUND">Фон</string>
     <string name="pref_button_shape_oval">Овальные</string>
     <string name="pref_button_shape_rect">Прямоугольные</string>

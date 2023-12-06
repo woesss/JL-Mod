@@ -309,13 +309,10 @@ public abstract class Canvas extends Displayable {
 	 * Update the size and position of the virtual screen relative to the real one.
 	 */
 	public void updateSize() {
-		/*
-		 * We turn the sizes of the virtual screen into the sizes of the visible canvas.
-		 *
-		 * At the same time, we take into account that one or both virtual sizes can be less
-		 * than zero, which means auto-selection of this size so that the resulting canvas
-		 * has the same aspect ratio as the actual screen of the device.
-		 */
+		// We turn the sizes of the virtual screen into the sizes of the visible canvas.
+		// At the same time, we take into account that one or both virtual sizes can be less
+		// than zero, which means auto-selection of this size so that the resulting canvas
+		// has the same aspect ratio as the actual screen of the device.
 		int scaledDisplayWidth;
 		int scaledDisplayHeight;
 
@@ -340,48 +337,38 @@ public abstract class Canvas extends Displayable {
 
 		if (virtualWidth > 0) {
 			if (virtualHeight > 0) {
-				/*
-				 * the width and height of the canvas are strictly set
-				 */
+				// the width and height of the canvas are strictly set
 				width = virtualWidth;
 				height = virtualHeight;
 			} else {
-				/*
-				 * only the canvas width is set
-				 * height is selected by the ratio of the real screen
-				 */
+				// only the canvas width is set
+				// height is selected by the ratio of the real screen
 				width = virtualWidth;
 				height = scaledDisplayHeight * virtualWidth / scaledDisplayWidth;
 			}
 		} else {
 			if (virtualHeight > 0) {
-				/*
-				 * only the canvas height is set
-				 * width is selected by the ratio of the real screen
-				 */
+				// only the canvas height is set
+				// width is selected by the ratio of the real screen
 				width = scaledDisplayWidth * virtualHeight / scaledDisplayHeight;
 				height = virtualHeight;
 			} else {
-				/*
-				 * nothing is set - screen-sized canvas
-				 */
+				// nothing is set - screen-sized canvas
 				width = scaledDisplayWidth;
 				height = scaledDisplayHeight;
 			}
 		}
 
-		/*
-		 * We turn the size of the canvas into the size of the image
-		 * that will be displayed on the screen of the device.
-		 */
+		// We turn the size of the canvas into the size of the image
+		// that will be displayed on the screen of the device.
 		int scaleRatio = settings.screenScaleRatio;
 		switch (settings.screenScaleType) {
-			case 0:
+			case 0 -> {
 				// without scaling
 				onWidth = width;
 				onHeight = height;
-				break;
-			case 1:
+			}
+			case 1 -> {
 				// try to fit in width
 				onWidth = scaledDisplayWidth;
 				onHeight = height * scaledDisplayWidth / width;
@@ -393,8 +380,8 @@ public abstract class Canvas extends Displayable {
 				if (scaleRatio > 100) {
 					scaleRatio = 100;
 				}
-				break;
-			case 2:
+			}
+			case 2 -> {
 				// scaling without preserving the aspect ratio:
 				// just stretch the picture to full screen
 				onWidth = scaledDisplayWidth;
@@ -402,33 +389,33 @@ public abstract class Canvas extends Displayable {
 				if (scaleRatio > 100) {
 					scaleRatio = 100;
 				}
-				break;
+			}
 		}
 
 		onWidth = onWidth * scaleRatio / 100;
 		onHeight = onHeight * scaleRatio / 100;
 
 		switch (settings.screenGravity) {
-			case 0: // left
+			case 0 -> { // left
 				onX = 0;
 				onY = (scaledDisplayHeight - onHeight) / 2;
-				break;
-			case 1: // top
+			}
+			case 1 -> { // top
 				onX = (scaledDisplayWidth - onWidth) / 2;
 				onY = 0;
-				break;
-			case 2: // center
+			}
+			case 2 -> { // center
 				onX = (scaledDisplayWidth - onWidth) / 2;
 				onY = (scaledDisplayHeight - onHeight) / 2;
-				break;
-			case 3: // right
+			}
+			case 3 -> { // right
 				onX = scaledDisplayWidth - onWidth;
 				onY = (scaledDisplayHeight - onHeight) / 2;
-				break;
-			case 4: // bottom
+			}
+			case 4 -> { // bottom
 				onX = (scaledDisplayWidth - onWidth) / 2;
 				onY = scaledDisplayHeight - onHeight;
-				break;
+			}
 		}
 
 		if (skinLayer != null && skinLayer.hasDisplayFrame()) {
@@ -439,15 +426,11 @@ public abstract class Canvas extends Displayable {
 			onY += settings.screenPadding;
 		}
 
-		/*
-		 * calculate the maximum height
-		 */
+		// calculate the maximum height
 		maxHeight = height;
 
+		// calculate the current height
 		softBar.resize();
-		/*
-		 * calculate the current height
-		 */
 		float softBarHeight = softBar.bounds.height();
 		if (softBarHeight > 0) {
 			float scaleY = (float) onHeight / height;
@@ -808,8 +791,6 @@ public abstract class Canvas extends Displayable {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, settings.screenFilter ? GL_LINEAR : GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-			// юнит текстуры
 			glUniform1i(program.uTextureUnit, 0);
 		}
 
@@ -851,7 +832,7 @@ public abstract class Canvas extends Displayable {
 
 		private Single<Bitmap> takeScreenShot() {
 			return Single.<int[]>create(emitter -> {
-						IntBuffer buf = IntBuffer.allocate(onWidth * onHeight * 4);
+						IntBuffer buf = IntBuffer.allocate(onWidth * onHeight);
 						mView.requestRender();
 						mView.queueEvent(() -> {
 							try {
@@ -982,11 +963,13 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public boolean onKey(View v, int keyCode, KeyEvent event) {
 			switch (event.getAction()) {
-				case KeyEvent.ACTION_DOWN:
+				case KeyEvent.ACTION_DOWN -> {
 					return onKeyDown(keyCode, event);
-				case KeyEvent.ACTION_UP:
+				}
+				case KeyEvent.ACTION_UP -> {
 					return onKeyUp(keyCode, event);
-				case KeyEvent.ACTION_MULTIPLE:
+				}
+				case KeyEvent.ACTION_MULTIPLE -> {
 					if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
 						String characters = event.getCharacters();
 						for (int i = 0; i < characters.length(); i++) {
@@ -998,6 +981,7 @@ public abstract class Canvas extends Displayable {
 					} else {
 						return onKeyDown(keyCode, event);
 					}
+				}
 			}
 			return false;
 		}

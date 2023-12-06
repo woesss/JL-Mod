@@ -96,6 +96,7 @@
     <string name="pref_app_sort_title">App sort order</string>
     <string name="pref_app_sort_vendor">Vendor</string>
     <string name="pref_apps_view">view</string>
+    <string name="pref_audio_title">Audio</string>
     <string name="PREF_BACKGROUND">Background</string>
     <string name="pref_button_shape_oval">Oval</string>
     <string name="pref_button_shape_rect">Rectangle</string>
@@ -154,7 +155,7 @@
     <string name="pref_screen_scale_type_none">As is</string>
     <string name="pref_screenshot_summary">Disable scaling and filtering for screenshots</string>
     <string name="pref_screenshot_title">Raw screenshot</string>
-    <string name="PREF_SHADER_FILTER">Shader:</string>
+    <string name="PREF_SHADER_FILTER">Shader</string>
     <string name="PREF_SHOW_FPS">Show FPS</string>
     <string name="pref_skin_not_set">not set</string>
     <string name="pref_skin_title">Skin</string>
@@ -172,7 +173,7 @@
     <string name="PREF_UNIT_MS">ms</string>
     <string name="pref_vibration_title">Enable vibration</string>
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">Virtual keyboard</string>
-    <string name="PREF_VK_ALPHA">Opacity: </string>
+    <string name="PREF_VK_ALPHA">Opacity</string>
     <string name="PREF_VK_BACK">Buttons</string>
     <string name="PREF_VK_FEEDBACK">Haptic feedback</string>
     <string name="PREF_VK_FIRE_KEY">Fire: </string>

@@ -55,33 +55,24 @@
     <style name="SwitchStyle">
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">?textColorSecondary</item>
-        <item name="android:minHeight">40dp</item>
     </style>
 
     <style name="EditTextStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:minHeight">38dp</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColorHint">#b0b0b0</item>
         <item name="android:textColor">?attr/textColorPrimary</item>
     </style>
 
     <style name="ButtonStyle" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:minHeight">38dp</item>
-        <item name="android:paddingLeft">6dp</item>
-        <item name="android:paddingRight">6dp</item>
-        <item name="android:elevation" tools:targetApi="lollipop">1dp</item>
+        <item name="elevation">1dp</item>
         <item name="android:background">@drawable/bg_button</item>
     </style>
 
     <style name="ImageButtonStyle" parent="Widget.AppCompat.ImageButton">
-        <item name="android:minHeight">38dp</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:tint">?colorAccent</item>
     </style>
 
-    <style name="TextViewVendor" parent="Widget.AppCompat.TextView" >
-    </style>
+    <style name="TextViewVendor" parent="Widget.AppCompat.TextView" />
 
 </resources>

@@ -20,14 +20,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class Size implements Comparable<Size> {
+   private static final String SEPARATOR = " x ";
    public final int width;
    public final int height;
    private final String string;
 
    public Size(int width, int height) {
+      this(width, height, width + SEPARATOR + height);
+   }
+
+   private Size(int width, int height, String string) {
       this.width = width;
       this.height = height;
-      string = width + " x " + height;
+      this.string = string;
    }
 
    @Nullable
@@ -36,13 +41,14 @@ public class Size implements Comparable<Size> {
          return null;
       }
 
-      int x = string.indexOf(" x ");
+      int x = string.indexOf(SEPARATOR);
       if (x < 0) {
          return null;
       }
       try {
-         return new Size(Integer.parseInt(string.substring(0, x)),
-                 Integer.parseInt(string.substring(x + 3)));
+         int width = Integer.parseInt(string.substring(0, x));
+         int height = Integer.parseInt(string.substring(x + SEPARATOR.length()));
+         return new Size(width, height, string);
       } catch (NumberFormatException e) {
          return null;
       }
@@ -58,17 +64,20 @@ public class Size implements Comparable<Size> {
    public boolean equals(@Nullable Object obj) {
       if (this == obj) {
          return true;
+      } else if (obj instanceof Size that) {
+         return that.width == width && that.height == height;
       }
-      if (!(obj instanceof Size)) {
-         return false;
-      }
-      Size that = (Size) obj;
-      return that.width == width && that.height == height;
+      return false;
    }
 
    @Override
    public int compareTo(Size o) {
       int r = Integer.compare(width, o.width);
       return r != 0 ? r : Integer.compare(height, o.height);
+   }
+
+   @Override
+   public int hashCode() {
+      return string.hashCode();
    }
 }
