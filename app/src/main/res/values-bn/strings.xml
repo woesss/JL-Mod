@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">সম্পর্কে</string>
-    <string name="about_message">এই অ্যাপটির মাধ্যমে J2ME অ্যাপ্লিকেশান এবং গেম Android এ চালাতে পারবেন । এতে অধিকাংশ 2D গেম এবং কিছু সীমাবদ্ধতাসহ ছাড়া অধিকাংশ 3D গেম সমর্থন করে।\n</string>
+    <string name="about_message">এই অ্যাপটির মাধ্যমে J2ME অ্যাপ্লিকেশান এবং গেম Android এ চালাতে পারবেন ।\n</string>
     <string name="action_context_delete">মুছে ফেলুন</string>
     <string name="action_context_rename">নাম পরিবর্তন করুন</string>
     <string name="action_context_shortcut">শর্টকাট যুক্ত করুন</string>

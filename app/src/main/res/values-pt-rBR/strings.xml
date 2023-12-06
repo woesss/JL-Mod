@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">Sobre</string>
-    <string name="about_message">Este aplicativo permite que você inicie aplicativos e jogos J2ME no Android. Suporta a maioria dos jogos 2D e também 3D com algumas limitações.&lt;BR&gt;</string>
+    <string name="about_message">Este aplicativo permite iniciar aplicativos e jogos J2ME no Android.\n</string>
     <string name="action_context_delete">Apagar</string>
     <string name="action_context_rename">Renomear</string>
     <string name="action_context_shortcut">Adicionar atalho</string>
     <string name="action_keyboard_ime">Teclado (IME)</string>
+    <string name="action_lock_orientation">Bloquear rotação de tela</string>
     <string name="action_reinstall">Reinstalar</string>
     <string name="action_settings">Configurações</string>
     <string name="add">Adicionar</string>
     <string name="add_profile_description">Criar novo perfil</string>
-    <string name="alert_map_menu">Você DEVE mapear a tecla \"menu\"!</string>
+    <string name="alert_map_menu">Tecla de menu (M) não está atribuída!\nIsto pode impossibilitar o acesso às opções do emulador</string>
     <string name="alert_msg_workdir_not_exists">Diretório de trabalho não existe no caminho:\n\'%1$s\'.\nVocê quer criá-lo ou escolher outro?</string>
+    <string name="alert_rewrite_profile">Um perfil chamado \"%1$s\" já existe.\nVocê deseja substituí-lo?</string>
     <string name="author">Autor: </string>
     <string name="CANCEL_CMD">Cancelar</string>
     <string name="change">Alterar</string>
     <string name="choose">Escolher</string>
     <string name="CLEAR_DATA_CMD">Apagar dados</string>
     <string name="close">Fechar</string>
+    <string name="cmd_menu">Menu</string>
     <string name="CONFIRMATION_REQUIRED">Confirmação necessária</string>
     <string name="converting_wait">Convertendo JAR…</string>
     <string name="crash_dialog_message">Deseja enviar um relatório de erro ao desenvolvedor?</string>
@@ -42,7 +45,7 @@
     <string name="help_message">&#8226; Ativando a filtragem em alguns casos pode reduzir muito a performance. Desative esta opção se o jogo estiver muito lento.&lt;BR&gt;&#8226; Problemas de exibição de imagens podem ser corrigidos ao ativar a opção \"Modo de processamento imediato\".</string>
     <string name="hide_buttons">Ocultar botões</string>
     <string name="identity_filter">Rápido (sem filtro)</string>
-    <string name="install">Instalar</string>
+    <string name="install">instalar</string>
     <string name="install_done">Aplicativo instalado com sucesso!</string>
     <string name="install_jar_needed">Selecione o arquivo JAR</string>
     <string name="install_jar_non_matched_jad">Este aplicativo é diferente do descrito em JAD.\nIgnorar JAD e instalar mesmo assim?</string>
@@ -56,7 +59,7 @@
     <string name="load_profile">Carregar perfil</string>
     <string name="loading_info">Carregando informações…</string>
     <string name="log_saved">Log foi salvo</string>
-    <string name="mapping_dialog_key_not_specified">Não especificado</string>
+    <string name="mapping_dialog_key_not_specified">não especificado</string>
     <string name="mapping_dialog_message">Mapeamento atual:\n%1$s</string>
     <string name="mapping_dialog_title">Pressione um botão</string>
     <string name="message_clear_data">Deseja realmente apagar os dados do aplicativo?</string>
@@ -69,7 +72,7 @@
     <string name="more">Mais</string>
     <string name="no_data_for_display">Sem dados</string>
     <string name="not_saved_exists">Já existe</string>
-    <string name="opt_save_screen_params">Salvar parâmetros de tela</string>
+    <string name="opt_save_screen_params">salvar parâmetros de tela</string>
     <string name="parallel_screen_redrawing">Redesenho de tela paralelo</string>
     <string name="permission_request_failed">Este aplicativo requer permissão de gravação no armazenamento</string>
     <string name="pref_app_sort_date">Data</string>
@@ -81,6 +84,7 @@
     <string name="pref_button_shape_rect">Quadrado</string>
     <string name="pref_button_shape_round">Quadrado arredondado</string>
     <string name="pref_button_shape_title">Formato dos botões</string>
+    <string name="pref_category_experimental">Opções experimentais/temporárias</string>
     <string name="pref_default_settings">Configurações padrão</string>
     <string name="pref_emulator_dir">Pasta padrão</string>
     <string name="pref_enable_actionbar_summary">Em aplicativos em tela cheia</string>
@@ -106,6 +110,8 @@
     <string name="PREF_KEEP_ASPECT_RATIO">Manter proporção</string>
     <string name="PREF_LIMIT_FPS">Limite de FPS</string>
     <string name="pref_map_keys">Mapeamento do teclado</string>
+    <string name="pref_mascot_summary">Mostrar mensagem ao usar</string>
+    <string name="pref_mascot_title">Detectar Mascot Capsule 3D</string>
     <string name="PREF_ORIENTATION">Orientação da tela</string>
     <string name="pref_orientation_auto">Automático</string>
     <string name="pref_orientation_default">Padrão</string>
@@ -125,6 +131,8 @@
     <string name="pref_screen_scale_type_fill">Preencher janela (ignorar proporção de aspecto)</string>
     <string name="pref_screen_scale_type_fit">Ajuste para caber na janela</string>
     <string name="pref_screen_scale_type_none">Estilo padrão</string>
+    <string name="pref_screenshot_summary">Desativar escala e filtragem para capturas de tela</string>
+    <string name="pref_screenshot_title">Captura de tela em raw</string>
     <string name="PREF_SHOW_FPS">Exibir FPS</string>
     <string name="PREF_SYS_PROPS">Propriedades do Sistema</string>
     <string name="pref_theme_auto_battery">Automático, por Economia de Bateria</string>
@@ -174,6 +182,7 @@
     <string name="reset_mapping">Redefinir</string>
     <string name="RESET_SETTINGS_CMD">Redefinir configurações</string>
     <string name="retry">tentar novamente</string>
+    <string name="save">Salvar</string>
     <string name="save_log">Salvar registro</string>
     <string name="save_profile">Salvar perfil</string>
     <string name="saved">Salvo %1$s</string>

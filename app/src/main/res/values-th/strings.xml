@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">เกี่ยวกับ</string>
-    <string name="about_message">แอปพลิเคชั่นนี้ช่วยให้คุณสามารถใช้งานแอปพลิเคชั่นของ J2ME บน Android. รองรับทั้ง 2D และ 3D อาจมีข้อจำกัดบางประการ.\n</string>
+    <string name="about_message">แอปพลิเคชั่นนี้ช่วยให้คุณสามารถใช้งานแอปพลิเคชั่นของ J2ME บน Android.\n</string>
     <string name="action_context_delete">ลบ</string>
     <string name="action_context_rename">เปลี่ยนชื่อ</string>
     <string name="action_context_shortcut">เพิ่มทางลัด</string>

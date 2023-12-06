@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">O aplikacji</string>
-    <string name="about_message">Ta aplikacja pozwala uruchamiać aplikacje i gry J2ME na urządzeniu z systemem Android. Obsługuje większość gier 2D, a także 3D z pewnymi ograniczeniami.\n</string>
+    <string name="about_message">Ta aplikacja pozwala uruchamiać aplikacje i gry J2ME na urządzeniu z systemem Android.\n</string>
     <string name="action_context_delete">Usuń</string>
     <string name="action_context_rename">Zmień nazwę</string>
     <string name="action_context_shortcut">Dodaj skrót</string>

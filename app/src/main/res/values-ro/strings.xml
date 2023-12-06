@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">Despre</string>
-    <string name="about_message">Această aplicație iți permite să lansezi aplicații J2ME și jocuri pe Android. Suportă majoritatea jocurilor 2D și 3D cu unele limitări.\n</string>
+    <string name="about_message">Această aplicație iți permite să lansezi aplicații J2ME și jocuri pe Android.\n</string>
     <string name="action_context_delete">Șterge</string>
     <string name="action_context_rename">Renumeste</string>
     <string name="action_context_shortcut">Adaugă scurtătură</string>

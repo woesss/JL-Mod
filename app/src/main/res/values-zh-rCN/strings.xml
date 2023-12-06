@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">关于</string>
-    <string name="about_message">此应用程序可以在Android设备上运行J2ME应用程序和游戏，它支持大多数2D和部分3D游戏。\n</string>
+    <string name="about_message">此应用允许您在 Android 上启动 J2ME 应用和游戏。\n</string>
     <string name="action_context_delete">删除</string>
     <string name="action_context_rename">重命名</string>
     <string name="action_context_shortcut">添加到桌面</string>
     <string name="action_keyboard_ime">键盘类型 (IME)</string>
+    <string name="action_lock_orientation">锁定屏幕旋转</string>
     <string name="action_reinstall">重新安装</string>
     <string name="action_settings">设置</string>
     <string name="add">添加</string>
     <string name="add_profile_description">创建新配置文件</string>
-    <string name="alert_map_menu">您必须映射“菜单”键！</string>
+    <string name="alert_map_menu">菜单键 (M) 未分配！\n这可能造成无法打开模拟器的选项菜单</string>
     <string name="alert_msg_workdir_not_exists">工作目录不存在于路径：\n\'%1$s 中。\n你想要创建它还是选择另一个？</string>
+    <string name="alert_rewrite_profile">名为“%1$s”的配置文件已存在。\n你想覆盖它吗？</string>
     <string name="author">作者: </string>
     <string name="CANCEL_CMD">取消</string>
     <string name="change">更改</string>
@@ -48,9 +50,9 @@
     <string name="install_jar_needed">选择 JAR 文件</string>
     <string name="install_jar_non_matched_jad">这个应用程序不同于 JAD 中描述的应用程序。\n 忽略 JAD 并安装吗？</string>
     <string name="invalid_resolution_not_saved">无效分辨率：未保存！</string>
-    <string name="layout_edit_finish">完成编辑模式</string>
-    <string name="layout_edit_finished">编辑模式已完成</string>
-    <string name="layout_edit_mode">按键布局编辑</string>
+    <string name="layout_edit_finish">保存按键布局</string>
+    <string name="layout_edit_finished">按键布局已保存</string>
+    <string name="layout_edit_mode">编辑按键布局</string>
     <string name="layout_scale_mode">调整按键大小</string>
     <string name="layout_switch">切换按键布局</string>
     <string name="licenses">许可</string>
@@ -82,13 +84,14 @@
     <string name="pref_button_shape_rect">矩形</string>
     <string name="pref_button_shape_round">圆角矩形</string>
     <string name="pref_button_shape_title">按钮形状</string>
+    <string name="pref_category_experimental">实验/临时选项</string>
     <string name="pref_default_settings">默认设置</string>
     <string name="pref_emulator_dir">工作目录</string>
     <string name="pref_enable_actionbar_summary">在应用中全屏</string>
     <string name="pref_enable_actionbar_title">启用操作栏</string>
     <string name="pref_enable_statusbar_title">启用状态栏</string>
     <string name="pref_encoding_title">编码</string>
-    <string name="PREF_FILTER">图像过滤器</string>
+    <string name="PREF_FILTER">图像虚化</string>
     <string name="PREF_FONT_ANTI_ALIASING">抗锯齿</string>
     <string name="PREF_FONT_LARGE">大</string>
     <string name="PREF_FONT_MEDIUM">中</string>
@@ -109,6 +112,8 @@
     <string name="PREF_LAYOUT">布局</string>
     <string name="PREF_LIMIT_FPS">限制 FPS</string>
     <string name="pref_map_keys">按键映射</string>
+    <string name="pref_mascot_summary">在使用时会提示消息</string>
+    <string name="pref_mascot_title">Mascot Capsule 3D 检测</string>
     <string name="PREF_ORIENTATION">屏幕方向​​​​​​​​​​​​​​</string>
     <string name="pref_orientation_auto">自动</string>
     <string name="pref_orientation_default">默认</string>
@@ -128,6 +133,8 @@
     <string name="pref_screen_scale_type_fill">填充窗口 (忽略宽高比)</string>
     <string name="pref_screen_scale_type_fit">适应窗口</string>
     <string name="pref_screen_scale_type_none">按照设置尺寸</string>
+    <string name="pref_screenshot_summary">禁用屏幕截图的缩放和过滤</string>
+    <string name="pref_screenshot_title">原始截图</string>
     <string name="PREF_SHADER_FILTER">着色器:</string>
     <string name="PREF_SHOW_FPS">显示 FPS</string>
     <string name="PREF_SYS_PROPS">系统属性</string>
@@ -143,7 +150,7 @@
     <string name="PREF_VIRTUAL_KEYBOARD_OPTIONS">虚拟键盘</string>
     <string name="PREF_VK_ALPHA">不透明度: </string>
     <string name="PREF_VK_BACK">按键</string>
-    <string name="PREF_VK_FEEDBACK">触觉反馈</string>
+    <string name="PREF_VK_FEEDBACK">按键振动</string>
     <string name="PREF_VK_FIRE_KEY">发射: </string>
     <string name="PREF_VK_FORCE_OPACITY">屏幕外按键强制不透明</string>
     <string name="PREF_VK_FORE">标签</string>
@@ -172,13 +179,14 @@
     <string name="profiles">配置文件</string>
     <string name="reinstall">应用已经安装。\n\n 您想要重新安装吗？\n 所有数据将被保存。</string>
     <string name="reinstall_newest">更新此应用到版本 %1$s？\n\n目前已安装版本： %2$s\n所有数据将被保存。</string>
-    <string name="reinstall_older">将此应用替换为版本 %1$s 吗？\n\n 目前已安装： %2$s\n 旧版本可能无法正确使用记录数据。</string>
+    <string name="reinstall_older">将此应用替换为旧版本 %1$s 吗？\n\n 目前已安装： %2$s\n 旧版本可能无法正常使用现有的存档数据。</string>
     <string name="report_crash">发送</string>
     <string name="reset">重置</string>
     <string name="RESET_LAYOUT_CMD">重置按键布局</string>
     <string name="reset_mapping">重置</string>
     <string name="RESET_SETTINGS_CMD">恢复默认设置</string>
     <string name="retry">重试</string>
+    <string name="save">保存</string>
     <string name="save_log">存储日志</string>
     <string name="save_profile">保存配置文件</string>
     <string name="saved">已保存 %1$s</string>

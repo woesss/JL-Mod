@@ -8,8 +8,7 @@
     <string name="about_crowdin" translatable="false">&lt;BR>Crowdin(translation): &lt;a href="https://crowdin.com/project/j2me-loader">crowdin.com/project/j2me-loader&lt;/a></string>
     <string name="about_email" translatable="false">\n\nEmail: <a href="mailto:j2me.forever@gmail.com">j2me.forever@gmail.com</a>\n</string>
     <string name="about_github" translatable="false">\nGithub: <a href="https://github.com/woesss/JL-Mod">woesss/JL-Mod</a>\n</string>
-    <string name="about_message">This app allows you to launch J2ME apps and games on Android. It supports most 2D games and also 3D with some limitations.\n</string>
-    <string name="about_mod_message">Experimental mod of the emulator <a href="https://github.com/nikita36078/J2ME-Loader">"J2ME-Loader" (A J2ME emulator for Android)</a> with support for games developed for the 3D engine "Mascot Capsule v3"\n</string>
+    <string name="about_message">This app allows you to launch J2ME apps and games on Android.\n</string>
     <string name="about_xda" translatable="false">&lt;BR>XDA: &lt;a href="https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889">forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889&lt;/a></string>
     <string name="action_context_delete">Delete</string>
     <string name="action_context_rename">Rename</string>
@@ -37,8 +36,8 @@
     <string name="crash_dialog_message">Do you want to send error report to the developer?</string>
     <string name="crash_dialog_title">Error detected</string>
     <string name="create">create</string>
-    <string name="create_apps_dir_failed">Failed to create a folder in the path:\n\'%1$s\'\nselect another.</string>
-    <string name="default_label">"%1$s (default)"</string>
+    <string name="create_apps_dir_failed">Failed to create a folder in the path:\n%1$s\nselect another.</string>
+    <string name="default_label">%1$s (default)</string>
     <string name="dismiss">Dismiss</string>
     <string name="donate">Donate</string>
     <string name="donation_paypal_item" translatable="false">J2ME Loader donation</string>
@@ -104,8 +103,6 @@
     <string name="pref_button_shape_title">Button shape</string>
     <string name="pref_category_experimental">Experimental/temporary options</string>
     <string name="PREF_COLOR_HINT" translatable="false">RRGGBB (hex color)</string>
-    <string name="pref_compress_summary">Reduces apps size when installed</string>
-    <string name="pref_compress_title">Compress code</string>
     <string name="pref_default_settings">Default settings</string>
     <string name="pref_emulator_dir">Working directory</string>
     <string name="pref_enable_actionbar_summary">In fullscreen applications</string>
@@ -225,6 +222,7 @@
     <string name="set_default_profile_description">Select this profile as a standard settings for all apps that will be installed later</string>
     <string name="shader_setting" translatable="false">%1$s: %2$s</string>
     <string name="shader_tuning">Shader Tuning</string>
+    <string name="show">Show</string>
     <string name="SIZE_PRESETS">Presets</string>
     <string name="START_CMD">Start</string>
     <string name="SWAP_SIZES">Swap sizes</string>

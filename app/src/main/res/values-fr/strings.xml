@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">À propos</string>
-    <string name="about_message">Cette application vous permet de lancer des applications et des jeux J2ME sur Android. Elle supporte la plupart des jeux 2D et 3D avec quelques limitations.\n</string>
+    <string name="about_message">Cette application vous permet de lancer des applications et des jeux J2ME sur Android.\n</string>
     <string name="action_context_delete">Supprimer</string>
     <string name="action_context_rename">Renommer</string>
     <string name="action_context_shortcut">Ajouter un raccourci</string>
     <string name="action_keyboard_ime">Keyboard (IME)</string>
+    <string name="action_lock_orientation">Verrouiller l\'orientation de l\'écran</string>
     <string name="action_reinstall">Réinstaller</string>
     <string name="action_settings">Paramètres</string>
     <string name="add">Ajouter</string>
     <string name="add_profile_description">Créer un profil</string>
-    <string name="alert_map_menu">Vous DEVEZ mapper la touche \"menu\" !</string>
+    <string name="alert_map_menu">La touche Menu (M) n\'est pas assignée !\n Cela peut rendre l\'accès aux options de l\'émulateur impossible</string>
     <string name="alert_msg_workdir_not_exists">Le répertoire de travail n\'existe pas au chemin :\n\'%1$s\'.\nVoulez-vous le créer ou en choisir un autre ?</string>
+    <string name="alert_rewrite_profile">Un profil ayant pour nom \"%1$s\" existe déjà.\n Voulez-vous le remplacer ?</string>
     <string name="author">Auteur: </string>
     <string name="CANCEL_CMD">Annuler</string>
     <string name="change">Modifier</string>
     <string name="choose">Sélectionnez le type de d\'initiative</string>
     <string name="CLEAR_DATA_CMD">Effacer les données</string>
     <string name="close">Terminer</string>
-    <string name="cmd_menu">menue</string>
+    <string name="cmd_menu">Menu</string>
     <string name="CONFIRMATION_REQUIRED">Confirmation requise</string>
     <string name="converting_wait">Conversion JAD…</string>
     <string name="crash_dialog_message">Voulez-vous envoyer un rapport d\'erreur au développeur ?</string>
@@ -77,7 +79,7 @@
     <string name="pref_app_sort_name">Nom</string>
     <string name="pref_app_sort_title">Ordre de tri des applications</string>
     <string name="pref_app_sort_vendor">Vendeur</string>
-    <string name="PREF_BACKGROUND">Fond</string>
+    <string name="PREF_BACKGROUND">Arrière-plan</string>
     <string name="pref_button_shape_oval">Ovale</string>
     <string name="pref_button_shape_rect">Rectangulaire</string>
     <string name="pref_button_shape_round">Rectangle arrondi</string>
@@ -128,6 +130,8 @@
     <string name="pref_screen_scale_type_fill">Remplir la fenêtre (Ignorer le rapport de l\'aspect)</string>
     <string name="pref_screen_scale_type_fit">Adapter à la fenêtre</string>
     <string name="pref_screen_scale_type_none">Comme c\'est</string>
+    <string name="pref_screenshot_summary">Désactiver la mise à l\'échelle et le filtrage des captures d\'écran</string>
+    <string name="pref_screenshot_title">Capture d\'écran brute</string>
     <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="PREF_SHOW_FPS">Afficher IPS</string>
     <string name="PREF_SYS_PROPS">Propriétés système</string>
@@ -179,6 +183,7 @@
     <string name="reset_mapping">Réinitialiser</string>
     <string name="RESET_SETTINGS_CMD">Réinitialiser les paramètres</string>
     <string name="retry">réessayer</string>
+    <string name="save">Sauvegarder</string>
     <string name="save_log">Sauvegarde logs</string>
     <string name="save_profile">Enregistrer profil</string>
     <string name="saved">Sauvegarder %1$s</string>
@@ -194,7 +199,7 @@
     <string name="SWAP_SIZES">Permuter les tailles</string>
     <string name="take_screenshot">Effectuer une capture d\'écran</string>
     <string name="unlimited">illimité</string>
-    <string name="version">Version: </string>
+    <string name="version">Version : </string>
     <string name="warn_install_from_net">Fichier téléchargé à partir d\'Internet</string>
     <string name="warning">Attention</string>
 </resources>

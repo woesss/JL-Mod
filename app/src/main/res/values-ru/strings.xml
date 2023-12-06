@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">О программе</string>
-    <string name="about_message">Данный эмулятор позволяет запускать J2ME приложения на Android. Для работы программы не нужен интернет, конвертация приложений происходит прямо на устройстве.\nНа данный момент поддерживается большинство 2д игр, поддержка 3д присутствует, но с некоторыми ограничениями.\nЕсть виртуальная клавиатура, индивидуальные настройки для каждого приложения, присутствует поддержка масштабирования.\n</string>
-    <string name="about_mod_message">Экпериментальный мод <a href="https://github.com/nikita36078/J2ME-Loader">"J2ME Loader" (J2ME эмулятор для Android)</a> с поддержкой игр, разработанных для 3D движка "Mascot Capsule v3"\n</string>
+    <string name="about_message">Это приложение позволяет запускать J2ME приложения и игры на Android.\n</string>
     <string name="action_context_delete">Удалить</string>
     <string name="action_context_rename">Переименовать</string>
     <string name="action_context_shortcut">Добавить ярлык</string>
@@ -31,6 +30,7 @@
     <string name="create">создать</string>
     <string name="create_apps_dir_failed">Не удалось создать папку по пути:\n%1$s\nвыберите другую.</string>
     <string name="default_label">%1$s (стандартный)</string>
+    <string name="dismiss">Скрыть</string>
     <string name="donate">Поддержать</string>
     <string name="edit">Настроить</string>
     <string name="enter_name">Введите название</string>
@@ -49,6 +49,7 @@
     <string name="identity_filter">Быстрый (без фильтра)</string>
     <string name="install">установить</string>
     <string name="install_done">Приложение установлено!</string>
+    <string name="install_jar_needed">Выберите JAR файл</string>
     <string name="install_jar_non_matched_jad">Это приложение не соответствует описанному в JAD. Параметры из JAD не будут использованы\n\nВсё равно установить?</string>
     <string name="invalid_resolution_not_saved">Некорректные размеры: не сохранено!</string>
     <string name="layout_edit_finish">Завершить редактирование раскладки</string>
@@ -71,8 +72,11 @@
     <string name="midlet_vendor"><b>Поставщик:</b> </string>
     <string name="midlet_version"><b>Версия:</b> </string>
     <string name="more">Подробнее</string>
+    <string name="msg_error_loading_shader">Неподдерживаемый шейдер, использую стандартный!</string>
+    <string name="msg_immediate_mode_disabled">Неотложный режим выключен чтобы избежать переполнения стэка</string>
     <string name="msg_no_matches">Нет совпадений для \"%1$s\"</string>
     <string name="msg_press_again_to_close">Нажмите ещё раз, чтобы закрыть</string>
+    <string name="msg_unsupported_soundbank">Неподдержываемый soundbank, перехожу на стандартный</string>
     <string name="no_data_for_display">Нет данных</string>
     <string name="not_saved_exists">Уже существует</string>
     <string name="opt_save_screen_params">сохранить параметры экрана</string>
@@ -89,8 +93,6 @@
     <string name="pref_button_shape_round">Закруглённые</string>
     <string name="pref_button_shape_title">Форма кнопок</string>
     <string name="pref_category_experimental">Экспериментальные/временные опции</string>
-    <string name="pref_compress_summary">Уменьшает размер приложений при установке</string>
-    <string name="pref_compress_title">Сжимать код</string>
     <string name="pref_default_settings">Стандартные настройки</string>
     <string name="pref_emulator_dir">Рабочая папка</string>
     <string name="pref_enable_actionbar_summary">В полноэкранных приложениях</string>
@@ -118,6 +120,8 @@
     <string name="PREF_LAYOUT">Раскладка</string>
     <string name="PREF_LIMIT_FPS">Ограничить FPS</string>
     <string name="pref_map_keys">Назначение кнопок</string>
+    <string name="pref_mascot_summary">Показывать сообщение при использовании</string>
+    <string name="pref_mascot_title">Обнаруживать Mascot Capsule 3D</string>
     <string name="PREF_ORIENTATION">Ориентация экрана</string>
     <string name="pref_orientation_auto">Автоматически</string>
     <string name="pref_orientation_default">По умолчанию</string>
@@ -133,6 +137,7 @@
     <string name="pref_screen_gravity_right">Справа</string>
     <string name="pref_screen_gravity_top">Сверху</string>
     <string name="PREF_SCREEN_OPTIONS">Параметры экрана</string>
+    <string name="pref_screen_padding_title">Отступ</string>
     <string name="pref_screen_scale_type">Масштабирование</string>
     <string name="pref_screen_scale_type_fill">Заполнить (без учёта пропорций)</string>
     <string name="pref_screen_scale_type_fit">Вписать</string>
@@ -141,6 +146,9 @@
     <string name="pref_screenshot_title">Необработанный скриншот</string>
     <string name="PREF_SHADER_FILTER">Шейдер:</string>
     <string name="PREF_SHOW_FPS">Показать FPS</string>
+    <string name="pref_skin_not_set">Не выбран</string>
+    <string name="pref_skin_title">Фоновое изображение</string>
+    <string name="pref_soundbank_title">С</string>
     <string name="PREF_SYS_PROPS">Системные параметры</string>
     <string name="pref_theme_auto_battery">Авто, по режиму энергосбережения</string>
     <string name="pref_theme_auto_time">Авто, по времени суток</string>
@@ -194,6 +202,7 @@
     <string name="save_log">Сохранить лог</string>
     <string name="save_profile">Сохранить профиль</string>
     <string name="saved">Сохранено %1$s</string>
+    <string name="scoped_storage_warning">Ваши пользовательские данные хранятся в папке, которая <b>будет удалена</b> при удалении приложения:\n</string>
     <string name="screenshot_saved">Скриншот сохранён в</string>
     <string name="search">Поиск</string>
     <string name="select_dialog_title">Выберите MIDlet</string>

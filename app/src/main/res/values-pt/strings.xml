@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">Sobre</string>
-    <string name="about_message">Este app permite emular jogos e aplicativos em J2ME no Android. Ele suporta a maioria dos jogos 2D e 3D com algumas limitações.\n</string>
+    <string name="about_message">Este app permite emular jogos e aplicativos em J2ME no Android.\n</string>
     <string name="action_context_delete">Eliminar</string>
     <string name="action_context_rename">Mudar o nome</string>
     <string name="action_context_shortcut">Adicionar atalho</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">Tietoja</string>
-    <string name="about_message">Tämä sovellus mahdollistaa J2ME-sovellusten ja -ohjelmien käynnistämisen Androidissa. Se tukee useimpia 2D-pelejä ja myös 3D-tekniikkaa rajoitetusti.\n</string>
+    <string name="about_message">Tämä sovellus mahdollistaa J2ME-sovellusten ja -ohjelmien käynnistämisen Androidissa.\n</string>
     <string name="action_context_delete">Poista</string>
     <string name="action_context_rename">Nimeä uudelleen</string>
     <string name="action_context_shortcut">Lisää pikakuvake</string>

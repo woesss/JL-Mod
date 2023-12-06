@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">Info</string>
-    <string name="about_message">Questa applicazione consente di avviare applicazioni e giochi J2ME su Android. Supporta la maggior parte dei giochi 2D e anche 3D, con alcune limitazioni.\n</string>
+    <string name="about_message">Questa applicazione consente di avviare applicazioni e giochi J2ME su Android.\n</string>
     <string name="action_context_delete">Elimina</string>
     <string name="action_context_rename">Rinomina</string>
     <string name="action_context_shortcut">Aggiungi collegamento</string>

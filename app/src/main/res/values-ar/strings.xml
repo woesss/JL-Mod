@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">حول البرنامج</string>
-    <string name="about_message">هذا التطبيق يسمح لك بتشغيل تطبيقات والعاب J2ME على جهازك اندرويد. وهو يدعم معظم الألعاب 2D و 3D أيضا ولكن مع بعض القيود.n\</string>
+    <string name="about_message">هذا التطبيق يسمح لك بتشغيل تطبيقات والعاب J2ME على جهازك اندرويد.n\</string>
     <string name="action_context_delete">حذف</string>
     <string name="action_context_rename">اعادة تسمية</string>
     <string name="action_context_shortcut">إضافة اختصار</string>
     <string name="action_keyboard_ime">لوحة المفاتيح (IME)</string>
+    <string name="action_lock_orientation">تدوير شاشة القفل</string>
     <string name="action_reinstall">إعادة التثبيت</string>
     <string name="action_settings">الاعدادات</string>
     <string name="add">إضافة</string>
     <string name="add_profile_description">إنشاء ملف شخصي جديد</string>
-    <string name="alert_map_menu">لابد من اعادة ربط مفتاح \"القائمة\" الخاص بك!</string>
+    <string name="alert_map_menu">لم يتم تعيين مفتاح القائمة (M)!\nقد يجعل هذا من المستحيل الوصول إلى خيارات المحاكي</string>
     <string name="alert_msg_workdir_not_exists">دليل العمل غير موجود في المسار:\n\'%1$s\'.\nهل تريد إنشاؤه أو اختيار دليل آخر؟</string>
+    <string name="alert_rewrite_profile">ملف تعريف اسمه \"%1$s\" موجود بالفعل.\nهل تريد الكتابة فوقه؟</string>
     <string name="author">المالك: </string>
     <string name="CANCEL_CMD">الغاء</string>
     <string name="change">تغيير</string>
@@ -26,6 +28,7 @@
     <string name="create">إنشاء</string>
     <string name="create_apps_dir_failed">فشل في إنشاء مجلد في المسار:\n\'%1$s\'\nحدد مجلد آخر.</string>
     <string name="default_label">%1$s (افتراضي)</string>
+    <string name="dismiss">إلغاء</string>
     <string name="donate">تبرع</string>
     <string name="edit">تعديل</string>
     <string name="enter_name">أدخل الاسم</string>
@@ -44,6 +47,7 @@
     <string name="identity_filter">سريع (بدون فلترة)</string>
     <string name="install">تثبيت</string>
     <string name="install_done">تم تثبيت التطبيق بنجاح!</string>
+    <string name="install_jar_needed">حدد ملف JAR</string>
     <string name="install_jar_non_matched_jad">هذا التطبيق يختلف عن ذلك الموصوف في JAD.\nتجاهل JAD والتثبيت على أي حال؟</string>
     <string name="invalid_resolution_not_saved">القرارات غير صالحة: لم يتم حفظها!</string>
     <string name="layout_edit_finish">انهاء وضع التعديل</string>
@@ -80,6 +84,7 @@
     <string name="pref_button_shape_rect">مستطيل</string>
     <string name="pref_button_shape_round">مستطيل دائري</string>
     <string name="pref_button_shape_title">شكل الزر</string>
+    <string name="pref_category_experimental">الخيارات التجريبية/المؤقتة</string>
     <string name="pref_default_settings">الإعدادات الإفتراضية</string>
     <string name="pref_emulator_dir">مجلد المفتوح</string>
     <string name="pref_enable_actionbar_summary">في تطبيقات ملء الشاشة</string>
@@ -107,6 +112,8 @@
     <string name="PREF_LAYOUT">التنسيق</string>
     <string name="PREF_LIMIT_FPS">أكبر حد من اللقطات في كل ثانية</string>
     <string name="pref_map_keys">توجيهات المفتاح</string>
+    <string name="pref_mascot_summary">إظهار الرسالة عند الاستخدام</string>
+    <string name="pref_mascot_title">كشف كابسول ماسكوت 3D</string>
     <string name="PREF_ORIENTATION">اتجاه الشاشة</string>
     <string name="pref_orientation_auto">تلقائي</string>
     <string name="pref_orientation_default">الافتراضي</string>
@@ -126,6 +133,8 @@
     <string name="pref_screen_scale_type_fill">ملء النافذة (تجاهل نسبة الجوانب)</string>
     <string name="pref_screen_scale_type_fit">مناسب للنوافذ</string>
     <string name="pref_screen_scale_type_none">كما هو</string>
+    <string name="pref_screenshot_summary">تعطيل القياس والتصفية لقطات الشاشة</string>
+    <string name="pref_screenshot_title">لقطة شاشة خامة</string>
     <string name="PREF_SHADER_FILTER">شيدر:</string>
     <string name="PREF_SHOW_FPS">إظهار عدد اللقطات في كل ثانية</string>
     <string name="PREF_SYS_PROPS">خصائص النظام</string>
@@ -170,15 +179,18 @@
     <string name="profiles">حقوق المستخدم</string>
     <string name="reinstall">التطبيق مثبت بالفعل.\n\nهل تريد إعادة تثبيته؟\nسيتم حفظ جميع البيانات.</string>
     <string name="reinstall_newest">قم بتحديث هذا التطبيق إلى الإصدار %1$s؟\n\nالمثبت حاليا: %2$s\nسيتم حفظ جميع البيانات.</string>
+    <string name="reinstall_older">هل تريد استبدال هذا التطبيق بالإصدار %1$s؟\n\nالمثبت حاليا: %2$s\nالإصدار القديم قد لا يعمل بشكل صحيح مع البيانات المسجلة.</string>
     <string name="report_crash">إرسال</string>
     <string name="reset">إعادة ضبط</string>
     <string name="RESET_LAYOUT_CMD">إعادة تعيين ترتيب لوحة المفاتيح</string>
     <string name="reset_mapping">إعادة تعيين</string>
     <string name="RESET_SETTINGS_CMD">إعادة تعيين الإعدادات</string>
     <string name="retry">اعد المحاولة</string>
+    <string name="save">حفظ</string>
     <string name="save_log">سجلات الحفظ</string>
     <string name="save_profile">حفظ الوضع</string>
     <string name="saved">تم الحفظ %1$s</string>
+    <string name="scoped_storage_warning">يتم تخزين بيانات المستخدم في مسار <b>سيتم حذفه</b> عند إلغاء تثبيت التطبيق:\n</string>
     <string name="screenshot_saved">تم حفظ لقطة الشاشة إلى</string>
     <string name="search">ابحث</string>
     <string name="select_dialog_title">حدد MIDlet</string>
@@ -192,4 +204,5 @@
     <string name="unlimited">غير محدود</string>
     <string name="version">الاصدار: </string>
     <string name="warn_install_from_net">سيتم تنزيل الملف من الإنترنت</string>
+    <string name="warning">تحذير</string>
 </resources>

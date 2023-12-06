@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">Over</string>
-    <string name="about_message">Met deze app kun je J2ME-apps en -games op Android starten. Het ondersteunt de meeste 2D-spellen en ook 3D met enkele beperkingen.\n</string>
+    <string name="about_message">Met deze app kun je J2ME-apps en -games op Android starten.\n</string>
     <string name="action_context_delete">Verwijder</string>
     <string name="action_context_rename">Hernoemen</string>
     <string name="action_context_shortcut">Snelkoppeling toevoegen</string>

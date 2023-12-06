@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">Om</string>
-    <string name="about_message">Denne app gør det muligt at afvikle J2ME apps og spil på Android. Den understøtter de fleste 2D spil og desuden 3D med nogle begrænsninger.\n</string>
+    <string name="about_message">Denne app gør det muligt at afvikle J2ME apps og spil på Android.\n</string>
     <string name="action_context_delete">Slet</string>
     <string name="action_context_shortcut">Tilføj genvej</string>
     <string name="action_settings">Indstillinger</string>

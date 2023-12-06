@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">關於</string>
-    <string name="about_message">此應用程序可以在Android設備上運行J2ME應用程序和遊戲，它支持大多數2D和部分3D遊戲。&lt;BR&gt;</string>
+    <string name="about_message">此應用程序可以在Android設備上運行J2ME應用程序和遊戲。\n</string>
     <string name="action_context_delete">刪除</string>
     <string name="action_context_rename">重命名</string>
     <string name="action_context_shortcut">添加到桌面</string>

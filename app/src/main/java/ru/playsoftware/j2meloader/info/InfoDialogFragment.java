@@ -1,5 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
+ * Copyright 2020-2023 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,23 +34,11 @@ public class InfoDialogFragment extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Activity activity = requireActivity();
-		TextView tv = new TextView(activity);
-		tv.setMovementMethod(LinkMovementMethod.getInstance());
-		SpannableStringBuilder sb = new SpannableStringBuilder();
-		sb.append(getText(R.string.about_mod_message));
-		sb.append(getText(R.string.about_message));
-		tv.setText(sb);
-		tv.setTextSize(16);
-		float density = getResources().getDisplayMetrics().density;
-		int paddingHorizontal = (int) (density * 20);
-		int paddingVertical = (int) (density * 14);
-		tv.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, 0);
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		builder.setTitle(R.string.app_name)
+		return new AlertDialog.Builder(requireActivity())
+				.setTitle(R.string.app_name)
 				.setIcon(R.mipmap.ic_launcher)
-				.setView(tv)
-				.setPositiveButton(android.R.string.ok, null);
-		return builder.create();
+				.setMessage(R.string.about_message)
+				.setPositiveButton(android.R.string.ok, null)
+				.create();
 	}
 }

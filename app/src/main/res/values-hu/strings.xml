@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">Infó</string>
-    <string name="about_message">Ez az app lehetővé teszi a J2ME alkalmazások és játékok indítását Androidon. Támogatja a legtöbb 2D-s játékot, illetve a 3D-seket némi korlátozással.\n</string>
+    <string name="about_message">Ez az app lehetővé teszi a J2ME alkalmazások és játékok indítását Androidon.\n</string>
     <string name="action_context_delete">Törlés</string>
     <string name="action_context_rename">Átnevezés</string>
     <string name="action_context_shortcut">Parancsikon létrehozása</string>

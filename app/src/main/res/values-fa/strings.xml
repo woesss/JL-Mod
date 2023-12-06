@@ -8,6 +8,8 @@
     <string name="action_settings">تنظیمات</string>
     <string name="author">برنامه نویس :</string>
     <string name="CANCEL_CMD">لغو</string>
+    <string name="change">تغییر</string>
+    <string name="choose">انتخاب</string>
     <string name="CLEAR_DATA_CMD">پاک کردن اطلاعات</string>
     <string name="close">بستن</string>
     <string name="CONFIRMATION_REQUIRED">به تایید نیاز دارد</string>
@@ -23,13 +25,16 @@
     <string name="help_message">• فعال کردن فیلتر در بعضی موارد می تواند عملکرد را به شدت کاهش دهد اگر بازی خیلی کند است این گزینه را غیرفعال کنید
 • با فعال کردن گزینه \"حالت پردازش فوری\" می توانید مشکل لرزش تصویر را برطرف کنید</string>
     <string name="hide_buttons">دکمه ها مخفی شود</string>
+    <string name="identity_filter">سریع (بدون فیلتر)</string>
+    <string name="install">نصب</string>
+    <string name="install_done">برنامه با موفقیت نصب شده</string>
     <string name="layout_edit_finish">پایان حالت ویرایش</string>
     <string name="layout_edit_finished">حالت ویرایش پایان یافته</string>
     <string name="layout_edit_mode">حالت ویرایش طرح کلید</string>
     <string name="layout_scale_mode">حالت تغییر اندازه طرح کلید</string>
     <string name="layout_switch">تعویض طرح کلید</string>
     <string name="licenses">مجوزها</string>
-    <string name="load_profile">وارد کردن قالب </string>
+    <string name="loading_info">در حال بارگیری اطلاعات …</string>
     <string name="log_saved">گزارش ذخیره شده است</string>
     <string name="mapping_dialog_message">نقشه برداری فعلی:\n%1$s</string>
     <string name="mapping_dialog_title">یک کلید را انتخاب کنید</string>
@@ -55,6 +60,7 @@
     <string name="PREF_FONT_SIZE_IN_SP">مقدار اندازه پیکسل ها</string>
     <string name="PREF_FONT_SMALL">کوچک</string>
     <string name="PREF_FORCE_FULLSCREEN">تمام صفحه اجباری</string>
+    <string name="pref_graphics_mode_title">حالت گرافیکی :</string>
     <string name="PREF_HEIGHT">ارتفاع</string>
     <string name="PREF_HW_ACCELERATION">شتاب سخت افزاری (ناپایدار)</string>
     <string name="PREF_IMMEDIATE">حالت پردازش فوری</string>
@@ -70,6 +76,11 @@
     <string name="pref_requires_restart_summary">به راه اندازی دوباره نیاز دارد</string>
     <string name="PREF_SCALE_RATIO">اندازه</string>
     <string name="PREF_SCALE_TO_FIT">اندازه مناسب است</string>
+    <string name="pref_screen_gravity_bottom">پایین</string>
+    <string name="pref_screen_gravity_center">مرکز</string>
+    <string name="pref_screen_gravity_left">چپ</string>
+    <string name="pref_screen_gravity_right">راست</string>
+    <string name="pref_screen_gravity_top">بالا</string>
     <string name="PREF_SCREEN_OPTIONS">گزینه های صفحه نمایش</string>
     <string name="PREF_SHOW_FPS">نمایش فریم در ثانیه</string>
     <string name="PREF_SYS_PROPS">خصوصیات سیستم</string>
@@ -95,7 +106,7 @@
     <string name="PREF_VK_SIZE_HINT">اندازه</string>
     <string name="PREF_VK_SOFT_KEYS">کلید های نرم :</string>
     <string name="PREF_VK_TYPE">نوع صفحه کلید</string>
-    <string name="pref_vk_type_custom">قابل تنظیم</string>
+    <string name="pref_vk_type_custom">سفارشی</string>
     <string name="pref_vk_type_phone">گوشی</string>
     <string name="pref_vk_type_phone_arrows">گوشی (جهت ها)</string>
     <string name="pref_wakelock_title">صفحه نمایش روشن بماند</string>
@@ -115,4 +126,5 @@
     <string name="SWAP_SIZES">اندازه های کشیدن</string>
     <string name="take_screenshot">گرفتن عکس از صفحه نمایش</string>
     <string name="version">نسخه :</string>
+    <string name="warning">هشدار</string>
 </resources>

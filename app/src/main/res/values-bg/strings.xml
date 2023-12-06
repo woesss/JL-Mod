@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about">За</string>
-    <string name="about_message">Това приложение ви позволява да стартирате J2ME приложения и игри на Android. Поддържа повечето двуизмерни и триизмерни игри с някои ограничения.&lt;BR&gt;</string>
+    <string name="about_message">Това приложение ви позволява да стартирате J2ME приложения и игри на Android.\n</string>
     <string name="action_context_delete">Изтриване</string>
     <string name="action_context_rename">Преименуване</string>
     <string name="action_context_shortcut">Добавяне на пряк път</string>
