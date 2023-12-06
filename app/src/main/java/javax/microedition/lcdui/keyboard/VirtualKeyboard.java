@@ -785,22 +785,19 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	private void snapKeys() {
 		obscuresVirtualScreen = false;
-		boolean isPhone = isPhone();
 		for (int i = 0; i < keypad.length; i++) {
 			snapKey(i, 0);
 			VirtualKey key = keypad[i];
 			RectF rect = key.rect;
 			key.corners = (int) (Math.min(rect.width(), rect.height()) * 0.25F);
-			if (!isPhone && RectF.intersects(rect, virtualScreen)) {
-				obscuresVirtualScreen = true;
+			if (RectF.intersects(rect, virtualScreen)) {
+				if (key.visible) {
+					obscuresVirtualScreen = true;
+				}
 				key.opaque = false;
 			} else {
-				key.opaque = true;
+				key.opaque = settings.vkForceOpacity;
 			}
-		}
-		boolean opaque = !obscuresVirtualScreen || settings.vkForceOpacity;
-		for (VirtualKey key : keypad) {
-			key.opaque &= opaque;
 		}
 	}
 
@@ -897,7 +894,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	@Override
 	public void paint(CanvasWrapper g) {
-		if (visible) {
+		if (visible && (layoutEditMode != LAYOUT_EOF || settings.vkAlpha > 0)) {
 			for (VirtualKey key : keypad) {
 				if (key.visible) {
 					key.paint(g);
@@ -1233,7 +1230,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				fgColor = settings.vkFgColor;
 			}
 			int alpha = (opaque || layoutEditMode != LAYOUT_EOF ? 0xFF : settings.vkAlpha) << 24;
-			g.setFillColor(alpha | bgColor);
+			g.setFillColor((layoutEditMode != LAYOUT_EOF ? (0xFF / 3) << 24 : alpha) | bgColor);
 			g.setTextColor(alpha | fgColor);
 			g.setDrawColor(alpha | settings.vkOutlineColor);
 
