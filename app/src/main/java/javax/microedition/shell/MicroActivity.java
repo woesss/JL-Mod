@@ -74,6 +74,7 @@ import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.ViewHandler;
 import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
+import javax.microedition.lcdui.skin.SkinLayer;
 import javax.microedition.util.ContextHolder;
 
 import io.reactivex.SingleObserver;
@@ -144,6 +145,21 @@ public class MicroActivity extends AppCompatActivity {
 			return;
 		}
 		microLoader.applyConfiguration();
+		SkinLayer skinLayer = SkinLayer.getInstance();
+		if (skinLayer != null) {
+			binding.overlay.addLayer(skinLayer);
+			if (!statusBarEnabled && !actionBarEnabled) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+					WindowManager.LayoutParams attributes = getWindow().getAttributes();
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+						attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
+					} else {
+						attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+					}
+					getWindow().setAttributes(attributes);
+				}
+			}
+		}
 		VirtualKeyboard vk = ContextHolder.getVk();
 		int orientation = microLoader.getOrientation();
 		if (vk != null) {

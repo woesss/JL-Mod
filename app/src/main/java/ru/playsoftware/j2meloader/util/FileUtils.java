@@ -20,6 +20,7 @@ package ru.playsoftware.j2meloader.util;
 
 import android.content.Context;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.File;
@@ -162,10 +163,11 @@ public class FileUtils {
 			new File(dir, Config.SHADERS_DIR).mkdir();
 			//noinspection ResultOfMethodCallIgnored
 			new File(dir, Config.SOUNDBANKS_DIR).mkdir();
+			//noinspection ResultOfMethodCallIgnored
+			new File(dir, Config.SKINS_DIR).mkdir();
 			try {
-				File nomedia = new File(dir, ".nomedia");
 				//noinspection ResultOfMethodCallIgnored
-				nomedia.createNewFile();
+				new File(dir, MediaStore.MEDIA_IGNORE_FILENAME).createNewFile();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

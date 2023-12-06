@@ -47,6 +47,9 @@ public class ProfileModel {
 	@SerializedName("ScreenBackgroundColor")
 	public int screenBackgroundColor;
 
+	@SerializedName("ScreenBackgroundImage")
+	public String screenBackgroundImage;
+
 	@SerializedName("ScreenScaleRatio")
 	public int screenScaleRatio;
 

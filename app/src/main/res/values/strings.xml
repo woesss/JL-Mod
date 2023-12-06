@@ -159,6 +159,9 @@
     <string name="pref_screenshot_title">Raw screenshot</string>
     <string name="PREF_SHADER_FILTER">Shader:</string>
     <string name="PREF_SHOW_FPS">Show FPS</string>
+    <string name="pref_skin_not_set">not set</string>
+    <string name="pref_skin_title">Skin</string>
+    <string name="pref_soundbank_title">Soundbank</string>
     <string name="PREF_SYS_PROPS">System properties</string>
     <string name="PREF_SYS_PROPS_HINT" translatable="false">microedition.platform: Sony Ericsson C510i\nmicroedition.profiles: MIDP2.0</string>
     <string name="pref_theme_auto_battery">Auto, by Battery Saver</string>

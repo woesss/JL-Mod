@@ -72,6 +72,7 @@ import javax.microedition.lcdui.overlay.FpsCounter;
 import javax.microedition.lcdui.overlay.Layer;
 import javax.microedition.lcdui.overlay.Overlay;
 import javax.microedition.lcdui.overlay.OverlayView;
+import javax.microedition.lcdui.skin.SkinLayer;
 import javax.microedition.shell.MicroActivity;
 import javax.microedition.util.ContextHolder;
 
@@ -263,7 +264,8 @@ public abstract class Canvas extends Displayable {
 		CanvasWrapper g = canvasWrapper;
 		g.bind(canvas);
 		g.clear(settings.screenBackgroundColor | Color.BLACK);
-		int p = settings.screenPadding;
+		SkinLayer skinLayer = SkinLayer.getInstance();
+		int p = skinLayer != null && skinLayer.hasDisplayFrame() ? 0 : settings.screenPadding;
 		canvas.clipRect(p, p, displayWidth - p, displayHeight - p);
 		synchronized (bufferLock) {
 			offscreenCopy.getBitmap().prepareToDraw();
@@ -314,18 +316,28 @@ public abstract class Canvas extends Displayable {
 		 * than zero, which means auto-selection of this size so that the resulting canvas
 		 * has the same aspect ratio as the actual screen of the device.
 		 */
-		int scaledDisplayWidth = displayWidth - settings.screenPadding * 2;
+		int scaledDisplayWidth;
 		int scaledDisplayHeight;
-		VirtualKeyboard vk = ContextHolder.getVk();
-		boolean isPhoneSkin = vk != null && vk.isPhone();
 
-		// if phone keyboard layout is active, then scale down the virtual screen
-		if (isPhoneSkin) {
-			float vkHeight = vk.getPhoneKeyboardHeight(displayWidth, displayHeight);
-			scaledDisplayHeight = (int) (displayHeight - vkHeight - 1) - settings.screenPadding;
+		SkinLayer skinLayer = SkinLayer.getInstance();
+		if (skinLayer != null && skinLayer.hasDisplayFrame()) {
+			skinLayer.resize(virtualScreen, 0, 0, displayWidth, displayHeight);
+			scaledDisplayWidth = (int) virtualScreen.width();
+			scaledDisplayHeight = (int) virtualScreen.height();
 		} else {
-			scaledDisplayHeight = displayHeight - settings.screenPadding * 2;
+			scaledDisplayWidth = displayWidth - settings.screenPadding * 2;
+			VirtualKeyboard vk = ContextHolder.getVk();
+			boolean isPhoneSkin = vk != null && vk.isPhone();
+
+			// if phone keyboard layout is active, then scale down the virtual screen
+			if (isPhoneSkin) {
+				float vkHeight = vk.getPhoneKeyboardHeight(displayWidth, displayHeight);
+				scaledDisplayHeight = (int) (displayHeight - vkHeight - 1) - settings.screenPadding;
+			} else {
+				scaledDisplayHeight = displayHeight - settings.screenPadding * 2;
+			}
 		}
+
 		if (virtualWidth > 0) {
 			if (virtualHeight > 0) {
 				/*
@@ -419,8 +431,13 @@ public abstract class Canvas extends Displayable {
 				break;
 		}
 
-		onX += settings.screenPadding;
-		onY += settings.screenPadding;
+		if (skinLayer != null && skinLayer.hasDisplayFrame()) {
+			onX += virtualScreen.left;
+			onY += virtualScreen.top;
+		} else {
+			onX += settings.screenPadding;
+			onY += settings.screenPadding;
+		}
 
 		/*
 		 * calculate the maximum height
@@ -453,6 +470,9 @@ public abstract class Canvas extends Displayable {
 		}
 		if (overlay != null) {
 			overlay.resize(screen, onX, onY, onX + onWidth, onY + onHeight + softBarHeight);
+		}
+		if (skinLayer != null && !skinLayer.hasDisplayFrame()) {
+			skinLayer.resize(virtualScreen, 0, 0, displayWidth, displayHeight);
 		}
 
 		if (settings.graphicsMode == 1) {
@@ -641,7 +661,8 @@ public abstract class Canvas extends Displayable {
 				CanvasWrapper g = this.canvasWrapper;
 				g.bind(canvas);
 				g.clear(settings.screenBackgroundColor | Color.BLACK);
-				int p = settings.screenPadding;
+				SkinLayer skinLayer = SkinLayer.getInstance();
+				int p = skinLayer != null && skinLayer.hasDisplayFrame() ? 0 : settings.screenPadding;
 				canvas.clipRect(p, p, displayWidth - p, displayHeight - p);
 				synchronized (bufferLock) {
 					g.drawImage(offscreenCopy, virtualScreen);
@@ -757,7 +778,8 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
 			glViewport(0, 0, width, height);
-			int p = settings.screenPadding;
+			SkinLayer skinLayer = SkinLayer.getInstance();
+			int p = skinLayer != null && skinLayer.hasDisplayFrame() ? 0 : settings.screenPadding;
 			glScissor(p, p, width - 2 * p, height - 2 * p);
 			if (program.uPixelDelta >= 0) {
 				glUniform2f(program.uPixelDelta, 1.0f / width, 1.0f / height);

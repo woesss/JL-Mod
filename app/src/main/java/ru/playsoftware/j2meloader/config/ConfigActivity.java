@@ -259,6 +259,30 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		binding.tfVKSelBack.addTextChangedListener(new ColorTextWatcher(binding.tfVKSelBack));
 		binding.tfVKOutline.addTextChangedListener(new ColorTextWatcher(binding.tfVKOutline));
 		initSoundBankSpinner();
+		initSkinSpinner();
+	}
+
+	private void initSkinSpinner() {
+		File dir = new File(workDir + Config.SKINS_DIR);
+		if (!dir.exists()) {
+			//noinspection ResultOfMethodCallIgnored
+			dir.mkdirs();
+		}
+		ArrayAdapter<String> skinAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+		skinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		binding.spSkin.setAdapter(skinAdapter);
+		skinAdapter.add(getString(R.string.pref_skin_not_set));
+		String[] files = dir.list((d, n) -> new File(d, n).isFile());
+		if (files != null) {
+			Arrays.sort(files, (o1, o2) -> {
+				int res = o1.compareToIgnoreCase(o2);
+				return res != 0 ? res : o1.compareTo(o2);
+			});
+			skinAdapter.addAll(files);
+		}
+		skinAdapter.notifyDataSetChanged();
+		int position = skinAdapter.getPosition(params.screenBackgroundImage);
+		binding.spSkin.setSelection(Math.max(position, 0));
 	}
 
 	private void initSoundBankSpinner() {
@@ -274,11 +298,8 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		String[] files = dir.list((d, n) -> new File(d, n).isFile());
 		if (files != null) {
 			Arrays.sort(files, (o1, o2) -> {
-				int res = o1.toLowerCase().compareTo(o2.toLowerCase());
-				if (res != 0) {
-					return res;
-				}
-				return o1.compareTo(o2);
+				int res = o1.compareToIgnoreCase(o2);
+				return res != 0 ? res : o1.compareTo(o2);
 			});
 			spSoundBankAdapter.addAll(files);
 		}
@@ -614,6 +635,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				params.screenBackgroundColor = Integer.parseInt(binding.tfScreenBack.getText().toString(), 16);
 			} catch (NumberFormatException ignored) {
 			}
+			params.screenBackgroundImage = binding.spSkin.getSelectedItemPosition() > 0 ? (String) binding.spSkin.getSelectedItem() : null;
 			try {
 				params.screenScaleRatio = Integer.parseInt(binding.tfScaleRatioValue.getText().toString());
 			} catch (NumberFormatException e) {

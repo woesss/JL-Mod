@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020-2023 Yury Kharchenko
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package javax.microedition.lcdui.graphics;
 
 import android.content.res.Resources;
@@ -6,7 +22,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.util.TypedValue;
 
 import javax.microedition.lcdui.Image;
@@ -20,6 +38,7 @@ public class CanvasWrapper {
 	private final Paint textPaint = new Paint();
 	private final Paint imgPaint = new Paint();
 	private final float textSize;
+	private final boolean filterBitmap;
 
 	private float textAscent;
 	private float textCenterOffset;
@@ -27,6 +46,7 @@ public class CanvasWrapper {
 	private Canvas canvas;
 
 	public CanvasWrapper(boolean filterBitmap) {
+		this.filterBitmap = filterBitmap;
 		imgPaint.setFilterBitmap(filterBitmap);
 		drawPaint.setStyle(Paint.Style.STROKE);
 		fillPaint.setStyle(Paint.Style.FILL);
@@ -118,5 +138,18 @@ public class CanvasWrapper {
 		float descent = textPaint.descent();
 		textHeight = descent - textAscent;
 		textCenterOffset = ((descent + textAscent) / 2);
+	}
+
+	public void drawBackground(Bitmap bitmap, RectF dst, RectF exclude) {
+		int save = canvas.save();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			canvas.clipOutRect(exclude);
+		} else {
+			canvas.clipRect(exclude, Region.Op.DIFFERENCE);
+		}
+		imgPaint.setFilterBitmap(true);
+		canvas.drawBitmap(bitmap, null, dst, imgPaint);
+		imgPaint.setFilterBitmap(filterBitmap);
+		canvas.restoreToCount(save);
 	}
 }

@@ -22,6 +22,7 @@ import static android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
@@ -57,6 +58,7 @@ import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.event.EventQueue;
 import javax.microedition.lcdui.keyboard.KeyMapper;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
+import javax.microedition.lcdui.skin.SkinLayer;
 import javax.microedition.m3g.Graphics3D;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.util.ContextHolder;
@@ -266,6 +268,11 @@ public class MicroLoader {
 			File sb = new File(workDir + Config.SOUNDBANKS_DIR + params.soundBank);
 			if (sb.exists()) {
 				soundBank = sb.getPath();
+			}
+			File skin = new File(workDir + Config.SKINS_DIR + params.screenBackgroundImage);
+			Bitmap bitmap = BitmapFactory.decodeFile(skin.getPath(), null);
+			if (bitmap != null) {
+				SkinLayer.init(bitmap, params);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

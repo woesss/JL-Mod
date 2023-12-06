@@ -38,9 +38,10 @@ import javax.microedition.util.ContextHolder;
 import ru.playsoftware.j2meloader.R;
 
 public class Config {
+	public static final String APPS_DB_NAME = "/J2ME-apps.db";
 	public static final String DEX_OPT_CACHE_DIR = "dex_opt";
-	public static final String MIDLET_CONFIG_FILE = "/config.json";
 	public static final String MIDLET_CONFIGS_DIR = "/configs/";
+	public static final String MIDLET_CONFIG_FILE = "/config.json";
 	public static final String MIDLET_DATA_DIR = "/data/";
 	public static final String MIDLET_DEX_ARCH = "/converted.zip";
 	public static final String MIDLET_DEX_FILE = "/converted.dex";
@@ -51,8 +52,8 @@ public class Config {
 	public static final String MIDLET_RES_FILE = "/res.jar";
 	public static final String SCREENSHOTS_DIR;
 	public static final String SHADERS_DIR = "/shaders/";
+	public static final String SKINS_DIR = "/skins/";
 	public static final String SOUNDBANKS_DIR = "/soundbanks/";
-	public static final String APPS_DB_NAME = "/J2ME-apps.db";
 
 	private static String emulatorDir;
 	private static String dataDir;
