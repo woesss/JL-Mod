@@ -20,7 +20,7 @@
             android:background="?attr/colorPrimary"
             android:descendantFocusability="blocksDescendants"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:popupTheme="@style/AppTheme.NoActionBar"
             tools:title="MIDlet Title" />
 
         <FrameLayout
