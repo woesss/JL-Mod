@@ -150,6 +150,7 @@
     <string name="pref_screen_gravity_right">Right</string>
     <string name="pref_screen_gravity_top">Top</string>
     <string name="PREF_SCREEN_OPTIONS">Screen options</string>
+    <string name="pref_screen_padding_title">Padding</string>
     <string name="pref_screen_scale_type">Scale type</string>
     <string name="pref_screen_scale_type_fill">Fill window (ignore aspect ratio)</string>
     <string name="pref_screen_scale_type_fit">Fit to window</string>

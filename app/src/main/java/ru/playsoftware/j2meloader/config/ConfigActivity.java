@@ -553,6 +553,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		binding.spOrientation.setSelection(params.orientation);
 		binding.spScaleType.setSelection(params.screenScaleType);
 		binding.spScreenGravity.setSelection(params.screenGravity);
+		binding.etScreenPadding.setText(Integer.toString(params.screenPadding));
 		binding.cxFilter.setChecked(params.screenFilter);
 		binding.cxImmediate.setChecked(params.immediateMode);
 		binding.cxParallel.setChecked(params.parallelRedrawScreen);
@@ -620,6 +621,11 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			}
 			params.orientation = binding.spOrientation.getSelectedItemPosition();
 			params.screenGravity = binding.spScreenGravity.getSelectedItemPosition();
+			try {
+				params.screenPadding = Integer.parseInt(binding.etScreenPadding.getText().toString());
+			} catch (NumberFormatException e) {
+				params.screenPadding = 0;
+			}
 			params.screenScaleType = binding.spScaleType.getSelectedItemPosition();
 			params.screenFilter = binding.cxFilter.isChecked();
 			params.immediateMode = binding.cxImmediate.isChecked();

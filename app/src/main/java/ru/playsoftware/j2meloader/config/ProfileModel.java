@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Yury Kharchenko
+ *  Copyright 2020-2023 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -64,6 +64,9 @@ public class ProfileModel {
 
 	@SerializedName("ScreenGravity")
 	public int screenGravity;
+
+	@SerializedName("ScreenPadding")
+	public int screenPadding;
 
 	@SerializedName("ScreenFilter")
 	public boolean screenFilter;

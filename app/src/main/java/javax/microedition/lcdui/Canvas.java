@@ -27,7 +27,6 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
@@ -264,6 +263,8 @@ public abstract class Canvas extends Displayable {
 		CanvasWrapper g = canvasWrapper;
 		g.bind(canvas);
 		g.clear(settings.screenBackgroundColor | Color.BLACK);
+		int p = settings.screenPadding;
+		canvas.clipRect(p, p, displayWidth - p, displayHeight - p);
 		synchronized (bufferLock) {
 			offscreenCopy.getBitmap().prepareToDraw();
 			g.drawImage(offscreenCopy, virtualScreen);
@@ -313,6 +314,7 @@ public abstract class Canvas extends Displayable {
 		 * than zero, which means auto-selection of this size so that the resulting canvas
 		 * has the same aspect ratio as the actual screen of the device.
 		 */
+		int scaledDisplayWidth = displayWidth - settings.screenPadding * 2;
 		int scaledDisplayHeight;
 		VirtualKeyboard vk = ContextHolder.getVk();
 		boolean isPhoneSkin = vk != null && vk.isPhone();
@@ -320,9 +322,9 @@ public abstract class Canvas extends Displayable {
 		// if phone keyboard layout is active, then scale down the virtual screen
 		if (isPhoneSkin) {
 			float vkHeight = vk.getPhoneKeyboardHeight(displayWidth, displayHeight);
-			scaledDisplayHeight = (int) (displayHeight - vkHeight - 1);
+			scaledDisplayHeight = (int) (displayHeight - vkHeight - 1) - settings.screenPadding;
 		} else {
-			scaledDisplayHeight = displayHeight;
+			scaledDisplayHeight = displayHeight - settings.screenPadding * 2;
 		}
 		if (virtualWidth > 0) {
 			if (virtualHeight > 0) {
@@ -337,7 +339,7 @@ public abstract class Canvas extends Displayable {
 				 * height is selected by the ratio of the real screen
 				 */
 				width = virtualWidth;
-				height = scaledDisplayHeight * virtualWidth / displayWidth;
+				height = scaledDisplayHeight * virtualWidth / scaledDisplayWidth;
 			}
 		} else {
 			if (virtualHeight > 0) {
@@ -345,13 +347,13 @@ public abstract class Canvas extends Displayable {
 				 * only the canvas height is set
 				 * width is selected by the ratio of the real screen
 				 */
-				width = displayWidth * virtualHeight / scaledDisplayHeight;
+				width = scaledDisplayWidth * virtualHeight / scaledDisplayHeight;
 				height = virtualHeight;
 			} else {
 				/*
 				 * nothing is set - screen-sized canvas
 				 */
-				width = displayWidth;
+				width = scaledDisplayWidth;
 				height = scaledDisplayHeight;
 			}
 		}
@@ -369,8 +371,8 @@ public abstract class Canvas extends Displayable {
 				break;
 			case 1:
 				// try to fit in width
-				onWidth = displayWidth;
-				onHeight = height * displayWidth / width;
+				onWidth = scaledDisplayWidth;
+				onHeight = height * scaledDisplayWidth / width;
 				if (onHeight > scaledDisplayHeight) {
 					// if height is too big, then fit in height
 					onHeight = scaledDisplayHeight;
@@ -383,7 +385,7 @@ public abstract class Canvas extends Displayable {
 			case 2:
 				// scaling without preserving the aspect ratio:
 				// just stretch the picture to full screen
-				onWidth = displayWidth;
+				onWidth = scaledDisplayWidth;
 				onHeight = scaledDisplayHeight;
 				if (scaleRatio > 100) {
 					scaleRatio = 100;
@@ -400,23 +402,25 @@ public abstract class Canvas extends Displayable {
 				onY = (scaledDisplayHeight - onHeight) / 2;
 				break;
 			case 1: // top
-				onX = (displayWidth - onWidth) / 2;
+				onX = (scaledDisplayWidth - onWidth) / 2;
 				onY = 0;
 				break;
 			case 2: // center
-				onX = (displayWidth - onWidth) / 2;
+				onX = (scaledDisplayWidth - onWidth) / 2;
 				onY = (scaledDisplayHeight - onHeight) / 2;
 				break;
 			case 3: // right
-				onX = displayWidth - onWidth;
+				onX = scaledDisplayWidth - onWidth;
 				onY = (scaledDisplayHeight - onHeight) / 2;
 				break;
 			case 4: // bottom
-				onX = (displayWidth - onWidth) / 2;
+				onX = (scaledDisplayWidth - onWidth) / 2;
 				onY = scaledDisplayHeight - onHeight;
 				break;
 		}
 
+		onX += settings.screenPadding;
+		onY += settings.screenPadding;
 
 		/*
 		 * calculate the maximum height
@@ -637,6 +641,8 @@ public abstract class Canvas extends Displayable {
 				CanvasWrapper g = this.canvasWrapper;
 				g.bind(canvas);
 				g.clear(settings.screenBackgroundColor | Color.BLACK);
+				int p = settings.screenPadding;
+				canvas.clipRect(p, p, displayWidth - p, displayHeight - p);
 				synchronized (bufferLock) {
 					g.drawImage(offscreenCopy, virtualScreen);
 				}
@@ -751,6 +757,8 @@ public abstract class Canvas extends Displayable {
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
 			glViewport(0, 0, width, height);
+			int p = settings.screenPadding;
+			glScissor(p, p, width - 2 * p, height - 2 * p);
 			if (program.uPixelDelta >= 0) {
 				glUniform2f(program.uPixelDelta, 1.0f / width, 1.0f / height);
 			}
@@ -758,9 +766,11 @@ public abstract class Canvas extends Displayable {
 
 		@Override
 		public void onDrawFrame(GL10 gl) {
+			glDisable(GL_SCISSOR_TEST);
 			glClear(GL_COLOR_BUFFER_BIT);
+			glEnable(GL_SCISSOR_TEST);
 			synchronized (bufferLock) {
-				GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, offscreenCopy.getBitmap(), 0);
+				GLUtils.texImage2D(GL_TEXTURE_2D, 0, offscreenCopy.getBitmap(), 0);
 			}
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 			if (fpsCounter != null) {
@@ -772,10 +782,10 @@ public abstract class Canvas extends Displayable {
 			glGenTextures(1, bgTextureId, 0);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, bgTextureId[0]);
-			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, settings.screenFilter ? GL_LINEAR : GL_NEAREST);
-			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, settings.screenFilter ? GL_LINEAR : GL_NEAREST);
-			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GLES20.GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, settings.screenFilter ? GL_LINEAR : GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, settings.screenFilter ? GL_LINEAR : GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 			// юнит текстуры
 			glUniform1i(program.uTextureUnit, 0);
