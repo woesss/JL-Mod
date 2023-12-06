@@ -3,7 +3,7 @@
 
 [Перейти на Русский](README_RU.md)  
 
-Experimental mod of the emulator ["J2ME-Loader" (A J2ME emulator for Android)](https://github.com/nikita36078/J2ME-Loader) with support for games developed for the 3D engine "Mascot Capsule v3"  
+Unofficial fork of ["J2ME-Loader" (A J2ME emulator for Android)](https://github.com/nikita36078/J2ME-Loader) 
 
 <img src="screenshots/screen01.png" width="240"> <img src="screenshots/screen02.png" width="240"> <img src="screenshots/screen03.png" width="240">
 
@@ -22,10 +22,18 @@ Experimental mod of the emulator ["J2ME-Loader" (A J2ME emulator for Android)](h
 
   Soundbank files (DLS, SF2) should be placed in the `soundbanks` folder in the working directory of the emulator.
   Next, in the game profile settings in the `Audio` section, select the desired one.
-  SF2 support is still in beta mode - only standard midi files are supported,
-  there are problems with rewinding (after which the sound turns into a cacophony).
+  SF2 support is still in beta mode - only standard midi files are supported.
   Not all banks are supported by the synthesizers used (Sonivox, TinySoundFont).
   If the bank or audio file is not supported, playback will automatically switch to a standard player with a standard bank.
+
+#### **Background image (skin)**
+
+  The image file in any format supported by Android must be placed in the `skins` folder in the emulator's working folder.  
+  Next, in the game profile settings, select it.  
+  The position and size of the virtual screen can be adjusted using the scale and padding settings.  
+  You can also set the screen in the image: a rectangular area filled with transparent black (`#00000000`).  
+  The emulator will automatically place the game screen in this area.  
+  The reaction to the skin buttons can be made by overlaying the virtual keyboard buttons, and the keyboard itself can be made completely transparent.  
 
 #### **Mascot Capsule v3 support**
   In some games (seen in "Medal of Honor") the 3D scene may not be displayed due to the overlap with the 2D background.
