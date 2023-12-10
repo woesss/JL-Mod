@@ -149,7 +149,6 @@
     <string name="PREF_SHOW_FPS">Показать FPS</string>
     <string name="pref_skin_not_set">Не выбран</string>
     <string name="pref_skin_title">Фоновое изображение</string>
-    <string name="pref_soundbank_title">С</string>
     <string name="PREF_SYS_PROPS">Системные параметры</string>
     <string name="pref_theme_auto_battery">Авто, по режиму энергосбережения</string>
     <string name="pref_theme_auto_time">Авто, по времени суток</string>
