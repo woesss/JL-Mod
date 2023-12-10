@@ -4,7 +4,7 @@
     <color name="primary">#262e37</color>
     <color name="primary_dark">#20272f</color>
     <color name="accent">#0099ff</color>
-    <color name="background">#20272f</color>
+    <color name="background">#000000</color>
     <color name="text_primary">#ffffff</color>
     <color name="text_secondary">#dedede</color>
     <color name="btn_bg_normal">#0099ff</color>

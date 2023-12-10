@@ -32,6 +32,7 @@
         <item name="nnf_separator_color">@color/nnf_separator_color</item>
         <item name="nnf_save_icon_color">?attr/colorAccent</item>
         <item name="nnf_dir_icon_color">?attr/colorAccent</item>
+        <item name="nnf_list_item_divider">?attr/dividerHorizontal</item>
 
         <!-- These are important. Handled by toolbar. -->
         <item name="windowActionBar">false</item>

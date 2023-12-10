@@ -7,7 +7,8 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:background="?android:selectableItemBackground"
-    android:padding="10dp"
+    android:paddingVertical="5dp"
+    android:paddingHorizontal="2dp"
     android:focusable="true"
     tools:showIn="@layout/fragment_appslist">
 
