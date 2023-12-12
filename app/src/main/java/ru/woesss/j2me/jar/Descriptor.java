@@ -47,7 +47,7 @@ public class Descriptor {
 
 	// required in JAD
 	public static final String MIDLET_JAR_URL = "MIDlet-Jar-URL";
-	private static final String MIDLET_JAR_SIZE = "MIDlet-Jar-Size";
+	public static final String MIDLET_JAR_SIZE = "MIDlet-Jar-Size";
 
 	// required in JAD and/or Manifest
 	private static final String MIDLET_N = "MIDlet-";

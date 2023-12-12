@@ -122,11 +122,14 @@ public class MicroLoader {
 	LinkedHashMap<String, String> loadMIDletList() throws IOException {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
 		String jarHash = null;
+		String jarSize = null;
 		Descriptor descriptor;
 		if (BuildConfig.FULL_EMULATOR) {
 			descriptor = new Descriptor(new File(appDir, Config.MIDLET_MANIFEST_FILE), false);
 			try {
-				byte[] bytes = FileUtils.getBytes(new File(appDir, Config.MIDLET_RES_FILE));
+				File jar = new File(appDir, Config.MIDLET_RES_FILE);
+				jarSize = Long.toString(jar.length());
+				byte[] bytes = FileUtils.getBytes(jar);
 				byte[] sum = MessageDigest.getInstance("md5").digest(bytes);
 				BigInteger bi = new BigInteger(1, sum);
 				jarHash = bi.toString(16);
@@ -152,6 +155,7 @@ public class MicroLoader {
 		sb.append(Descriptor.MIDLET_NAME).append(": ").append(descriptor.getName()).append("\n");
 		sb.append(Descriptor.MIDLET_VENDOR).append(": ").append(descriptor.getVendor()).append("\n");
 		sb.append(Descriptor.MIDLET_VERSION).append(": ").append(descriptor.getVersion()).append("\n");
+		sb.append(Descriptor.MIDLET_JAR_SIZE).append(": ").append(jarSize).append("\n");
 		if (jarHash != null) {
 			sb.append("JAR_HASH_MD5").append(": ").append(jarHash);
 		}
