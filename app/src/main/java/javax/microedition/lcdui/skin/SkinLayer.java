@@ -17,12 +17,21 @@
 package javax.microedition.lcdui.skin;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.graphics.RectF;
+
+import androidx.core.content.ContextCompat;
+
+import java.io.File;
+import java.util.Objects;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.graphics.CanvasWrapper;
 import javax.microedition.lcdui.overlay.Overlay;
+import javax.microedition.util.ContextHolder;
 
+import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfileModel;
 
 public class SkinLayer implements Overlay {
@@ -69,8 +78,37 @@ public class SkinLayer implements Overlay {
 		return instance;
 	}
 
-	public static void init(Bitmap image, ProfileModel settings) {
-		instance = new SkinLayer(image, settings);
+	public static void init(ProfileModel settings) {
+		File workDir = Objects.requireNonNull(settings.dir.getParentFile()).getParentFile();
+		File skin = new File(workDir + Config.SKINS_DIR + settings.screenBackgroundImage);
+		BitmapFactory.Options opts = new BitmapFactory.Options();
+		opts.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(skin.getPath(), opts);
+		if (opts.outWidth <= 0 || opts.outHeight <= 0) {
+			return;
+		}
+		Point p = new Point();
+		ContextCompat.getDisplayOrDefault(ContextHolder.getAppContext()).getSize(p);
+		int max = opts.outWidth / p.x;
+		int sample = opts.outWidth / p.y;
+		if (sample > max) {
+			max = sample;
+		}
+		sample = opts.outHeight / p.x;
+		if (sample > max) {
+			max = sample;
+		}
+		sample = opts.outHeight / p.y;
+		if (sample > max) {
+			max = sample;
+		}
+		opts.inSampleSize = max;
+		opts.inJustDecodeBounds = false;
+		Bitmap bitmap = BitmapFactory.decodeFile(skin.getPath(), opts);
+		if (bitmap == null) {
+			return;
+		}
+		instance = new SkinLayer(bitmap, settings);
 	}
 
 	@Override

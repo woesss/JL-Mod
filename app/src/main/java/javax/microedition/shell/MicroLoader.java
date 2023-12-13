@@ -22,7 +22,6 @@ import static android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
@@ -273,10 +272,8 @@ public class MicroLoader {
 			if (sb.exists()) {
 				soundBank = sb.getPath();
 			}
-			File skin = new File(workDir + Config.SKINS_DIR + params.screenBackgroundImage);
-			Bitmap bitmap = BitmapFactory.decodeFile(skin.getPath(), null);
-			if (bitmap != null) {
-				SkinLayer.init(bitmap, params);
+			if (params.screenBackgroundImage != null) {
+				SkinLayer.init(params);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
