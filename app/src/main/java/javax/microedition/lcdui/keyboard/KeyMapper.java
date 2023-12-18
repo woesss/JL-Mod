@@ -1,21 +1,23 @@
 /*
- *  Copyright 2018 Nikita Shakarun
- *  Copyright 2021 Yury Kharchenko
+ * Copyright 2018 Nikita Shakarun
+ * Copyright 2021-2023 Yury Kharchenko
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package javax.microedition.lcdui.keyboard;
+
+import static javax.microedition.lcdui.Canvas.*;
 
 import android.util.SparseIntArray;
 import android.view.KeyCharacterMap;
@@ -23,9 +25,9 @@ import android.view.KeyEvent;
 
 import androidx.collection.SparseArrayCompat;
 
-import ru.playsoftware.j2meloader.config.ProfileModel;
+import java.util.List;
 
-import static javax.microedition.lcdui.Canvas.*;
+import ru.playsoftware.j2meloader.config.ProfileModel;
 
 public class KeyMapper {
 	public static final int KEY_OPTIONS_MENU = 0;
@@ -82,18 +84,9 @@ public class KeyMapper {
 		mapKeyCode(KEY_SEND, 0, "SEND");
 		mapKeyCode(KEY_END, 0, "END");
 
-		mapGameAction(UP, KEY_UP);
-		mapGameAction(LEFT, KEY_LEFT);
-		mapGameAction(RIGHT, KEY_RIGHT);
-		mapGameAction(DOWN, KEY_DOWN);
-		mapGameAction(FIRE, KEY_FIRE);
-		mapGameAction(GAME_A, KEY_NUM7);
-		mapGameAction(GAME_B, KEY_NUM9);
-		mapGameAction(GAME_C, KEY_STAR);
-		mapGameAction(GAME_D, KEY_POUND);
 	}
 
-	private static void remapKeys() {
+	private static void remapKeys(ProfileModel params) {
 		if (layoutType == SIEMENS_LAYOUT) {
 			keyCodeToCustom.put(KEY_LEFT, SIEMENS_KEY_LEFT);
 			keyCodeToCustom.put(KEY_RIGHT, SIEMENS_KEY_RIGHT);
@@ -101,11 +94,6 @@ public class KeyMapper {
 			keyCodeToCustom.put(KEY_DOWN, SIEMENS_KEY_DOWN);
 			keyCodeToCustom.put(KEY_SOFT_LEFT, SIEMENS_KEY_SOFT_LEFT);
 			keyCodeToCustom.put(KEY_SOFT_RIGHT, SIEMENS_KEY_SOFT_RIGHT);
-
-			mapGameAction(LEFT, SIEMENS_KEY_LEFT);
-			mapGameAction(RIGHT, SIEMENS_KEY_RIGHT);
-			mapGameAction(UP, SIEMENS_KEY_UP);
-			mapGameAction(DOWN, SIEMENS_KEY_DOWN);
 
 			mapKeyCode(SIEMENS_KEY_UP, UP, "UP");
 			mapKeyCode(SIEMENS_KEY_DOWN, DOWN, "DOWN");
@@ -122,12 +110,6 @@ public class KeyMapper {
 			keyCodeToCustom.put(KEY_SOFT_LEFT, MOTOROLA_KEY_SOFT_LEFT);
 			keyCodeToCustom.put(KEY_SOFT_RIGHT, MOTOROLA_KEY_SOFT_RIGHT);
 
-			mapGameAction(LEFT, MOTOROLA_KEY_LEFT);
-			mapGameAction(RIGHT, MOTOROLA_KEY_RIGHT);
-			mapGameAction(UP, MOTOROLA_KEY_UP);
-			mapGameAction(DOWN, MOTOROLA_KEY_DOWN);
-			mapGameAction(FIRE, MOTOROLA_KEY_FIRE);
-
 			mapKeyCode(MOTOROLA_KEY_UP, UP, "UP");
 			mapKeyCode(MOTOROLA_KEY_DOWN, DOWN, "DOWN");
 			mapKeyCode(MOTOROLA_KEY_LEFT, LEFT, "LEFT");
@@ -135,16 +117,32 @@ public class KeyMapper {
 			mapKeyCode(MOTOROLA_KEY_FIRE, FIRE, "SELECT");
 			mapKeyCode(MOTOROLA_KEY_SOFT_LEFT, 0, "SOFT1");
 			mapKeyCode(MOTOROLA_KEY_SOFT_RIGHT, 0, "SOFT2");
+		} else if (layoutType == CUSTOM_LAYOUT) {
+			List<KeyModel> list = params.customKeys;
+			if (list != null) {
+				for (KeyModel keyModel : list) {
+					if (keyModel.defaultKeyCode == 0) {
+						continue;
+					}
+					if (keyModel.customKeyCode != 0) {
+						keyCodeToCustom.put(keyModel.defaultKeyCode, keyModel.customKeyCode);
+						mapKeyCode(keyModel.customKeyCode, keyModel.gameAction, keyModel.keyName);
+					} else {
+						mapKeyCode(keyModel.defaultKeyCode, keyModel.gameAction, keyModel.keyName);
+					}
+				}
+			}
 		}
 	}
 
-	private static void mapKeyCode(int midpKeyCode, int gameAction, String keyName) {
-		keyCodeToGameAction.put(midpKeyCode, gameAction);
-		keyCodeToKeyName.put(midpKeyCode, keyName);
-	}
-
-	private static void mapGameAction(int gameAction, int keyCode) {
-		gameActionToKeyCode.put(gameAction, keyCode);
+	private static void mapKeyCode(int keyCode, int gameAction, String keyName) {
+		if (keyName != null) {
+			keyCodeToKeyName.put(keyCode, keyName);
+		}
+		if (gameAction != 0) {
+			keyCodeToGameAction.put(keyCode, gameAction);
+			gameActionToKeyCode.put(gameAction, keyCode);
+		}
 	}
 
 	public static int convertAndroidKeyCode(int keyCode, KeyEvent event) {
@@ -175,7 +173,7 @@ public class KeyMapper {
 			}
 		}
 		androidToMIDP = map;
-		remapKeys();
+		remapKeys(params);
 	}
 
 	public static int getKeyCode(int gameAction) {
@@ -183,15 +181,13 @@ public class KeyMapper {
 	}
 
 	public static int getGameAction(int keyCode) {
-		return keyCodeToGameAction.get(keyCode, Integer.MAX_VALUE);
+		return keyCodeToGameAction.get(keyCode, 0);
 	}
 
 	public static String getKeyName(int keyCode) {
 		String name = keyCodeToKeyName.get(keyCode);
-		if (name == null) {
-			if (Character.isValidCodePoint(keyCode)) {
-				name = new String(Character.toChars(keyCode));
-			}
+		if (name == null && Character.isValidCodePoint(keyCode)) {
+			name = new String(Character.toChars(keyCode));
 		}
 		return name;
 	}
