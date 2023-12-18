@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package ru.woesss.j2me.micro3d;
+package com.j_phone.system;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+/** @noinspection unused*/
+public interface MailListener {
+ int SKYMAIL = 1;
+ int RELAY = 2;
+ int GREETING = 3;
+ int LONGMAIL = 4;
+ int WEB = 5;
+ int CBS_DEFINE = 6;
+ int CBS_PL = 7;
 
-class BufferUtils {
-	private BufferUtils(){}
-
-	static IntBuffer createIntBuffer(int capacity) {
-		return createByteBuffer(capacity * 4).asIntBuffer();
-	}
-
-	static FloatBuffer createFloatBuffer(int capacity) {
-		return createByteBuffer(capacity * 4).asFloatBuffer();
-	}
-
-	static ByteBuffer createByteBuffer(int capacity) {
-		return ByteBuffer.allocateDirect(capacity).order(ByteOrder.nativeOrder());
-	}
+ void received(String a, String b, int c);
 }

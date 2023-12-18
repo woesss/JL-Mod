@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-package ru.woesss.j2me.micro3d;
+package com.vodafone.media.audio3d;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+/** @noinspection unused*/
+public interface Audio3DControl extends ExtendedAudioControl {
+	int MODE_DYNAMIC = 2;
 
-class BufferUtils {
-	private BufferUtils(){}
-
-	static IntBuffer createIntBuffer(int capacity) {
-		return createByteBuffer(capacity * 4).asIntBuffer();
-	}
-
-	static FloatBuffer createFloatBuffer(int capacity) {
-		return createByteBuffer(capacity * 4).asFloatBuffer();
-	}
-
-	static ByteBuffer createByteBuffer(int capacity) {
-		return ByteBuffer.allocateDirect(capacity).order(ByteOrder.nativeOrder());
-	}
+	int[] getPosition();
+	int[] getRolloff();
+	int[] getVelocity();
+	boolean isListenerRelative();
+	void setListenerRelative(boolean b);
+	void setPosition(int x, int y, int z);
+	void setRolloff(int x, int y, int z);
+	void setVelocity(int x, int y, int z);
 }

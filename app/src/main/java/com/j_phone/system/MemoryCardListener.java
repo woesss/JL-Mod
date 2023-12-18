@@ -14,25 +14,10 @@
  * limitations under the License.
  */
 
-package ru.woesss.j2me.micro3d;
+package com.j_phone.system;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
-class BufferUtils {
-	private BufferUtils(){}
-
-	static IntBuffer createIntBuffer(int capacity) {
-		return createByteBuffer(capacity * 4).asIntBuffer();
-	}
-
-	static FloatBuffer createFloatBuffer(int capacity) {
-		return createByteBuffer(capacity * 4).asFloatBuffer();
-	}
-
-	static ByteBuffer createByteBuffer(int capacity) {
-		return ByteBuffer.allocateDirect(capacity).order(ByteOrder.nativeOrder());
-	}
+/** @noinspection unused*/
+public interface MemoryCardListener {
+	void memoryCardInserted();
+	void memoryCardRemoved();
 }

@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package ru.woesss.j2me.micro3d;
+package com.vodafone.media.audio3d;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import javax.microedition.media.Control;
+import javax.microedition.media.MediaException;
 
-class BufferUtils {
-	private BufferUtils(){}
+public interface ExtendedAudioControl extends Control {
+ /** @noinspection unused*/
+ int MODE_DISABLED = 0;
+ /** @noinspection unused*/
+ int MODE_EXTENDED = 1;
 
-	static IntBuffer createIntBuffer(int capacity) {
-		return createByteBuffer(capacity * 4).asIntBuffer();
-	}
-
-	static FloatBuffer createFloatBuffer(int capacity) {
-		return createByteBuffer(capacity * 4).asFloatBuffer();
-	}
-
-	static ByteBuffer createByteBuffer(int capacity) {
-		return ByteBuffer.allocateDirect(capacity).order(ByteOrder.nativeOrder());
-	}
+ int getMode();
+ void setMode(int paramInt) throws MediaException;
 }
