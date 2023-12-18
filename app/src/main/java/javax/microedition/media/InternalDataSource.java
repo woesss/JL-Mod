@@ -34,7 +34,7 @@ import java.io.RandomAccessFile;
 import ru.woesss.j2me.mmapi.FileCacheDataSource;
 
 class InternalDataSource extends FileCacheDataSource {
-	private static final String TAG = InternalDataSource.class.getName();
+	private static final String TAG = InternalDataSource.class.getSimpleName();
 
 	InternalDataSource(InputStream stream, String type) throws IllegalArgumentException, IOException {
 		super(type);
@@ -69,20 +69,17 @@ class InternalDataSource extends FileCacheDataSource {
 			if (mediaInformation != null) {
 				StreamInformation streamInformation = mediaInformation.getStreams().get(0);
 				if (streamInformation.getCodec().contains("adpcm")) {
-					int dot = path.lastIndexOf('.');
-					String newName = (dot == -1 ? path : path.substring(0, dot)) + ".wav";
-					String cmd = "-i " + path + " -acodec pcm_u8 -ar 16000 " + newName;
+					File pcmU8 = createCacheFile(null, ".wav");
+					String cmd = "-i " + path + " -acodec pcm_u8 -ar 16000 -y " + pcmU8.getPath();
 					int rc = FFmpeg.execute(cmd);
 					if (rc == Config.RETURN_CODE_SUCCESS) {
-						Log.i(TAG, "Command execution completed successfully.");
-						if (mediaFile.delete()) {
+						Log.i(TAG, "FFmpeg command execution completed successfully.");
+						if (!mediaFile.delete()) {
 							Log.w(TAG, "convert: error delete file=" + mediaFile);
 						}
-						mediaFile = new File(newName);
-						mediaFile.deleteOnExit();
+						mediaFile = pcmU8;
 					} else {
-						Log.i(TAG, String.format(
-								"Command execution failed with rc=%d and the output below.", rc));
+						Log.w(TAG, "FFmpeg command execution failed with RETURN_CODE=" + rc);
 					}
 				}
 			}

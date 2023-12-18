@@ -52,7 +52,7 @@ public class FileCacheDataSource extends DataSource {
 		this.type = type;
 	}
 
-	private static File createCacheFile(String type, String ext) throws IOException {
+	protected static File createCacheFile(String type, String ext) throws IOException {
 		if (ext == null) {
 			ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(type);
 			if (ext == null) {
