@@ -12,6 +12,8 @@ android {
         buildConfigField 'int', 'VERSION_CODE', "1"
     }
 
+    buildFeatures.buildConfig true
+
     buildTypes {
         release {
             minifyEnabled false

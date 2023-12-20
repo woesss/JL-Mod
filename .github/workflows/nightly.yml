@@ -26,6 +26,9 @@ jobs:
           ENCODED_KEYSTORE: ${{ secrets.SIGNING_KEY }}
           ENCODED_PROPS: ${{ secrets.KEYSTORE_PROPERTIES }}
         run: |
+          if [ "$ENCODED_PROPS" == "" ]; then
+            exit
+          fi
           echo $ENCODED_KEYSTORE | base64 -di > keystore.jks
           echo $ENCODED_PROPS | base64 -di > keystore.properties
 
