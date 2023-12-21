@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.AudioManager;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -494,6 +495,7 @@ public class MicroActivity extends AppCompatActivity {
 			public void onSuccess(@NonNull String s) {
 				Toast.makeText(MicroActivity.this, getString(R.string.screenshot_saved)
 						+ " " + s, Toast.LENGTH_LONG).show();
+				MediaScannerConnection.scanFile(MicroActivity.this, new String[]{s}, null, null);
 			}
 
 			@Override
