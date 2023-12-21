@@ -17,7 +17,8 @@
 #}
 
 # J2ME API's and extensions
--keep public class com.jblend.graphics.j3d.* { public protected *; }
+-keep public class com.j_phone.** { public protected *; }
+-keep public class com.jblend.** { public protected *; }
 -keep public class com.kddi.** { public protected *; }
 -keep public class com.mascotcapsule.micro3d.v3.* { public protected *; }
 -keep public class com.motorola.** { public protected *; }
