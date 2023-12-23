@@ -824,12 +824,8 @@ public class VirtualKeyboard implements Overlay, Runnable {
 
 	public void setLayoutEditMode(int mode) {
 		layoutEditMode = mode;
-		int group = -1;
-		if (mode == LAYOUT_SCALES) {
-			editedIndex = 0;
-			group = 0;
-		}
-		highlightGroup(group);
+		editedIndex = -1;
+		highlightGroup(-1);
 		handler.removeCallbacks(this);
 		visible = true;
 		overlayView.postInvalidate();
@@ -939,15 +935,21 @@ public class VirtualKeyboard implements Overlay, Runnable {
 						}
 					}
 				}
-				if (index >= 0) {
+				if (editedIndex == index) {
+					editedIndex = -1;
+					highlightGroup(-1);
+					overlayView.postInvalidate();
+				} else if (index >= 0) {
 					editedIndex = index;
 					highlightGroup(index);
 					overlayView.postInvalidate();
 				}
+				if (editedIndex >= 0) {
+					prevScaleX = keyScales[editedIndex * 2];
+					prevScaleY = keyScales[editedIndex * 2 + 1];
+				}
 				offsetX = x;
 				offsetY = y;
-				prevScaleX = keyScales[editedIndex * 2];
-				prevScaleY = keyScales[editedIndex * 2 + 1];
 			}
 		}
 		return false;
@@ -996,10 +998,16 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				}
 			}
 			case LAYOUT_SCALES -> {
+				if (editedIndex == -1) {
+					break;
+				}
 				float dx = x - offsetX;
 				float dy = offsetY - y;
-				int index = this.editedIndex * 2;
+				int index = editedIndex * 2;
 				float scale = prevScaleX + dx / Math.min(screen.centerX(), screen.centerY());
+				if (scale <= 0.0f) {
+					scale = Float.MIN_VALUE;
+				}
 				if (Math.abs(1 - scale) <= SCALE_SNAP_RADIUS) {
 					scale = 1;
 				} else {
@@ -1012,6 +1020,9 @@ public class VirtualKeyboard implements Overlay, Runnable {
 				}
 				keyScales[index++] = scale;
 				scale = prevScaleY + dy / Math.min(screen.centerX(), screen.centerY());
+				if (scale <= 0.0f) {
+					scale = Float.MIN_VALUE;
+				}
 				if (Math.abs(1 - scale) <= SCALE_SNAP_RADIUS) {
 					scale = 1;
 				} else {
@@ -1023,7 +1034,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 					}
 				}
 				keyScales[index] = scale;
-				resizeKeyGroup(this.editedIndex);
+				resizeKeyGroup(editedIndex);
 				snapKeys();
 				overlayView.postInvalidate();
 			}
