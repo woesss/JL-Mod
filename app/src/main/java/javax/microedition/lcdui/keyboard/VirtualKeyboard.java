@@ -858,7 +858,7 @@ public class VirtualKeyboard implements Overlay, Runnable {
 		}
 
 		float keySize = getKeySize(screen.width(), screen.height());
-		snapRadius = keySize * snapRadius / 4;
+		snapRadius = keySize * snapRadius / 8;
 		this.keySize = keySize;
 		for (int group = 0; group < keyScaleGroups.length; group++) {
 			resizeKeyGroup(group);
