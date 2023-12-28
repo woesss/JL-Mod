@@ -21,6 +21,7 @@
 -keep public class com.jblend.** { public protected *; }
 -keep public class com.kddi.** { public protected *; }
 -keep public class com.mascotcapsule.micro3d.v3.* { public protected *; }
+-keep public class com.mexa.** { public protected *; }
 -keep public class com.motorola.** { public protected *; }
 -keep public class com.nokia.mid.** { public protected *; }
 -keep public class com.samsung.util.** { public protected *; }
