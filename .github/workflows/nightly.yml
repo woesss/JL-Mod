@@ -37,7 +37,7 @@ jobs:
 
       - name: Calculate version suffix
         run:
-          echo "VERSION_SUFFIX=-${GITHUB_SHA::7}" >> $GITHUB_ENV
+          echo "VERSION_SUFFIX=$(git show -s --abbrev=7 --format=-%cd-%h --date=format:%y%m%d)" >> $GITHUB_ENV
 
       - name: Build with Gradle
         run: ./gradlew assembleEmulatorRelease
