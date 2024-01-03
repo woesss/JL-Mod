@@ -61,29 +61,25 @@ public class KeyMapper {
 	private static int layoutType;
 
 	static {
-		keyCodeToGameAction.put(KEY_NUM0, 0);
-		keyCodeToGameAction.put(KEY_NUM1, 0);
-		keyCodeToGameAction.put(KEY_NUM2, UP);
-		keyCodeToGameAction.put(KEY_NUM3, 0);
-		keyCodeToGameAction.put(KEY_NUM4, LEFT);
-		keyCodeToGameAction.put(KEY_NUM5, FIRE);
-		keyCodeToGameAction.put(KEY_NUM6, RIGHT);
-		keyCodeToGameAction.put(KEY_NUM7, GAME_A);
-		keyCodeToGameAction.put(KEY_NUM8, DOWN);
-		keyCodeToGameAction.put(KEY_NUM9, GAME_B);
-		keyCodeToGameAction.put(KEY_STAR, GAME_C);
-		keyCodeToGameAction.put(KEY_POUND, GAME_D);
-		mapKeyCode(KEY_UP, UP, "UP");
-		mapKeyCode(KEY_DOWN, DOWN, "DOWN");
-		mapKeyCode(KEY_LEFT, LEFT, "LEFT");
-		mapKeyCode(KEY_RIGHT, RIGHT, "RIGHT");
-		mapKeyCode(KEY_FIRE, FIRE, "SELECT");
-		mapKeyCode(KEY_SOFT_LEFT, 0, "SOFT1");
-		mapKeyCode(KEY_SOFT_RIGHT, 0, "SOFT2");
-		mapKeyCode(KEY_CLEAR, 0, "CLEAR");
-		mapKeyCode(KEY_SEND, 0, "SEND");
-		mapKeyCode(KEY_END, 0, "END");
-
+		mapGameAction(KEY_NUM2, UP);
+		mapGameAction(KEY_NUM4, LEFT);
+		mapGameAction(KEY_NUM5, FIRE);
+		mapGameAction(KEY_NUM6, RIGHT);
+		mapGameAction(KEY_NUM7, GAME_A);
+		mapGameAction(KEY_NUM8, DOWN);
+		mapGameAction(KEY_NUM9, GAME_B);
+		mapGameAction(KEY_STAR, GAME_C);
+		mapGameAction(KEY_POUND, GAME_D);
+		mapKey(KEY_UP, UP, "UP");
+		mapKey(KEY_DOWN, DOWN, "DOWN");
+		mapKey(KEY_LEFT, LEFT, "LEFT");
+		mapKey(KEY_RIGHT, RIGHT, "RIGHT");
+		mapKey(KEY_FIRE, FIRE, "SELECT");
+		mapKeyName(KEY_SOFT_LEFT, "SOFT1");
+		mapKeyName(KEY_SOFT_RIGHT, "SOFT2");
+		mapKeyName(KEY_CLEAR, "CLEAR");
+		mapKeyName(KEY_SEND, "SEND");
+		mapKeyName(KEY_END, "END");
 	}
 
 	private static void remapKeys(ProfileModel params) {
@@ -95,12 +91,12 @@ public class KeyMapper {
 			keyCodeToCustom.put(KEY_SOFT_LEFT, SIEMENS_KEY_SOFT_LEFT);
 			keyCodeToCustom.put(KEY_SOFT_RIGHT, SIEMENS_KEY_SOFT_RIGHT);
 
-			mapKeyCode(SIEMENS_KEY_UP, UP, "UP");
-			mapKeyCode(SIEMENS_KEY_DOWN, DOWN, "DOWN");
-			mapKeyCode(SIEMENS_KEY_LEFT, LEFT, "LEFT");
-			mapKeyCode(SIEMENS_KEY_RIGHT, RIGHT, "RIGHT");
-			mapKeyCode(SIEMENS_KEY_SOFT_LEFT, 0, "SOFT1");
-			mapKeyCode(SIEMENS_KEY_SOFT_RIGHT, 0, "SOFT2");
+			mapKey(SIEMENS_KEY_UP, UP, "UP");
+			mapKey(SIEMENS_KEY_DOWN, DOWN, "DOWN");
+			mapKey(SIEMENS_KEY_LEFT, LEFT, "LEFT");
+			mapKey(SIEMENS_KEY_RIGHT, RIGHT, "RIGHT");
+			mapKeyName(SIEMENS_KEY_SOFT_LEFT, "SOFT1");
+			mapKeyName(SIEMENS_KEY_SOFT_RIGHT, "SOFT2");
 		} else if (layoutType == MOTOROLA_LAYOUT) {
 			keyCodeToCustom.put(KEY_UP, MOTOROLA_KEY_UP);
 			keyCodeToCustom.put(KEY_DOWN, MOTOROLA_KEY_DOWN);
@@ -110,13 +106,13 @@ public class KeyMapper {
 			keyCodeToCustom.put(KEY_SOFT_LEFT, MOTOROLA_KEY_SOFT_LEFT);
 			keyCodeToCustom.put(KEY_SOFT_RIGHT, MOTOROLA_KEY_SOFT_RIGHT);
 
-			mapKeyCode(MOTOROLA_KEY_UP, UP, "UP");
-			mapKeyCode(MOTOROLA_KEY_DOWN, DOWN, "DOWN");
-			mapKeyCode(MOTOROLA_KEY_LEFT, LEFT, "LEFT");
-			mapKeyCode(MOTOROLA_KEY_RIGHT, RIGHT, "RIGHT");
-			mapKeyCode(MOTOROLA_KEY_FIRE, FIRE, "SELECT");
-			mapKeyCode(MOTOROLA_KEY_SOFT_LEFT, 0, "SOFT1");
-			mapKeyCode(MOTOROLA_KEY_SOFT_RIGHT, 0, "SOFT2");
+			mapKey(MOTOROLA_KEY_UP, UP, "UP");
+			mapKey(MOTOROLA_KEY_DOWN, DOWN, "DOWN");
+			mapKey(MOTOROLA_KEY_LEFT, LEFT, "LEFT");
+			mapKey(MOTOROLA_KEY_RIGHT, RIGHT, "RIGHT");
+			mapKey(MOTOROLA_KEY_FIRE, FIRE, "SELECT");
+			mapKeyName(MOTOROLA_KEY_SOFT_LEFT, "SOFT1");
+			mapKeyName(MOTOROLA_KEY_SOFT_RIGHT, "SOFT2");
 		} else if (layoutType == CUSTOM_LAYOUT) {
 			List<KeyModel> list = params.customKeys;
 			if (list != null) {
@@ -126,16 +122,25 @@ public class KeyMapper {
 					}
 					if (keyModel.customKeyCode != 0) {
 						keyCodeToCustom.put(keyModel.defaultKeyCode, keyModel.customKeyCode);
-						mapKeyCode(keyModel.customKeyCode, keyModel.gameAction, keyModel.keyName);
+						mapKey(keyModel.customKeyCode, keyModel.gameAction, keyModel.keyName);
 					} else {
-						mapKeyCode(keyModel.defaultKeyCode, keyModel.gameAction, keyModel.keyName);
+						mapKey(keyModel.defaultKeyCode, keyModel.gameAction, keyModel.keyName);
 					}
 				}
 			}
 		}
 	}
 
-	private static void mapKeyCode(int keyCode, int gameAction, String keyName) {
+	private static void mapGameAction(int keyCode, int gameAction) {
+		keyCodeToGameAction.put(keyCode, gameAction);
+		gameActionToKeyCode.put(gameAction, keyCode);
+	}
+
+	private static void mapKeyName(int keyCode, String keyName) {
+		keyCodeToKeyName.put(keyCode, keyName);
+	}
+
+	private static void mapKey(int keyCode, int gameAction, String keyName) {
 		if (keyName != null) {
 			keyCodeToKeyName.put(keyCode, keyName);
 		}
