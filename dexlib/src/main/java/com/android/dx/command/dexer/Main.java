@@ -53,10 +53,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
@@ -309,7 +308,7 @@ public class Main {
 
         try {
             for (int i = 0; i < fileNames.length; i++) {
-                processOne(fileNames[i], path -> path.endsWith(".class"));
+                processOne(fileNames[i], path -> path.toLowerCase(Locale.US).endsWith(".class"));
             }
         } catch (StopProcessing ex) {
             /*
@@ -414,7 +413,7 @@ public class Main {
      */
     private boolean processFileBytes(String name, long lastModified, byte[] bytes) {
 
-        boolean isClass = name != null && name.toLowerCase().endsWith(".class");
+        boolean isClass = name != null && name.toLowerCase(Locale.US).endsWith(".class");
         boolean keepResources = (outputResources != null);
 
         if (!isClass && !keepResources) {
@@ -463,16 +462,6 @@ public class Main {
     private boolean processClass(String name, byte[] bytes) {
         if (! args.coreLibrary) {
             checkClassName(name);
-        }
-
-        // skip classes implemented in the emulator to avoid duplication (verification errors)
-        try {
-            String refName = name.substring(0, name.length() - 6).replace('/', '.');
-            if (!refName.startsWith("org.xmlpull.v1.")) {
-                Class.forName(refName);
-                return true;
-            }
-        } catch (ClassNotFoundException ignored) {
         }
 
         try {

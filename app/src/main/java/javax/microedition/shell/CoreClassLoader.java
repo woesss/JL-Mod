@@ -16,7 +16,35 @@
 
 package javax.microedition.shell;
 
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
 public class CoreClassLoader extends ClassLoader {
+	public static final Pattern INCLUDE = Pattern.compile("java\\..+|com\\..+|javax\\..+|mmpp\\..+|org.xml.sax.+");
+	public static final Pattern EXCLUDE = initExcludePattern();
+
+	private static Pattern initExcludePattern() {
+		String prop = MidletSystem.getProperty("emulator.classpath.exclude");
+		if (prop == null) {
+			return null;
+		}
+		String[] list = prop.split("[:;]");
+		List<String> parts = new ArrayList<>(list.length);
+		for (String value : list) {
+			String s = value.trim();
+			if (s.isEmpty()) {
+				continue;
+			}
+			parts.add(s.replace(".", "\\.") + ".*");
+		}
+		if (parts.isEmpty()) {
+			return null;
+		}
+		return Pattern.compile(TextUtils.join("|", parts));
+	}
 
 	public CoreClassLoader(ClassLoader parent) {
 		super(parent);
@@ -24,8 +52,10 @@ public class CoreClassLoader extends ClassLoader {
 
 	@Override
 	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-		if (name.startsWith("java.") || name.startsWith("javax.") || name.startsWith("com.")
-				|| name.startsWith("org.xml.sax") || name.startsWith("mmpp.")) {
+		if (EXCLUDE != null && EXCLUDE.matcher(name).matches()) {
+			throw new ClassNotFoundException();
+		}
+		if (INCLUDE.matcher(name).matches()) {
 			return super.loadClass(name, resolve);
 		}
 		throw new ClassNotFoundException();

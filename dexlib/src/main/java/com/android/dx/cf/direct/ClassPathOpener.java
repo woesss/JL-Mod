@@ -18,7 +18,6 @@ package com.android.dx.cf.direct;
 
 import com.android.dex.util.FileUtils;
 
-import ru.woesss.util.zip.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 
 import java.io.ByteArrayOutputStream;
@@ -29,6 +28,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+
+import ru.woesss.util.zip.ZipFile;
 
 /**
  * Opens all the class files found in a class path element. Path elements
@@ -147,7 +149,7 @@ public class ClassPathOpener {
             }
 
             String path = file.getPath();
-            String lowerName = file.getName().toLowerCase();
+            String lowerName = file.getName().toLowerCase(Locale.US);
 
             if (lowerName.endsWith(".zip") ||
                     lowerName.endsWith(".jar") ||

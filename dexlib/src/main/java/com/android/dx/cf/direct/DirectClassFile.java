@@ -37,6 +37,8 @@ import com.android.dx.rop.type.TypeList;
 import com.android.dx.util.ByteArray;
 import com.android.dx.util.Hex;
 
+import java.util.Locale;
+
 /**
  * Class file with info taken from a {@code byte[]} or slice thereof.
  */
@@ -512,7 +514,7 @@ public class DirectClassFile implements ClassFile {
              * package/class name.
              */
             String thisClassName = thisClass.getClassType().getClassName();
-            if (!(filePath.toLowerCase().endsWith(".class") &&
+            if (!(filePath.toLowerCase(Locale.US).endsWith(".class") &&
                   filePath.startsWith(thisClassName) &&
                   (filePath.length() == (thisClassName.length() + 6)))) {
                 throw new ParseException("class name (" + thisClassName +
