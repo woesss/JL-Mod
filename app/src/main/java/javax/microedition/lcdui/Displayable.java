@@ -40,8 +40,8 @@ public abstract class Displayable {
 	private static final int TICKER_SHOW = 1;
 	private static final int TICKER_HIDE = 2;
 
-	protected static int virtualWidth;
-	protected static int virtualHeight;
+	private static int virtualWidth;
+	private static int virtualHeight;
 
 	final ArrayList<Command> commands = new ArrayList<>();
 	CommandListener listener;

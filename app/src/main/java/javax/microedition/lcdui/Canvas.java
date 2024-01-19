@@ -330,23 +330,23 @@ public abstract class Canvas extends Displayable {
 			}
 		}
 
-		if (virtualWidth > 0) {
-			if (virtualHeight > 0) {
+		if (settings.screenWidth > 0) {
+			if (settings.screenHeight > 0) {
 				// the width and height of the canvas are strictly set
-				width = virtualWidth;
-				height = virtualHeight;
+				width = settings.screenWidth;
+				height = settings.screenHeight;
 			} else {
 				// only the canvas width is set
 				// height is selected by the ratio of the real screen
-				width = virtualWidth;
-				height = scaledDisplayHeight * virtualWidth / scaledDisplayWidth;
+				width = settings.screenWidth;
+				height = scaledDisplayHeight * settings.screenWidth / scaledDisplayWidth;
 			}
 		} else {
-			if (virtualHeight > 0) {
+			if (settings.screenHeight > 0) {
 				// only the canvas height is set
 				// width is selected by the ratio of the real screen
-				width = scaledDisplayWidth * virtualHeight / scaledDisplayHeight;
-				height = virtualHeight;
+				width = scaledDisplayWidth * settings.screenHeight / scaledDisplayHeight;
+				height = settings.screenHeight;
 			} else {
 				// nothing is set - screen-sized canvas
 				width = scaledDisplayWidth;
