@@ -2,7 +2,7 @@
  * MicroEmulator
  * Copyright (C) 2008 Bartek Teodorczyk <barteo@barteo.net>
  * Copyright (C) 2017-2018 Nikita Shakarun
- * Copyright (C) 2021-2022 Yury Kharchenko
+ * Copyright (C) 2021-2024 Yury Kharchenko
  * <p>
  * It is licensed under the following two licenses as alternatives:
  * 1. GNU Lesser General Public License (the "LGPL") version 2.1 or any newer version
@@ -32,10 +32,20 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
-public class AndroidProducer {
+import java.io.DataInputStream;
+import java.io.EOFException;
+import java.util.HashMap;
+import java.util.Map;
 
-	public static byte[] instrument(final byte[] classData, String classFileName)
+public class AndroidProducer {
+	private static final Map<Integer, Integer> patches = initPatchFixes();
+
+	public static byte[] instrument(byte[] classData, String classFileName, long crc)
 			throws IllegalArgumentException {
+		Integer patch = patches.get((int) crc);
+		if (patch != null) {
+			classData = patchClass(classData, patch);
+		}
 		ClassReader cr = new ClassReader(classData);
 		if (!cr.getClassName().equals(classFileName.substring(0, classFileName.length() - 6))) {
 			throw new IllegalArgumentException("Class name does not match path");
@@ -43,8 +53,42 @@ public class AndroidProducer {
 
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		ClassVisitor cv = new AndroidClassVisitor(cw);
-		cr.accept(cv, ClassReader.SKIP_DEBUG);
+		cr.accept(cv, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
 
 		return cw.toByteArray();
+	}
+
+	private static byte[] patchClass(byte[] classData, int patch) {
+		try (DataInputStream dis = new DataInputStream(AndroidProducer.class.getResourceAsStream("/assets/dexer/patches.bin"))) {
+			dis.skipBytes(patch);
+			int len = dis.readUnsignedShort();
+			int newSize = dis.readShort() + classData.length;
+			byte[] patchData = new byte[len - 2];
+			dis.readFully(patchData);
+			return BinaryPatcher.patch(classData, patchData, newSize);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return classData;
+	}
+
+	public static Map<Integer, Integer> initPatchFixes() {
+		Map<Integer, Integer> map = new HashMap<>();
+		try (DataInputStream dis = new DataInputStream(AndroidProducer.class.getResourceAsStream("/assets/dexer/patches.bin"))) {
+			int pos = 0;
+			//noinspection InfiniteLoopStatement
+			while (true) {
+				int key = dis.readInt();
+				pos += 4;
+				map.put(key, pos);
+				int len = dis.readUnsignedShort();
+				dis.skipBytes(len);
+				pos += len + 2;
+			}
+		} catch (EOFException ignored) {
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return map;
 	}
 }

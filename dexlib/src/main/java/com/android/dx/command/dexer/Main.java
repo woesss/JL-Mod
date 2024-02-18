@@ -411,7 +411,7 @@ public class Main {
      * @param bytes {@code non-null;} contents of the file
      * @return whether processing was successful
      */
-    private boolean processFileBytes(String name, long lastModified, byte[] bytes) {
+    private boolean processFileBytes(String name, long crc, byte[] bytes) {
 
         boolean isClass = name != null && name.toLowerCase(Locale.US).endsWith(".class");
         boolean keepResources = (outputResources != null);
@@ -436,10 +436,7 @@ public class Main {
                     outputResources.put(fixedName, bytes);
                 }
             }
-            if (lastModified < minimumFileAge) {
-                return true;
-            }
-            processClass(fixedName, bytes);
+            processClass(fixedName, crc, bytes);
             // Assume that an exception may occur. Status will be updated
             // asynchronously, if the class compiles without error.
             return false;
@@ -456,17 +453,18 @@ public class Main {
      *
      * @param name {@code non-null;} name of the file, clipped such that it
      * <i>should</i> correspond to the name of the class it contains
+     * @param crc CRC32 of class file
      * @param bytes {@code non-null;} contents of the file
      * @return whether processing was successful
      */
-    private boolean processClass(String name, byte[] bytes) {
+    private boolean processClass(String name, long crc, byte[] bytes) {
         if (! args.coreLibrary) {
             checkClassName(name);
         }
 
         try {
             // modify byte-code with ASM-java
-            bytes = AndroidProducer.instrument(bytes, name);
+            bytes = AndroidProducer.instrument(bytes, name, crc);
 
             new DirectClassFileConsumer(name, bytes, null).call(
                     new ClassParserTask(name, bytes).call());
@@ -1272,9 +1270,8 @@ public class Main {
     private class FileBytesConsumer implements ClassPathOpener.Consumer {
 
         @Override
-        public boolean processFileBytes(String name, long lastModified,
-                byte[] bytes)   {
-            return Main.this.processFileBytes(name, lastModified, bytes);
+        public boolean processFileBytes(String name, long crc, byte[] bytes)   {
+            return Main.this.processFileBytes(name, crc, bytes);
         }
 
         @Override

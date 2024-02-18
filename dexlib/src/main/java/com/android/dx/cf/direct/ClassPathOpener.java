@@ -279,7 +279,7 @@ public class ClassPathOpener {
                         bytes = new byte[0];
                     }
 
-                    any |= consumer.processFileBytes(path, one.getLastModifiedTime(), bytes);
+                    any |= consumer.processFileBytes(path, one.getCrc(), bytes);
                 }
             }
 
