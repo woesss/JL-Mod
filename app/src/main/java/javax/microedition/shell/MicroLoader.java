@@ -154,8 +154,8 @@ public class MicroLoader {
 		sb.append(Descriptor.MIDLET_NAME).append(": ").append(descriptor.getName()).append("\n");
 		sb.append(Descriptor.MIDLET_VENDOR).append(": ").append(descriptor.getVendor()).append("\n");
 		sb.append(Descriptor.MIDLET_VERSION).append(": ").append(descriptor.getVersion()).append("\n");
-		sb.append(Descriptor.MIDLET_JAR_SIZE).append(": ").append(jarSize).append("\n");
 		if (jarHash != null) {
+			sb.append(Descriptor.MIDLET_JAR_SIZE).append(": ").append(jarSize).append("\n");
 			sb.append("JAR_HASH_MD5").append(": ").append(jarHash);
 		}
 		errorReporter.putCustomData(Constants.KEY_APPCENTER_ATTACHMENT, sb.toString());

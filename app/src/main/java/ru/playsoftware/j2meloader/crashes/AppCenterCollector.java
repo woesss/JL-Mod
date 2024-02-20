@@ -109,24 +109,26 @@ public class AppCenterCollector implements Collector {
 		errorLog.exception = getModelExceptionFromThrowable(reportBuilder.getException());
 		logs.add(errorLog);
 
+		StringBuilder sb = null;
 		JSONObject o = (JSONObject) report.get(ReportField.CUSTOM_DATA.name());
 		if (o != null) {
 			Object od = o.opt(Constants.KEY_APPCENTER_ATTACHMENT);
 			if (od != null) {
-				String customData = (String) od;
-				Attachment attachment = new Attachment("attachment.txt");
-				attachment.data = Base64.encodeToString(customData.getBytes(), Base64.DEFAULT);
-				attachment.errorId = report.getString(ReportField.REPORT_ID);
-				attachment.device = device;
-				attachment.timestamp = report.getString(ReportField.USER_CRASH_DATE);
-				logs.add(attachment);
+				sb = new StringBuilder().append(od);
 			}
 		}
 
 		String logcat = report.getString(ReportField.LOGCAT);
 		if (logcat != null) {
-			Attachment logcatAttachment = new Attachment("logcat.txt");
-			logcatAttachment.data = Base64.encodeToString(logcat.getBytes(), Base64.DEFAULT);
+			if (sb == null) {
+				sb = new StringBuilder(logcat);
+			} else {
+				sb.append("\n====================Logcat==================\n").append(logcat);
+			}
+		}
+		if (sb != null) {
+			Attachment logcatAttachment = new Attachment("attachment.txt");
+			logcatAttachment.data = Base64.encodeToString(sb.toString().getBytes(), Base64.DEFAULT);
 			logcatAttachment.errorId = report.getString(ReportField.REPORT_ID);
 			logcatAttachment.device = device;
 			logcatAttachment.timestamp = report.getString(ReportField.USER_CRASH_DATE);

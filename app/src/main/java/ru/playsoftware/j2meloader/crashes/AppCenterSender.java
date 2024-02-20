@@ -65,23 +65,23 @@ public class AppCenterSender implements ReportSender {
 					Log.e(TAG, "Response error", error);
 					String logFile = Config.getEmulatorDir() + "/crash.txt";
 					try (FileOutputStream fos = new FileOutputStream(logFile)) {
-						String logcat = report.getString(ReportField.LOGCAT);
-						if (logcat != null) {
-							fos.write(logcat.getBytes());
-						}
-						String stack = report.getString(ReportField.STACK_TRACE);
-						if (stack != null) {
-							fos.write("\n====================Error==================\n".getBytes());
-							fos.write(stack.getBytes());
-						}
 						JSONObject o = (JSONObject) report.get(ReportField.CUSTOM_DATA.name());
 						if (o != null) {
 							Object od = o.opt(Constants.KEY_APPCENTER_ATTACHMENT);
 							if (od != null) {
-								String customData = (String) od;
-								fos.write("\n==========application=info=============\n".getBytes());
-								fos.write(customData.getBytes());
+								String midlet = (String) od;
+								fos.write(midlet.getBytes());
 							}
+						}
+						String stack = report.getString(ReportField.STACK_TRACE);
+						if (stack != null) {
+							fos.write("\n===================Error===================\n".getBytes());
+							fos.write(stack.getBytes());
+						}
+						String logcat = report.getString(ReportField.LOGCAT);
+						if (logcat != null) {
+							fos.write("\n==================More=Log=================\n".getBytes());
+							fos.write(logcat.getBytes());
 						}
 						fos.close();
 						Toast.makeText(context, "Can't send report! Saved to file:\n" + logFile, Toast.LENGTH_LONG).show();

@@ -25,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
@@ -47,8 +48,9 @@ public class EmulatorApplication extends Application {
 
 	private static EmulatorApplication instance;
 
+	@Keep
 	private final SharedPreferences.OnSharedPreferenceChangeListener themeListener = (sharedPreferences, key) -> {
-		if (key.equals(Constants.PREF_THEME)) {
+		if (Constants.PREF_THEME.equals(key)) {
 			setNightMode(sharedPreferences.getString(Constants.PREF_THEME, null));
 		}
 	};
@@ -124,24 +126,13 @@ public class EmulatorApplication extends Application {
 		if (theme == null) {
 			theme = getString(R.string.pref_theme_default);
 		}
-		switch (theme) {
-			case "light":
-				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-				break;
-			case "dark":
-				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-				break;
-			case "auto-battery":
-				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
-				break;
-			case "auto-time":
-				//noinspection deprecation
-				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_TIME);
-				break;
-			default:
-			case "system":
-				AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-				break;
-		}
+		AppCompatDelegate.setDefaultNightMode(switch (theme) {
+			case "light" -> AppCompatDelegate.MODE_NIGHT_NO;
+			case "dark" -> AppCompatDelegate.MODE_NIGHT_YES;
+			case "auto-battery" -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+			case "auto-time" -> //noinspection deprecation
+					AppCompatDelegate.MODE_NIGHT_AUTO_TIME;
+			default -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+		});
 	}
 }
