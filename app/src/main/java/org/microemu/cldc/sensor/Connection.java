@@ -28,6 +28,7 @@ import org.microemu.microedition.io.ConnectionImplementation;
 import java.io.IOException;
 import java.util.Arrays;
 
+import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.sensor.AndroidSensorManager;
 import javax.microedition.sensor.Channel;
 import javax.microedition.sensor.ChannelImpl;
@@ -58,8 +59,8 @@ public class Connection extends AccelerometerSensorConnection implements Connect
 	@Override
 	public javax.microedition.io.Connection openConnection(String name, int mode, boolean timeouts) throws IOException {
 		SensorInfo[] sensorInfos = SensorManager.findSensors(name);
-		if (sensorInfos.length < 1) {
-			throw new IllegalArgumentException();
+		if (sensorInfos.length == 0) {
+			throw new ConnectionNotFoundException();
 		}
 		sensorInfo = sensorInfos[0];
 		channelInfos = sensorInfo.getChannelInfos();
