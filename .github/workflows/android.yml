@@ -3,6 +3,9 @@ name: Android CI
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -54,8 +57,19 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: ${{ steps.get_version.outputs.version }}
-          prerelease: true
           draft: true
           files: |
             app/build/outputs/apk/**/*.apk
             symbols.zip
+
+      - name: Upload Artifact (bin)
+        uses: actions/upload-artifact@v3.1.3
+        with:
+          name: "JL-Mod_${{ steps.get_version.outputs.version }}"
+          path: app/build/outputs/apk/emulator/release/*.apk
+
+      - name: Upload a Build Artifact (sym)
+        uses: actions/upload-artifact@v3.1.3
+        with:
+          name: "Symbols"
+          path: artifact
