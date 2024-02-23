@@ -1,7 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
  * Copyright 2017-2020 Nikita Shakarun
- * Copyright 2020-2023 Yury Kharchenko
+ * Copyright 2020-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -307,23 +307,25 @@ class MicroPlayer extends BasePlayer implements MediaPlayer.OnCompletionListener
 		if (mute) {
 			left = right = 0;
 		} else {
-			if (level == 100) {
-				left = right = 1.0f;
-			} else {
-				left = right = (float) (1 - (Math.log(100 - level) / Math.log(100)));
-			}
-
-			if (pan >= 0) {
-				left *= (float) (100 - pan) / 100f;
-			}
-
-			if (pan < 0) {
-				right *= (float) (100 + pan) / 100f;
+			left = right = volumeToGain(level);
+			if (pan > 0) {
+				left = volumeToGain(level * (100 - pan) / 100);
+			} else if (pan < 0) {
+				right =  volumeToGain(level * (100 + pan) / 100);
 			}
 		}
 
 		player.setVolume(left, right);
 		postEvent(PlayerListener.VOLUME_CHANGED, this);
+	}
+
+	private float volumeToGain(int volume) {
+		if (volume <= 0) {
+			return 0.0f;
+		} else if (volume >= 100) {
+			return 1.0f;
+		}
+		return (float) (1 - (Math.log(100 - volume) / Math.log(100)));
 	}
 
 	@Override
