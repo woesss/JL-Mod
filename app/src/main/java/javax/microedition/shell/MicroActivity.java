@@ -1,7 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2017-2021 Nikita Shakarun
- * Copyright 2019-2023 Yury Kharchenko
+ * Copyright 2019-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -174,18 +174,13 @@ public class MicroActivity extends AppCompatActivity {
 		menuKey = microLoader.getMenuKeyCode();
 		inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
-		try {
-			loadMIDlet();
-		} catch (Exception e) {
-			e.printStackTrace();
-			showErrorDialog(e.toString());
-		}
 		getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
 			@Override
 			public void handleOnBackPressed() {
 				// Intentionally overridden by empty due to support for back-key remapping.
 			}
 		});
+		loadMIDlet();
 	}
 
 	public void lockNightMode() {
@@ -239,15 +234,22 @@ public class MicroActivity extends AppCompatActivity {
 		});
 	}
 
-	private void loadMIDlet() throws Exception {
-		LinkedHashMap<String, String> midlets = microLoader.loadMIDletList();
+	private void loadMIDlet() {
+		LinkedHashMap<String, String> midlets;
+		try {
+			midlets = microLoader.loadMIDletList();
+		} catch (IOException e) {
+			showErrorDialog(e.toString());
+			return;
+		}
 		int size = midlets.size();
 		String[] midletsNameArray = midlets.values().toArray(new String[0]);
 		String[] midletsClassArray = midlets.keySet().toArray(new String[0]);
 		if (size == 0) {
-			throw new Exception("No MIDlets found");
+			showErrorDialog("No MIDlets found");
 		} else if (size == 1) {
 			MidletThread.create(microLoader, midletsClassArray[0]);
+			microLoader.pushToRecentApps(appName);
 		} else {
 			showMidletDialog(midletsNameArray, midletsClassArray);
 		}
@@ -268,6 +270,7 @@ public class MicroActivity extends AppCompatActivity {
 					errorReporter.putCustomData(Constants.KEY_APPCENTER_ATTACHMENT, sb.toString());
 					MidletThread.create(microLoader, clazz);
 					MidletThread.resumeApp();
+					microLoader.pushToRecentApps(appName);
 				})
 				.setOnCancelListener(d -> {
 					d.dismiss();

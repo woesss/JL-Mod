@@ -1,5 +1,6 @@
 /*
- * Copyright 2018 Nikita Shakarun
+ * Copyright 2018-2020 Nikita Shakarun
+ * Copyright 2019-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +17,23 @@
 
 package ru.playsoftware.j2meloader.util;
 
+import static ru.playsoftware.j2meloader.util.Constants.KEY_MIDLET_NAME;
+
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,9 +42,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.microedition.util.ContextHolder;
+
+import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
+import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.woesss.j2me.jar.Descriptor;
 
 public class AppUtils {
@@ -93,6 +110,7 @@ public class AppUtils {
 		FileUtils.deleteDirectory(appSaveDir);
 		File appConfigsDir = new File(Config.getConfigsDir(), item.getPath());
 		FileUtils.deleteDirectory(appConfigsDir);
+		ShortcutManagerCompat.removeDynamicShortcuts(ContextHolder.getAppContext(), List.of(item.getPathExt()));
 	}
 
 	public static void updateDb(AppRepository appRepository, List<AppItem> items) {
@@ -106,6 +124,7 @@ public class AppUtils {
 			// If db isn't empty
 			if (items.size() != 0) {
 				appRepository.deleteAll();
+				removeFromRecentShortcuts(items);
 			}
 			return;
 		}
@@ -120,6 +139,7 @@ public class AppUtils {
 		}
 		if (items.size() > 0) {
 			appRepository.delete(items);
+			removeFromRecentShortcuts(items);
 		}
 		if (appFoldersList.size() > 0) {
 			appRepository.insert(getAppsList(appFoldersList));
@@ -132,5 +152,72 @@ public class AppUtils {
 			return null;
 		}
 		return BitmapFactory.decodeFile(file);
+	}
+
+	public static void addShortcut(Context context, AppItem appItem) {
+		Bitmap bitmap = getIconBitmap(appItem);
+		IconCompat icon;
+		if (bitmap == null) {
+			icon = IconCompat.createWithResource(context, R.mipmap.ic_launcher);
+		} else {
+			int width = bitmap.getWidth();
+			int height = bitmap.getHeight();
+			ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+			int iconSize = am.getLauncherLargeIconSize();
+			Rect src;
+			if (width > height) {
+				int left = (width - height) / 2;
+				src = new Rect(left, 0, left + height, height);
+			} else if (width < height) {
+				int top = (height - width) / 2;
+				src = new Rect(0, top, width, top + width);
+			} else {
+				src = null;
+			}
+			Bitmap scaled = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888);
+			Canvas canvas = new Canvas(scaled);
+			canvas.drawBitmap(bitmap, src, new RectF(0, 0, iconSize, iconSize), null);
+			icon = IconCompat.createWithBitmap(scaled);
+		}
+		String title = appItem.getTitle();
+		Intent launchIntent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appItem.getPathExt()),
+				context, ConfigActivity.class);
+		launchIntent.putExtra(KEY_MIDLET_NAME, title);
+		ShortcutInfoCompat shortcut = new ShortcutInfoCompat.Builder(context, title)
+				.setIntent(launchIntent)
+				.setShortLabel(title)
+				.setIcon(icon)
+				.build();
+		ShortcutManagerCompat.requestPinShortcut(context, shortcut, null);
+	}
+
+	public static void pushToRecentShortcuts(Context context, String appPath, String appName, File iconFile) {
+		try {
+			IconCompat icon;
+			if (iconFile == null) {
+				icon = IconCompat.createWithResource(context, R.mipmap.ic_launcher);
+			} else {
+				icon = IconCompat.createWithContentUri(Uri.fromFile(iconFile));
+			}
+			Intent launchIntent = new Intent(Intent.ACTION_DEFAULT, Uri.parse(appPath),
+					context, ConfigActivity.class);
+			launchIntent.putExtra(KEY_MIDLET_NAME, appName);
+			ShortcutInfoCompat shortcut = new ShortcutInfoCompat.Builder(context, appPath)
+					.setIntent(launchIntent)
+					.setShortLabel(appName)
+					.setIcon(icon)
+					.build();
+			ShortcutManagerCompat.pushDynamicShortcut(context, shortcut);
+		} catch (Exception e) {
+			Log.e(TAG, "pushToRecentShortCuts()", e);
+		}
+	}
+
+	public static void removeFromRecentShortcuts(List<AppItem> items) {
+		List<String> shortcuts = new ArrayList<>();
+		for (AppItem item : items) {
+			shortcuts.add(item.getPathExt());
+		}
+		ShortcutManagerCompat.removeDynamicShortcuts(ContextHolder.getAppContext(), shortcuts);
 	}
 }
