@@ -2,7 +2,7 @@
  * Copyright 2012 Kulikov Dmitriy
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2018-2019 Nikita Shakarun
- * Copyright 2019-2023 Yury Kharchenko
+ * Copyright 2019-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -95,7 +96,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	private Display display;
 	private File configDir;
 	private String defProfile;
-	private ArrayAdapter<ShaderInfo> spShaderAdapter;
+	private ArrayList<ShaderInfo> shaders;
 	private String workDir;
 	private boolean needShow;
 	private ActivityConfigBinding binding;
@@ -238,6 +239,34 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			public void onNothingSelected(AdapterView<?> parent) {
 			}
 		});
+		binding.spShader.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				ShaderInfo item = (ShaderInfo) parent.getItemAtPosition(position);
+				ShaderInfo.Setting[] settings = item.settings;
+				float[] values = item.values;
+				if (values == null) {
+					for (int i = 0; i < 4; i++) {
+						if (settings[i] != null) {
+							if (values == null) {
+								values = new float[4];
+							}
+							values[i] = settings[i].def;
+						}
+					}
+				}
+				if (values == null) {
+					binding.btShaderTune.setVisibility(View.GONE);
+				} else {
+					item.values = values;
+					binding.btShaderTune.setVisibility(View.VISIBLE);
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
+		});
 		binding.cxIsShowKeyboard.setOnClickListener((b) -> {
 			View.OnLayoutChangeListener onLayoutChangeListener = new View.OnLayoutChangeListener() {
 				@Override
@@ -280,8 +309,6 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			skinAdapter.addAll(files);
 		}
 		skinAdapter.notifyDataSetChanged();
-		int position = skinAdapter.getPosition(params.screenBackgroundImage);
-		binding.spSkin.setSelection(Math.max(position, 0));
 	}
 
 	private void initSoundBankSpinner() {
@@ -303,8 +330,12 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			adapter.addAll(files);
 		}
 		adapter.notifyDataSetChanged();
-		int position = adapter.getPosition(params.soundBank);
-		binding.spSoundBank.setSelection(Math.max(position, 0));
+	}
+
+	private void setSpinnerSelection(Spinner spinner, String item) {
+		//noinspection unchecked
+		ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinner.getAdapter();
+		spinner.setSelection(Math.max(adapter.getPosition(item), 0));
 	}
 
 	private void onLockAspectChanged(CompoundButton cb, boolean isChecked) {
@@ -366,7 +397,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 	}
 
 	private void initShaderSpinner() {
-		if (spShaderAdapter != null) {
+		if (shaders != null) {
 			return;
 		}
 		File dir = new File(workDir + Config.SHADERS_DIR);
@@ -374,10 +405,10 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			//noinspection ResultOfMethodCallIgnored
 			dir.mkdirs();
 		}
-		ArrayList<ShaderInfo> list = new ArrayList<>();
-		spShaderAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
-		spShaderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		binding.spShader.setAdapter(spShaderAdapter);
+		shaders = new ArrayList<>();
+		ArrayAdapter<ShaderInfo> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, shaders);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		binding.spShader.setAdapter(adapter);
 		File[] files = dir.listFiles((f) -> f.isFile() && f.getName().toLowerCase().endsWith(".ini"));
 		if (files != null) {
 			for (File file : files) {
@@ -387,7 +418,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 				for (String line : split) {
 					if (line.startsWith("[")) {
 						if (info != null && info.fragment != null && info.vertex != null) {
-							list.add(info);
+							shaders.add(info);
 						}
 						info = new ShaderInfo(line.replaceAll("[\\[\\]]", ""), "unknown");
 					} else if (info != null) {
@@ -399,49 +430,21 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 					}
 				}
 				if (info != null && info.fragment != null && info.vertex != null) {
-					list.add(info);
+					shaders.add(info);
 				}
 			}
-			Collections.sort(list);
+			Collections.sort(shaders);
 		}
-		list.add(0, new ShaderInfo(getString(R.string.identity_filter), "woesss"));
-		spShaderAdapter.notifyDataSetChanged();
+		shaders.add(0, new ShaderInfo(getString(R.string.identity_filter), "woesss"));
+		adapter.notifyDataSetChanged();
 		ShaderInfo selected = params.shader;
 		if (selected != null) {
-			int position = list.indexOf(selected);
+			int position = shaders.indexOf(selected);
 			if (position > 0) {
-				list.get(position).values = selected.values;
+				shaders.get(position).values = selected.values;
 				binding.spShader.setSelection(position);
 			}
 		}
-		binding.spShader.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				ShaderInfo item = (ShaderInfo) parent.getItemAtPosition(position);
-				ShaderInfo.Setting[] settings = item.settings;
-				float[] values = item.values;
-				if (values == null) {
-					for (int i = 0; i < 4; i++) {
-						if (settings[i] != null) {
-							if (values == null) {
-								values = new float[4];
-							}
-							values[i] = settings[i].def;
-						}
-					}
-				}
-				if (values == null) {
-					binding.btShaderTune.setVisibility(View.GONE);
-				} else {
-					item.values = values;
-					binding.btShaderTune.setVisibility(View.VISIBLE);
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
-		});
 	}
 
 	private void showCharsetPicker(View v) {
@@ -569,6 +572,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 			binding.tfScreenHeight.setText(Integer.toString(screenHeight));
 		}
 		binding.tfScreenBack.setText(String.format("%06X", params.screenBackgroundColor));
+		setSpinnerSelection(binding.spSkin, params.screenBackgroundImage);
 		binding.tfScaleRatioValue.setText(Integer.toString(params.screenScaleRatio));
 		binding.spOrientation.setSelection(params.orientation);
 		binding.spScaleType.setSelection(params.screenScaleType);
@@ -579,6 +583,15 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		binding.cxParallel.setChecked(params.parallelRedrawScreen);
 		binding.cxForceFullscreen.setChecked(params.forceFullscreen);
 		binding.spGraphicsMode.setSelection(params.graphicsMode);
+		if (shaders != null) {
+			int position = shaders.indexOf(params.shader);
+			if (position > 0) {
+				shaders.get(position).values =  params.shader.values;
+				binding.spShader.setSelection(position);
+			} else {
+				binding.spShader.setSelection(0);
+			}
+		}
 		binding.cxShowFps.setChecked(params.showFps);
 
 		binding.tfFontSizeSmall.setText(Integer.toString(params.fontSizeSmall));
@@ -606,6 +619,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		binding.tfVKSelBack.setText(String.format("%06X", params.vkBgColorSelected));
 		binding.tfVKSelFore.setText(String.format("%06X", params.vkFgColorSelected));
 		binding.tfVKOutline.setText(String.format("%06X", params.vkOutlineColor));
+		setSpinnerSelection(binding.spSoundBank, params.soundBank);
 
 		String systemProperties = params.systemProperties;
 		if (systemProperties == null) {
