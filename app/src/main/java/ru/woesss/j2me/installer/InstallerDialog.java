@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Yury Kharchenko
+ * Copyright 2020-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -240,20 +240,18 @@ public class InstallerDialog extends DialogFragment {
 		Descriptor nd = installer.getNewDescriptor();
 		SpannableStringBuilder message;
 		switch (status) {
-			case AppInstaller.STATUS_NEW:
+			case AppInstaller.STATUS_NEW -> {
 				if (installer.getJar() != null) {
 					convert();
 					return;
 				}
 				message = nd.getInfo(requireActivity());
-				break;
-			case AppInstaller.STATUS_OLDEST:
-				message = new SpannableStringBuilder(getString(
-						R.string.reinstall_older,
-						nd.getVersion(),
-						installer.getCurrentVersion()));
-				break;
-			case AppInstaller.STATUS_EQUAL:
+			}
+			case AppInstaller.STATUS_OLDEST -> message = new SpannableStringBuilder(getString(
+					R.string.reinstall_older,
+					nd.getVersion(),
+					installer.getCurrentVersion()));
+			case AppInstaller.STATUS_EQUAL -> {
 				message = new SpannableStringBuilder(getString(R.string.reinstall));
 				AppItem app = installer.getExistsApp();
 				btnRun.setVisibility(View.VISIBLE);
@@ -263,20 +261,26 @@ public class InstallerDialog extends DialogFragment {
 					Config.startApp(v.getContext(), app.getTitle(), app.getPathExt(), false);
 					dismiss();
 				});
-				break;
-			case AppInstaller.STATUS_NEWEST:
-				message = new SpannableStringBuilder(getString(
-						R.string.reinstall_newest,
-						nd.getVersion(),
-						installer.getCurrentVersion()));
-				break;
-			case AppInstaller.STATUS_UNMATCHED:
+			}
+			case AppInstaller.STATUS_NEWEST -> message = new SpannableStringBuilder(getString(
+					R.string.reinstall_newest,
+					nd.getVersion(),
+					installer.getCurrentVersion()));
+			case AppInstaller.STATUS_UNMATCHED -> {
 				SpannableStringBuilder info = installer.getManifest().getInfo(requireActivity());
 				info.append(getString(R.string.install_jar_non_matched_jad));
 				alertConfirm(info, v -> installApp(installer.getJar(), null));
 				return;
-			default:
-				throw new IllegalStateException("Unexpected value: " + status);
+			}
+			case AppInstaller.STATUS_SAME -> {
+				installer.clearCache();
+				installer.deleteTemp();
+				AppItem app = installer.getExistsApp();
+				Config.startApp(getContext(), app.getTitle(), app.getPathExt(), false);
+				dismiss();
+				return;
+			}
+			default -> throw new IllegalStateException("Unexpected value: " + status);
 		}
 		if (installer.getJar() == null) {
 			message.append('\n').append(getString(R.string.warn_install_from_net));

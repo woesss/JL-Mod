@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Yury Kharchenko
+ * Copyright 2020-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,7 @@ public class AppInstaller {
 	static final int STATUS_NEW = 2;
 	static final int STATUS_UNMATCHED = 3;
 	static final int STATUS_SUCCESS = 4;
+	static final int STATUS_SAME = 5;
 
 	private final int id;
 	private final Application context;
@@ -374,7 +375,22 @@ public class AppInstaller {
 		}
 		appDirName = currentApp.getPath();
 		targetDir = new File(Config.getAppDir(), appDirName);
-		return newDesc.compareVersion(currentApp.getVersion());
+		int result = newDesc.compareVersion(currentApp.getVersion());
+		if (result == 0) {
+			if (srcJar != null && srcJar.exists()) {
+				File targetJar = new File(targetDir, Config.MIDLET_RES_FILE);
+				if (targetJar.exists() && targetJar.length() == srcJar.length()) {
+					try (FileInputStream one = new FileInputStream(srcJar);
+						 FileInputStream two = new FileInputStream(targetJar)) {
+						if (one.read() != two.read()) {
+							return STATUS_EQUAL;
+						}
+						return STATUS_SAME;
+					} catch (IOException ignored) {}
+				}
+			}
+		}
+		return result;
 	}
 
 	private void generatePathName(String name) {
