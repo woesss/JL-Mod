@@ -143,10 +143,15 @@ public class KeyMapper {
 	private static void mapKey(int keyCode, int gameAction, String keyName) {
 		if (keyName != null) {
 			keyCodeToKeyName.put(keyCode, keyName);
+		} else {
+			keyCodeToKeyName.remove(keyCode);
 		}
 		if (gameAction != 0) {
 			keyCodeToGameAction.put(keyCode, gameAction);
 			gameActionToKeyCode.put(gameAction, keyCode);
+		} else {
+			keyCodeToGameAction.delete(keyCode);
+			gameActionToKeyCode.delete(gameAction);
 		}
 	}
 
@@ -162,9 +167,6 @@ public class KeyMapper {
 	}
 
 	public static int convertKeyCode(int keyCode) {
-		if (layoutType == DEFAULT_LAYOUT) {
-			return keyCode;
-		}
 		return keyCodeToCustom.get(keyCode, keyCode);
 	}
 
