@@ -1,7 +1,7 @@
 /*
  * Copyright 2012 Kulikov Dmitriy
  * Copyright 2017-2020 Nikita Shakarun
- * Copyright 2019-2023 Yury Kharchenko
+ * Copyright 2019-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -590,7 +590,7 @@ public abstract class Canvas extends Displayable {
 	}
 
 	// GameCanvas
-	public void flushBuffer(Image image, int x, int y, int width, int height) {
+	protected void flushBuffer(Image image, int x, int y, int width, int height) {
 		limitFps();
 		if (width <= 0 || height <= 0 ||
 				x + width < 0 || y + height < 0 ||
@@ -598,6 +598,10 @@ public abstract class Canvas extends Displayable {
 			return;
 		}
 		synchronized (bufferLock) {
+			if (Thread.holdsLock(paintEvent)) {
+				offscreen.getSingleGraphics().flush(image, x, y, width, height);
+				return;
+			}
 			offscreenCopy.getSingleGraphics().flush(image, x, y, width, height);
 		}
 		requestFlushToScreen();
