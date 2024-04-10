@@ -39,14 +39,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.microedition.util.ContextHolder;
 
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppItem;
-import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ConfigActivity;
 import ru.woesss.j2me.jar.Descriptor;
@@ -54,10 +53,10 @@ import ru.woesss.j2me.jar.Descriptor;
 public class AppUtils {
 	private static final String TAG = AppUtils.class.getSimpleName();
 
-	private static ArrayList<AppItem> getAppsList(@NonNull List<String> appFolders) {
+	public static ArrayList<AppItem> getApps(@NonNull List<String> paths) {
 		ArrayList<AppItem> apps = new ArrayList<>();
 		File appsDir = new File(Config.getAppDir());
-		for (String appFolderName : appFolders) {
+		for (String appFolderName : paths) {
 			File appFolder = new File(appsDir, appFolderName);
 			if (!appFolder.isDirectory()) {
 				if (!appFolder.delete()) {
@@ -113,37 +112,12 @@ public class AppUtils {
 		ShortcutManagerCompat.removeDynamicShortcuts(ContextHolder.getAppContext(), List.of(item.getPathExt()));
 	}
 
-	public static void updateDb(AppRepository appRepository, List<AppItem> items) {
-		File tmp = new File(Config.getAppDir(), ".tmp");
-		if (tmp.exists()) {
-			// TODO: 30.07.2021 incomplete installation - maybe can continue?
-			FileUtils.deleteDirectory(tmp);
-		}
+	public static List<String> getAppDirectories() {
 		String[] appFolders = new File(Config.getAppDir()).list();
 		if (appFolders == null || appFolders.length == 0) {
-			// If db isn't empty
-			if (items.size() != 0) {
-				appRepository.deleteAll();
-				removeFromRecentShortcuts(items);
-			}
-			return;
+			return Collections.emptyList();
 		}
-		List<String> appFoldersList = new ArrayList<>(Arrays.asList(appFolders));
-		// Delete invalid app items from db
-		ListIterator<AppItem> iterator = items.listIterator(items.size());
-		while (iterator.hasPrevious()) {
-			AppItem item = iterator.previous();
-			if (appFoldersList.remove(item.getPath())) {
-				iterator.remove();
-			}
-		}
-		if (items.size() > 0) {
-			appRepository.delete(items);
-			removeFromRecentShortcuts(items);
-		}
-		if (appFoldersList.size() > 0) {
-			appRepository.insert(getAppsList(appFoldersList));
-		}
+		return new ArrayList<>(Arrays.asList(appFolders));
 	}
 
 	public static Bitmap getIconBitmap(AppItem appItem) {

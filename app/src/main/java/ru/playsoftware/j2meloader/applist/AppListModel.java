@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Yury Kharchenko
+ * Copyright 2021-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,77 @@
 
 package ru.playsoftware.j2meloader.applist;
 
+import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
+import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+
+import android.content.SharedPreferences;
+
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.preference.PreferenceManager;
 
+import java.util.List;
+
+import ru.playsoftware.j2meloader.EmulatorApplication;
 import ru.playsoftware.j2meloader.appsdb.AppRepository;
+import ru.playsoftware.j2meloader.config.Config;
 
-public class AppListModel extends ViewModel {
-	private final AppRepository appRepository = new AppRepository(this);
+public class AppListModel extends ViewModel implements SharedPreferences.OnSharedPreferenceChangeListener {
+	private final AppRepository appRepository = new AppRepository();
 
-	public AppRepository getAppRepository() {
-		return appRepository;
+	public AppListModel() {
+		PreferenceManager.getDefaultSharedPreferences(EmulatorApplication.getInstance())
+				.registerOnSharedPreferenceChangeListener(this);
 	}
 
 	@Override
 	protected void onCleared() {
+		PreferenceManager.getDefaultSharedPreferences(EmulatorApplication.getInstance())
+				.unregisterOnSharedPreferenceChangeListener(this);
 		appRepository.close();
 	}
 
-	public void onWorkDirReady() {
-		appRepository.onWorkDirReady();
+	public void setEmulatorDirectory(String emulatorDir) {
+		appRepository.setDatabaseFile(emulatorDir + Config.APPS_DB_NAME);
+	}
+
+	MutableLiveData<List<AppItem>> getAppList() {
+		return appRepository.getAppList();
+	}
+
+	public MutableLiveData<Throwable> getErrors() {
+		return appRepository.getErrors();
+	}
+
+	void updateApp(AppItem item) {
+		appRepository.update(item);
+	}
+
+	void deleteApp(AppItem item) {
+		appRepository.delete(item);
+	}
+
+	public AppItem getApp(int id) {
+		return appRepository.get(id);
+	}
+
+	public void addApp(AppItem app) {
+		appRepository.insert(app);
+	}
+
+	public AppItem getApp(String name, String vendor) {
+		return appRepository.get(name, vendor);
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+		if (PREF_APP_SORT.equals(key)) {
+			appRepository.setSort(sp.getInt(PREF_APP_SORT, 0));
+		} else if (PREF_EMULATOR_DIR.equals(key)) {
+			String path = sp.getString(key, null);
+			if (path != null) {
+				appRepository.setDatabaseFile(path + Config.APPS_DB_NAME);
+			}
+		}
 	}
 }

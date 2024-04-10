@@ -41,7 +41,6 @@ import io.reactivex.schedulers.Schedulers;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.applist.AppItem;
 import ru.playsoftware.j2meloader.applist.AppListModel;
-import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.databinding.FragmentInstallerBinding;
 import ru.woesss.j2me.jar.Descriptor;
@@ -55,7 +54,7 @@ public class InstallerDialog extends DialogFragment {
 	private Button btnOk;
 	private Button btnClose;
 	private Button btnRun;
-	private AppRepository appRepository;
+	private AppListModel appListModel;
 	private AppInstaller installer;
 	private AlertDialog dialog;
 
@@ -84,8 +83,7 @@ public class InstallerDialog extends DialogFragment {
 	@Override
 	public void onAttach(@NonNull Context context) {
 		super.onAttach(context);
-		AppListModel appListModel = new ViewModelProvider(requireActivity()).get(AppListModel.class);
-		appRepository = appListModel.getAppRepository();
+		appListModel = new ViewModelProvider(requireActivity()).get(AppListModel.class);
 	}
 
 	@Override
@@ -146,7 +144,7 @@ public class InstallerDialog extends DialogFragment {
 	}
 
 	private void installApp(String path, Uri uri) {
-		installer = new AppInstaller(path, uri, requireActivity().getApplication(), appRepository);
+		installer = new AppInstaller(path, uri, appListModel);
 		btnClose.setOnClickListener(v -> {
 			installer.deleteTemp();
 			installer.clearCache();
@@ -160,7 +158,7 @@ public class InstallerDialog extends DialogFragment {
 	}
 
 	private void reinstallApp(int id) {
-		installer = new AppInstaller(id, requireActivity().getApplication(), appRepository);
+		installer = new AppInstaller(id, appListModel);
 		btnClose.setOnClickListener(v -> {
 			installer.deleteTemp();
 			installer.clearCache();

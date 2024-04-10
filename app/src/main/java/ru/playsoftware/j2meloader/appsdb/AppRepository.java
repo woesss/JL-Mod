@@ -1,6 +1,6 @@
 /*
  * Copyright 2018 Nikita Shakarun
- * Copyright 2020-2023 Yury Kharchenko
+ * Copyright 2020-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,115 +17,71 @@
 
 package ru.playsoftware.j2meloader.appsdb;
 
-import static ru.playsoftware.j2meloader.util.Constants.PREF_APP_SORT;
-import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
+import android.util.Log;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.preference.PreferenceManager;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
-import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.flowables.ConnectableFlowable;
 import io.reactivex.schedulers.Schedulers;
-import ru.playsoftware.j2meloader.EmulatorApplication;
 import ru.playsoftware.j2meloader.applist.AppItem;
-import ru.playsoftware.j2meloader.applist.AppListModel;
-import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.AppUtils;
 
-public class AppRepository implements SharedPreferences.OnSharedPreferenceChangeListener {
-	private final MutableLiveData<List<AppItem>> listLiveData = new MutableLiveData<>();
+public class AppRepository {
+	private final MutableLiveData<List<AppItem>> appListLiveData = new MutableLiveData<>();
 	private final MutableLiveData<Throwable> errorsLiveData = new MutableLiveData<>();
 	private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 	private final ErrorObserver errorObserver = new ErrorObserver(errorsLiveData);
 	private final MutableSortSQLiteQuery query = new MutableSortSQLiteQuery();
 
 	private AppDatabase db;
-	private AppItemDao appItemDao;
 
-	public AppRepository(AppListModel model) {
-		if (model.getAppRepository() != null) {
-			throw new IllegalStateException("You must get instance from 'AppListModel'");
-		}
-		Context context = EmulatorApplication.getInstance();
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		preferences.registerOnSharedPreferenceChangeListener(this);
-		String emulatorDir = Config.getEmulatorDir();
-		File dir = new File(emulatorDir);
-		if (dir.isDirectory() && dir.canWrite()) {
-			initDb(emulatorDir);
-		}
-	}
-
-	public void initDb(String path) {
-		db = AppDatabase.open(path + Config.APPS_DB_NAME);
-		appItemDao = db.appItemDao();
-		ConnectableFlowable<List<AppItem>> listConnectableFlowable = getAll()
-				.subscribeOn(Schedulers.io())
+	private void initDb(String file) {
+		db = AppDatabase.open(file);
+		ConnectableFlowable<List<AppItem>> listConnectableFlowable = db.appItemDao().getAll(query)
 				.publish();
 		compositeDisposable.add(listConnectableFlowable
 				.firstElement()
-				.subscribe(list -> AppUtils.updateDb(this, new ArrayList<>(list)), errorsLiveData::postValue));
-		compositeDisposable.add(listConnectableFlowable.subscribe(listLiveData::postValue, errorsLiveData::postValue));
+				.observeOn(Schedulers.io())
+				.subscribe(this::syncWithFilesystem, errorsLiveData::postValue));
+		compositeDisposable.add(listConnectableFlowable.subscribe(appListLiveData::postValue, errorsLiveData::postValue));
 		compositeDisposable.add(listConnectableFlowable.connect());
 	}
 
-	public void observeApps(LifecycleOwner owner, Observer<List<AppItem>> observer) {
-		listLiveData.observe(owner, observer);
-	}
-
-	private Flowable<List<AppItem>> getAll() {
-		return appItemDao.getAll(query);
-	}
-
 	private void execute(Completable completable) {
-		completable.subscribeOn(Schedulers.io()).subscribe(errorObserver);
+		completable.subscribeOn(Schedulers.from(db.getQueryExecutor())).subscribe(errorObserver);
 	}
 
 	public void insert(AppItem item) {
-		execute(appItemDao.insert(item));
-	}
-
-	public void insert(List<AppItem> items) {
-		execute(appItemDao.insert(items));
+		execute(db.appItemDao().insert(item));
 	}
 
 	public void update(AppItem item) {
-		execute(appItemDao.update(item));
+		execute(db.appItemDao().update(item));
 	}
 
 	public void delete(AppItem item) {
-		execute(appItemDao.delete(item));
-	}
-
-	public void delete(List<AppItem> items) {
-		execute(appItemDao.delete(items));
-	}
-
-	public void deleteAll() {
-		execute(appItemDao.deleteAll());
+		execute(db.appItemDao().delete(item));
+		Completable.fromAction(() -> AppUtils.deleteApp(item))
+				.subscribeOn(Schedulers.io())
+				.subscribe(errorObserver);
 	}
 
 	public AppItem get(String name, String vendor) {
-		return appItemDao.get(name, vendor);
+		return db.appItemDao().get(name, vendor);
 	}
 
 	public AppItem get(int id) {
-		return appItemDao.get(id);
+		return db.appItemDao().get(id);
 	}
 
 	public void close() {
@@ -135,41 +91,64 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 		compositeDisposable.clear();
 	}
 
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-		if (PREF_APP_SORT.equals(key)) {
-			if (query.setSort(sp.getInt(PREF_APP_SORT, 0))) {
-				Disposable disposable = appItemDao.getAllSingle(query)
-						.subscribeOn(Schedulers.io())
-						.subscribe(listLiveData::postValue, errorsLiveData::postValue);
-				compositeDisposable.add(disposable);
-			}
-		} else if (PREF_EMULATOR_DIR.equals(key)) {
-			String workDir = sp.getString(key, null);
-			if (db != null) {
-				if ((workDir + Config.APPS_DB_NAME).equals(db.getOpenHelper().getDatabaseName())) {
-					return;
-				}
-				close();
-			}
-			initDb(workDir);
+	public void setSort(int sort) {
+		if (query.setSort(sort)) {
+			compositeDisposable.add(db.appItemDao().getAllSingle(query)
+					.subscribeOn(Schedulers.from(db.getQueryExecutor()))
+					.subscribe(appListLiveData::postValue, errorsLiveData::postValue));
 		}
 	}
 
-	public void observeErrors(LifecycleOwner owner, Observer<Throwable> observer) {
-		errorsLiveData.observe(owner, observer);
+	public MutableLiveData<List<AppItem>> getAppList() {
+		return appListLiveData;
 	}
 
-	public void onWorkDirReady() {
-		if (db == null) {
-			initDb(Config.getEmulatorDir());
+	public MutableLiveData<Throwable> getErrors() {
+		return errorsLiveData;
+	}
+
+	public void setDatabaseFile(String file) {
+		if (db != null) {
+			if (file.equals(db.getOpenHelper().getReadableDatabase().getPath())) {
+				return;
+			}
+			close();
+		}
+		initDb(file);
+	}
+
+	private void syncWithFilesystem(List<AppItem> list) {
+		List<AppItem> items = new ArrayList<>(list);
+		List<String> paths = AppUtils.getAppDirectories();
+		// incomplete installation must not be added to DB
+		paths.remove(".tmp");
+		if (paths.isEmpty()) {
+			// If db isn't empty
+			if (!items.isEmpty()) {
+				execute(db.appItemDao().deleteAll());
+				AppUtils.removeFromRecentShortcuts(items);
+			}
+			return;
+		}
+		for (Iterator<AppItem> it = items.iterator(); it.hasNext() && !paths.isEmpty(); ) {
+			AppItem item = it.next();
+			if (paths.remove(item.getPath())) {
+				it.remove();
+			}
+		}
+		if (items.size() > 0) {
+			execute(db.appItemDao().delete(items));
+			AppUtils.removeFromRecentShortcuts(items);
+		}
+		if (paths.size() > 0) {
+			execute(db.appItemDao().insert(AppUtils.getApps(paths)));
 		}
 	}
 
-	private static class ErrorObserver implements CompletableObserver {
+	static class ErrorObserver implements CompletableObserver {
 		private final MutableLiveData<Throwable> callback;
 
-		public ErrorObserver(MutableLiveData<Throwable> callback) {
+		ErrorObserver(MutableLiveData<Throwable> callback) {
 			this.callback = callback;
 		}
 
@@ -183,6 +162,7 @@ public class AppRepository implements SharedPreferences.OnSharedPreferenceChange
 
 		@Override
 		public void onError(@NotNull Throwable e) {
+			Log.e("AppRepository", "Error occurred", e);
 			callback.postValue(e);
 		}
 	}

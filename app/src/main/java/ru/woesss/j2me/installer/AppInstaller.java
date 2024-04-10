@@ -16,7 +16,6 @@
 
 package ru.woesss.j2me.installer;
 
-import android.app.Application;
 import android.net.Uri;
 import android.util.Log;
 
@@ -41,8 +40,9 @@ import java.util.List;
 import java.util.jar.JarFile;
 
 import io.reactivex.SingleEmitter;
+import ru.playsoftware.j2meloader.EmulatorApplication;
 import ru.playsoftware.j2meloader.applist.AppItem;
-import ru.playsoftware.j2meloader.appsdb.AppRepository;
+import ru.playsoftware.j2meloader.applist.AppListModel;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.util.ConverterException;
 import ru.playsoftware.j2meloader.util.FileUtils;
@@ -62,9 +62,8 @@ public class AppInstaller {
 	static final int STATUS_SAME = 5;
 
 	private final int id;
-	private final Application context;
-	private final AppRepository appRepository;
-	private final File cacheDir;
+	private final AppListModel appListModel;
+	private final File cacheDir = new File(EmulatorApplication.getInstance().getCacheDir(), "installer");
 
 	private Uri uri;
 	private Descriptor manifest;
@@ -76,20 +75,16 @@ public class AppInstaller {
 	private AppItem currentApp;
 	private File srcFile;
 
-	AppInstaller(String path, Uri uri, Application context, AppRepository appRepository) {
+	AppInstaller(String path, Uri uri, AppListModel appListModel) {
 		id = -1;
-		this.appRepository = appRepository;
+		this.appListModel = appListModel;
 		if (path != null) srcFile = new File(path);
 		this.uri = uri;
-		this.context = context;
-		this.cacheDir = new File(context.getCacheDir(), "installer");
 	}
 
-	public AppInstaller(int id, Application context, AppRepository appRepository) {
+	public AppInstaller(int id, AppListModel appListModel) {
 		this.id = id;
-		this.context = context;
-		this.appRepository = appRepository;
-		this.cacheDir = new File(context.getCacheDir(), "installer");
+		this.appListModel = appListModel;
 	}
 
 	Descriptor getNewDescriptor() {
@@ -107,7 +102,7 @@ public class AppInstaller {
 	/** Load and check app info from source */
 	void loadInfo(SingleEmitter<Integer> emitter) throws IOException, ConverterException {
 		if (id != -1) {
-			currentApp = appRepository.get(id);
+			currentApp = appListModel.getApp(id);
 			srcJar = new File(currentApp.getPathExt(), Config.MIDLET_RES_FILE);
 			newDesc = new Descriptor(new File(currentApp.getPathExt(), Config.MIDLET_MANIFEST_FILE), false);
 			appDirName = currentApp.getPath();
@@ -120,7 +115,7 @@ public class AppInstaller {
 			downloadJad();
 			isLocal = false;
 		} else {
-			srcFile = FileUtils.getFileForUri(context, uri);
+			srcFile = FileUtils.getFileForUri(uri);
 			isLocal = true;
 		}
 
@@ -328,7 +323,7 @@ public class AppInstaller {
 			}
 		}
 		currentApp = app;
-		appRepository.insert(app);
+		appListModel.addApp(app);
 		clearCache();
 		deleteTemp();
 		emitter.onSuccess(STATUS_SUCCESS);
@@ -368,7 +363,7 @@ public class AppInstaller {
 		// Remove invalid characters from app path
 		String name = newDesc.getName();
 		String vendor = newDesc.getVendor();
-		currentApp = appRepository.get(name, vendor);
+		currentApp = appListModel.getApp(name, vendor);
 		if (currentApp == null) {
 			generatePathName(name.replaceAll(FileUtils.ILLEGAL_FILENAME_CHARS, "").trim());
 			return STATUS_NEW;

@@ -85,6 +85,8 @@
     <string name="msg_immediate_mode_disabled">Immediate mode disabled due to stack overflow</string>
     <string name="msg_mascot_capsule" translatable="false">Mascot Capsule 3D!</string>
     <string name="msg_no_matches">No matches for \"%1$s\"</string>
+    <string name="msg_press_again_to_close">Press again to close</string>
+    <string name="msg_text_copied_to_clipboard">Text copied to clipboard</string>
     <string name="msg_unsupported_soundbank">Unsupported soundbank, default bank is used!</string>
     <string name="no_data_for_display">No data</string>
     <string name="not_saved_exists">Already exists</string>
@@ -228,7 +230,6 @@
     <string name="START_CMD">Start</string>
     <string name="SWAP_SIZES">Swap sizes</string>
     <string name="take_screenshot">Take screenshot</string>
-    <string name="msg_press_again_to_close">Press again to close</string>
     <string name="unlimited">unlimited</string>
     <string name="version">Version: </string>
     <string name="virtual_key_0" translatable="false">0</string>

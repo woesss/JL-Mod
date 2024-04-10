@@ -76,6 +76,7 @@
     <string name="msg_immediate_mode_disabled">Неотложный режим выключен чтобы избежать переполнения стэка</string>
     <string name="msg_no_matches">Нет совпадений для \"%1$s\"</string>
     <string name="msg_press_again_to_close">Нажмите ещё раз, чтобы закрыть</string>
+    <string name="msg_text_copied_to_clipboard">Текст скопирован в буфер обмена</string>
     <string name="msg_unsupported_soundbank">Неподдержываемый soundbank, перехожу на стандартный</string>
     <string name="no_data_for_display">Нет данных</string>
     <string name="not_saved_exists">Уже существует</string>

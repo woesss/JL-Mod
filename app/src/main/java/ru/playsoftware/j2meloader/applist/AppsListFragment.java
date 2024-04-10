@@ -28,12 +28,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDiskIOException;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -78,7 +76,6 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import ru.playsoftware.j2meloader.R;
-import ru.playsoftware.j2meloader.appsdb.AppRepository;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.databinding.DialogInputBinding;
@@ -93,7 +90,6 @@ import ru.playsoftware.j2meloader.util.LogUtils;
 import ru.woesss.j2me.installer.InstallerDialog;
 
 public class AppsListFragment extends Fragment implements MenuProvider {
-	private static final String TAG = AppsListFragment.class.getSimpleName();
 
 	private final ActivityResultLauncher<Void> openFileLauncher = registerForActivityResult(
 			new ActivityResultContract<Void, Uri>() {
@@ -128,7 +124,7 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 	private final AppsListAdapter adapter = new AppsListAdapter(this);
 	private Uri appUri;
 	private SharedPreferences preferences;
-	private AppRepository appRepository;
+	private AppListModel appListViewModel;
 	private Disposable searchViewDisposable;
 	private GridLayoutManager layoutManager;
 	private FragmentAppslistBinding binding;
@@ -150,10 +146,7 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 		args.remove(KEY_APP_URI);
 		FragmentActivity activity = requireActivity();
 		preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-		AppListModel appListModel = new ViewModelProvider(activity).get(AppListModel.class);
-		appRepository = appListModel.getAppRepository();
-		appRepository.observeErrors(this, this::alertDbError);
-		appRepository.observeApps(this, this::onDbUpdated);
+		appListViewModel = new ViewModelProvider(activity).get(AppListModel.class);
 	}
 
 
@@ -188,6 +181,7 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 		binding.list.setLayoutManager(layoutManager);
 		binding.list.setAdapter(adapter);
 		binding.fab.setOnClickListener(v -> openFileLauncher.launch(null));
+		appListViewModel.getAppList().observe(getViewLifecycleOwner(), this::onDbUpdated);
 	}
 
 	@Override
@@ -196,20 +190,6 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 			searchViewDisposable.dispose();
 		}
 		super.onDestroy();
-	}
-
-	private void alertDbError(Throwable throwable) {
-		Activity activity = getActivity();
-		if (activity == null) {
-			Log.e(TAG, "Db error detected", throwable);
-			return;
-		}
-		if (throwable instanceof SQLiteDiskIOException) {
-			Toast.makeText(activity, R.string.error_disk_io, Toast.LENGTH_SHORT).show();
-		} else {
-			String msg = activity.getString(R.string.error) + ": " + throwable.getMessage();
-			Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-		}
 	}
 
 	private void alertRename(AppItem item) {
@@ -225,7 +205,7 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 						Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
 					} else {
 						item.setTitle(title);
-						appRepository.update(item);
+						appListViewModel.updateApp(item);
 					}
 				})
 				.setNegativeButton(android.R.string.cancel, null);
@@ -236,10 +216,8 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 		AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity())
 				.setTitle(android.R.string.dialog_alert_title)
 				.setMessage(R.string.message_delete)
-				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-					AppUtils.deleteApp(item);
-					appRepository.delete(item);
-				})
+				.setPositiveButton(android.R.string.ok, (dialogInterface, i) ->
+						appListViewModel.deleteApp(item))
 				.setNegativeButton(android.R.string.cancel, null);
 		builder.show();
 	}

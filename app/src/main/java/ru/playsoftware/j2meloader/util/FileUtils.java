@@ -1,7 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2017-2020 Nikita Shakarun
- * Copyright 2020-2023 Yury Kharchenko
+ * Copyright 2020-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
 import kotlin.io.FilesKt;
+import ru.playsoftware.j2meloader.EmulatorApplication;
 import ru.playsoftware.j2meloader.config.Config;
 
 public class FileUtils {
@@ -90,7 +91,8 @@ public class FileUtils {
 		}
 	}
 
-	public static File getFileForUri(Context context, Uri uri) throws IOException {
+	public static File getFileForUri(Uri uri) throws IOException {
+		Context context = EmulatorApplication.getInstance();
 		if ("file".equals(uri.getScheme())) {
 			String path = uri.getPath();
 			if (path != null) {
