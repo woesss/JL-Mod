@@ -1,6 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2020-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +18,10 @@
 
 package ru.playsoftware.j2meloader.applist;
 
-import android.content.Context;
-
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import ru.playsoftware.j2meloader.R;
+
 import ru.playsoftware.j2meloader.config.Config;
 
 @Entity(tableName = "apps", indices = {@Index(value = {"path"}, unique = true)})
@@ -82,26 +81,7 @@ public class AppItem {
 		return Config.getAppDir() + path;
 	}
 
-	public void setImagePathExt(String imagePath) {
-		if (imagePath.length() > 0 && imagePath.charAt(0) != '/') {
-			imagePath = "/" + imagePath;
-		}
-		this.imagePath = path + imagePath;
-	}
-
 	public String getImagePathExt() {
-		if (imagePath == null) {
-			return null;
-		}
-		return Config.getAppDir() + imagePath;
+		return Config.getAppDir() + path + Config.MIDLET_ICON_FILE;
 	}
-
-	public String getAuthorExt(Context context) {
-		return context.getString(R.string.author) + author;
-	}
-
-	public String getVersionExt(Context context) {
-		return context.getString(R.string.version) + version;
-	}
-
 }

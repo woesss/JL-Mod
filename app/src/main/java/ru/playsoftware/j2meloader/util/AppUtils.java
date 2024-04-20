@@ -89,15 +89,19 @@ public class AppUtils {
 		AppItem item = new AppItem(appDir.getName(), params.getName(),
 				params.getVendor(),
 				params.getVersion());
-		File icon = new File(appDir, Config.MIDLET_ICON_FILE);
-		if (icon.exists()) {
-			item.setImagePathExt(Config.MIDLET_ICON_FILE);
-		} else {
-			String iconPath = Config.MIDLET_RES_DIR + '/' + params.getIcon();
-			icon = new File(appDir, iconPath);
-			if (icon.exists()) {
-				item.setImagePathExt(iconPath);
+		try {
+			File icon = new File(appDir, Config.MIDLET_ICON_FILE);
+			if (!icon.exists()) {
+				String iconPath = params.getIcon();
+				if (iconPath != null) {
+					File srcIcon = new File(appDir, Config.MIDLET_RES_DIR + '/' + iconPath);
+					if (srcIcon.exists()) {
+						FileUtils.copyFileUsingChannel(srcIcon, icon);
+					}
+				}
 			}
+		} catch (Exception e) {
+			Log.e(TAG, "getApp: migrate icon file failed", e);
 		}
 		return item;
 	}
@@ -120,16 +124,8 @@ public class AppUtils {
 		return new ArrayList<>(Arrays.asList(appFolders));
 	}
 
-	public static Bitmap getIconBitmap(AppItem appItem) {
-		String file = appItem.getImagePathExt();
-		if (file == null) {
-			return null;
-		}
-		return BitmapFactory.decodeFile(file);
-	}
-
 	public static void addShortcut(Context context, AppItem appItem) {
-		Bitmap bitmap = getIconBitmap(appItem);
+		Bitmap bitmap = BitmapFactory.decodeFile(appItem.getImagePathExt());
 		IconCompat icon;
 		if (bitmap == null) {
 			icon = IconCompat.createWithResource(context, R.mipmap.ic_launcher);

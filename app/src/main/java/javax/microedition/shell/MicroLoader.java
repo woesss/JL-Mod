@@ -77,7 +77,6 @@ import ru.playsoftware.j2meloader.util.Constants;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.IOUtils;
 import ru.woesss.j2me.jar.Descriptor;
-import ru.woesss.j2me.jar.DescriptorException;
 
 public class MicroLoader {
 	private static final String TAG = MicroLoader.class.getName();
@@ -88,7 +87,6 @@ public class MicroLoader {
 	private final Context context;
 	private final String workDir;
 	private final String appDirName;
-	private Descriptor descriptor;
 
 	MicroLoader(Context context, String appPath) {
 		this.context = context;
@@ -125,6 +123,7 @@ public class MicroLoader {
 		LinkedHashMap<String, String> midlets = new LinkedHashMap<>();
 		String jarHash = null;
 		String jarSize = null;
+		Descriptor descriptor;
 		if (BuildConfig.FULL_EMULATOR) {
 			descriptor = new Descriptor(new File(appDir, Config.MIDLET_MANIFEST_FILE), false);
 			try {
@@ -327,18 +326,6 @@ public class MicroLoader {
 			return;
 		}
 		File iconFile = new File(appDir, Config.MIDLET_ICON_FILE);
-		if (!iconFile.exists()) {
-			try {
-				String iconPath = Config.MIDLET_RES_DIR + '/' + descriptor.getIcon();
-				iconFile = new File(appDir, iconPath);
-				if (!iconFile.exists()) {
-					iconFile = null;
-				}
-			} catch (DescriptorException e) {
-				Log.e(TAG, "pushToRecentShortcuts: bad manifest", e);
-				iconFile = null;
-			}
-		}
 		AppUtils.pushToRecentShortcuts(context, appDir.getPath(), appName, iconFile);
 	}
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020-2023 Yury Kharchenko
+ *  Copyright 2020-2024 Yury Kharchenko
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -115,22 +115,21 @@ public class Descriptor {
 		String jarSize = getJarSize();
 		if (jarSize == null)
 			throw new DescriptorException(String.format(FAIL_ATTRIBUTE, MIDLET_JAR_SIZE, "not found"));
-		String trim = jarSize.trim();
-		if (trim.isEmpty())
+		if (jarSize.isEmpty())
 			throw new DescriptorException(String.format(FAIL_ATTRIBUTE, MIDLET_JAR_SIZE, "empty value"));
 		try {
-			Integer.parseInt(trim);
+			Integer.parseInt(jarSize);
 		} catch (NumberFormatException e) {
 			throw new DescriptorException(String.format(FAIL_ATTRIBUTE, MIDLET_JAR_SIZE, jarSize), e);
 		}
-		attributes.put(MIDLET_JAR_SIZE, trim);
+		attributes.put(MIDLET_JAR_SIZE, jarSize);
 		String url = attributes.get(MIDLET_JAR_URL);
 		if (url == null) {
 			throw new DescriptorException(String.format(FAIL_ATTRIBUTE, MIDLET_JAR_URL, "not found"));
-		} else if (url.trim().isEmpty()) {
+		} else if (url.isEmpty()) {
 			throw new DescriptorException(String.format(FAIL_ATTRIBUTE, MIDLET_JAR_URL, "empty value"));
 		}
-		attributes.put(MIDLET_JAR_URL, url.trim());
+		attributes.put(MIDLET_JAR_URL, url);
 	}
 
 	private void verify() throws DescriptorException {
@@ -216,27 +215,29 @@ public class Descriptor {
 		return attributes.get(MIDLET_VENDOR);
 	}
 
-	public String getIcon() throws DescriptorException {
+	public String getIcon() {
 		String icon = attributes.get(MIDLET_ICON);
-		if (icon == null || icon.trim().isEmpty()) {
-			String midlet = MIDLET_N + 1;
-			icon = attributes.get(midlet);
-			if (icon == null) {
-				throw new DescriptorException(String.format(FAIL_ATTRIBUTE, midlet, "not found"));
+		if (icon == null || icon.isEmpty()) {
+			String midlet = attributes.get(MIDLET_N + 1);
+			if (midlet == null) {
+				return null;
 			}
-			int start = icon.indexOf(',');
-			if (start != -1) {
-				int end = icon.indexOf(',', ++start);
-				if (end != -1)
-					icon = icon.substring(start, end);
+			int start = midlet.indexOf(',');
+			if (start == -1) {
+				return null;
+			}
+			int end = midlet.indexOf(',', ++start);
+			if (end == -1) {
+				return null;
+			}
+			icon = midlet.substring(start, end).trim();
+		}
+		for (int i = 0; i < icon.length(); i++) {
+			if (icon.charAt(i) != '/') {
+				return icon.substring(i);
 			}
 		}
-		icon = icon.trim();
-		if (icon.isEmpty()) return null;
-		while (icon.charAt(0) == '/') {
-			icon = icon.substring(1);
-		}
-		return icon;
+		return null;
 	}
 
 	public String getJarUrl() {

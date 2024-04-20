@@ -285,7 +285,6 @@ public class AppInstaller {
 				ZipUtils.unzipEntry(resJar, icon, iconFile);
 			} catch (IOException e) {
 				Log.w(TAG, "Can't unzip icon: " + icon, e);
-				icon = null;
 				//noinspection ResultOfMethodCallIgnored
 				iconFile.delete();
 			}
@@ -298,9 +297,6 @@ public class AppInstaller {
 		String name = newDesc.getName();
 		String vendor = newDesc.getVendor();
 		AppItem app = new AppItem(appDirName, name, vendor, newDesc.getVersion());
-		if (icon != null) {
-			app.setImagePathExt(Config.MIDLET_ICON_FILE);
-		}
 		if (currentApp != null) {
 			app.setId(currentApp.getId());
 			app.setTitle(currentApp.getTitle());
