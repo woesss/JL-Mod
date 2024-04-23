@@ -34,7 +34,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        tools:targetApi="q"
+        tools:targetApi="tiramisu"
         tools:ignore="RtlEnabled">
         <activity
             android:name=".MainActivity"
@@ -133,6 +133,14 @@
             android:theme="@style/FilePickerTheme" />
         <activity android:name=".config.ProfilesActivity" android:exported="false" />
         <activity android:name="com.nokia.mid.ui.NotificationActivity" />
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
     </application>
 
 </manifest>

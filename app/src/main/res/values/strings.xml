@@ -130,6 +130,7 @@
     <string name="PREF_IMMEDIATE">Immediate processing mode</string>
     <string name="pref_input_devices_title">Input devices</string>
     <string name="PREF_KEEP_ASPECT_RATIO">Keep aspect ratio</string>
+    <string name="pref_language">Language</string>
     <string name="PREF_LAYOUT">Layout</string>
     <string name="PREF_LIMIT_FPS">Limit FPS</string>
     <string name="pref_map_keys">Key mappings (GamePad)</string>

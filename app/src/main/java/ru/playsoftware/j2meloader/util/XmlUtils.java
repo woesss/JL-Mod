@@ -16,7 +16,7 @@
 
 package ru.playsoftware.j2meloader.util;
 
-import android.util.ArrayMap;
+import androidx.collection.ArrayMap;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -1242,6 +1242,23 @@ public class XmlUtils {
 			throw new XmlPullParserException(
 					"Not a number in value attribute in <" + tagName + ">");
 		}
+	}
+
+	public static boolean nextElement(XmlPullParser parser, String elementName) throws XmlPullParserException, IOException {
+		int type;
+		do {
+			nextElement(parser);
+			type = parser.getEventType();
+		} while (type != parser.END_DOCUMENT && !parser.getName().equals(elementName));
+
+		return type == parser.START_TAG;
+	}
+
+	public static void nextElement(XmlPullParser parser) throws XmlPullParserException, IOException {
+		int type;
+		do {
+			type = parser.next();
+		} while (type != parser.START_TAG && type != parser.END_DOCUMENT);
 	}
 
 	/**

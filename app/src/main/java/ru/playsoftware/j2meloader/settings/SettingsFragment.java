@@ -18,24 +18,38 @@ package ru.playsoftware.j2meloader.settings;
 
 import static ru.playsoftware.j2meloader.util.Constants.PREF_EMULATOR_DIR;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import java.io.File;
+import java.util.Locale;
+import java.util.Objects;
 
+import ru.playsoftware.j2meloader.EmulatorApplication;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.config.ProfilesActivity;
 import ru.playsoftware.j2meloader.util.FileUtils;
 import ru.playsoftware.j2meloader.util.PickDirResultContract;
+import ru.playsoftware.j2meloader.util.XmlUtils;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
+	private static final String TAG = "SettingsFragment";
+
 	private Preference prefFolder;
 	private final ActivityResultLauncher<String> openDirLauncher = registerForActivityResult(
 			new PickDirResultContract(),
@@ -44,8 +58,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
-		findPreference("pref_default_settings").setIntent(new Intent(requireActivity(), ProfilesActivity.class));
-		prefFolder = findPreference(PREF_EMULATOR_DIR);
+		Objects.<Preference>requireNonNull(findPreference("pref_default_settings"))
+				.setIntent(new Intent(requireActivity(), ProfilesActivity.class));
+		initLanguages();
+		prefFolder = Objects.requireNonNull(findPreference(PREF_EMULATOR_DIR));
 		prefFolder.setSummary(Config.getEmulatorDir());
 		prefFolder.setOnPreferenceClickListener(preference -> {
 			openDirLauncher.launch(null);
@@ -53,8 +69,50 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		});
 	}
 
+	private void initLanguages() {
+		ListPreference prefLanguage = Objects.requireNonNull(findPreference("pref_language"));
+		StringBuilder sb = new StringBuilder();
+		Context context = EmulatorApplication.getInstance();
+		Resources resources = context.getResources();
+		@SuppressLint("DiscouragedApi")
+		int id = resources.getIdentifier("_generated_res_locale_config", "xml", context.getPackageName());
+		try (XmlResourceParser parser = resources.getXml(id)) {
+			if (XmlUtils.nextElement(parser, "locale")) {
+				sb.append(parser.getAttributeValue(0));
+			}
+			while (XmlUtils.nextElement(parser, "locale")) {
+				sb.append(',').append(parser.getAttributeValue(0));
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "loadLanguagesList: ", e);
+		}
+		LocaleListCompat locales = LocaleListCompat.forLanguageTags(sb.toString());
+		int size = locales.size();
+		String[] languageTags = new String[size + 1];
+		String[] languageNames = new String[size + 1];
+		languageTags[0] = "";
+		languageNames[0] = context.getString(R.string.pref_theme_system);
+		for (int i = 0; i < size; ) {
+			Locale locale1 = locales.get(i++);
+			if (locale1 == null) {
+				break;
+			}
+			languageTags[i] = locale1.getLanguage();
+			languageNames[i] = locale1.getDisplayLanguage(locale1);
+		}
+		prefLanguage.setEntryValues(languageTags);
+		prefLanguage.setEntries(languageNames);
+		Locale locale = AppCompatDelegate.getApplicationLocales().get(0);
+		prefLanguage.setValue(locale != null ? locale.getLanguage() : "");
+		prefLanguage.setOnPreferenceChangeListener((preference, value) -> {
+			LocaleListCompat list = LocaleListCompat.forLanguageTags((String) value);
+			AppCompatDelegate.setApplicationLocales(list);
+			return true;
+		});
+	}
+
 	private void onPickDirResult(Uri uri) {
-		if (uri == null) {
+		if (uri == null || uri.getPath() == null) {
 			return;
 		}
 		File file = new File(uri.getPath());
@@ -69,7 +127,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 					.show();
 			return;
 		}
-		getPreferenceManager().getSharedPreferences().edit()
+		Objects.requireNonNull(getPreferenceManager().getSharedPreferences()).edit()
 				.putString(PREF_EMULATOR_DIR, path)
 				.apply();
 		prefFolder.setSummary(path);
