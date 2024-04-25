@@ -43,6 +43,12 @@
 # dependencies
 -keep class com.arthenica.mobileffmpeg.** { *; }
 -keep public class org.acra.** { public protected *; }
+-keepclassmembers,allowobfuscation class * {
+ @com.google.gson.annotations.SerializedName <fields>;
+}
+-keepattributes Signature
+-keep class com.google.gson.reflect.TypeToken { *; }
+-keep class * extends com.google.gson.reflect.TypeToken
 
 -obfuscationdictionary dictionary.pro
 -classobfuscationdictionary dictionary.pro
