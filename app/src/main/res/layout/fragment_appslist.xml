@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:text="@string/no_data_for_display"
+        android:text="@string/loading_info"
         android:textSize="18sp"
         tools:visibility="gone" />
 

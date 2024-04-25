@@ -73,7 +73,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
@@ -161,7 +160,6 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 		MenuHost menuHost = requireActivity();
 		menuHost.addMenuProvider(this, getViewLifecycleOwner());
 
-		adapter.setEmptyView(binding.empty);
 		int viewType = preferences.getInt(PREF_APPS_VIEW, AppsListAdapter.LAYOUT_TYPE_GRID);
 		int spanCount;
 		if (viewType == AppsListAdapter.LAYOUT_TYPE_GRID) {
@@ -262,6 +260,9 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 		menuInflater.inflate(R.menu.main, menu);
 		final MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView searchView = (SearchView) Objects.requireNonNull(searchItem.getActionView());
+		if (searchViewDisposable != null) {
+			searchViewDisposable.dispose();
+		}
 		searchViewDisposable = Observable.create((ObservableOnSubscribe<String>) emitter ->
 						searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 							@Override
@@ -278,8 +279,7 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 						})).debounce(300, TimeUnit.MILLISECONDS)
 				.map(String::toLowerCase)
 				.distinctUntilChanged()
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(charSequence -> adapter.getFilter().filter(charSequence));
+				.subscribe(appListViewModel::setAppListFilter);
 		int type = preferences.getInt(PREF_APPS_VIEW, AppsListAdapter.LAYOUT_TYPE_GRID);
 		if (type == AppsListAdapter.LAYOUT_TYPE_LIST) {
 			menu.findItem(R.id.action_view).setIcon(R.drawable.ic_action_apps_view_grid);
@@ -365,7 +365,18 @@ public class AppsListFragment extends Fragment implements MenuProvider {
 	}
 
 	private void onDbUpdated(List<AppItem> items) {
-		adapter.setItems(items);
+		adapter.submitList(items);
+		if (items.isEmpty()) {
+			String filter = appListViewModel.getAppFilter();
+			if (filter.isEmpty()) {
+				binding.empty.setText(R.string.no_data_for_display);
+			} else {
+				binding.empty.setText(getResources().getString(R.string.msg_no_matches, filter));
+			}
+			binding.empty.setVisibility(View.VISIBLE);
+		} else {
+			binding.empty.setVisibility(View.GONE);
+		}
 		if (appUri != null) {
 			InstallerDialog.newInstance(appUri).show(getParentFragmentManager(), "installer");
 			appUri = null;

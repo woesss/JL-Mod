@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Yury Kharchenko
+ * Copyright 2023-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,13 +29,19 @@ import androidx.sqlite.db.SupportSQLiteQuery;
 import ru.playsoftware.j2meloader.EmulatorApplication;
 import ru.playsoftware.j2meloader.R;
 
-class MutableSortSQLiteQuery implements SupportSQLiteQuery {
-	private static final String SELECT = "SELECT * FROM apps ORDER BY ";
+class AppListSQLiteQuery implements SupportSQLiteQuery {
+	private static final String SELECT = "SELECT * FROM `apps` " +
+			"WHERE `title` LIKE '%%%s%%' OR `author` LIKE '%%%<s%%' " +
+			"ORDER BY ";
+
 	private final String[] orderTerms;
 	private int sortVariant;
+	private String filter = "";
+	private String sql;
 
-	MutableSortSQLiteQuery() {
+	AppListSQLiteQuery() {
 		Context context = EmulatorApplication.getInstance();
+		orderTerms = context.getResources().getStringArray(R.array.pref_app_sort_values);
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		try {
 			sortVariant = preferences.getInt(PREF_APP_SORT, 0);
@@ -43,15 +49,13 @@ class MutableSortSQLiteQuery implements SupportSQLiteQuery {
 			sortVariant = preferences.getString(PREF_APP_SORT, "name").equals("name") ? 0 : 1;
 			preferences.edit().putInt(PREF_APP_SORT, sortVariant).apply();
 		}
-		orderTerms = context.getResources().getStringArray(R.array.pref_app_sort_values);
+		updateQuery();
 	}
 
 	@NonNull
 	@Override
 	public String getSql() {
-		int sortVariant = this.sortVariant;
-		String order = sortVariant >= 0 ? " ASC" : " DESC";
-		return SELECT + String.format(orderTerms[sortVariant & 0x7FFFFFFF], order);
+		return sql;
 	}
 
 	@Override
@@ -63,11 +67,30 @@ class MutableSortSQLiteQuery implements SupportSQLiteQuery {
 		return 0;
 	}
 
-	boolean setSort(int variant) {
-		if (variant == sortVariant) {
+	boolean setSort(int sort) {
+		if (sort == sortVariant) {
 			return false;
 		}
-		sortVariant = variant;
+		sortVariant = sort;
+		updateQuery();
 		return true;
+	}
+
+	boolean setFilter(String filter) {
+		if (this.filter.equals(filter)) {
+			return false;
+		}
+		this.filter = filter;
+		updateQuery();
+		return true;
+	}
+
+	private void updateQuery() {
+		String order = sortVariant < 0 ? " DESC" : " ASC";
+		sql = String.format(SELECT + orderTerms[sortVariant & 0x7FFFFFFF], filter, order);
+	}
+
+	String getFilter() {
+		return filter;
 	}
 }

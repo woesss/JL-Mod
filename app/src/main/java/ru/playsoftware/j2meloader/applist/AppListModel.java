@@ -66,6 +66,10 @@ public class AppListModel extends ViewModel implements SharedPreferences.OnShare
 		appRepository.delete(item);
 	}
 
+	void setAppListFilter(String filter) {
+		appRepository.setFilter(filter);
+	}
+
 	public AppItem getApp(int id) {
 		return appRepository.get(id);
 	}
@@ -76,6 +80,10 @@ public class AppListModel extends ViewModel implements SharedPreferences.OnShare
 
 	public AppItem getApp(String name, String vendor) {
 		return appRepository.get(name, vendor);
+	}
+
+	public String getAppFilter() {
+		return appRepository.getFilter();
 	}
 
 	@Override

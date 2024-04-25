@@ -1,7 +1,7 @@
 /*
  * Copyright 2015-2016 Nickolay Savchenko
  * Copyright 2017-2019 Nikita Shakarun
- * Copyright 2019-2023 Yury Kharchenko
+ * Copyright 2019-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,23 +30,16 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.config.Config;
 import ru.playsoftware.j2meloader.databinding.ListRowGridJarBinding;
 import ru.playsoftware.j2meloader.databinding.ListRowJarBinding;
 
-class AppsListAdapter extends ListAdapter<AppItem, AppsListAdapter.AppViewHolder> implements Filterable {
+class AppsListAdapter extends ListAdapter<AppItem, AppsListAdapter.AppViewHolder> {
 	static final int LAYOUT_TYPE_LIST = 0;
 	static final int LAYOUT_TYPE_GRID = 1;
 
 	private final View.OnCreateContextMenuListener contextMenuListener;
-	private List<AppItem> list = new ArrayList<>();
-	private final AppFilter appFilter = new AppFilter();
-	private CharSequence filterConstraint;
-	private View emptyView;
 	private int layout = LAYOUT_TYPE_LIST;
 
 	AppsListAdapter(View.OnCreateContextMenuListener contextMenuListener) {
@@ -76,7 +67,7 @@ class AppsListAdapter extends ListAdapter<AppItem, AppsListAdapter.AppViewHolder
 	@Override
 	public AppViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-		if (viewType == 1) {
+		if (viewType == LAYOUT_TYPE_GRID) {
 			ListRowGridJarBinding binding = ListRowGridJarBinding.inflate(inflater, parent, false);
 			return new AppViewHolder(binding, contextMenuListener);
 		} else {
@@ -88,20 +79,6 @@ class AppsListAdapter extends ListAdapter<AppItem, AppsListAdapter.AppViewHolder
 	@Override
 	public void onBindViewHolder(@NonNull AppViewHolder holder, int position) {
 		holder.onBind(getItem(position));
-	}
-
-	void setItems(List<AppItem> items) {
-		list = items;
-		appFilter.filter(filterConstraint);
-	}
-
-	@Override
-	public Filter getFilter() {
-		return appFilter;
-	}
-
-	void setEmptyView(View emptyView) {
-		this.emptyView = emptyView;
 	}
 
 	void setLayout(int layout) {
@@ -162,51 +139,6 @@ class AppsListAdapter extends ListAdapter<AppItem, AppsListAdapter.AppViewHolder
 			super.onBind(item);
 			author.setText(item.getAuthor());
 			version.setText(item.getVersion());
-		}
-	}
-
-	class AppFilter extends Filter {
-
-		@Override
-		protected FilterResults performFiltering(CharSequence constraint) {
-			FilterResults results = new FilterResults();
-			if (isEmpty(constraint)) {
-				results.count = list.size();
-				results.values = list;
-			} else {
-				ArrayList<AppItem> resultList = new ArrayList<>();
-				for (AppItem item : list) {
-					if (item.getTitle().toLowerCase().contains(constraint) ||
-							item.getAuthor().toLowerCase().contains(constraint)) {
-						resultList.add(item);
-					}
-				}
-				results.count = resultList.size();
-				results.values = resultList;
-			}
-			return results;
-		}
-
-		boolean isEmpty(CharSequence constraint) {
-			return constraint == null || constraint.toString().trim().length() == 0;
-		}
-
-		@Override
-		protected void publishResults(CharSequence constraint, FilterResults results) {
-			filterConstraint = constraint;
-			//noinspection unchecked
-			submitList((List<AppItem>) results.values);
-			if (results.count > 0) {
-				emptyView.setVisibility(View.GONE);
-			} else {
-				if (list.isEmpty()) {
-					((TextView) emptyView).setText(R.string.no_data_for_display);
-				} else {
-					String msg = emptyView.getResources().getString(R.string.msg_no_matches, constraint);
-					((TextView) emptyView).setText(msg);
-				}
-				emptyView.setVisibility(View.VISIBLE);
-			}
 		}
 	}
 }

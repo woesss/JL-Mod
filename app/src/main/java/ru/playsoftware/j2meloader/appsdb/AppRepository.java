@@ -41,7 +41,7 @@ public class AppRepository {
 	private final MutableLiveData<Throwable> errorsLiveData = new MutableLiveData<>();
 	private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 	private final ErrorObserver errorObserver = new ErrorObserver(errorsLiveData);
-	private final MutableSortSQLiteQuery query = new MutableSortSQLiteQuery();
+	private final AppListSQLiteQuery query = new AppListSQLiteQuery();
 
 	private AppDatabase db;
 
@@ -89,6 +89,18 @@ public class AppRepository {
 			db.close();
 		}
 		compositeDisposable.clear();
+	}
+
+	public void setFilter(String filter) {
+		if (query.setFilter(filter)) {
+			compositeDisposable.add(db.appItemDao().getAllSingle(query)
+					.subscribeOn(Schedulers.from(db.getQueryExecutor()))
+					.subscribe(appListLiveData::postValue, errorsLiveData::postValue));
+		}
+	}
+
+	public String getFilter() {
+		return query.getFilter();
 	}
 
 	public void setSort(int sort) {
