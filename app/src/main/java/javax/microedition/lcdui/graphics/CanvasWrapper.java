@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Yury Kharchenko
+ * Copyright 2020-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,23 @@
 
 package javax.microedition.lcdui.graphics;
 
-import android.content.res.Resources;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.graphics.Typeface;
 import android.os.Build;
-import android.util.TypedValue;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import javax.microedition.lcdui.Image;
 import javax.microedition.util.ContextHolder;
 
-public class CanvasWrapper {
-	private static final float TEXT_SIZE_KEYBOARD = 22;
+import ru.playsoftware.j2meloader.R;
 
+public class CanvasWrapper {
 	private final Paint drawPaint = new Paint();
 	private final Paint fillPaint = new Paint();
 	private final Paint textPaint = new Paint();
@@ -52,10 +52,9 @@ public class CanvasWrapper {
 		fillPaint.setStyle(Paint.Style.FILL);
 
 		// init text paint
-		Resources res = ContextHolder.getAppContext().getResources();
-		Typeface typeface = Typeface.createFromAsset(res.getAssets(), "Roboto-Regular.ttf");
-		textPaint.setTypeface(typeface);
-		textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, TEXT_SIZE_KEYBOARD, res.getDisplayMetrics());
+		Context context = ContextHolder.getAppContext();
+		textPaint.setTypeface(ResourcesCompat.getFont(context, R.font.roboto_regular));
+		textSize = context.getResources().getDimension(R.dimen._22sp);
 		textPaint.setTextSize(textSize);
 		textPaint.setTextAlign(Paint.Align.CENTER);
 		textAscent = textPaint.ascent();
