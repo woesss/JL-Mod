@@ -1,3 +1,6 @@
+import java.util.Locale
+import java.util.Properties
+import java.util.jar.Attributes
 import java.util.jar.Manifest
 
 plugins {
@@ -6,14 +9,14 @@ plugins {
 }
 
 android {
-    compileSdk = rootProject.compileSdk
-    ndkVersion = rootProject.ndkVersion
+    compileSdk = rootProject.extra["compileSdk"] as Int
+    ndkVersion = rootProject.extra["ndkVersion"] as String
     namespace = "ru.playsoftware.j2meloader"
 
     defaultConfig {
         applicationId = "ru.woesss.j2meloader"
-        minSdk = rootProject.minSdk
-        targetSdk = rootProject.targetSdk
+        minSdk = rootProject.extra["minSdk"] as Int
+        targetSdk = rootProject.extra["targetSdk"] as Int
         versionCode = 46
         versionName = "0.86"
         resValue("string", "app_name", rootProject.name)
@@ -22,7 +25,7 @@ android {
     }
 
     androidResources {
-        generateLocaleConfig true
+        generateLocaleConfig = true
     }
 
     buildFeatures {
@@ -32,70 +35,69 @@ android {
     }
 
     signingConfigs {
-        emulator {
-            def file = rootProject.file("keystore.properties")
-            if (file.exists()) file.withInputStream {
-                def keystoreProperties = new Properties()
+        create("emulator") {
+            rootProject.file("keystore.properties").takeIf(File::isFile)?.inputStream().use {
+                val keystoreProperties = Properties()
                 keystoreProperties.load(it)
-                keyAlias = keystoreProperties["keyAlias"]
-                keyPassword = keystoreProperties["keyPassword"]
-                storeFile = rootProject.file(keystoreProperties["storeFile"])
-                storePassword = keystoreProperties["storePassword"]
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["storePassword"] as String
             }
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled = true
-            shrinkResources = true
+            isMinifyEnabled = true
+            isShrinkResources = true
         }
         debug {
             applicationIdSuffix = ".debug"
-            jniDebuggable = true
+            isJniDebuggable = true
             multiDexEnabled = true
             multiDexKeepProguard = file("multidex-config.pro")
         }
     }
 
     lint {
-        disable("MissingTranslation")
+        disable += "MissingTranslation"
     }
 
     flavorDimensions += "default"
     productFlavors {
-        emulator { // variant dimension for create emulator
+        create("emulator") { // variant dimension for create emulator
             buildConfigField("boolean", "FULL_EMULATOR", "true")
             signingConfig = signingConfigs.getByName("emulator")
             versionNameSuffix = System.getenv("VERSION_SUFFIX")
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
-        midlet { // variant dimension for create android port from J2ME app source
+        create("midlet") { // variant dimension for create android port from J2ME app source
             buildConfigField("boolean", "FULL_EMULATOR", "false")
             // configure midlet's port project params here, as default it read from app manifest,
             // placed to 'app/src/midlet/resources/MIDLET-META-INF/MANIFEST.MF'
-            def props = getMidletManifestProperties()
-            def midletName = props.getValue("MIDlet-Name").trim()
-            def apkName = midletName.replaceAll("[/\\\\:*?\"<>|]", "").replace(" ", "_")
-            applicationId = "com.example.androidlet.${apkName.toLowerCase()}"
-            versionName = props.getValue("MIDlet-Version")
+            val props = getMidletManifestProperties()
+            val midletName = props?.getValue("MIDlet-Name")?.trim() ?: "Demo MIDlet"
+            val apkName = midletName.replace("[/\\\\:*?\"<>|]".toRegex(), "").replace(" ", "_")
+            applicationId = "com.example.androidlet.${apkName.lowercase(Locale.getDefault())}"
+            versionName = props?.getValue("MIDlet-Version") ?: "1.0"
             resValue("string", "app_name", midletName)
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-midlet.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-midlet.pro"
             )
         }
     }
 
     splits {
         abi {
-            enable = true
+            isEnable = true
             reset()
             include("x86", "armeabi-v7a", "x86_64", "arm64-v8a")
-            universalApk = true
+            isUniversalApk = true
         }
     }
 
@@ -115,24 +117,25 @@ android {
             resValue("string", "app_name", "JL-Debug")
         }
         outputs.configureEach {
-            if (this instanceof com.android.build.gradle.internal.api.BaseVariantOutputImpl) {
-                outputFileName = "${rootProject.name}_${versionName}-${dirName}.apk"
+            if (this is com.android.build.gradle.internal.api.BaseVariantOutputImpl) {
+                outputFileName = "${rootProject.name}_$versionName-$dirName.apk"
             }
         }
     }
 }
 
-def getMidletManifestProperties() {
-    def mf = new Manifest()
-    def file = project.file("src/midlet/resources/MIDLET-META-INF/MANIFEST.MF")
-    if (file.isFile()) file.withInputStream { mf.read(it) }
+fun getMidletManifestProperties(): Attributes? {
+    val mf = Manifest()
+    project.file("src/midlet/resources/MIDLET-META-INF/MANIFEST.MF")
+        .takeIf(File::isFile)?.inputStream()
+        .use(mf::read)
     return mf.mainAttributes
 }
 
 dependencies {
     implementation(project(":dexlib"))
 
-    def roomVersion = "2.6.1"
+    val roomVersion = "2.6.1"
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-rxjava2:$roomVersion")

@@ -5,11 +5,11 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.9.22" apply false
 }
 
-tasks.register("clean", Delete) {
+tasks.register<Delete>("clean") {
     delete(rootProject.properties["buildDir"])
 }
 
-ext.compileSdk = 34
-ext.minSdk = 14
-ext.targetSdk = 34
-ext.ndkVersion = "22.1.7171670"
+val compileSdk by extra(34)
+val minSdk by extra(14)
+val targetSdk by extra(34)
+val ndkVersion by extra("22.1.7171670")
