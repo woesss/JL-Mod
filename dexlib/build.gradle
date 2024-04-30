@@ -1,33 +1,33 @@
 plugins {
-    id 'com.android.library'
+    id("com.android.library")
 }
 
 android {
-    compileSdk COMPILE_SDK
-    namespace 'ru.playsoftware.j2meloader.dexlib'
+    compileSdk = rootProject.compileSdk
+    namespace = "ru.playsoftware.j2meloader.dexlib"
 
     defaultConfig {
-        minSdk MIN_SDK
-        targetSdk TARGET_SDK
-        buildConfigField 'int', 'VERSION_CODE', "1"
+        minSdk = rootProject.minSdk
+        buildConfigField("int", "VERSION_CODE", "1")
     }
 
-    buildFeatures.buildConfig true
+    buildFeatures.buildConfig = true
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
 
     lint {
-        abortOnError false
+        abortOnError = false
+        targetSdk = rootProject.targetSdk
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api 'net.lingala.zip4j:zip4j:2.11.5'
-    implementation 'org.ow2.asm:asm:9.6'
+    implementation(fileTree(dir: "libs", include: ["*.jar"]))
+    api("net.lingala.zip4j:zip4j:2.11.5")
+    implementation("org.ow2.asm:asm:9.6")
 }

@@ -1,22 +1,24 @@
+import java.util.jar.Manifest
+
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    compileSdk COMPILE_SDK
-    ndkVersion NDK_VERSION
-    namespace 'ru.playsoftware.j2meloader'
+    compileSdk = rootProject.compileSdk
+    ndkVersion = rootProject.ndkVersion
+    namespace = "ru.playsoftware.j2meloader"
 
     defaultConfig {
-        applicationId "ru.woesss.j2meloader"
-        minSdk MIN_SDK
-        targetSdk TARGET_SDK
-        versionCode 46
-        versionName "0.86"
-        resValue 'string', 'app_name', rootProject.name
+        applicationId = "ru.woesss.j2meloader"
+        minSdk = rootProject.minSdk
+        targetSdk = rootProject.targetSdk
+        versionCode = 46
+        versionName = "0.86"
+        resValue("string", "app_name", rootProject.name)
         vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     androidResources {
@@ -24,9 +26,9 @@ android {
     }
 
     buildFeatures {
-        viewBinding true
-        prefab true
-        buildConfig true
+        viewBinding = true
+        prefab = true
+        buildConfig = true
     }
 
     signingConfigs {
@@ -35,134 +37,142 @@ android {
             if (file.exists()) file.withInputStream {
                 def keystoreProperties = new Properties()
                 keystoreProperties.load(it)
-                keyAlias keystoreProperties['keyAlias']
-                keyPassword keystoreProperties['keyPassword']
-                storeFile rootProject.file(keystoreProperties['storeFile'])
-                storePassword keystoreProperties['storePassword']
+                keyAlias = keystoreProperties["keyAlias"]
+                keyPassword = keystoreProperties["keyPassword"]
+                storeFile = rootProject.file(keystoreProperties["storeFile"])
+                storePassword = keystoreProperties["storePassword"]
             }
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled = true
+            shrinkResources = true
         }
         debug {
-            applicationIdSuffix '.debug'
-            jniDebuggable true
-            multiDexEnabled true
-            multiDexKeepProguard file('multidex-config.pro')
+            applicationIdSuffix = ".debug"
+            jniDebuggable = true
+            multiDexEnabled = true
+            multiDexKeepProguard = file("multidex-config.pro")
         }
     }
 
     lint {
-        disable 'MissingTranslation'
+        disable("MissingTranslation")
     }
 
-    flavorDimensions = ['default']
+    flavorDimensions += "default"
     productFlavors {
         emulator { // variant dimension for create emulator
-            buildConfigField 'boolean', 'FULL_EMULATOR', 'true'
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.emulator
-            versionNameSuffix System.getenv('VERSION_SUFFIX')
+            buildConfigField("boolean", "FULL_EMULATOR", "true")
+            signingConfig = signingConfigs.getByName("emulator")
+            versionNameSuffix = System.getenv("VERSION_SUFFIX")
+            proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+            )
         }
         midlet { // variant dimension for create android port from J2ME app source
-            buildConfigField 'boolean', 'FULL_EMULATOR', 'false'
+            buildConfigField("boolean", "FULL_EMULATOR", "false")
             // configure midlet's port project params here, as default it read from app manifest,
             // placed to 'app/src/midlet/resources/MIDLET-META-INF/MANIFEST.MF'
             def props = getMidletManifestProperties()
-            def midletName = props.getValue('MIDlet-Name').trim()
-            def apkName = midletName.replaceAll('[/\\\\:*?\"<>|]', '').replace(' ', '_')
-            applicationId "com.example.androidlet.${apkName.toLowerCase()}"
-            versionName = props.getValue('MIDlet-Version')
-            resValue 'string', 'app_name', midletName
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-midlet.pro'
+            def midletName = props.getValue("MIDlet-Name").trim()
+            def apkName = midletName.replaceAll("[/\\\\:*?\"<>|]", "").replace(" ", "_")
+            applicationId = "com.example.androidlet.${apkName.toLowerCase()}"
+            versionName = props.getValue("MIDlet-Version")
+            resValue("string", "app_name", midletName)
+            proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-midlet.pro"
+            )
         }
     }
 
     splits {
         abi {
-            enable true
+            enable = true
             reset()
-            include 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
-            universalApk true
+            include("x86", "armeabi-v7a", "x86_64", "arm64-v8a")
+            universalApk = true
         }
     }
 
     externalNativeBuild {
         ndkBuild {
-            path 'src/main/cpp/Android.mk'
+            path("src/main/cpp/Android.mk")
         }
     }
 
     compileOptions {
-        targetCompatibility JavaVersion.VERSION_17
-        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
     }
 
     applicationVariants.configureEach {
-        if (buildType.name == 'debug' && flavorName == 'emulator') {
-            resValue 'string', 'app_name', 'JL-Debug'
+        if (buildType.name == "debug" && flavorName == "emulator") {
+            resValue("string", "app_name", "JL-Debug")
         }
         outputs.configureEach {
-            outputFileName = "${rootProject.name}_${versionName}-${dirName}.apk".replaceAll('--+', '-')
+            if (this instanceof com.android.build.gradle.internal.api.BaseVariantOutputImpl) {
+                outputFileName = "${rootProject.name}_${versionName}-${dirName}.apk"
+            }
         }
     }
 }
 
 def getMidletManifestProperties() {
-    def mf = new java.util.jar.Manifest()
-    def file = project.file('src/midlet/resources/MIDLET-META-INF/MANIFEST.MF')
-    if (file.exists()) file.withInputStream { mf.read(it) }
+    def mf = new Manifest()
+    def file = project.file("src/midlet/resources/MIDLET-META-INF/MANIFEST.MF")
+    if (file.isFile()) file.withInputStream { mf.read(it) }
     return mf.mainAttributes
 }
 
 dependencies {
-    implementation project(':dexlib')
+    implementation(project(":dexlib"))
 
-    def roomVersion = '2.6.1'
-    annotationProcessor "androidx.room:room-compiler:$roomVersion"
-    implementation "androidx.room:room-runtime:$roomVersion"
-    implementation "androidx.room:room-rxjava2:$roomVersion"
+    def roomVersion = "2.6.1"
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-rxjava2:$roomVersion")
 
-    annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
-    compileOnly 'com.google.auto.service:auto-service-annotations:1.1.1'
+    annotationProcessor("com.google.auto.service:auto-service:1.1.1")
+    compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
 
-    implementation 'androidx.activity:activity-ktx:1.8.2'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.arch.core:core-common:2.2.0'
-    implementation 'androidx.collection:collection-ktx:1.3.0'
-    implementation 'androidx.concurrent:concurrent-futures:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.documentfile:documentfile:1.0.1'
-    implementation 'androidx.fragment:fragment-ktx:1.6.2'
-    implementation 'androidx.lifecycle:lifecycle-common:2.6.2'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.preference:preference-ktx:1.2.1'
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
-    implementation 'androidx.transition:transition:1.4.1'
-    implementation 'com.google.android.material:material:1.11.0'
+    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.arch.core:core-common:2.2.0")
+    implementation("androidx.collection:collection-ktx:1.3.0")
+    implementation("androidx.concurrent:concurrent-futures:1.1.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.documentfile:documentfile:1.0.1")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("androidx.lifecycle:lifecycle-common:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.multidex:multidex:2.0.1")
+    implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.transition:transition:1.4.1")
+    implementation("com.google.android.material:material:1.11.0")
     //noinspection GradleDependency (next version incompatible with Android 4)
-    implementation 'com.google.oboe:oboe:1.7.0'
+    implementation("com.google.oboe:oboe:1.7.0")
 
-    implementation 'ch.acra:acra-dialog:5.11.3'
-    implementation 'com.android.volley:volley:1.2.1'
-    implementation 'com.github.nikita36078:mobile-ffmpeg:v4.3.2-compact'
-    implementation 'com.github.nikita36078:pngj:2.2.3'
-    implementation 'com.github.woesss:filepicker:4.4.0'
-    implementation 'com.github.yukuku:ambilwarna:2.0.1'
-    implementation 'com.github.penn5:donations:3.6.0'
+    implementation("ch.acra:acra-dialog:5.11.3")
+    implementation("com.android.volley:volley:1.2.1")
+    implementation("com.github.nikita36078:mobile-ffmpeg:v4.3.2-compact")
+    implementation("com.github.nikita36078:pngj:2.2.3")
+    implementation("com.github.woesss:filepicker:4.4.0")
+    implementation("com.github.yukuku:ambilwarna:2.0.1")
+    implementation("com.github.penn5:donations:3.6.0")
     //noinspection GradleDependency (next version incompatible with Android 4)
-    implementation 'com.google.code.gson:gson:2.9.1'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation("com.google.code.gson:gson:2.9.1")
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
