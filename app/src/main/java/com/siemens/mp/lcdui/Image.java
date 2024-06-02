@@ -20,13 +20,34 @@ import java.io.IOException;
 
 public class Image extends com.siemens.mp.ui.Image {
 
-	public static javax.microedition.lcdui.Image createImageFromFile(
-			String resname, boolean scaleToFullScreen) throws IOException {
-		return javax.microedition.lcdui.Image.createImage(resname);
+	public static javax.microedition.lcdui.Image createImageFromFile(String filename,
+																	 boolean scaleToFullScreen)
+			throws IOException {
+		return javax.microedition.lcdui.Image.createImage(filename);
+	}
+
+	public static javax.microedition.lcdui.Image createImageFromFile(String filename,
+																	 int ScaleToWidth,
+																	 int ScaleToHeight)
+			throws IOException {
+		return javax.microedition.lcdui.Image.createImage(filename);
+	}
+
+	public static int getPixelColor(javax.microedition.lcdui.Image image, int x, int y)
+			throws IllegalArgumentException {
+		return image.getBitmap().getPixel(x, y);
 	}
 
 	public static void setPixelColor(
 			javax.microedition.lcdui.Image image, int x, int y, int color) throws IllegalArgumentException {
 		image.getBitmap().setPixel(x, y, color);
+	}
+
+	public static void writeImageToFile(javax.microedition.lcdui.Image img, String file)
+			throws IOException {
+	}
+
+	public static void writeBmpToFile(Image image, String filename)
+			throws IOException {
 	}
 }
