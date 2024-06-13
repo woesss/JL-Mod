@@ -31,7 +31,7 @@ import ru.playsoftware.j2meloader.R;
 
 class AppListSQLiteQuery implements SupportSQLiteQuery {
 	private static final String SELECT = "SELECT * FROM `apps` " +
-			"WHERE `title` LIKE '%%%s%%' OR `author` LIKE '%%%<s%%' " +
+			"WHERE `title` LIKE '%' || ? || '%' OR `author` LIKE '%' || ? || '%' " +
 			"ORDER BY ";
 
 	private final String[] orderTerms;
@@ -60,11 +60,13 @@ class AppListSQLiteQuery implements SupportSQLiteQuery {
 
 	@Override
 	public void bindTo(@NonNull SupportSQLiteProgram statement) {
+		statement.bindString(1, filter);
+		statement.bindString(2, filter);
 	}
 
 	@Override
 	public int getArgCount() {
-		return 0;
+		return 2;
 	}
 
 	boolean setSort(int sort) {
@@ -87,7 +89,7 @@ class AppListSQLiteQuery implements SupportSQLiteQuery {
 
 	private void updateQuery() {
 		String order = sortVariant < 0 ? " DESC" : " ASC";
-		sql = String.format(SELECT + orderTerms[sortVariant & 0x7FFFFFFF], filter, order);
+		sql = SELECT + String.format(orderTerms[sortVariant & 0x7FFFFFFF], order);
 	}
 
 	String getFilter() {
