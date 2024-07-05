@@ -1,5 +1,6 @@
 /*
- * Copyright 2017-2018 Nikita Shakarun
+ * Copyright 2017-2019 Nikita Shakarun
+ * Copyright 2019-2024 Yury Kharchenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,12 +94,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		languageTags[0] = "";
 		languageNames[0] = context.getString(R.string.pref_theme_system);
 		for (int i = 0; i < size; ) {
-			Locale locale1 = locales.get(i++);
-			if (locale1 == null) {
+			Locale l = locales.get(i++);
+			if (l == null) {
 				break;
 			}
-			languageTags[i] = locale1.getLanguage();
-			languageNames[i] = locale1.getDisplayLanguage(locale1);
+			languageTags[i] = l.getLanguage();
+			languageNames[i] = l.getDisplayName(l);
 		}
 		prefLanguage.setEntryValues(languageTags);
 		prefLanguage.setEntries(languageNames);
