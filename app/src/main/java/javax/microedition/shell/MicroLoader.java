@@ -162,7 +162,7 @@ public class MicroLoader {
 		errorReporter.putCustomData(Constants.KEY_APPCENTER_ATTACHMENT, sb.toString());
 		MIDlet.initProps(attr);
 		for (int i = 1; ; i++) {
-			String v = attr.get("MIDlet-" + i);
+			String v = attr.get(Descriptor.MIDLET_N + i);
 			if (v == null) {
 				break;
 			}

@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,8 +33,6 @@ import ru.playsoftware.j2meloader.R;
 import ru.playsoftware.j2meloader.util.FileUtils;
 
 public class Descriptor {
-	private static final char UNICODE_BOM = '\uFEFF';
-	private static final String MANIFEST_VERSION = "Manifest-Version";
 	// required in JAD and Manifest
 	public static final String MIDLET_NAME = "MIDlet-Name";
 	public static final String MIDLET_VERSION = "MIDlet-Version";
@@ -45,17 +43,17 @@ public class Descriptor {
 	public static final String MIDLET_JAR_SIZE = "MIDlet-Jar-Size";
 
 	// required in JAD and/or Manifest
-	private static final String MIDLET_N = "MIDlet-";
-	private static final String MICROEDITION_PROFILE = "MicroEdition-Profile";
-	private static final String MICROEDITION_CONFIGURATION = "MicroEdition-Configuration";
+	public static final String MIDLET_N = "MIDlet-";
+	public static final String MICROEDITION_PROFILE = "MicroEdition-Profile";
+	public static final String MICROEDITION_CONFIGURATION = "MicroEdition-Configuration";
 
 	// optional
 	public static final String MIDLET_CERTIFICATE_N_S = "MIDlet-Certificate-";
 	public static final String MIDLET_DATA_SIZE = "MIDlet-Data-Size";
 	public static final String MIDLET_DELETE_CONFIRM = "MIDlet-Delete-Confirm ";
 	public static final String MIDLET_DELETE_NOTIFY = "MIDlet-Delete-Notify";
-	private static final String MIDLET_DESCRIPTION = "MIDlet-Description";
-	private static final String MIDLET_ICON = "MIDlet-Icon";
+	public static final String MIDLET_DESCRIPTION = "MIDlet-Description";
+	public static final String MIDLET_ICON = "MIDlet-Icon";
 	public static final String MIDLET_INFO_URL = "MIDlet-Info-URL";
 	public static final String MIDLET_INSTALL_NOTIFY = "MIDlet-Install-Notify";
 	public static final String MIDLET_JAR_RSA_SHA1 = "MIDlet-Jar-RSA-SHA1";
@@ -63,7 +61,10 @@ public class Descriptor {
 	public static final String MIDLET_PERMISSIONS_OPT = "MIDlet-Permissions-Opt";
 	public static final String MIDLET_PUSH_N = "MIDlet-Push-";
 
+	private static final char UNICODE_BOM = '\uFEFF';
+	private static final char SEPARATOR = ':';
 	private static final String FAIL_ATTRIBUTE = "Fail attribute '%s: %s'";
+
 	private final boolean isJad;
 	private final Map<String, String> attributes = new HashMap<>();
 
@@ -86,7 +87,9 @@ public class Descriptor {
 	}
 
 	public int compareVersion(String version) {
-		if (version == null) return 1;
+		if (version == null) {
+			return 1;
+		}
 		String[] mv = getVersion().split("\\.");
 		String[] ov = version.split("\\.");
 		int len = Math.max(mv.length, ov.length);
@@ -113,10 +116,12 @@ public class Descriptor {
 
 	private void verifyJadAttrs() throws DescriptorException {
 		String jarSize = getJarSize();
-		if (jarSize == null)
+		if (jarSize == null) {
 			throw new DescriptorException(String.format(FAIL_ATTRIBUTE, MIDLET_JAR_SIZE, "not found"));
-		if (jarSize.isEmpty())
+		}
+		if (jarSize.isEmpty()) {
 			throw new DescriptorException(String.format(FAIL_ATTRIBUTE, MIDLET_JAR_SIZE, "empty value"));
+		}
 		try {
 			Integer.parseInt(jarSize);
 		} catch (NumberFormatException e) {
@@ -133,12 +138,15 @@ public class Descriptor {
 	}
 
 	private void verify() throws DescriptorException {
-		if (getName() == null)
+		if (getName() == null) {
 			throw new DescriptorException(String.format(FAIL_ATTRIBUTE, MIDLET_NAME, "not found"));
-		if (getVendor() == null)
+		}
+		if (getVendor() == null) {
 			throw new DescriptorException(String.format(FAIL_ATTRIBUTE, MIDLET_VENDOR, "not found"));
-		if (getVersion() == null)
+		}
+		if (getVersion() == null) {
 			throw new DescriptorException(String.format(FAIL_ATTRIBUTE, MIDLET_VERSION, "not found"));
+		}
 	}
 
 	public String getVersion() {
@@ -151,37 +159,49 @@ public class Descriptor {
 
 	private void parse(String source) {
 		String[] lines = source.split("[\\n\\r]+");
-		int length = lines.length;
-		if (length == 0) {
-			throw new IllegalArgumentException("Descriptor source is empty");
-		}
-		String line0 = lines[0];
-		if (line0.length() > 0 && line0.charAt(0) == UNICODE_BOM)
-			lines[0] = line0.substring(1);
-		Map<String, String> attrs = attributes;
-		final StringBuilder sb = new StringBuilder("1.0");
-		String key = MANIFEST_VERSION;
-		for (String line : lines) {
-			int colon = line.indexOf(':');
-			if (colon == -1) {
+		for (int i = lines.length - 1; i > 0; i--) {
+			String line = lines[i];
+			int separatorIdx = line.indexOf(SEPARATOR);
+			if (separatorIdx == -1) {
 				if (line.isEmpty()) {
 					continue;
 				}
 				if (line.charAt(0) == ' ') {
-					sb.append(line, 1, line.length());
+					lines[i - 1] += line.substring(1);
 				} else {
-					sb.append(line);
+					lines[i - 1] += line;
 				}
 			} else {
-				attrs.put(key, sb.toString().trim());
-				sb.setLength(0);
-				key = line.substring(0, colon).trim();
-				if (line.length() > ++colon) {
-					sb.append(line, colon, line.length());
-				}
+				String name = substringStripped(line, 0, separatorIdx);
+				String value = substringStripped(line, separatorIdx + 1, line.length());
+				attributes.put(name, value);
 			}
 		}
-		attrs.put(key, sb.toString().trim());
+		String line = lines[0];
+		int colon = line.indexOf(SEPARATOR);
+		if (colon != -1) {
+			String name = substringStripped(line, line.charAt(0) == UNICODE_BOM ? 1 : 0, colon);
+			String value = substringStripped(line, colon + 1, line.length());
+			attributes.put(name, value);
+		}
+	}
+
+	private static String substringStripped(String string, int beginIndex, int endIndex) {
+		while (beginIndex < endIndex) {
+			int c = string.codePointAt(beginIndex);
+			if (c != ' ' && c != '\t') {
+				break;
+			}
+			beginIndex += Character.charCount(c);
+		}
+		while (beginIndex < endIndex) {
+			int c = string.codePointBefore(endIndex);
+			if (c != ' ' && c != '\t') {
+				break;
+			}
+			endIndex -= Character.charCount(c);
+		}
+		return string.substring(beginIndex, endIndex);
 	}
 
 	public String getName() {
@@ -189,26 +209,23 @@ public class Descriptor {
 	}
 
 	private static String getSizePretty(String number) {
-		long size = Long.parseLong(number.trim());
-		DecimalFormat decimalformat = new DecimalFormat("########.00");
-		String formatted;
-		if (size >= 1024L) {
-			float kb = (float) size / 1024F;
-			if (kb >= 1024F) {
-				float mb = kb / 1024F;
-				if (mb >= 1024F) {
-					float gb = mb / 1024F;
-					formatted = decimalformat.format(gb) + " GB";
-				} else {
-					formatted = decimalformat.format(mb) + " MB";
-				}
-			} else {
-				formatted = decimalformat.format(kb) + " KB";
-			}
-		} else {
-			formatted = size + " B";
+		long size = Long.parseLong(number);
+		if (size < 1024L) {
+			return number + " B";
 		}
-		return formatted;
+		NumberFormat formatter = NumberFormat.getNumberInstance();
+		formatter.setMinimumFractionDigits(2);
+		formatter.setMaximumFractionDigits(2);
+		float kb = (float) size / 1024.0F;
+		if (kb < 1024.0F) {
+			return formatter.format(kb) + " KB";
+		}
+		float mb = kb / 1024F;
+		if (mb < 1024F) {
+			return formatter.format(mb) + " MB";
+		}
+		float gb = mb / 1024F;
+		return formatter.format(gb) + " GB";
 	}
 
 	public String getVendor() {
@@ -291,5 +308,14 @@ public class Descriptor {
 			sb.append(entry.getKey()).append(": ").append(entry.getValue()).append("\r\n");
 		}
 		outputStream.write(sb.toString().getBytes());
+	}
+
+	public boolean containsAllAttributes(Descriptor o) {
+		for (Map.Entry<String, String> e : o.attributes.entrySet()) {
+			if (!e.getValue().equals(o.attributes.get(e.getKey()))) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

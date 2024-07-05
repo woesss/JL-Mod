@@ -367,21 +367,33 @@ public class AppInstaller {
 		appDirName = currentApp.getPath();
 		targetDir = new File(Config.getAppDir(), appDirName);
 		int result = newDesc.compareVersion(currentApp.getVersion());
-		if (result == 0) {
-			if (srcJar != null && srcJar.exists()) {
-				File targetJar = new File(targetDir, Config.MIDLET_RES_FILE);
-				if (targetJar.exists() && targetJar.length() == srcJar.length()) {
-					try (FileInputStream one = new FileInputStream(srcJar);
-						 FileInputStream two = new FileInputStream(targetJar)) {
-						if (one.read() != two.read()) {
-							return STATUS_EQUAL;
-						}
-						return STATUS_SAME;
-					} catch (IOException ignored) {}
+		if (result != 0) {
+			return result;
+		}
+		if (srcJar == null || !srcJar.exists()) {
+			return STATUS_EQUAL;
+		}
+		try {
+			Descriptor oldDesc = new Descriptor(new File(targetDir, Config.MIDLET_MANIFEST_FILE), false);
+			if (!oldDesc.containsAllAttributes(newDesc)) {
+				return STATUS_EQUAL;
+			}
+		} catch (IOException e) {
+			Log.e(TAG, "checkDescriptor: error read exists app manifest", e);
+		}
+		File targetJar = new File(targetDir, Config.MIDLET_RES_FILE);
+		if (targetJar.exists() && targetJar.length() == srcJar.length()) {
+			try (FileInputStream one = new FileInputStream(srcJar);
+				 FileInputStream two = new FileInputStream(targetJar)) {
+				if (one.read() != two.read()) {
+					return STATUS_EQUAL;
 				}
+				return STATUS_SAME;
+			} catch (IOException e) {
+				Log.e(TAG, "checkDescriptor: io error when compare files", e);
 			}
 		}
-		return result;
+		return STATUS_EQUAL;
 	}
 
 	private void generatePathName(String name) {
