@@ -926,6 +926,7 @@ public class ConfigActivity extends AppCompatActivity implements View.OnClickLis
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		Set<String> set = preferences.getStringSet("ResolutionsPreset", null);
 		Set<String> presets = set == null ? new HashSet<>(1) : new HashSet<>(set);
+		presets.add(size.toString());
 		preferences.edit().putStringSet("ResolutionsPreset", presets).apply();
 		Toast.makeText(this, getString(R.string.saved, size.toString()), Toast.LENGTH_SHORT).show();
 	}
