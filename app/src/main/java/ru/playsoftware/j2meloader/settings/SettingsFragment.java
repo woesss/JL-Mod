@@ -78,28 +78,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 		@SuppressLint("DiscouragedApi")
 		int id = resources.getIdentifier("_generated_res_locale_config", "xml", context.getPackageName());
 		try (XmlResourceParser parser = resources.getXml(id)) {
-			if (XmlUtils.nextElement(parser, "locale")) {
-				sb.append(parser.getAttributeValue(0));
-			}
 			while (XmlUtils.nextElement(parser, "locale")) {
 				sb.append(',').append(parser.getAttributeValue(0));
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "loadLanguagesList: ", e);
 		}
+		String[] languageTags = sb.toString().split(",");
 		LocaleListCompat locales = LocaleListCompat.forLanguageTags(sb.toString());
-		int size = locales.size();
-		String[] languageTags = new String[size + 1];
-		String[] languageNames = new String[size + 1];
-		languageTags[0] = "";
+		int size = languageTags.length;
+		String[] languageNames = new String[size];
 		languageNames[0] = context.getString(R.string.pref_theme_system);
-		for (int i = 0; i < size; ) {
-			Locale l = locales.get(i++);
-			if (l == null) {
-				break;
+		for (int i = 1; i < size; i++) {
+			Locale l = locales.get(i);
+			if (l != null) {
+				languageNames[i] = l.getDisplayName(l);
 			}
-			languageTags[i] = l.getLanguage();
-			languageNames[i] = l.getDisplayName(l);
 		}
 		prefLanguage.setEntryValues(languageTags);
 		prefLanguage.setEntries(languageNames);
