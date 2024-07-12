@@ -281,8 +281,11 @@ public class MicroLoader {
 		}
 	}
 
-	void takeScreenshot(Canvas canvas, SingleObserver<String> observer) {
-		canvas.getScreenShot()
+	void takeScreenshot(Object target, SingleObserver<String> observer) {
+		if (!(target instanceof Canvas canvas)) {
+			return;
+		}
+		canvas.getScreenshot()
 				.subscribeOn(Schedulers.computation())
 				.observeOn(Schedulers.io())
 				.map(bitmap -> {

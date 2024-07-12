@@ -271,7 +271,7 @@ public abstract class Canvas extends Displayable {
 		}
 	}
 
-	public Single<Bitmap> getScreenShot() {
+	public Single<Bitmap> getScreenshot() {
 		if (renderer != null && !screenshotRawMode) {
 			return renderer.takeScreenShot();
 		}

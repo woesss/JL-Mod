@@ -520,7 +520,7 @@ public class MicroActivity extends AppCompatActivity {
 
 	@SuppressLint("CheckResult")
 	private void takeScreenshot() {
-		microLoader.takeScreenshot((Canvas) current, new SingleObserver<>() {
+		microLoader.takeScreenshot(current, new SingleObserver<>() {
 			@Override
 			public void onSubscribe(@NonNull Disposable d) {
 			}
