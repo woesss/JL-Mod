@@ -969,17 +969,17 @@ public abstract class Canvas extends Displayable {
 					return onKeyUp(keyCode, event);
 				}
 				case KeyEvent.ACTION_MULTIPLE -> {
-					if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
-						String characters = event.getCharacters();
-						for (int i = 0; i < characters.length(); i++) {
-							int cp = characters.codePointAt(i);
-							postKeyPressed(cp);
-							postKeyReleased(cp);
-						}
-						return true;
-					} else {
+					if (keyCode != KeyEvent.KEYCODE_UNKNOWN) {
 						return onKeyDown(keyCode, event);
 					}
+					String characters = event.getCharacters();
+					for (int i = 0, len = characters.length(); i < len; ) {
+						int cp = characters.codePointAt(i);
+						postKeyPressed(cp);
+						postKeyReleased(cp);
+						i += Character.charCount(cp);
+					}
+					return true;
 				}
 			}
 			return false;
@@ -1007,17 +1007,8 @@ public abstract class Canvas extends Displayable {
 			if (midpKeyCode == 0) {
 				return false;
 			}
-			long pressedTime = event.getEventTime() - event.getDownTime();
-			if (pressedTime < 100) {
-				mView.postDelayed(() -> {
-					if (overlay == null || !overlay.keyReleased(midpKeyCode)) {
-						postKeyReleased(midpKeyCode);
-					}
-				}, 100 - pressedTime);
-			} else {
-				if (overlay == null || !overlay.keyReleased(midpKeyCode)) {
-					postKeyReleased(midpKeyCode);
-				}
+			if (overlay == null || !overlay.keyReleased(midpKeyCode)) {
+				postKeyReleased(midpKeyCode);
 			}
 			return true;
 		}
