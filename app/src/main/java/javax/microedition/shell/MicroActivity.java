@@ -77,6 +77,7 @@ import javax.microedition.lcdui.event.SimpleEvent;
 import javax.microedition.lcdui.keyboard.VirtualKeyboard;
 import javax.microedition.lcdui.skin.SkinLayer;
 import javax.microedition.util.ContextHolder;
+import javax.microedition.util.TimeControl;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
@@ -459,6 +460,8 @@ public class MicroActivity extends AppCompatActivity {
 			takeScreenshot();
 		} else if (id == R.id.action_limit_fps) {
 			showLimitFpsDialog();
+		} else if (id == R.id.action_time_speed) {
+			showTimeSpeedDialog();
 		} else if (ContextHolder.getVk() != null) {
 			// Handled only when virtual keyboard is enabled
 			handleVkOptions(id);
@@ -635,6 +638,28 @@ public class MicroActivity extends AppCompatActivity {
 				})
 				.setNegativeButton(android.R.string.cancel, null)
 				.setNeutralButton(R.string.reset, ((d, which) -> Canvas.setLimitFps(-1)))
+				.show();
+	}
+
+	private void showTimeSpeedDialog() {
+		final String[] speeds = {"0.25x", "0.5x", "1.0x", "1.5x", "2.0x", "3.0x", "4.0x", "8.0x"};
+		final float[] values = {0.25f, 0.5f, 1.0f, 1.5f, 2.0f, 3.0f, 4.0f, 8.0f};
+		float current = TimeControl.getSpeed();
+		int selected = 2; // Default 1.0x
+		for (int i = 0; i < values.length; i++) {
+			if (Math.abs(values[i] - current) < 0.01f) {
+				selected = i;
+				break;
+			}
+		}
+
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.PREF_TIME_SPEED)
+				.setSingleChoiceItems(speeds, selected, (d, which) -> {
+					TimeControl.setSpeed(values[which]);
+					d.dismiss();
+				})
+				.setNegativeButton(android.R.string.cancel, null)
 				.show();
 	}
 

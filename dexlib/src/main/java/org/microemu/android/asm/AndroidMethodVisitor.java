@@ -65,7 +65,10 @@ public class AndroidMethodVisitor extends MethodVisitor {
 			case "java/lang/Thread":
 				if (name.equals("yield")) {
 					mv.visitLdcInsn(1L);
-					mv.visitMethodInsn(opcode, owner, "sleep", "(J)V", false);
+					mv.visitMethodInsn(INVOKESTATIC, "javax/microedition/util/TimeControl", "sleep", "(J)V", false);
+					return;
+				} else if (name.equals("sleep")) {
+					mv.visitMethodInsn(INVOKESTATIC, "javax/microedition/util/TimeControl", "sleep", "(J)V", false);
 					return;
 				}
 				break;
