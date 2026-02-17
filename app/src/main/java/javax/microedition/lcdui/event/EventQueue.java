@@ -32,8 +32,6 @@ public class EventQueue implements Runnable {
 
 	private boolean enabled;
 	private Thread thread;
-	private boolean running;
-	private boolean continuerun;
 
 	/**
 	 * Enable immediate processing mode.
@@ -67,7 +65,6 @@ public class EventQueue implements Runnable {
 	 * @param event the added event
 	 */
 	public void postEvent(Event event) {
-
 		if (immediate) { // the immediate processing mode is enabled
 			event.enterQueue();
 			synchronized (callbackLock) {
@@ -76,44 +73,18 @@ public class EventQueue implements Runnable {
 			return;      // and nothing to do here
 		}
 
-		boolean empty;
-
-		synchronized (queue) {   // all operations with the queue must be synchronized (on itself)
-			empty = queue.isEmpty();
-
-			if (empty || event.placeableAfter(queue.getLast())) {
-				/*
-				 * If the queue itself is empty, then this already implies that either
-				 * exactly one event remains and it is now being processed,
-				 * or there is not a single event left at all.
-				 *
-				 * In both cases, a new event should be added to the queue,
-				 * regardless of event.placeableAfter() value.
-				 */
-
+		synchronized (queue) {
+			if (queue.isEmpty() || event.placeableAfter(queue.getLast())) {
 				queue.addLast(event);
 				event.enterQueue();
 			} else {
-				// it is more correct, but additional checks are required
-				// queue.setLast(event).recycle(); // remove the previous event and add the new one.
-				event.recycle(); // more reliable // leave the previous event, recycle the new one.
+				event.recycle();
+				return;
 			}
 		}
 
-		if (empty) {
-			/*
-			 * on the other hand, if the queue was non-empty,
-			 * there is at least one more iteration for the events,
-			 * and this is not necessary
-			 */
-
-			synchronized (waiter) {
-				if (running) {
-					continuerun = true;
-				} else {
-					waiter.notifyAll();
-				}
-			}
+		synchronized (waiter) {
+			waiter.notify();
 		}
 	}
 
@@ -170,13 +141,12 @@ public class EventQueue implements Runnable {
 	@Override
 	public void run() {
 		synchronized (interlock) {
-			running = true;
-
 			while (enabled) {
-
-				Event event;
+				Event event = null;
 				synchronized (queue) {
-					event = queue.removeFirst();
+					if (!queue.isEmpty()) {
+						event = queue.removeFirst();
+					}
 				}
 
 				if (event != null) {
@@ -185,18 +155,16 @@ public class EventQueue implements Runnable {
 					}
 				} else {
 					synchronized (waiter) {
-						if (continuerun) {
-							continuerun = false;
-						} else {
-							running = false;
-
+						boolean empty;
+						synchronized (queue) {
+							empty = queue.isEmpty();
+						}
+						if (empty && enabled) {
 							try {
 								waiter.wait();
 							} catch (InterruptedException ie) {
 								ie.printStackTrace();
 							}
-
-							running = true;
 						}
 					}
 				}

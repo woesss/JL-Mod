@@ -145,7 +145,7 @@ public abstract class Canvas extends Displayable {
 	private Image offscreen;
 	private Image offscreenCopy;
 	private int onX, onY, onWidth, onHeight;
-	private long lastFrameTime = System.currentTimeMillis();
+	private long lastFrameTime = System.nanoTime();
 	private Handler uiHandler;
 	private Overlay overlay;
 	private FpsCounter fpsCounter;
@@ -619,12 +619,18 @@ public abstract class Canvas extends Displayable {
 	private void limitFps() {
 		if (fpsLimit <= 0) return;
 		try {
-			long millis = (1000 / fpsLimit) - (System.currentTimeMillis() - lastFrameTime);
-			if (millis > 0) Thread.sleep(millis);
+			long frameDurationNs = 1_000_000_000L / fpsLimit;
+			long elapsedNs = System.nanoTime() - lastFrameTime;
+			long sleepNs = frameDurationNs - elapsedNs;
+			if (sleepNs > 0) {
+				long millis = sleepNs / 1_000_000L;
+				int nanos = (int) (sleepNs % 1_000_000L);
+				Thread.sleep(millis, nanos);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		lastFrameTime = System.currentTimeMillis();
+		lastFrameTime = System.nanoTime();
 	}
 
 	@SuppressLint("NewApi")

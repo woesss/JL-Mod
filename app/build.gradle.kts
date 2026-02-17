@@ -36,7 +36,7 @@ android {
 
     signingConfigs {
         create("emulator") {
-            rootProject.file("keystore.properties").takeIf(File::isFile)?.inputStream().use {
+            rootProject.file("keystore.properties").takeIf(File::isFile)?.inputStream()?.use {
                 val keystoreProperties = Properties()
                 keystoreProperties.load(it)
                 keyAlias = keystoreProperties["keyAlias"] as String
@@ -112,6 +112,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
     }
 
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     applicationVariants.configureEach {
         if (buildType.name == "debug" && flavorName == "emulator") {
             resValue("string", "app_name", "JL-Debug")
@@ -128,7 +132,7 @@ fun getMidletManifestProperties(): Attributes? {
     val mf = Manifest()
     project.file("src/midlet/resources/MIDLET-META-INF/MANIFEST.MF")
         .takeIf(File::isFile)?.inputStream()
-        .use(mf::read)
+        ?.use(mf::read)
     return mf.mainAttributes
 }
 
