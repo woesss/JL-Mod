@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+env:
+  CRASH_REPORT_URL: https://jl-mod-plus-crash-reporter.h3nb-jl-mod-plus.workers.dev/v1/crash-reports
+  CRASH_REPORT_FINGERPRINT: 22:74:A1:72:96:D6:84:14:89:7F:CE:59:C0:B6:EB:3B:BC:3D:03:1B
+
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
@@ -61,13 +65,17 @@ jobs:
       - name: Make Gradle Wrapper executable
         run: chmod +x gradlew
 
+      - name: Install Android NDK 22
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;22.1.7171670" >/dev/null
+
       - name: Verify signing secrets
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           KEYSTORE_PROPERTIES: ${{ secrets.KEYSTORE_PROPERTIES }}
+          CRASH_REPORT_TOKEN: ${{ secrets.CRASH_REPORT_TOKEN }}
         run: |
-          if [ -z "$SIGNING_KEY" ] || [ -z "$KEYSTORE_PROPERTIES" ]; then
-            echo "::error::Add SIGNING_KEY and KEYSTORE_PROPERTIES repository secrets."
+          if [ -z "$SIGNING_KEY" ] || [ -z "$KEYSTORE_PROPERTIES" ] || [ -z "$CRASH_REPORT_TOKEN" ]; then
+            echo "::error::Add SIGNING_KEY, KEYSTORE_PROPERTIES, and CRASH_REPORT_TOKEN repository secrets."
             exit 1
           fi
 
@@ -79,10 +87,32 @@ jobs:
           printf '%s' "$SIGNING_KEY" | base64 --decode > keystore.jks
           printf '%s' "$KEYSTORE_PROPERTIES" | base64 --decode > keystore.properties
 
+      - name: Verify release and crash reporter configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          required_properties=(
+            storeFile
+            storePassword
+            keyAlias
+            keyPassword
+          )
+          for property in "${required_properties[@]}"; do
+            if ! grep -Eq "^${property}=.+$" keystore.properties; then
+              echo "::error::KEYSTORE_PROPERTIES is missing ${property}."
+              exit 1
+            fi
+          done
+          if ! grep -Eq '^storeFile=keystore\.jks$' keystore.properties; then
+            echo "::error::The Actions signing storeFile must be keystore.jks."
+            exit 1
+          fi
+
       - name: Build signed universal APK
         env:
           VERSION_NAME: ${{ steps.version.outputs.name }}
           VERSION_CODE: ${{ steps.version.outputs.code }}
+          CRASH_REPORT_TOKEN: ${{ secrets.CRASH_REPORT_TOKEN }}
         run: ./gradlew :app:assembleEmulatorRelease
 
       - name: Prepare release assets

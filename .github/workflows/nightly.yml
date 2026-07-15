@@ -33,6 +33,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Install Android NDK 22
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;22.1.7171670" >/dev/null
+
       - name: Calculate version suffix
         run:
           echo "VERSION_SUFFIX=$(git show -s --abbrev=7 --format=-%cd-%h --date=format:%y%m%d)" >> $GITHUB_ENV

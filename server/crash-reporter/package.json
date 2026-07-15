@@ -1,0 +1,17 @@
+{
+  "name": "jl-mod-plus-crash-reporter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "wrangler deploy --dry-run --outdir dist",
+    "dev": "wrangler dev",
+    "test": "node --test test/*.test.mjs",
+    "deploy": "wrangler deploy --strict",
+    "db:migrate:local": "wrangler d1 migrations apply jl-mod-plus-crashes --local",
+    "db:migrate:remote": "wrangler d1 migrations apply jl-mod-plus-crashes --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^4.102.0"
+  }
+}

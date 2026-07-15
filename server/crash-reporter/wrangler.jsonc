@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jl-mod-plus-crash-reporter",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-07-15",
+  "workers_dev": true,
+  "preview_urls": false,
+  "minify": true,
+  "secrets": {
+    "required": [
+      "INGEST_TOKEN",
+      "ADMIN_TOKEN"
+    ]
+  },
+  "vars": {
+    "RETENTION_DAYS": "90"
+  },
+  "triggers": {
+    "crons": [
+      "17 3 * * *"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "jl-mod-plus-crashes",
+      "database_id": "c539be14-9da5-4587-a5bc-0cae5bafc0e8",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

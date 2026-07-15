@@ -44,6 +44,10 @@ secrets.properties
 .env
 .env.*
 !.env.example
+.dev.vars
+server/crash-reporter/dist/
+server/crash-reporter/node_modules/
+server/crash-reporter/.wrangler/
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild

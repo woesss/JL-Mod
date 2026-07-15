@@ -37,11 +37,9 @@ import org.acra.data.CrashReportData;
 import org.acra.http.DefaultHttpRequest;
 import org.acra.security.TLS;
 import org.acra.sender.ReportSender;
-import org.acra.util.Installation;
 import org.json.JSONObject;
 
 import java.io.FileOutputStream;
-import java.math.BigInteger;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -54,7 +52,6 @@ import ru.playsoftware.j2meloader.util.Constants;
 
 public class AppCenterSender implements ReportSender {
 	private static final String TAG = AppCenterSender.class.getSimpleName();
-	private static final String BASE_URL = "https://in.appcenter.ms/logs?Api-Version=1.0.0";
 
 	private final CoreConfiguration coreConfiguration;
 	private final HttpSenderConfiguration httpConfig;
@@ -70,15 +67,13 @@ public class AppCenterSender implements ReportSender {
 		// Force TLSv1.2 for Android 4.1-4.4
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
 				&& Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			builder.withCertificatePath("asset://appcenter.cer");
 			builder.withTlsProtocols(TLS.V1_2);
 		}
 		Map<String, String> httpHeaders = new HashMap<>();
-		httpHeaders.put("App-Secret", context.getString(R.string.app_center));
-		httpHeaders.put("Install-ID", Installation.id(context));
-		return builder.withUri(BASE_URL)
+		httpHeaders.put("Authorization", "Bearer " + context.getString(R.string.crash_report_token));
+		return builder.withUri(context.getString(R.string.crash_report_url))
 				.withHttpHeaders(httpHeaders)
-				.withCompress(true)
+				.withCompress(false)
 				.withEnabled(false)
 				.build();
 	}
@@ -142,11 +137,15 @@ public class AppCenterSender implements ReportSender {
 	}
 
 	private boolean sendForbidden(@NonNull Context context) {
-		if (context.getString(R.string.app_center).isBlank()) {
+		if (context.getString(R.string.crash_report_url).isBlank()
+				|| context.getString(R.string.crash_report_token).isBlank()
+				|| context.getString(R.string.fingerprint).isBlank()) {
 			return true;
 		}
 		try {
-			BigInteger fp = new BigInteger(context.getString(R.string.fingerprint), 16);
+			String expectedFingerprint = context.getString(R.string.fingerprint)
+					.replace(":", "")
+					.trim();
 			Signature[] signatures;
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 				PackageInfo info = context.getPackageManager()
@@ -159,8 +158,11 @@ public class AppCenterSender implements ReportSender {
 			}
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
 			for (Signature signature : signatures) {
-				md.update(signature.toByteArray());
-				if (MessageDigest.isEqual(fp.toByteArray(), md.digest())) {
+				StringBuilder actualFingerprint = new StringBuilder(40);
+				for (byte value : md.digest(signature.toByteArray())) {
+					actualFingerprint.append(String.format("%02x", value & 0xff));
+				}
+				if (expectedFingerprint.equalsIgnoreCase(actualFingerprint.toString())) {
 					return false;
 				}
 			}
@@ -168,8 +170,6 @@ public class AppCenterSender implements ReportSender {
 			Log.e(TAG, "mustSaveLocally: get package info filed", e);
 		} catch (NoSuchAlgorithmException e) {
 			Log.e(TAG, "mustSaveLocally: not support sha1!?", e);
-		} catch (NumberFormatException e) {
-			Log.e(TAG, "mustSaveLocally: invalid fingerprint", e);
 		}
 		return true;
 	}

@@ -60,7 +60,7 @@ public class AppCenterCollector implements Collector {
 	public static final String APPCENTER_LOG = "APPCENTER_LOG";
 	public static final List<ReportField> REPORT_FIELDS = Arrays.asList(
 			ANDROID_VERSION, APP_VERSION_CODE, APP_VERSION_NAME, BRAND, CUSTOM_DATA, DISPLAY,
-			INSTALLATION_ID, IS_SILENT, LOGCAT, PACKAGE_NAME, PHONE_MODEL, REPORT_ID,
+				IS_SILENT, LOGCAT, PACKAGE_NAME, PHONE_MODEL, REPORT_ID,
 			STACK_TRACE, USER_APP_START_DATE, USER_CRASH_DATE);
 
 	@Override
@@ -84,7 +84,6 @@ public class AppCenterCollector implements Collector {
 		ErrorLog errorLog = new ErrorLog(report.getString(REPORT_ID));
 		errorLog.appLaunchTimestamp = report.getString(USER_APP_START_DATE);
 		errorLog.timestamp = report.getString(USER_CRASH_DATE);
-		errorLog.userId = report.getString(INSTALLATION_ID);
 		Thread uncaughtExceptionThread = reportBuilder.getUncaughtExceptionThread();
 		if (uncaughtExceptionThread != null) {
 			errorLog.errorThreadId = uncaughtExceptionThread.getId();

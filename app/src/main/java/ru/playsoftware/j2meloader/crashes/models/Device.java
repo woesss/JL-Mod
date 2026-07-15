@@ -2,8 +2,8 @@ package ru.playsoftware.j2meloader.crashes.models;
 
 public class Device {
 	public final String osName = "Android";
-	public final String sdkName = "appcenter.android";
-	public final String sdkVersion = "4.2.1";
+	public final String sdkName = "jl-mod-plus.android";
+	public final String sdkVersion = "1.0";
 
 	public String appBuild;
 	public String appNamespace;

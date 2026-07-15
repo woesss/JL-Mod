@@ -35,5 +35,22 @@ jobs:
       - name: Make Gradle Wrapper executable
         run: chmod +x gradlew
 
+      - name: Install Android NDK 22
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;22.1.7171670" >/dev/null
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v6.4.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: server/crash-reporter/package-lock.json
+
+      - name: Verify crash reporter Worker
+        working-directory: server/crash-reporter
+        run: |
+          npm ci
+          npm test
+          npm run check
+
       - name: Build arm64 development APK
         run: ./gradlew :app:assembleEmulatorDebug

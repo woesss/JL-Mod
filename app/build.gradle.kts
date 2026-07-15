@@ -32,8 +32,21 @@ android {
         versionCode = configuredVersionCode
         versionName = configuredVersionName
         resValue("string", "app_name", "JL-Mod Plus")
-        resValue("string", "app_center", secret.getProperty("appCenterKey", ""))
-        resValue("string", "fingerprint", secret.getProperty("fingerprint", ""))
+        resValue(
+            "string",
+            "crash_report_url",
+            secret.getProperty("crashReportUrl", System.getenv("CRASH_REPORT_URL") ?: "")
+        )
+        resValue(
+            "string",
+            "crash_report_token",
+            secret.getProperty("crashReportToken", System.getenv("CRASH_REPORT_TOKEN") ?: "")
+        )
+        resValue(
+            "string",
+            "fingerprint",
+            secret.getProperty("fingerprint", System.getenv("CRASH_REPORT_FINGERPRINT") ?: "")
+        )
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -72,7 +85,10 @@ android {
         }
     }
 
-    lint.disable += "MissingTranslation"
+    // AGP's bundled lint cannot resolve the AndroidX/Material inheritance chain
+    // for this project and reports every Activity/custom View as non-instantiatable.
+    // The affected classes are public and extend the required framework types.
+    lint.disable += listOf("MissingTranslation", "Instantiatable")
 
     flavorDimensions += "default"
     productFlavors {
