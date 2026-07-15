@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Check out tagged source
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 0
           submodules: recursive
@@ -52,7 +52,7 @@ jobs:
           echo "code=$version_code" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4.2.1
+        uses: actions/setup-java@v5.5.0
         with:
           java-version: "17"
           distribution: temurin
@@ -100,7 +100,7 @@ jobs:
           (cd symbols && zip -r ../release-assets/symbols.zip .)
 
       - name: Upload release artifacts
-        uses: actions/upload-artifact@v4.3.3
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: JL-Mod-Plus-${{ steps.version.outputs.name }}-universal
           path: release-assets/*
