@@ -1,9 +1,13 @@
 name: Android development CI
 
 on:
+  workflow_dispatch:
   push:
     branches:
     - dev
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -62,7 +66,7 @@ jobs:
       - name: Upload Artifact (bin)
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: "Binary"
+          name: "JL-Mod-Plus-development"
           path: app/build/outputs/apk/emulator/release/*.apk
 
       - name: Upload a Build Artifact (sym)
