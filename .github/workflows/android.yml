@@ -58,6 +58,9 @@ jobs:
           distribution: temurin
           cache: gradle
 
+      - name: Make Gradle Wrapper executable
+        run: chmod +x gradlew
+
       - name: Verify signing secrets
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
