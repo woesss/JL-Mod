@@ -14,6 +14,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4.1.6
@@ -26,16 +27,23 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      - name: Verify signing secrets
+        env:
+          ENCODED_KEYSTORE: ${{ secrets.SIGNING_KEY }}
+          ENCODED_PROPS: ${{ secrets.KEYSTORE_PROPERTIES }}
+        run: |
+          if [ -z "$ENCODED_KEYSTORE" ] || [ -z "$ENCODED_PROPS" ]; then
+            echo "::error::Release signing is not configured. Add SIGNING_KEY and KEYSTORE_PROPERTIES repository secrets."
+            exit 1
+          fi
+
       - name: Decode Keystore
         env:
           ENCODED_KEYSTORE: ${{ secrets.SIGNING_KEY }}
           ENCODED_PROPS: ${{ secrets.KEYSTORE_PROPERTIES }}
         run: |
-          if [ "$ENCODED_PROPS" == "" ]; then
-            exit
-          fi
-          echo $ENCODED_KEYSTORE | base64 -di > keystore.jks
-          echo $ENCODED_PROPS | base64 -di > keystore.properties
+          printf '%s' "$ENCODED_KEYSTORE" | base64 --decode > keystore.jks
+          printf '%s' "$ENCODED_PROPS" | base64 --decode > keystore.properties
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -68,7 +76,7 @@ jobs:
       - name: Upload Artifact (bin)
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: "JL-Mod-Plus_${{ steps.get_version.outputs.version }}"
+          name: "JL-Mod-Plus_${{ steps.get_version.outputs.version }}_arm64-v8a"
           path: app/build/outputs/apk/emulator/release/*.apk
 
       - name: Upload a Build Artifact (sym)

@@ -1,14 +1,38 @@
 #
 # https://help.github.com/articles/dealing-with-line-endings/
 #
+# Let Git normalize text files in the repository.
+*               text=auto
+.gitattributes  text eol=lf
+.gitignore      text eol=lf
+*.md            text eol=lf
+*.java          text eol=lf
+*.kt            text eol=lf
+*.kts           text eol=lf
+*.xml           text eol=lf
+*.properties    text eol=lf
+*.properties.example text eol=lf
+
 # Linux start script should use lf
 /gradlew        text eol=lf
+*.sh            text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf
 
 # These are Windows script files and should use crlf
 *.bat           text eol=crlf
+*.cmd           text eol=crlf
+*.ps1           text eol=crlf
 
 # Binary files should be left untouched
 *.jar           binary
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.webp          binary
+*.apk           binary
+*.aab           binary
 
 *.h linguist-language=C
 *.inl linguist-language=C

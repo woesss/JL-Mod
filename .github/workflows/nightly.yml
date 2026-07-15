@@ -9,10 +9,15 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: development-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4.1.6
@@ -25,17 +30,6 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Decode Keystore
-        env:
-          ENCODED_KEYSTORE: ${{ secrets.SIGNING_KEY }}
-          ENCODED_PROPS: ${{ secrets.KEYSTORE_PROPERTIES }}
-        run: |
-          if [ "$ENCODED_PROPS" == "" ]; then
-            exit
-          fi
-          echo $ENCODED_KEYSTORE | base64 -di > keystore.jks
-          echo $ENCODED_PROPS | base64 -di > keystore.properties
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
@@ -44,14 +38,7 @@ jobs:
           echo "VERSION_SUFFIX=$(git show -s --abbrev=7 --format=-%cd-%h --date=format:%y%m%d)" >> $GITHUB_ENV
 
       - name: Build with Gradle
-        run: ./gradlew assembleEmulatorRelease
-
-      - name: Prepare artifact
-        run: |
-          mkdir -p artifact/mapping
-          mv app/build/outputs/native-debug-symbols/**/* artifact
-          mv app/build/outputs/mapping/**/* artifact/mapping
-          (cd artifact && zip -r "$OLDPWD/symbols.zip" .)
+        run: ./gradlew assembleEmulatorDebug
 
       - name: GitHub Release
         uses: "marvinpinto/action-automatic-releases@v1.2.1"
@@ -60,17 +47,10 @@ jobs:
           automatic_release_tag: "continuous"
           title: "Development Build"
           files: |
-            app/build/outputs/apk/**/*.apk
-            symbols.zip
+            app/build/outputs/apk/emulator/debug/*.apk
 
       - name: Upload Artifact (bin)
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: "JL-Mod-Plus-development"
-          path: app/build/outputs/apk/emulator/release/*.apk
-
-      - name: Upload a Build Artifact (sym)
-        uses: actions/upload-artifact@v4.3.3
-        with:
-          name: "Symbols"
-          path: artifact
+          name: "JL-Mod-Plus-development-arm64-v8a"
+          path: app/build/outputs/apk/emulator/debug/*.apk

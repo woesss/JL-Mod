@@ -7,6 +7,8 @@
 
 JL-Mod Plus — форк [JL-Mod](https://github.com/woesss/JL-Mod), неофициального форка ["J2ME Loader" (J2ME эмулятор для Android)](https://github.com/nikita36078/J2ME-Loader).
 
+> Сборки JL-Mod Plus в настоящее время предназначены только для 64-битных ARM-устройств Android (`arm64-v8a`).
+
 <img src="screenshots/screen01.png" width="240"> <img src="screenshots/screen02.png" width="240"> <img src="screenshots/screen03.png" width="240">
 
 ### **!!!Внимание!!!**

@@ -34,9 +34,28 @@ captures/
 
 # Keystore files
 *.jks
+*.keystore
+*.p12
+keystore.properties
+signing.properties
+secrets.properties
+
+# Environment files may contain local credentials
+.env
+.env.*
+!.env.example
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
 .cxx/
 
 /.kotlin/
+
+# JVM crash and profiling output
+*.hprof
+hs_err_pid*
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+desktop.ini
