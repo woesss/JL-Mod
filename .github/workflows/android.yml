@@ -65,7 +65,7 @@ jobs:
       - name: Upload Artifact (bin)
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: "JL-Mod_${{ steps.get_version.outputs.version }}"
+          name: "JL-Mod-Plus_${{ steps.get_version.outputs.version }}"
           path: app/build/outputs/apk/emulator/release/*.apk
 
       - name: Upload a Build Artifact (sym)

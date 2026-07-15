@@ -24,7 +24,7 @@ android {
         targetSdk = rootProject.extra["targetSdk"] as Int
         versionCode = 48
         versionName = "0.87.1"
-        resValue("string", "app_name", rootProject.name)
+        resValue("string", "app_name", "JL-Mod Plus")
         resValue("string", "app_center", secret.getProperty("appCenterKey", ""))
         resValue("string", "fingerprint", secret.getProperty("fingerprint", ""))
         vectorDrawables.useSupportLibrary = true

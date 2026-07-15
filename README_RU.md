@@ -1,9 +1,11 @@
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/woesss/JL-Mod?style=plastic)](https://github.com/woesss/JL-Mod/releases/latest)
+# JL-Mod Plus
+
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/H3nb/JL-Mod-Plus?style=plastic)](https://github.com/H3nb/JL-Mod-Plus/releases/latest)
 [![donate](https://img.shields.io/badge/donate-PayPal-%234D8A99?style=plastic)](https://www.paypal.me/j2meforever)  
 
-\[ [EN](README_RU.md) | RU \]  
+\[ [EN](README.md) | RU \]
 
-Неофициальный форк ["J2ME Loader" (J2ME эмулятор для Android)](https://github.com/nikita36078/J2ME-Loader)
+JL-Mod Plus — форк [JL-Mod](https://github.com/woesss/JL-Mod), неофициального форка ["J2ME Loader" (J2ME эмулятор для Android)](https://github.com/nikita36078/J2ME-Loader).
 
 <img src="screenshots/screen01.png" width="240"> <img src="screenshots/screen02.png" width="240"> <img src="screenshots/screen03.png" width="240">
 
@@ -41,7 +43,7 @@
   В некоторых играх (замечено в "Medal of Honor") 3D-сцена может не отображаться из-за перекрытия 2D-фоном.  
   Попробуйте добавить в поле "Системные параметры" строку:  
   **micro3d.v3.render.no-mix2D3D: true**  
-  Если не поможет - сообщите об этой игре в [баг-репорт](https://github.com/woesss/JL-Mod/issues/new?assignees=&labels=bug&template=issue-template.md&title=) или другим способом.
+  Если не поможет - сообщите об этой игре в [баг-репорт](https://github.com/H3nb/JL-Mod-Plus/issues/new?assignees=&labels=bug&template=issue-template.md&title=) или другим способом.
 
  Ещё один параметр включает фильтр текстур (встроенный в OpenGL), но это может порождать искажения в виде захвата лишних текселей по краям полигонов:  
  **micro3d.v3.texture.filter: true**  
@@ -49,9 +51,9 @@
 
 #### **Портирование**
  Добавлена возможность сборки приложения для Андроид из исходного кода J2ME приложения с использованием кода этого проекта.
- Подробнее в [Wiki](https://github.com/woesss/JL-Mod/wiki/Porting-midlet-instruction)
+ Подробнее в [Wiki](https://github.com/H3nb/JL-Mod-Plus/wiki/Porting-midlet-instruction)
     
- [Скачать APK](https://github.com/woesss/JL-Mod/releases/latest)
+ [Скачать APK](https://github.com/H3nb/JL-Mod-Plus/releases/latest)
 
 #### **Внешние ссылки**
  Emulation General Wiki:  

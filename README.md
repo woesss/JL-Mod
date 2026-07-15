@@ -1,9 +1,11 @@
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/woesss/JL-Mod?style=plastic)](https://github.com/woesss/JL-Mod/releases/latest)
+# JL-Mod Plus
+
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/H3nb/JL-Mod-Plus?style=plastic)](https://github.com/H3nb/JL-Mod-Plus/releases/latest)
 [![donate](https://img.shields.io/badge/donate-PayPal-%234D8A99?style=plastic)](https://www.paypal.me/j2meforever)  
 
 \[ [RU](README_RU.md) | EN \]  
 
-Unofficial fork of ["J2ME-Loader" (A J2ME emulator for Android)](https://github.com/nikita36078/J2ME-Loader) 
+JL-Mod Plus is a fork of [JL-Mod](https://github.com/woesss/JL-Mod), an unofficial fork of ["J2ME-Loader" (a J2ME emulator for Android)](https://github.com/nikita36078/J2ME-Loader).
 
 <img src="screenshots/screen01.png" width="240"> <img src="screenshots/screen02.png" width="240"> <img src="screenshots/screen03.png" width="240">
 
@@ -39,7 +41,7 @@ Unofficial fork of ["J2ME-Loader" (A J2ME emulator for Android)](https://github.
   In some games (seen in "Medal of Honor") the 3D scene may not be displayed due to the overlap with the 2D background.
   Try adding the following line to the "System Properties" field:
   **micro3d.v3.render.no-mix2D3D: true**
-  If it doesn't help, please report this game in [bug-report](https://github.com/woesss/JL-Mod/issues/new?assignees=&labels=bug&template=issue-template.md&title=) or in another way.
+  If it doesn't help, please report this game in [bug-report](https://github.com/H3nb/JL-Mod-Plus/issues/new?assignees=&labels=bug&template=issue-template.md&title=) or in another way.
 
   Another one property turns on the texture filter (built into OpenGL), but this can generate distortion in the form of extra texels being captured at the edges of polygons:
   **micro3d.v3.texture.filter: true**
@@ -47,9 +49,9 @@ Unofficial fork of ["J2ME-Loader" (A J2ME emulator for Android)](https://github.
 
 #### **Porting**
   Added the ability to build an Android application from the source code of a J2ME application using the code of this project  
-  Read more in the [Wiki](https://github.com/woesss/JL-Mod/wiki/Porting-midlet-instruction)
+  Read more in the [Wiki](https://github.com/H3nb/JL-Mod-Plus/wiki/Porting-midlet-instruction)
 
-[Download APK](https://github.com/woesss/JL-Mod/releases/latest)
+[Download APK](https://github.com/H3nb/JL-Mod-Plus/releases/latest)
 
 #### **External links**  
 Emulation General Wiki:  

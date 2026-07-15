@@ -7,7 +7,7 @@
     <string name="about_copyright" translatable="false">\n\nCopyright 2020-2026 Yury Kharchenko</string>
     <string name="about_crowdin" translatable="false">&lt;BR>Crowdin(translation): &lt;a href="https://crowdin.com/project/j2me-loader">crowdin.com/project/j2me-loader&lt;/a></string>
     <string name="about_email" translatable="false">\n\nEmail: <a href="mailto:j2me.forever@gmail.com">j2me.forever@gmail.com</a>\n</string>
-    <string name="about_github" translatable="false">\nGithub: <a href="https://github.com/woesss/JL-Mod">woesss/JL-Mod</a>\n</string>
+    <string name="about_github" translatable="false">\nGithub: <a href="https://github.com/H3nb/JL-Mod-Plus">H3nb/JL-Mod-Plus</a>\n</string>
     <string name="about_message">This app allows you to launch J2ME apps and games on Android.\n</string>
     <string name="about_xda" translatable="false">&lt;BR>XDA: &lt;a href="https://forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889">forum.xda-developers.com/android/apps-games/app-j2me-loader-t3777889&lt;/a></string>
     <string name="action_context_delete">Delete</string>
