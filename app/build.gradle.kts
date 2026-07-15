@@ -4,6 +4,13 @@ import java.util.Properties
 import java.util.jar.Attributes
 import java.util.jar.Manifest
 
+val configuredVersionName = providers.environmentVariable("VERSION_NAME").orNull
+    ?.removePrefix("v")
+    ?: "0.87.1"
+val configuredVersionCode = providers.environmentVariable("VERSION_CODE").orNull
+    ?.toIntOrNull()
+    ?: 48
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,11 +26,11 @@ android {
     namespace = "ru.playsoftware.j2meloader"
 
     defaultConfig {
-        applicationId = "ru.woesss.j2meloader"
+        applicationId = "io.github.h3nb.jlmodplus"
         minSdk = rootProject.extra["minSdk"] as Int
         targetSdk = rootProject.extra["targetSdk"] as Int
-        versionCode = 48
-        versionName = "0.87.1"
+        versionCode = configuredVersionCode
+        versionName = configuredVersionName
         resValue("string", "app_name", "JL-Mod Plus")
         resValue("string", "app_center", secret.getProperty("appCenterKey", ""))
         resValue("string", "fingerprint", secret.getProperty("fingerprint", ""))
@@ -59,6 +66,9 @@ android {
             isJniDebuggable = true
             multiDexEnabled = true
             multiDexKeepProguard = file("multidex-config.pro")
+            ndk {
+                abiFilters += "arm64-v8a"
+            }
         }
     }
 
@@ -92,13 +102,6 @@ android {
         }
     }
 
-    splits.abi {
-        isEnable = true
-        reset()
-        include("arm64-v8a")
-        isUniversalApk = false
-    }
-
     externalNativeBuild.ndkBuild.path("src/main/cpp/Android.mk")
 
     compileOptions {
@@ -112,7 +115,7 @@ android {
         }
         outputs.configureEach {
             if (this is com.android.build.gradle.internal.api.BaseVariantOutputImpl) {
-                outputFileName = "${rootProject.name}_$versionName-$dirName.apk"
+                outputFileName = "${rootProject.name}_$versionName-$flavorName-${buildType.name}.apk"
             }
         }
     }

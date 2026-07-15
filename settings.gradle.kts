@@ -1,7 +1,9 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 pluginManagement {
     repositories {
-        mavenLocal()
+        if (System.getenv("CI") != "true") {
+            mavenLocal()
+        }
         gradlePluginPortal()
         google()
         mavenCentral()
@@ -10,7 +12,9 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        mavenLocal()
+        if (System.getenv("CI") != "true") {
+            mavenLocal()
+        }
         google()
         mavenCentral()
         maven("https://jitpack.io")
