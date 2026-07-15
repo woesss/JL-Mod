@@ -58,7 +58,9 @@ Run these commands from the repository root. They pipe secret values directly to
   [IO.File]::ReadAllBytes('F:\Android\keystores\JL-Mod-Plus.jks')
 ) | gh secret set SIGNING_KEY --repo H3nb/JL-Mod-Plus
 
-((Get-Content -Raw .\keystore.properties) -replace '(?m)^storeFile=.*$', 'storeFile=keystore.jks') |
+$ciProperties = (Get-Content -Raw .\keystore.properties) -replace `
+  '(?m)^storeFile=.*$', 'storeFile=keystore.jks'
+[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($ciProperties)) |
   gh secret set KEYSTORE_PROPERTIES --repo H3nb/JL-Mod-Plus
 ```
 
@@ -68,4 +70,4 @@ Verify only the secret names and update dates; GitHub will never return their va
 gh secret list --repo H3nb/JL-Mod-Plus
 ```
 
-After both secrets exist, manually run the `Android CI` workflow from the Actions tab or push a release commit to `master`.
+After both secrets exist, follow `docs/RELEASING.md`. Release builds are created from semantic-version tags that point to commits contained in `master`.

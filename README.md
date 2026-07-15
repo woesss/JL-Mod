@@ -1,13 +1,17 @@
 # JL-Mod Plus
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/H3nb/JL-Mod-Plus?style=plastic)](https://github.com/H3nb/JL-Mod-Plus/releases/latest)
-[![donate](https://img.shields.io/badge/donate-PayPal-%234D8A99?style=plastic)](https://www.paypal.me/j2meforever)  
-
-\[ [RU](README_RU.md) | EN \]  
 
 JL-Mod Plus is a fork of [JL-Mod](https://github.com/woesss/JL-Mod), an unofficial fork of ["J2ME-Loader" (a J2ME emulator for Android)](https://github.com/nikita36078/J2ME-Loader).
 
-> JL-Mod Plus builds currently target 64-bit ARM Android devices (`arm64-v8a`) only.
+JL-Mod Plus uses the application ID `io.github.h3nb.jlmodplus`, so it can be installed alongside upstream JL-Mod. It uses its own signing identity and cannot replace or update an upstream installation.
+
+| Channel | Purpose | Architecture |
+| --- | --- | --- |
+| Development | Local testing and continuous builds | `arm64-v8a` only |
+| Release | Public GitHub release | Universal APK with every ABI supported by the project |
+
+[Download the latest release](https://github.com/H3nb/JL-Mod-Plus/releases/latest) or read the [contribution guide](CONTRIBUTING.md) to build it locally.
 
 <img src="screenshots/screen01.png" width="240"> <img src="screenshots/screen02.png" width="240"> <img src="screenshots/screen03.png" width="240">
 
@@ -53,7 +57,15 @@ JL-Mod Plus is a fork of [JL-Mod](https://github.com/woesss/JL-Mod), an unoffici
   Added the ability to build an Android application from the source code of a J2ME application using the code of this project  
   Read more in the [Wiki](https://github.com/H3nb/JL-Mod-Plus/wiki/Porting-midlet-instruction)
 
-[Download APK](https://github.com/H3nb/JL-Mod-Plus/releases/latest)
+#### **Development and releases**
+
+Pull requests target `dev`. Public releases are signed universal APKs created from version tags on the protected `master` branch. See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow and [docs/RELEASING.md](docs/RELEASING.md) for the owner-only release checklist.
+
+#### **License and credits**
+
+JL-Mod Plus is distributed under the [Apache License 2.0](LICENSE). It preserves the work and attribution of JL-Mod, J2ME Loader, and their contributors. JL-Mod Plus modifications are copyright 2026 H3NB and their respective contributors. Bundled third-party components remain under their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md) and the in-app licenses page.
+
+AI-assisted contributions are welcome, but contributors remain responsible for testing their changes and ensuring submitted code is compatible with the repository's licenses.
 
 #### **External links**  
 Emulation General Wiki:  

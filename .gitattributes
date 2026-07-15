@@ -18,6 +18,7 @@
 *.sh            text eol=lf
 *.yml           text eol=lf
 *.yaml          text eol=lf
+/.github/CODEOWNERS text eol=lf
 
 # These are Windows script files and should use crlf
 *.bat           text eol=crlf

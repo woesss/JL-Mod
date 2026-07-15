@@ -37,10 +37,11 @@ Use the existing `GRADLE_USER_HOME` configured by the developer. Do not commit `
 
 ## Compatibility rules
 
-- Keep `applicationId = "ru.woesss.j2meloader"` unless a migration is explicitly requested and planned.
+- Keep `applicationId = "io.github.h3nb.jlmodplus"` so JL-Mod Plus can be installed alongside upstream JL-Mod. Source-code package names do not need to match the application ID.
 - Keep the user-facing app name `JL-Mod Plus` and the Gradle-safe project name `JL-Mod-Plus`.
 - Minimum Android API is 16 because NDK 22 does not support native builds for API 14–15.
-- APK builds intentionally target `arm64-v8a` only. Do not restore other ABIs or a universal APK unless explicitly requested.
+- Development and testing builds must target `arm64-v8a` only to keep local and CI build times and resource usage low.
+- Release builds intended for distribution must produce a universal APK containing every ABI supported by the project. Do not treat an `arm64-v8a`-only APK as a public release artifact.
 - Preserve upstream attribution, licensing, translations, and existing data formats.
 - Treat native code, storage paths, emulator profiles, and save-data compatibility as high-risk areas.
 
@@ -50,13 +51,21 @@ Use the existing `GRADLE_USER_HOME` configured by the developer. Do not commit `
 - Review upstream changes before integrating them into `dev`.
 - Push normal work to `origin`, never to `upstream`.
 - Do not force-push shared branches unless the user explicitly requests it.
-- Keep commits focused and do not mix generated build output with source changes.
+- Start normal work from `dev`. Human branches should use a descriptive prefix such as `feature/`, `fix/`, or `docs/`; Codex-created branches use `codex/`.
+- Use Conventional Commit subjects in English: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `build:`, `ci:`, or `chore:` followed by a concise imperative description.
+- Keep one logical concern per commit. Do not mix generated output, unrelated cleanup, or another contributor's work into the same commit.
+- Before staging, inspect `git diff` and `git status --short`. Stage explicit paths instead of using `git add .` in a dirty worktree.
+- Before committing, run the smallest relevant verification plus `git diff --cached --check`. Never commit secrets, signing material, local paths, or APKs.
+- Examples: `fix: avoid pointer truncation in M3G cache`, `docs: document release signing`, and `ci: verify pull requests on arm64 debug`.
 - Preserve unrelated user changes in a dirty working tree.
+
+Pull requests target `dev`. The `master` branch is release-only. Use semantic versions without a fork suffix (for example `v0.87.1`), and create release tags only from commits contained in `master`. Only H3NB publishes releases.
 
 ## GitHub Actions
 
 - `.github/workflows/nightly.yml` builds an installable debug APK from `dev` and updates the continuous development release without production signing secrets.
-- `.github/workflows/android.yml` builds signed release APKs from `master`; it requires `SIGNING_KEY` and `KEYSTORE_PROPERTIES` repository secrets and should fail early when they are absent.
+- `.github/workflows/ci.yml` verifies pull requests to `dev` without write permissions or release side effects.
+- `.github/workflows/android.yml` builds a signed universal release APK for semantic-version tags created from `master`; it requires `SIGNING_KEY` and `KEYSTORE_PROPERTIES` repository secrets and should fail early when they are absent.
 - Keep workflow permissions minimal. Release-producing workflows require only `contents: write` unless a new feature clearly needs more.
 - Follow `docs/SIGNING.md` for release-key handling. Never commit the keystore or real passwords.
 
