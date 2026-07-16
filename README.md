@@ -1,6 +1,6 @@
 # JL-Mod Plus
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/H3nb/JL-Mod-Plus?style=plastic)](https://github.com/H3nb/JL-Mod-Plus/releases/latest)
+[![Android development CI](https://github.com/H3nb/JL-Mod-Plus/actions/workflows/nightly.yml/badge.svg?branch=dev)](https://github.com/H3nb/JL-Mod-Plus/actions/workflows/nightly.yml)
 
 JL-Mod Plus is a fork of [JL-Mod](https://github.com/woesss/JL-Mod), an unofficial fork of ["J2ME-Loader" (a J2ME emulator for Android)](https://github.com/nikita36078/J2ME-Loader).
 
@@ -11,7 +11,7 @@ JL-Mod Plus uses the application ID `io.github.h3nb.jlmodplus`, so it can be ins
 | Development | Local testing and continuous builds | `arm64-v8a` only |
 | Release | Public GitHub release | Universal APK with every ABI supported by the project |
 
-[Download the latest release](https://github.com/H3nb/JL-Mod-Plus/releases/latest) or read the [contribution guide](CONTRIBUTING.md) to build it locally.
+JL-Mod Plus is currently pre-1.0 experimental software. There is no stable public JL-Mod Plus release yet; the first planned version is `0.1.0`. Testers can use the [continuous development build](https://github.com/H3nb/JL-Mod-Plus/releases/tag/continuous), or read the [contribution guide](CONTRIBUTING.md) to build locally.
 
 <img src="screenshots/screen01.png" width="240"> <img src="screenshots/screen02.png" width="240"> <img src="screenshots/screen03.png" width="240">
 
@@ -59,7 +59,7 @@ JL-Mod Plus uses the application ID `io.github.h3nb.jlmodplus`, so it can be ins
 
 #### **Development and releases**
 
-Pull requests target `dev`. Public releases are signed universal APKs created from version tags on the protected `master` branch. See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow and [docs/RELEASING.md](docs/RELEASING.md) for the owner-only release checklist.
+Pull requests target `dev`. Public releases are signed universal APKs created from version tags on the protected `master` branch. App versions start at `0.1.0` and are independent of the upstream JL-Mod version; see [versioning](docs/VERSIONING.md). The locked [`baseline` branch](docs/BASELINE.md) preserves an unmodified upstream `dev` snapshot for troubleshooting. See [CONTRIBUTING.md](CONTRIBUTING.md) for development and [the release checklist](docs/RELEASING.md) for publishing.
 
 #### **License and credits**
 

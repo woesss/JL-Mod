@@ -31,13 +31,18 @@ On Windows, use a checkout path without spaces because the NDK version used by t
 
 ## Branch and pull-request workflow
 
+Use one issue or goal, one branch, and one pull request:
+
 1. Update `dev` and create a branch from it.
 2. Use `feature/`, `fix/`, `docs/`, or another descriptive branch prefix.
-3. Keep the change focused and preserve unrelated work.
-4. Build and test locally.
+3. State the user-visible outcome before editing and keep the change focused.
+4. Build and test locally, then inspect the diff for unrelated changes and secrets.
 5. Open a pull request targeting `dev`, not `master`.
+6. Wait for green CI, resolve review conversations, then squash-merge and delete the branch.
 
-The `master` branch is reserved for owner-approved releases.
+The `master` branch is reserved for owner-approved releases. The locked `baseline` branch is read-only upstream reference code; never branch normal feature work from it and never merge into it.
+
+Maintainers using AI assistance should also follow the [beginner-friendly maintenance workflow](docs/BEGINNER_WORKFLOW.md).
 
 ## Commit messages
 
@@ -64,11 +69,13 @@ git status --short
 
 Do not commit APKs, build directories, IDE state, local SDK paths, keystores, passwords, or generated native intermediates.
 
+Do not change `version.properties` for ordinary development commits. Change it only while intentionally preparing a public release, following `docs/VERSIONING.md` and `docs/RELEASING.md`.
+
 ## AI-assisted work
 
-AI-assisted contributions are welcome. The contributor is still responsible for:
+AI-assisted contributions are welcome. AI should explain important terms and provide verification evidence in plain language. Before merging, the contributor should still confirm:
 
-- understanding and testing the submitted change;
-- reviewing generated code for security and correctness;
+- the requested behavior and risks are understandable;
+- the affected behavior was tested rather than trusted from generated code alone;
 - disclosing substantial AI assistance in the pull-request description;
 - confirming that generated or copied material does not violate third-party copyright or licenses.

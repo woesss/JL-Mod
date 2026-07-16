@@ -11,14 +11,14 @@ Android uses a signing key as the permanent identity of an application. Every up
 
 ## 1. Create and back up the key
 
-Create a directory outside the repository, then run this from PowerShell with JDK 17 available:
+Create a directory outside the repository, then run this from PowerShell with JDK 17 available. Use a unique file name and alias; the placeholders below are not real values:
 
 ```powershell
-New-Item -ItemType Directory -Force 'F:\Android\keystores'
+New-Item -ItemType Directory -Force 'X:\private\keystores'
 keytool -genkeypair -v `
-  -keystore 'F:\Android\keystores\JL-Mod-Plus.jks' `
+  -keystore 'X:\private\keystores\JL-Mod-Plus-UNIQUE-ID.jks' `
   -storetype JKS `
-  -alias 'jl-mod-plus' `
+  -alias 'jl-mod-plus-UNIQUE-ID' `
   -keyalg RSA `
   -keysize 4096 `
   -validity 10000
@@ -37,9 +37,9 @@ Copy-Item .\keystore.properties.example .\keystore.properties
 The file must contain:
 
 ```properties
-storeFile=F:/Android/keystores/JL-Mod-Plus.jks
+storeFile=X:/private/keystores/JL-Mod-Plus-UNIQUE-ID.jks
 storePassword=YOUR_STORE_PASSWORD
-keyAlias=jl-mod-plus
+keyAlias=jl-mod-plus-UNIQUE-ID
 keyPassword=YOUR_KEY_PASSWORD
 ```
 
@@ -54,15 +54,27 @@ Test the release configuration from a checkout path without spaces:
 Run these commands from the repository root. They pipe secret values directly to GitHub CLI instead of printing them:
 
 ```powershell
-[Convert]::ToBase64String(
-  [IO.File]::ReadAllBytes('F:\Android\keystores\JL-Mod-Plus.jks')
-) | gh secret set SIGNING_KEY --repo H3nb/JL-Mod-Plus
+[Convert]::ToBase64String([IO.File]::ReadAllBytes(
+  (Select-String -Path .\keystore.properties -Pattern '^storeFile=(.+)$').Matches.Groups[1].Value
+)) | gh secret set SIGNING_KEY --repo H3nb/JL-Mod-Plus
 
-$ciProperties = (Get-Content -Raw .\keystore.properties) -replace `
-  '(?m)^storeFile=.*$', 'storeFile=keystore.jks'
+$localProperties = @{}
+Get-Content .\keystore.properties | ForEach-Object {
+  if ($_ -match '^([^#!][^=]*)=(.*)$') {
+    $localProperties[$matches[1].Trim()] = $matches[2]
+  }
+}
+$ciProperties = @(
+  'storeFile=keystore.jks'
+  "storePassword=$($localProperties.storePassword)"
+  "keyAlias=$($localProperties.keyAlias)"
+  "keyPassword=$($localProperties.keyPassword)"
+) -join "`n"
 [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($ciProperties)) |
   gh secret set KEYSTORE_PROPERTIES --repo H3nb/JL-Mod-Plus
 ```
+
+`KEYSTORE_PROPERTIES` intentionally contains only signing configuration. Keep `CRASH_REPORT_TOKEN` as its own GitHub secret so rotating or debugging one credential cannot silently replace another.
 
 Verify only the secret names and update dates; GitHub will never return their values:
 

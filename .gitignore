@@ -40,6 +40,11 @@ keystore.properties
 signing.properties
 secrets.properties
 
+# Local maintainer notes (not a substitute for encrypted secret storage)
+docs/private/
+docs/local/
+*.private.md
+
 # Environment files may contain local credentials
 .env
 .env.*
