@@ -1,6 +1,12 @@
 ## Summary
 
-Describe what changed and why.
+Describe the user-visible result, what changed, and why.
+
+## Risk and scope
+
+- Risk level: low / medium / high
+- Areas affected: UI / emulator / native code / storage / save data / CI / documentation
+- Out of scope: describe nearby work intentionally left unchanged.
 
 ## Verification
 
@@ -8,6 +14,7 @@ Describe what changed and why.
 - [ ] I tested behavior affected by this change.
 - [ ] I ran `git diff --check`.
 - [ ] I did not include secrets, signing material, proprietary game files, or generated build output.
+- [ ] I changed `version.properties` only if this pull request intentionally prepares a public release.
 
 ## Compatibility and licensing
 

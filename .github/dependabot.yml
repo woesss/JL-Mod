@@ -4,10 +4,8 @@ updates:
     directory: /
     target-branch: dev
     schedule:
-      interval: weekly
-      day: monday
-      timezone: Asia/Makassar
-    open-pull-requests-limit: 5
+      interval: monthly
+    open-pull-requests-limit: 2
     labels:
       - dependencies
 
@@ -15,10 +13,8 @@ updates:
     directory: /
     target-branch: dev
     schedule:
-      interval: weekly
-      day: monday
-      timezone: Asia/Makassar
-    open-pull-requests-limit: 5
+      interval: monthly
+    open-pull-requests-limit: 2
     labels:
       - dependencies
       - ci
@@ -27,9 +23,7 @@ updates:
     directory: /
     target-branch: dev
     schedule:
-      interval: weekly
-      day: monday
-      timezone: Asia/Makassar
-    open-pull-requests-limit: 3
+      interval: monthly
+    open-pull-requests-limit: 1
     labels:
       - dependencies

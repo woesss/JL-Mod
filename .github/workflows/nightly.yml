@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - dev
+      - dev
 
 permissions:
   contents: write
@@ -14,46 +14,101 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-
+  development-build:
+    name: Development build
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v7.0.0
+      - name: Check out source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          submodules: 'true'
-      - name: set up JDK 17
-        uses: actions/setup-java@v5.5.0
+          submodules: recursive
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5.5.0
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: "17"
+          distribution: temurin
           cache: gradle
 
-      - name: Grant execute permission for gradlew
+      - name: Make Gradle Wrapper executable
         run: chmod +x gradlew
 
       - name: Install Android NDK 22
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;22.1.7171670" >/dev/null
 
-      - name: Calculate version suffix
-        run:
-          echo "VERSION_SUFFIX=$(git show -s --abbrev=7 --format=-%cd-%h --date=format:%y%m%d)" >> $GITHUB_ENV
+      - name: Calculate development version suffix
+        shell: bash
+        run: |
+          short_sha="${GITHUB_SHA::7}"
+          build_date="$(date -u +%Y%m%d)"
+          echo "VERSION_SUFFIX=-dev.${build_date}.${GITHUB_RUN_NUMBER}.${short_sha}" >> "$GITHUB_ENV"
 
-      - name: Build with Gradle
-        run: ./gradlew assembleEmulatorDebug
+      - name: Build arm64 development APK
+        run: ./gradlew :app:assembleEmulatorDebug
 
-      - name: GitHub Release
-        uses: "marvinpinto/action-automatic-releases@v1.2.1"
+      - name: Verify development APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk_files=(app/build/outputs/apk/emulator/debug/*.apk)
+          if (( ${#apk_files[@]} != 1 )); then
+            echo "::error::Expected exactly one development APK."
+            exit 1
+          fi
+          build_tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          badging="$("$build_tools/aapt" dump badging "${apk_files[0]}")"
+          grep -F "package: name='io.github.h3nb.jlmodplus.debug'" <<< "$badging"
+          native_code="$(grep '^native-code:' <<< "$badging")"
+          grep -F "'arm64-v8a'" <<< "$native_code"
+          for unexpected in armeabi-v7a x86 x86_64; do
+            if grep -Fq "'$unexpected'" <<< "$native_code"; then
+              echo "::error::Development APK unexpectedly contains $unexpected."
+              exit 1
+            fi
+          done
+
+      - name: Update continuous development release
+        if: github.ref == 'refs/heads/dev'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk_files=(app/build/outputs/apk/emulator/debug/*.apk)
+          apk="${apk_files[0]}"
+          notes="Automated arm64 development build from commit ${GITHUB_SHA}. This is experimental and is not a stable public release."
+
+          if gh release view continuous --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh api --method PATCH \
+              "repos/${GITHUB_REPOSITORY}/git/refs/tags/continuous" \
+              -f sha="$GITHUB_SHA" \
+              -F force=true >/dev/null
+            gh api "repos/${GITHUB_REPOSITORY}/releases/tags/continuous" --jq '.assets[].url' |
+              while read -r asset_url; do
+                if [[ -n "$asset_url" ]]; then
+                  gh api --method DELETE "$asset_url"
+                fi
+              done
+            gh release upload continuous "$apk" --repo "$GITHUB_REPOSITORY" --clobber
+            gh release edit continuous \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "Development Build" \
+              --notes "$notes" \
+              --prerelease
+          else
+            gh release create continuous "$apk" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "Development Build" \
+              --notes "$notes" \
+              --prerelease
+          fi
+
+      - name: Upload development artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "continuous"
-          title: "Development Build"
-          files: |
-            app/build/outputs/apk/emulator/debug/*.apk
-
-      - name: Upload Artifact (bin)
-        uses: actions/upload-artifact@v7.0.1
-        with:
-          name: "JL-Mod-Plus-development-arm64-v8a"
+          name: JL-Mod-Plus-development-arm64-v8a
           path: app/build/outputs/apk/emulator/debug/*.apk
+          if-no-files-found: error

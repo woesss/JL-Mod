@@ -10,21 +10,22 @@ permissions:
 
 env:
   CRASH_REPORT_URL: https://jl-mod-plus-crash-reporter.h3nb-jl-mod-plus.workers.dev/v1/crash-reports
-  CRASH_REPORT_FINGERPRINT: 22:74:A1:72:96:D6:84:14:89:7F:CE:59:C0:B6:EB:3B:BC:3D:03:1B
+  CRASH_REPORT_FINGERPRINT: 35:CE:45:EC:69:D8:02:1F:C0:1A:72:BC:83:15:80:5A:E0:F6:EB:C3
 
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  build:
+  release-build:
+    name: Release build
     runs-on: ubuntu-latest
     timeout-minutes: 45
     environment: release
 
     steps:
       - name: Check out tagged source
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
           submodules: recursive
@@ -39,24 +40,20 @@ jobs:
             echo "::error::Release tags must use vMAJOR.MINOR.PATCH."
             exit 1
           fi
+          version_name="$(sed -n 's/^[[:space:]]*versionName[[:space:]]*=[[:space:]]*//p' version.properties | tr -d '\r')"
+          if [[ -z "$version_name" || "$tag" != "v${version_name}" ]]; then
+            echo "::error::Tag $tag does not match version.properties ($version_name)."
+            exit 1
+          fi
           git fetch origin master
           if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/master; then
             echo "::error::Release tag must point to a commit contained in origin/master."
             exit 1
           fi
-          major="${BASH_REMATCH[1]}"
-          minor="${BASH_REMATCH[2]}"
-          patch="${BASH_REMATCH[3]}"
-          version_code=$((major * 1000000 + minor * 1000 + patch))
-          if (( version_code <= 0 || version_code > 2100000000 )); then
-            echo "::error::Calculated Android versionCode is outside the supported range."
-            exit 1
-          fi
-          echo "name=${tag#v}" >> "$GITHUB_OUTPUT"
-          echo "code=$version_code" >> "$GITHUB_OUTPUT"
+          echo "name=$version_name" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v5.5.0
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5.5.0
         with:
           java-version: "17"
           distribution: temurin
@@ -110,10 +107,40 @@ jobs:
 
       - name: Build signed universal APK
         env:
-          VERSION_NAME: ${{ steps.version.outputs.name }}
-          VERSION_CODE: ${{ steps.version.outputs.code }}
           CRASH_REPORT_TOKEN: ${{ secrets.CRASH_REPORT_TOKEN }}
         run: ./gradlew :app:assembleEmulatorRelease
+
+      - name: Verify release APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk_files=(app/build/outputs/apk/emulator/release/*.apk)
+          if (( ${#apk_files[@]} != 1 )); then
+            echo "::error::Expected exactly one release APK."
+            exit 1
+          fi
+          apk="${apk_files[0]}"
+          build_tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          "$build_tools/apksigner" verify --verbose "$apk"
+
+          badging="$("$build_tools/aapt" dump badging "$apk")"
+          grep -F "package: name='io.github.h3nb.jlmodplus'" <<< "$badging"
+          native_code="$(grep '^native-code:' <<< "$badging")"
+          for abi in arm64-v8a armeabi-v7a x86 x86_64; do
+            if ! grep -Fq "'$abi'" <<< "$native_code"; then
+              echo "::error::Release APK is missing $abi."
+              exit 1
+            fi
+          done
+
+          actual_sha1="$("$build_tools/apksigner" verify --print-certs "$apk" |
+            sed -n 's/^Signer #1 certificate SHA-1 digest: //p' |
+            tr -d ':[:space:]' | tr '[:lower:]' '[:upper:]')"
+          expected_sha1="$(tr -d ':' <<< "$CRASH_REPORT_FINGERPRINT" | tr '[:lower:]' '[:upper:]')"
+          if [[ "$actual_sha1" != "$expected_sha1" ]]; then
+            echo "::error::Release certificate fingerprint does not match CRASH_REPORT_FINGERPRINT."
+            exit 1
+          fi
 
       - name: Prepare release assets
         shell: bash
@@ -130,7 +157,7 @@ jobs:
           (cd symbols && zip -r ../release-assets/symbols.zip .)
 
       - name: Upload release artifacts
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: JL-Mod-Plus-${{ steps.version.outputs.name }}-universal
           path: release-assets/*
