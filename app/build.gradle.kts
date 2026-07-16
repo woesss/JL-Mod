@@ -4,12 +4,29 @@ import java.util.Properties
 import java.util.jar.Attributes
 import java.util.jar.Manifest
 
-val configuredVersionName = providers.environmentVariable("VERSION_NAME").orNull
-    ?.removePrefix("v")
-    ?: "0.87.1"
-val configuredVersionCode = providers.environmentVariable("VERSION_CODE").orNull
-    ?.toIntOrNull()
-    ?: 48
+val versionFile = rootProject.file("version.properties")
+require(versionFile.isFile) {
+    "Missing version.properties. Restore it from Git before building."
+}
+
+val versionProperties = Properties().also { properties ->
+    versionFile.inputStream().use(properties::load)
+}
+val configuredVersionName = versionProperties.getProperty("versionName")?.trim()
+    ?: error("version.properties must define versionName.")
+val versionMatch = Regex("(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)")
+    .matchEntire(configuredVersionName)
+    ?: error("versionName must use MAJOR.MINOR.PATCH without a prefix or suffix.")
+val (versionMajor, versionMinor, versionPatch) = versionMatch.destructured
+    .let { (major, minor, patch) -> Triple(major.toLong(), minor.toLong(), patch.toLong()) }
+require(versionMinor <= 999 && versionPatch <= 999) {
+    "versionName minor and patch components must be between 0 and 999."
+}
+val configuredVersionCodeLong = versionMajor * 1_000_000 + versionMinor * 1_000 + versionPatch
+require(configuredVersionCodeLong in 1..2_100_000_000) {
+    "The versionName produces an Android versionCode outside the valid range."
+}
+val configuredVersionCode = configuredVersionCodeLong.toInt()
 
 plugins {
     alias(libs.plugins.android.application)
@@ -85,10 +102,16 @@ android {
         }
     }
 
-    // AGP's bundled lint cannot resolve the AndroidX/Material inheritance chain
-    // for this project and reports every Activity/custom View as non-instantiatable.
-    // The affected classes are public and extend the required framework types.
-    lint.disable += listOf("MissingTranslation", "Instantiatable")
+    lint {
+        // Keep inherited findings visible without allowing new lint problems into CI.
+        // Reduce this file gradually as the corresponding code is fixed.
+        baseline = file("lint-baseline.xml")
+
+        // AGP's bundled lint cannot resolve the AndroidX/Material inheritance chain
+        // for this project and reports every Activity/custom View as non-instantiatable.
+        // The affected classes are public and extend the required framework types.
+        disable += listOf("MissingTranslation", "Instantiatable")
+    }
 
     flavorDimensions += "default"
     productFlavors {
